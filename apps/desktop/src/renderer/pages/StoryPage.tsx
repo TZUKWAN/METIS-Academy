@@ -193,7 +193,7 @@ export function StoryPage(): React.JSX.Element {
 
       {showHistory && (
         <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/70" onClick={() => setShowHistory(false)}>
-          <div className="card max-h-[80vh] w-[640px] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="glass max-h-[80vh] w-[640px] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <h3 className="mb-3 font-serif text-lg font-bold">历史回看</h3>
             <div className="space-y-2 text-sm">
               {state.eventLog.slice(-60).map((l, i) => (

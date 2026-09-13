@@ -28,7 +28,7 @@ export function StudioPage(): React.JSX.Element {
               </h2>
               <div className="grid grid-cols-3 gap-3">
                 {list.map((a) => (
-                  <button key={a.id} className="card text-left hover:border-accent" onClick={() => setOpen(a.id)}>
+                  <button key={a.id} className="glass text-left hover:border-accent" onClick={() => setOpen(a.id)}>
                     <div className="mb-1 flex items-center gap-2">
                       <span className="tag">{ASSET_TYPE_CATALOG[a.type as AssetType]?.label ?? a.type}</span>
                       <span className="tag">v{a.version}</span>
@@ -46,7 +46,7 @@ export function StudioPage(): React.JSX.Element {
 
       {asset && (
         <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/70" onClick={() => setOpen(null)}>
-          <div className="card max-h-[80vh] w-[680px] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="glass max-h-[80vh] w-[680px] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="mb-2 flex items-center gap-2">
               <span className="tag">{ASSET_TYPE_CATALOG[asset.type as AssetType]?.label ?? asset.type}</span>
               <span className="tag">v{asset.version}</span>

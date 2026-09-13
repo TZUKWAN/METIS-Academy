@@ -38,7 +38,7 @@ export function HomePage(): React.JSX.Element {
 
       {/* 当前进行中 */}
       {state && !state.ended && (
-        <section className="card mb-6">
+        <section className="glass mb-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs uppercase tracking-wider text-paper-400">当前进行中</p>
@@ -70,7 +70,7 @@ export function HomePage(): React.JSX.Element {
             ).length;
             const poolCount = c.endingPool.length;
             return (
-              <div key={c.id} className="card flex flex-col">
+              <div key={c.id} className="glass flex flex-col">
                 <div className={`mb-3 h-2 w-full rounded ${c.type === "research" ? "bg-accent" : c.type === "competition" ? "bg-amber" : "bg-mint"}`} />
                 <h3 className="font-serif text-lg font-bold">{c.title}</h3>
                 <p className="mb-2 text-xs uppercase tracking-wider text-paper-400">{c.subtitle}</p>
@@ -100,7 +100,7 @@ export function HomePage(): React.JSX.Element {
       </section>
 
       <section className="grid grid-cols-2 gap-4">
-        <div className="card">
+        <div className="glass">
           <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-paper-400">最近资产</h2>
           {recentAssets.length === 0 && <p className="text-sm text-paper-400">还没有资产。开始一条主线，在工作台里创造它们。</p>}
           <div className="space-y-2">
@@ -113,7 +113,7 @@ export function HomePage(): React.JSX.Element {
             ))}
           </div>
         </div>
-        <div className="card">
+        <div className="glass">
           <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-paper-400">已发现的结局</h2>
           {profile.discoveredEndings.length === 0 && <p className="text-sm text-paper-400">暂无。结局由你的真实选择决定，无法被剧情强送。</p>}
           <div className="flex flex-wrap gap-2">
@@ -126,7 +126,7 @@ export function HomePage(): React.JSX.Element {
 
       {showNew && selected && (
         <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/70">
-          <div className="card w-96">
+          <div className="glass w-96">
             <h3 className="mb-3 font-serif text-lg font-bold">新建角色</h3>
             <input className="input mb-3" placeholder="角色名（默认：你）" value={name} onChange={(e) => setName(e.target.value)} />
             <p className="mb-4 text-xs text-paper-400">
@@ -178,7 +178,7 @@ export function SavesModal({ onClose, onLoad }: { onClose: () => void; onLoad?: 
   const slots = Array.from({ length: 10 }, (_, i) => i);
   return (
     <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/70">
-      <div className="card max-h-[80vh] w-[560px] overflow-y-auto">
+      <div className="glass max-h-[80vh] w-[560px] overflow-y-auto">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="font-serif text-lg font-bold">存档（0 号为自动存档）</h3>
           <button className="btn-ghost" onClick={onClose}>关闭</button>

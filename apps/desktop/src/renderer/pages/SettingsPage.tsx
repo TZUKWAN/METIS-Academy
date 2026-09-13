@@ -41,7 +41,7 @@ export function SettingsPage(): React.JSX.Element {
       <h1 className="mb-5 font-serif text-2xl font-bold">设置</h1>
 
       {/* AI Provider（D001-D006） */}
-      <section className="card mb-4">
+      <section className="glass mb-4">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-paper-400">AI 服务（Provider）</h2>
           <button
@@ -96,7 +96,7 @@ export function SettingsPage(): React.JSX.Element {
       </section>
 
       {/* CLI Agent */}
-      <section className="card mb-4">
+      <section className="glass mb-4">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-paper-400">Agent CLI 工具</h2>
           <button className="btn-outline text-xs" onClick={refresh}>
@@ -134,7 +134,7 @@ export function SettingsPage(): React.JSX.Element {
       </section>
 
       {/* 外观 / 音频 */}
-      <section className="card mb-4 grid grid-cols-2 gap-6">
+      <section className="glass mb-4 grid grid-cols-2 gap-6">
         <div>
           <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-paper-400">外观与字体</h2>
           <label className="text-xs text-paper-400">界面缩放 {fontScale}%</label>
@@ -156,7 +156,7 @@ export function SettingsPage(): React.JSX.Element {
       </section>
 
       {/* 存档 / 数据 / 隐私 */}
-      <section className="card mb-4">
+      <section className="glass mb-4">
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-paper-400">存档与数据</h2>
         <div className="mb-3 flex flex-wrap items-center gap-2 text-sm">
           <button className="btn-outline text-xs" onClick={() => setShowSaves(true)}>

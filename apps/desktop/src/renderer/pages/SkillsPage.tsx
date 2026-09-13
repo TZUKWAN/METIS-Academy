@@ -34,7 +34,7 @@ export function SkillsPage(): React.JSX.Element {
                   const lvl = state?.skills[s.id] ?? 0;
                   const fog = s.hiddenUntilDiscovered && lvl === 0 && !hintKnown.has(s.id);
                   return (
-                    <div key={s.id} className={`card text-xs ${fog ? "opacity-50" : ""}`}>
+                    <div key={s.id} className={`glass text-xs ${fog ? "opacity-50" : ""}`}>
                       <div className="mb-1 flex items-center gap-1">
                         {fog ? (
                           <>

@@ -48,7 +48,7 @@ function KnowledgeCard({ k, unlocked }: { k: KnowledgeAtom; unlocked: boolean })
   const [depth, setDepth] = useState<0 | 1 | 2>(0);
   const labels = ["30 秒", "3 分钟", "10 分钟"];
   return (
-    <div className={`card ${unlocked ? "" : "opacity-80"}`}>
+    <div className={`glass ${unlocked ? "" : "opacity-80"}`}>
       <div className="mb-1 flex items-center gap-2">
         <span className="tag">{SKILL_DOMAIN_LABEL[k.domain]}</span>
         {!unlocked && <span className="tag bg-amber/20 text-amber">未解锁（剧情中会触发）</span>}
