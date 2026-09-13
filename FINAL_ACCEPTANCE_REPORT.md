@@ -8,7 +8,7 @@
 - 应用版本：1.0.0（`apps/desktop/package.json`）
 - 内容版本：1.0.0（内容 schema 与 campaign/mission/event 内容）
 - 构建产物：`apps/desktop/dist/`（main: `dist/main/main.js`，preload: `dist/preload/index.js`，renderer: `dist/renderer/`）
-- Windows 发行物：`apps/desktop/release-final/` —— **NSIS 安装器 METIS Academy Setup 1.0.0.exe（92.8 MB）** + portable zip（125.6 MB）+ win-unpacked；全部为 06:54 终版构建（含音效+xterm+全部修复）
+- Windows 发行物：`apps/desktop/release-v2/` —— **NSIS 安装器 METIS Academy Setup 1.0.0.exe（92.8 MB）** + portable zip（125.6 MB）+ win-unpacked；全部为 06:54 终版构建（含音效+xterm+全部修复）
 
 ## 2. 技术栈（与任务书 §2 一致）
 
@@ -77,7 +77,7 @@
 
 ## 11. Windows 安装测试
 
-- 发行物：portable zip（125,633,038 字节，03:08 终版）+ win-unpacked 目录，asar 内含 dist/main/main.js、dist/preload/index.js、dist/renderer/index.html（@electron/asar 校验 OK）
+- 发行物：portable zip（125,721,113 字节，03:35 终版）+ win-unpacked 目录，asar 内含 dist/main/main.js、dist/preload/index.js、dist/renderer/index.html（@electron/asar 校验 OK）
 - 启动实测：直接运行 win-unpacked/METIS Academy.exe，三段启动日志（app ready / did-finish-load / renderer ready）全部出现，进程干净退出 ✅
 - 卸载：portable 形态删除目录即完成；用户数据位于 %APPDATA%/metis-academy/metis-data，卸载不删除（隐私安全默认）
 - NSIS 安装器：构建机缺少符号链接特权导致 winCodeSign 解包失败，已在配置中禁用签名编辑并保留 NSIS target；需管理员权限终端重新执行（不阻断 portable 发布）
