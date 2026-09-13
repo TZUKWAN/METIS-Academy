@@ -1,0 +1,95 @@
+# 竞赛线：延迟队列目标事件（由 scheduleEvent 触发）
+events:
+  - id: c_d05_redo_day
+    campaign: competition
+    day: 5
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——选题推翻重选, learning: 不验证的选题必然返工 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["何老师转发了去年的获奖名单——你直接采用的 AI 首选题目赫然在列，作者还是隔壁学校的。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "……重选。今天白过。", mood: angry }
+      - { speaker: 系统, text: "延迟后果触发：第 4 天省下的 30 分钟验证，变成了一整天的返工。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 4 }
+      - { kind: subtract, key: energy, value: 8 }
+    terminal: true
+
+  - id: c_d12_coordination_pain
+    campaign: competition
+    day: 12
+    type: npc
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——放养分工爆发, learning: 没有边界的协作必然碰撞 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["雨桐要的报名页接口和方远写的对不上；方远要的文案素材雨桐说'还没定'。两个人第一次互相催。"]
+    dialogue:
+      - { speaker: 方远, text: "我等她的素材两天了。" }
+      - { speaker: 江雨桐, text: "他说接口下周才有，我先画什么？" }
+      - { speaker: 系统, text: "延迟后果触发：第 3 天的'各干各的'，在第九天开始收利息。" }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: 5 }
+      - { kind: subtract, key: teamTrust, value: 6 }
+    terminal: true
+
+  - id: c_d14_zip_loss
+    campaign: competition
+    day: 14
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——压缩包丢代码, learning: 版本控制是后悔药 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["方远把'最终版'压缩包覆盖到'真最终版'上——两天前的登录模块不见了。"]
+    dialogue:
+      - { speaker: 方远, text: "……没了。真没了。（长时间沉默）谁说过的来着，Git。", mood: angry }
+      - { speaker: 系统, text: "延迟后果触发：第 9 天'不折腾'的选择，今天连本带利。" }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: 6 }
+      - { kind: subtract, key: energy, value: 8 }
+    terminal: true
+
+  - id: c_d18_judge_gap
+    campaign: competition
+    day: 18
+    type: npc
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——诱导访谈在答辩暴露, learning: 没有真实访谈就没有真实弹药 }
+    scene: { location: classroom, characters: [c_judge_prelim] }
+    setup: ["模拟答辩。高主任随机抽问：'你说报名要 3 天，这个数字哪来的？具体某个社团是谁？'"]
+    dialogue:
+      - { speaker: 系统, text: "你张了张嘴——第 6 天那五个说'会啊挺好'的受访者，没有一个能帮你回答这题。" }
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 10 }
+      - { kind: add, key: academicDebt, value: 5 }
+    terminal: true
+
+  - id: c_d19_rework_night
+    campaign: competition
+    day: 19
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——拖延对齐变成通宵返工, learning: 材料债的利息按小时计 }
+    scene: { location: lab, characters: [c_design, c_tech] }
+    setup: ["初赛晋级的当晚，本该庆祝——三份材料的数字对不上，全部要按实测重核。凌晨两点，PPT 还剩六页。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（第 11 次导出 PDF）以后谁再对我说'先交上去再说'……", mood: angry }
+      - { speaker: 系统, text: "延迟后果触发：第 15 天'决赛前再对齐'的决策，今天 22:00 准时到账。" }
+    automaticEffects:
+      - { kind: subtract, key: energy, value: 12 }
+      - { kind: add, key: execution, value: 2 }
+    terminal: true
+
+  - id: c_d13_format_error
+    campaign: competition
+    day: 13
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——第七次格式错误, learning: 人肉提醒必有遗漏 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["第七次。Agent 把注释写成了英文——而你的提醒永远慢它一步。"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：没有规则文件的每一次'我说一下'，都在攒一次事故。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 3 }
+    terminal: true

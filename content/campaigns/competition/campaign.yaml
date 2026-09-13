@@ -1,0 +1,286 @@
+# 竞赛线：Campaign + 角色（TASK-I001）
+campaigns:
+  - id: competition_21d_ai
+    title: 《21天：第一次AI创新竞赛》
+    subtitle: 竞赛主线
+    description: 校园AI创新竞赛从通知到决赛只有21天。你是队长：读规则、组队、选题、做Demo、写材料、上台路演。比赛教你的不是拿奖，是把一个想法在约束下做成真的。
+    type: competition
+    cover: competition
+    startMissionId: cm1
+    endingPool:
+      - c_end_gold_real
+      - c_end_fake_exposed
+      - c_end_national_prize
+      - c_end_province_gold
+      - c_end_province_bronze
+      - c_end_school_third
+      - c_end_school_fail
+      - c_end_hollow_award
+      - c_end_to_venture
+      - c_end_team_dissolve
+      - c_end_tech_fail
+      - c_end_to_research
+      - c_end_biz_validated
+      - c_end_infighting
+      - c_end_recognized_drained
+      - c_end_time_up
+    defaultState: { money: 500, timeBudget: 5, actionPoints: 5, competitionRank: 0 }
+    skillFocus: [task_contract.acceptance, loop.build_test_fix, org.decomposition]
+    estimatedMinutes: 110
+    totalDays: 21
+
+characters:
+  - id: c_tech
+    displayName: 方远
+    role: 技术队友
+    portrait: c_tech
+    baseRelationship: 50
+    traits: [代码强, 没耐心, 吃软不吃硬]
+    goals: 用比赛证明技术实力，顺带攒简历
+    personality: 直来直去，讨厌开会，喜欢直接开写
+    offers: 前后端一把梭、Debug 神速
+    conflicts: 常跳过测试直接加功能；嫌文档浪费时间
+    relationshipRules: [给他明确边界少管过程加分, 事无巨细地催扣分]
+    campaignAvailability: [competition]
+    dynamicRules: []
+    dialogueStyle: 短句、术语、"这不就是一个xxx的事"
+  - id: c_design
+    displayName: 江雨桐
+    role: 设计与表达队友
+    portrait: c_design
+    baseRelationship: 50
+    traits: [审美在线, 讲故事高手, 有点完美主义]
+    goals: 做一份拿得出手的作品集
+    personality: 温和但固执于细节
+    offers: PPT、视频、路演稿、用户体验把关
+    conflicts: 材料与真实功能不一致时会不舒服
+    relationshipRules: [给真实数据让她讲故事加分, 让她编数字必翻脸]
+    campaignAvailability: [competition]
+    dynamicRules: []
+    dialogueStyle: 感性、画面感、"用户看到的是什么"
+  - id: c_advisor
+    displayName: 何老师
+    role: 指导老师
+    portrait: c_advisor
+    baseRelationship: 50
+    traits: [经验丰富, 忙, 看重真实]
+    goals: 队伍别出事，最好拿奖
+    personality: 三句话点要害，时间宝贵
+    offers: 往届获奖情报、评审视角、关键资源
+    conflicts: 反感包装大于内容
+    relationshipRules: [带真实进展汇报加分, 只带漂亮PPT扣分]
+    campaignAvailability: [competition]
+    dynamicRules: []
+    dialogueStyle: 快、准、少
+  - id: c_rival
+    displayName: 邱一鸣
+    role: 对手队队长
+    portrait: c_rival
+    baseRelationship: 35
+    traits: [张扬, 情报灵通, 实力不弱]
+    goals: 卫冕冠军
+    personality: 喜欢放烟雾弹
+    offers: （对手）压力与参照系
+    conflicts: 赛前互相打探
+    relationshipRules: []
+    campaignAvailability: [competition]
+    dynamicRules: []
+    dialogueStyle: 自信、爱挑衅
+  - id: c_judge_prelim
+    displayName: 高主任
+    role: 初赛评委
+    portrait: c_judge_prelim
+    baseRelationship: 40
+    traits: [看材料效率极高]
+    goals: 快速筛掉不真实的申报书
+    personality: 只看数据与逻辑链
+    offers: 无
+    conflicts: 零容忍材料数据打架
+    relationshipRules: []
+    campaignAvailability: [competition]
+    dynamicRules: [申报书与Demo数据不一致时必扣]
+    dialogueStyle: 简短、直击
+  - id: c_judge_final
+    displayName: 孙教授
+    role: 决赛评委
+    portrait: c_judge_final
+    baseRelationship: 40
+    traits: [追根问底, 看重创新真实性]
+    goals: 找出真正解决问题而非堆概念的项目
+    personality: 温和地把你问穿
+    offers: 无
+    conflicts: 对"AI+万物"式伪创新反感
+    relationshipRules: []
+    campaignAvailability: [competition]
+    dynamicRules: []
+    dialogueStyle: 先扬后抑、连环追问
+  - id: c_ai_agent
+    displayName: Agent
+    role: 你的AI助手（教学模拟）
+    portrait: ai_agent
+    baseRelationship: 50
+    traits: [快, 全能, 需要边界]
+    goals: 完成你字面布置的任务
+    personality: 高效但只对字面负责
+    offers: 规则提取、竞品扫描、代码脚手架、材料润色
+    conflicts: 会编数据、会忘记约束、会把PPT写跑偏
+    relationshipRules: []
+    campaignAvailability: [competition]
+    dynamicRules: []
+    dialogueStyle: 列表化、笃定
+
+missions:
+  - id: cm1
+    campaignId: competition
+    stage: 1
+    day: 1
+    title: 读懂规则
+    objective: 从40页通知里提取评分标准、约束与deadline，转成项目验收标准
+    briefing: 比赛第一课：赢在读懂规则。长文档别硬读，让Agent提取、你核对。
+    prerequisites: []
+    entryEventId: c_d01_notice
+    completionConditions: [{ kind: assetType, type: checklist, minCount: 1 }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 4 }]
+    requiredAssets: []
+    recommendedSkills: [task_contract.sources]
+    nextMissionRules: [{ when: null, goto: cm2 }]
+    skillTraining: 学会用Agent提取长文档关键约束并人工抽查核对
+    knowledge: []
+  - id: cm2
+    campaignId: competition
+    stage: 2
+    day: 3
+    title: 组队与分工
+    objective: 确定队友分工与任务边界，写成分工表
+    briefing: 技术强但跳测试的方远、细节控的江雨桐——分工表就是你的第一份任务契约。
+    prerequisites: [cm1]
+    entryEventId: c_d03_team
+    completionConditions: [{ kind: assetType, type: document, minCount: 1 }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 3 }, { kind: add, key: teamTrust, value: 5 }]
+    requiredAssets: []
+    recommendedSkills: [org.role_definition]
+    nextMissionRules: [{ when: null, goto: cm3 }]
+    skillTraining: 学会按边界分工并写清"不许做什么"
+    knowledge: []
+  - id: cm3
+    campaignId: competition
+    stage: 3
+    day: 4
+    title: 选题
+    objective: 从10个候选里验证并选出一个真问题
+    briefing: AI给了10个选题，个个像冠军方案。评委问的是：问题是真的吗？
+    prerequisites: [cm2]
+    entryEventId: c_d04_topics
+    completionConditions: [{ kind: assetType, type: research_brief, minCount: 1 }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 6 }]
+    requiredAssets: []
+    recommendedSkills: [verification.source_check]
+    nextMissionRules: [{ when: null, goto: cm4 }]
+    skillTraining: 学会对候选选题做快速桌面验证
+    knowledge: []
+  - id: cm4
+    campaignId: competition
+    stage: 3
+    day: 6
+    title: 调研
+    objective: 访谈+竞品+政策三路调研，建立竞品矩阵
+    briefing: AI帮写访谈提纲全是诱导性问题——真实访谈和它想象的不一样。
+    prerequisites: [cm3]
+    entryEventId: c_d06_interview
+    completionConditions:
+      - { kind: assetType, type: research_matrix, minCount: 1 }
+      - { kind: assetType, type: interview_notes, minCount: 1 }
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 8 }, { kind: add, key: userUnderstanding, value: 10 }]
+    requiredAssets: []
+    recommendedSkills: [loop.search_verify]
+    nextMissionRules: [{ when: null, goto: cm5 }]
+    skillTraining: 学会批量竞品扫描与真实访谈（问过去行为）
+    knowledge: []
+  - id: cm5
+    campaignId: competition
+    stage: 4
+    day: 8
+    title: 方案收敛
+    objective: 形成Problem-Solution Fit六要素卡
+    briefing: 问题/用户/方案/可行性/创新/影响——六个词写不满一页，才是真的想清楚了。
+    prerequisites: [cm4]
+    entryEventId: c_d08_psf
+    completionConditions: [{ kind: assetType, type: business_model, minCount: 1 }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 6 }]
+    requiredAssets: []
+    recommendedSkills: [task_contract.basics]
+    nextMissionRules: [{ when: null, goto: cm6 }]
+    skillTraining: 学会一页纸方案收敛
+    knowledge: []
+  - id: cm6
+    campaignId: competition
+    stage: 5
+    day: 9
+    title: Demo 冲刺
+    objective: INIT+规则+契约+Goal+Loop，做出可演示MVP并守住回归
+    briefing: 六天的工程冲刺。INIT、AGENTS.md、Task Contract、Goal、Build-Test-Fix——该来的都会来。
+    prerequisites: [cm5]
+    entryEventId: c_d09_init
+    completionConditions:
+      - { kind: assetType, type: code_project, minCount: 1 }
+      - { kind: assetType, type: test_report, minCount: 1 }
+    failureConditions:
+      - kind: and
+        conditions:
+          - { kind: state, key: day, op: gte, value: 14 }
+          - { kind: flag, key: fake_metrics }
+    rewards: [{ kind: add, key: progress, value: 12 }, { kind: add, key: technicalDebt, value: 5 }]
+    requiredAssets: []
+    recommendedSkills: [loop.build_test_fix, verification.regression]
+    nextMissionRules: [{ when: null, goto: cm7 }]
+    skillTraining: 完整经历INIT→规则→契约→Goal→Loop→回归的工程循环
+    knowledge: []
+  - id: cm7
+    campaignId: competition
+    stage: 6
+    day: 15
+    title: 材料一致性
+    objective: 申报书、PPT、Demo三者的数据完全一致
+    briefing: 申报书写92%，Demo跑78%——评委最爱抓的就是这个。
+    prerequisites: [cm6]
+    entryEventId: c_d15_materials
+    completionConditions:
+      - { kind: assetType, type: pitch_deck, minCount: 1 }
+      - { kind: flag, key: materials_aligned }
+    failureConditions:
+      - kind: and
+        conditions:
+          - { kind: flag, key: material_inconsistent }
+          - { kind: state, key: day, op: gte, value: 18 }
+    rewards: [{ kind: add, key: progress, value: 8 }, { kind: add, key: credibility, value: 8 }]
+    requiredAssets: []
+    recommendedSkills: [verification.data_consistency]
+    nextMissionRules: [{ when: null, goto: cm8 }]
+    skillTraining: 学会跨材料数据对表
+    knowledge: []
+  - id: cm8
+    campaignId: competition
+    stage: 9
+    day: 17
+    title: 路演与决赛
+    objective: 8分钟路演+评委追问+赛后选择
+    briefing: 时间到就切PPT。评委的追问不看你的稿子，看你的项目。
+    prerequisites: [cm7]
+    entryEventId: c_d17_rehearsal
+    completionConditions: [{ kind: flag, key: c_final_done }]
+    failureConditions:
+      - kind: and
+        conditions:
+          - { kind: flag, key: fake_metrics }
+          - { kind: state, key: day, op: gte, value: 20 }
+    rewards: [{ kind: add, key: progress, value: 10 }]
+    requiredAssets: []
+    recommendedSkills: [verification.adversarial_review]
+    nextMissionRules: []
+    skillTraining: 学会在时间约束下取舍内容并用证据应对追问
+    knowledge: []

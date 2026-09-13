@@ -1,0 +1,364 @@
+# 科研线事件 D21-D30（多智能体 / 写作交接 / 预审 / 答辩）
+events:
+  # ============ DAY 23 ============
+  - id: r_d23_subagent
+    campaign: research
+    day: 23
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: r_m07 }
+    purpose: { learning: 并行≠无脑开多个Agent；先定边界和汇总方式 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“设计 v2 有三处证据薄弱：方法依据、数据代表性、理论机制。都得补文献。”]
+    dialogue:
+      - { speaker: Agent, text: "建议开三个并行子任务分别检索。", mood: neutral }
+      - { speaker: 你, text: "上次'综合分析'的教训翻版。先说清楚：边界、格式、汇总方式。" }
+    choices:
+      - id: structured_parallel
+        text: 三路并行，每路定义：检索范围/输出格式/禁区，约定统一汇总表
+        visibleResponse: |
+          你写了三张迷你契约：
+          A 方法文献（只查实验设计依据，禁推理论）
+          B 数据代表性（只查抽样标准）
+          C 机制证据（只查认知负荷实证）
+          汇总表统一五列。两小时后三份结果进了同一张表。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 8 }
+          - { kind: add, key: progress, value: 5 }
+          - { kind: addAsset, assetType: document, name: 三路检索汇总表, description: 三个子任务的统一汇总, content: "| 路 | 结论 | 来源 | 置信 | 备注 |" }
+          - { kind: achievement, achievementId: ach_r_subagent }
+      - id: chaos_parallel
+        text: 开三个会话同时问，谁快用谁的
+        visibleResponse: 三个会话给了三套互相打架的口径。你花了一晚上理它们——比串行还慢。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+          - { kind: addAsset, assetType: document, name: 三路粗结果(口径混乱), description: 未经对表的并行结果, content: "三套口径并存，需人工对表" }
+    learningPoint: 先定边界，再并行
+
+  # ============ DAY 24 ============
+  - id: r_d24_conflict
+    campaign: research
+    day: 24
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 24, phase: start }
+    purpose: { narrative: 强制——子任务结论冲突, learning: 冲突靠来源裁决，不靠投票 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“汇总表里炸了：A 路说'实验证据支持反馈机制'，C 路说'现有证据不支持该机制'。”]
+    dialogue:
+      - { speaker: Agent, text: "两条结论冲突。建议采纳多数（2:1）——A、B 都倾向正面。", mood: neutral }
+      - { speaker: 你, text: "B 是查抽样标准的，它'倾向正面'干啥？真理不是投出来的。" }
+    choices:
+      - id: source_arbitration
+        text: 回来源：让两路各自给出原始文献与页码，你亲自读
+        visibleResponse: |
+          A 引的是 2023 年综述（二手转述）；C 引的是 2021 年原始实验（样本小但直接）。
+          裁决：该机制"有直接但初步的支持"。你把两种证据等级都写进了设计。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 10 }
+          - { kind: add, key: independence, value: 6 }
+          - { kind: setFlag, key: subagent_conflict_resolved }
+          - { kind: achievement, achievementId: ach_r_conflict_arbitrated }
+        unlockKnowledge: [kc_g_subagent_not_voting]
+      - id: vote_majority
+        text: 少数服从多数，用 A 的结论
+        visibleResponse: 你写进设计的结论建立在二手转述上。预审时评委追问原始出处，你翻开笔记本——只有二手的。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 8 }
+          - { kind: subtract, key: credibility, value: 8 }
+    learningPoint: 主Agent不能投票决定真相
+
+  # ============ DAY 25 ============
+  - id: r_d25_structure
+    campaign: research
+    day: 25
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: r_m08 }
+    purpose: { learning: 论文结构=论证结构；不是“生成目录” }
+    scene: { location: workbench, characters: [] }
+    setup: [“开始写开题报告。Agent 提议：'我先给你生成一个标准目录？'”]
+    dialogue:
+      - { speaker: Agent, text: "已生成通用目录：绪论/文献综述/研究设计/预期成果。", mood: pleased }
+      - { speaker: 你, text: "这是模板，不是我的论证。我的每一章要回答什么问题？" }
+    choices:
+      - id: argument_map
+        text: 画论证图：核心命题→三层支撑→每层挂证据编号
+        visibleResponse: |
+          你画了一张图：
+          主张：AI辅助写作通过替代自我监控影响论证质量。
+          支撑L1: 机制链（M3证据） L2: 相关性（矩阵14篇） L3: 可行性（预调研）。
+          目录从图里自己长出来：哪层薄哪章重。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: add, key: progress, value: 6 }
+          - { kind: addAsset, assetType: argument_map, name: 论证图, description: 主张-支撑-证据三层结构, content: "主张→L1机制/L2相关/L3可行→每节点挂证据编号" }
+      - id: generic_toc
+        text: 就用生成的通用目录，往里填内容
+        visibleResponse: 填到第二章你发现结构与你的论证对不上——模板的“综述”一章装不下你的机制链。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 结构为论证服务
+
+  # ============ DAY 26 ============
+  - id: r_d26_evidence_warning
+    campaign: research
+    day: 26
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 假引用第一次预警, learning: 每个命题都要能指到证据 }
+    scene: { location: workbench, characters: [] }
+    setup: [“做证据映射时，你给每个命题编号挂证据。挂到 P7 时——编号对不上文献表。”]
+    dialogue:
+      - { speaker: 系统, text: "命题 P7 的证据指向：Zhang & Li (2024)。该条目在已核实清单中不存在。" }
+      - { speaker: 你, text: "……第八天那条。我当时想'之后再说'。现在'之后'到了。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 5 }
+      - { kind: setFlag, key: citation_warning_seen }
+    next: r_d26_handle
+
+  - id: r_d26_handle
+    campaign: research
+    day: 26
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 立即处置 vs 拖到答辩 }
+    scene: { location: workbench, characters: [] }
+    choices:
+      - id: fix_now
+        text: 现在就删掉 P7 的假证据，用真实的文献重写这个命题
+        visibleResponse: 你花了两小时找到两篇真实文献顶上。命题被你改弱了，但每一处都经得起查。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 10 }
+          - { kind: unsetFlag, key: used_fake_citation }
+          - { kind: setFlag, key: citation_fixed_in_time }
+          - { kind: achievement, achievementId: ach_r_citation_saved }
+        next: r_d26_map_done
+      - id: leave_it
+        text: 应该没人会查到这条，留着撑场面
+        visibleResponse: 你把风险留在了原地。两天后，它会在最坏的时间点爆炸。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+        next: r_d26_map_done
+    learningPoint: 假引用越早处理成本越低
+
+  - id: r_d26_map_done
+    campaign: research
+    day: 26
+    type: story
+    trigger: { kind: manual }
+    scene: { location: workbench, characters: [] }
+    setup: [“证据映射完成：14 个命题，每个都挂着编号与页码。这报告开始有了骨骼。”]
+    automaticEffects:
+      - { kind: addAsset, assetType: evidence_matrix, name: 命题-证据映射表, description: claim_evidence_map 全量版, content: "| 命题 | 证据 | 页码 | 等级 |" }
+    dialogue:
+      - { speaker: 系统, text: "获得资产：命题-证据映射表。" }
+    terminal: true
+
+  # ============ DAY 27 ============
+  - id: r_d27_handoff
+    campaign: research
+    day: 27
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 27, phase: start }
+    purpose: { learning: 完整交接流程：旧会话总结→handoff→新会话→恢复验证 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“进入纯写作期。研究阶段的会话已经很长，你决定做一次干净的交接。”]
+    dialogue:
+      - { speaker: 系统, text: "交接四步：旧会话总结 → handoff 文档 → 新会话 → 恢复验证（四问）。" }
+    choices:
+      - id: full_handoff
+        text: 完整跑一遍四步交接
+        visibleResponse: |
+          旧会话输出总结；你整理成 HANDOFF.md（目标/现状/关键决定/下一步/坑）；
+          新会话开局先答四问：当前RQ？方法？最大缺口？下一步？
+          ——全对。写作会话在干净上下文里开工。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 8 }
+          - { kind: addAsset, assetType: session_summary, name: 旧会话总结, description: 研究/设计阶段会话总结, content: "本会话完成：矩阵/机制链/设计v2/论证图" }
+          - { kind: addAsset, assetType: handoff, name: HANDOFF.md, description: 写作期交接文档, content: "目标/现状/关键决定/下一步/坑（四问验证通过）" }
+          - { kind: achievement, achievementId: ach_r_handoff }
+        unlockKnowledge: [kc_g_handoff_four_questions]
+      - id: copy_history
+        text: 直接把聊天记录复制给新会话，省事
+        visibleResponse: 新会话加载了三万字历史。响应变慢，且把设计期一个已废弃的旧目标又捡了回来。你被迫手写了一张临时交接便签。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 5 }
+          - { kind: setFlag, key: context_pollution_seen }
+          - { kind: addAsset, assetType: handoff, name: 临时交接便签, description: 聊天记录搬运失败后的补救, content: "目标/现状/下一步（缺关键决定与坑）" }
+    learningPoint: 交接质量=新会话四问答对程度
+
+  # ============ DAY 28 ============
+  - id: r_d28_pre_review
+    campaign: research
+    day: 28
+    type: story
+    keyDecision: true
+    trigger: { kind: day, day: 28, phase: start }
+    purpose: { narrative: 模拟导师预审, learning: 预审暴露最弱一环 }
+    scene: { location: office, characters: [r_mentor] }
+    setup: [“陈教授把你叫进办公室，桌上是你的开题报告打印稿。”]
+    dialogue:
+      - { speaker: 陈教授, text: "答辩前最后一次。我只问最要命的那一个问题。", mood: serious }
+    next: r_d28_question
+
+  - id: r_d28_question
+    campaign: research
+    day: 28
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: office, characters: [r_mentor] }
+    setup: [“他翻到某一页，手指点住。”]
+    choices:
+      - id: face_it
+        text: 直面最弱处：主动坦白最没把握的部分并给出应对
+        visibleResponse: 你指着机制链标黄的那节：“这两处只有间接证据，我计划用预调研补。”陈教授第一次露出了近似满意的表情。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 8 }
+          - { kind: add, key: credibility, value: 8 }
+          - { kind: add, key: independence, value: 4 }
+      - id: deflect
+        text: 挑最有把握的部分大讲特讲
+        visibleResponse: 你讲了十分钟创新点。陈教授合上报告：“我问的不是这个。回去。”
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: -4 }
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 预审的价值在于暴露弱点，不是表演强项
+
+  - id: r_d28_citation_crisis
+    campaign: research
+    day: 28
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 假引用爆雷（D8选择的延迟后果）, learning: 未核验的引用终会被发现 }
+    scene: { location: office, characters: [r_mentor, r_evaluator_a] }
+    setup: [“预审现场。吴教授恰好来办公室送材料，扫了一眼摊开的报告，停在一行引用上。”]
+    dialogue:
+      - { speaker: 吴教授, text: "Zhang & Li 2024？这篇我在评审会上讨论过——它不存在。谁给你的？", mood: angry }
+      - { speaker: 陈教授, text: "（沉默地看着你）", mood: serious }
+      - { speaker: 你, text: "……是AI生成的。我第八天就该查它。" }
+      - { speaker: 陈教授, text: "十一天。你有十一天，你选了'之后再说'。" }
+      - { speaker: 系统, text: "延迟后果触发：20 天前的那次'先放进文献表'，在今天结了账。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 10 }
+      - { kind: subtract, key: credibility, value: 25 }
+      - { kind: relationship, characterId: r_mentor, delta: -15 }
+      - { kind: setFlag, key: citation_crisis_happened }
+    terminal: true
+
+  - id: r_d29_triage
+    campaign: research
+    day: 29
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 29, phase: start }
+    purpose: { learning: 资源不足时的优先级与风险管理 }
+    scene: { location: dorm, characters: [] }
+    setup: [“最后一天了。行动点只够做三件事，但待办有五件：”]
+    dialogue:
+      - { speaker: 系统, text: "① 补数据代表性的证据 ② 给答辩PPT做一页机制图 ③ 修复P7假引用（若仍存在）④ 找师姐过一遍方法 ⑤ 睡觉" }
+    choices:
+      - id: triage_risk
+        text: 按“答辩被问概率×伤害”排序处理，今晚必须睡觉
+        visibleResponse: |
+          你的排序：修复硬伤 > 补薄弱证据 > 睡觉 > 美化PPT > 完善方法细节。
+          睡前你把最可能被问的三个问题写成了应答卡。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: add, key: energy, value: 10 }
+          - { kind: add, key: progress, value: 4 }
+      - id: triage_polish
+        text: 全部时间做PPT，答辩拼表现
+        visibleResponse: PPT 精美。但评委的问题是问内容的，不是问配色的。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 优先级=概率×伤害，不是难度
+
+  # ============ DAY 30 ============
+  - id: r_d30_defense
+    campaign: research
+    day: 30
+    type: story
+    trigger: { kind: missionEntry, mission: r_m09 }
+    purpose: { narrative: 开题答辩, learning: 用证据回应质疑 }
+    scene: { location: defense_hall, characters: [r_evaluator_a, r_evaluator_b, r_mentor] }
+    setup: [“答辩室。吴教授和郑老师坐在对面，陈教授列席。你做了十五分钟陈述。”]
+    dialogue:
+      - { speaker: 郑老师, text: "陈述很清楚。那么，进入提问环节。", mood: neutral }
+    next: r_d30_q1
+
+  - id: r_d30_q1
+    campaign: research
+    day: 30
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: defense_hall, characters: [r_evaluator_a] }
+    setup: [“吴教授先开口。”]
+    dialogue:
+      - { speaker: 吴教授, text: "第一问：文献做到了哪里？你的矩阵里，最近三年有多少篇直接实证？", mood: serious }
+    choices:
+      - id: answer_with_numbers
+        text: 用矩阵答：“28 篇精读中 11 篇近三年实证，其中 4 篇直接相关，它们共同认为——”
+        visibleResponse: 你报出数字、报出分歧点。吴教授没有追问，在纸上写了什么。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 8 }
+          - { kind: add, key: progress, value: 3 }
+      - id: answer_vague
+        text: "文献比较充分，国内外都有不少研究……"
+        visibleResponse: 吴教授抬头：“我问的是数字。你自己的矩阵呢？”
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 10 }]
+    next: r_d30_q2
+
+  - id: r_d30_q2
+    campaign: research
+    day: 30
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: defense_hall, characters: [r_evaluator_b] }
+    setup: [“郑老师接过话头。”]
+    dialogue:
+      - { speaker: 郑老师, text: "你的机制链很用心。但我想问数据：120 份问卷，两个班，你敢下'影响'这个结论吗？", mood: neutral }
+    choices:
+      - id: answer_limit
+        text: "不敢下因果结论。我的是相关性证据，外推性受限——这写在局限里"
+        visibleResponse: 郑老师笑了：“知道结论的边界，比结论本身更让我放心。”
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 10 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+      - id: answer_overclaim
+        text: "影响是明确的，问卷显示了显著相关"
+        visibleResponse: 郑老师和吴教授交换了一个眼神。相关≠影响，这个词你用大了。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 12 }]
+    next: r_d30_final
+
+  - id: r_d30_final
+    campaign: research
+    day: 30
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { narrative: 答辩结束与去向选择, learning: 全部状态在此结算 }
+    scene: { location: defense_hall, characters: [r_evaluator_a, r_evaluator_b, r_mentor] }
+    setup: [“提问结束。评委商量了三分钟——你数着自己的心跳。”]
+    dialogue:
+      - { speaker: 郑老师, text: "我们讨论一下。你先出去等等。" }
+      - { speaker: 系统, text: "30 天的一切——每一次核查与偷懒、每一次坚持与妥协——现在结算。走廊里，你想着结果之外的事。" }
+    choices:
+      - id: just_wait
+        text: 什么也不想，专心等结果
+        visibleResponse: 你在走廊里站得笔直。三十天的重量都压在这三分钟上。
+        hiddenEffects: []
+      - id: pitch_competition
+        text: 掏出手机和苏晓聊起那个AI创新竞赛——你的研究能做成参赛项目
+        visibleResponse: 苏晓秒回：“报！我来写材料！”你笑了一下，心跳快了一拍，不全是因为答辩。
+        hiddenEffects:
+          - { kind: setFlag, key: transfer_competition }
+          - { kind: relationship, characterId: r_peer, delta: 4 }
+      - id: pitch_venture
+        text: 翻出预调研数据里那条“愿意付费”的评论，越看越睡不着
+        visibleResponse: 78% 的抱怨、明确的价格预期——你第一次用看数据的眼神看一个商业点子。文件夹的名字在脑子里成形了。
+        hiddenEffects:
+          - { kind: setFlag, key: transfer_venture }
+          - { kind: add, key: riskTolerance, value: 5 }
+    automaticEffects:
+      - { kind: setFlag, key: defense_done }
+    terminal: true

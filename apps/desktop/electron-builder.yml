@@ -1,0 +1,26 @@
+appId: com.metis.academy
+productName: METIS Academy
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/**/*
+  - package.json
+  - "!**/*.ts"
+  - "!**/scripts/**"
+  - "!tests/**"
+extraMetadata:
+  main: dist/main/main.js
+asar: true
+win:
+  forceCodeSigning: false
+  target:
+    - nsis
+    - zip
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: METIS Academy
+npmRebuild: false
+compression: maximum

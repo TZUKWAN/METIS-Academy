@@ -1,0 +1,72 @@
+# 创业线：延迟队列目标事件（由 scheduleEvent 触发）
+events:
+  - id: v_d14_behind
+    campaign: venture
+    day: 14
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——跳过验证直接开发的代价, learning: 最贵的验证方式是开发 }
+    scene: { location: workbench, characters: [] }
+    setup: ["开发第 3 天。对照原计划，你落后了整整两天的进度——而隔壁手工帮社团收表的同学，已经聊出了三个新需求。"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：第 10 天'直接开发'的选择，今天开始计息。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 3 }
+    terminal: true
+
+  - id: v_d16_field_mismatch
+    campaign: venture
+    day: 16
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——无规则文件的字段漂移, learning: 第 13 天欠下的 AGENTS.md 今天到账 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["合并报名数据报错：Agent 前天把'学院'字段自作主张改名成了'系'，新旧数据对不齐。"]
+    dialogue:
+      - { speaker: 系统, text: "没有规则文件的每一次'先这样'，都是一次数据事故的预定。" }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: 4 }
+    terminal: true
+
+  - id: v_d18_bug_reboot
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——统一测试的账单, learning: 23 个问题不会自己消失 }
+    scene: { location: lab, characters: [] }
+    setup: ["上线首日，第 16 天那次'统一测试欠账'的 5 个遗留问题，被真实用户一个一个踩了出来。"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：用户替你跑完了那轮没做的测试——以信任为代价。" }
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 6 }
+    terminal: true
+
+  - id: v_d25_bill_shock
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——成本台账缺失的清算, learning: 看不见的成本最致命 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你想复盘成本，才发现第 11-20 天的 AI 调用记录全都没记。账本上一段空白，金额未知。"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：'几块钱而已'×10 天 ≈ 一笔对不上账的支出。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 4 }
+    terminal: true
+
+  - id: v_d27_maintenance_crash
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——需求全做的维护崩塌, learning: 功能坟场是维护出来的 }
+    scene: { location: dorm, characters: [] }
+    setup: ["第 19 天照单全收的 20 条需求，如今每修一处就坏两处。凌晨的报错群消息已经刷了 40 条。"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：功能坟场不是一天建成的——它是第 19 天的每一次'都做'。" }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: 8 }
+      - { kind: setFlag, key: feature_graveyard }
+    terminal: true

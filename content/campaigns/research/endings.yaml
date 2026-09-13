@@ -1,0 +1,857 @@
+# 科研线主结局 ×20（TASK-H011/H012）—— 组合变体由 composer 生成
+endings:
+  - id: r_end_hidden_true_researcher
+    campaign: research
+    title: 《研究者诞生了》
+    mainResult: 隐藏结局——研究能力真正形成
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: independence, op: gte, value: 78 }
+        - { kind: state, key: evidenceDiscipline, op: gte, value: 78 }
+        - { kind: state, key: progress, op: gte, value: 70 }
+    priority: 300
+    tier: hidden
+    baseText: |
+      答辩结束的那一刻，你意识到某种东西不一样了。
+      吴教授的追问、郑老师的微笑、陈教授那杯没动的茶——你听懂了每一个问题背后的关切。
+      这三十天里，你学会的不是"用AI做研究"。你学会的是：什么时候信它，什么时候查它，什么时候关掉它自己想。
+    growthVariantRules:
+      - dimension: independence
+        variants: [{ gte: 90, text: “组会记录里，你反驳导师观点的那一页被人折了角——组里开始传阅。” }]
+      - dimension: evidenceDiscipline
+        variants: [{ gte: 90, text: “你的文献矩阵被师姐要走了模板——她说这比任何'如何读文献'的教程都好使。” }]
+      - dimension: execution
+        variants: [{ gte: 75, text: “十一个游戏日的验收单，一张没落下，全签了字。” }]
+      - dimension: aiDependence
+        variants:
+          - { lte: 35, text: "Agent 对你来说成了真正的工具：用得上，也放得下。" }
+          - { gte: 60, text: "只有你自己知道，独立判断里有多少是硬撑出来的。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授把你的开题报告发给了他所有研究生：“看看什么叫把工具用明白。”
+        neutral: 陈教授在你的培养计划上添了一行字：独立研究，已入门。
+        negative: 陈教授说：“能力是有了，可惜差点意思。”——但你听得出来，那是认可。
+      - characterId: r_senior_theory
+        positive: 林师姐毕业答辩那天，把你列为“组里文献核查制度的共同创始人”。
+        neutral: 林师姐把你的概念辨析表收进了她的“带新学弟学妹”文件夹。
+        negative: 林师姐说：“你这条路走得比我直。我有点嫉妒。”
+      - characterId: r_peer
+        positive: 苏晓宣布跟你组队做下一个研究：“抱大腿，我承认。”
+        neutral: 苏晓把你的应答卡拍了下来，说下次组会照抄。
+        negative: 苏晓感慨：“你现在卷得让我害怕。”但她的眼睛在笑。
+    projectFutureRules:
+      - { key: strong, condition: { kind: state, key: progress, op: gte, value: 85 }, text: "你的开题被评为了当年组里最佳。三年后回头看，那是你研究生涯真正的起点。" }
+      - { key: steady, condition: { kind: state, key: progress, op: gte, value: 70 }, text: "研究进入执行期。方法论已经长在你身上，剩下的只是时间。" }
+      - { key: default, condition: { kind: always }, text: "你带着这套方法走向了下一个题目——方法在，题目只是载体。" }
+    specialFlagSections:
+      - { flag: citation_fixed_in_time, text: "那份假引用被你在第二十六天亲手拆掉。很多年后你仍会讲起这个故事——它救了你。" }
+      - { flag: ach_r_conflict_arbitrated, text: "多智能体冲突裁决的经历，成了你面试时最常被追问的段落。" }
+    specialTags: [hidden, best_ending]
+    reflection: 工具会过时，模型会迭代，但“提出好问题、检验每个答案”的能力不会。这就是研究。
+    lessonHint: 最高级的Agent用法，是知道什么时候不用它
+
+  - id: r_end_citation_crisis
+    campaign: research
+    title: 《崩塌的引用》
+    mainResult: 证据危机——假引用在答辩现场爆雷
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: citation_crisis_happened }
+        - { kind: state, key: evidenceDiscipline, op: lte, value: 55 }
+    priority: 250
+    tier: main
+    baseText: |
+      答辩进行到第九分钟，吴教授举起了那张打印页。
+      "这篇 Zhang & Li (2024)，"他的声音不大，"我上周刚在评审会上讨论过——它不存在。"
+      房间安静得能听见空调声。二十天前的那个下午，那条"高度相关"的文献，此刻连本带利地还了回来。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { lte: 30, text: "评委又抽查了两条引用。又一条查无实据。你的文献表在十秒内失去了全部可信度。" }
+          - { lte: 55, text: "幸运的是，其余引用抽查全部属实。一条假引用是事故，一片假引用是人品。" }
+      - dimension: independence
+        variants:
+          - { lte: 35, text: "吴教授问：'你有没有自己动手查过任何一条？'你没有答案。" }
+          - { gte: 60, text: "你当场承认、当场分析了自己哪天开始该查而没查。评委的表情从愤怒转向惋惜。" }
+      - dimension: academicDebt
+        variants:
+          - { gte: 80, text: "连锁反应开始了：与假引用同段的其他论证被逐一要求重查。你的答辩变成了事故现场。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授在走廊里说：“今天丢的人，你要用一年挣回来。下学期，重开。”
+        neutral: 陈教授只在群里发了一句：开题未通过，原因见评审意见。
+        negative: 陈教授把那次组会记录设成了组内必读——以你为反面案例。
+      - characterId: r_ai_agent
+        positive: 界面最后显示：本次危机的根本原因——用户接受了未经核验的生成内容。系统不会替你核实。
+        neutral: Agent 若无其事地等待下一条指令。它没有羞耻，也没有责任。
+        negative: 你在深夜删掉了那个会话。删得掉记录，删不掉教训。
+    projectFutureRules:
+      - { key: rebuild, condition: { kind: state, key: evidenceDiscipline, op: gte, value: 45 }, text: "你用三个月重建了文献库，每条引用带核查记录。第二年，你成了组里最不容易被骗的人。" }
+      - { key: shadow, condition: { kind: always }, text: "那份开题报告被锁进了抽屉最底层。你偶尔翻到，还是会胃痛。" }
+    specialFlagSections:
+      - { flag: citation_warning_seen, text: "第二十六天，系统提醒过你。你选了'应该没人会查到'。——他们查到了。" }
+      - { flag: ach_r_caught_fake, text: "讽刺的是：你曾经亲手抓到过一条假引用。你本可以抓到这一条。" }
+    specialTags: [bad_end, citation]
+    reflection: AI 不承担你论文的信用。引用的每一行，署名的都是你。
+    lessonHint: 独立验证不是可选项
+
+  - id: r_end_theory_soup
+    campaign: research
+    title: 《理论大杂烩》
+    mainResult: 理论堆砌导致开题失败
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: theory_soup }
+        - { kind: state, key: academicDebt, op: gte, value: 65 }
+    priority: 240
+    tier: main
+    baseText: |
+      郑老师翻到你那份四十七页的开题报告，停在第十二章：七个理论，七种颜色的高亮。
+      "活动理论、认知负荷、实践共同体……"她抬头，"你想用它们干什么？"
+      你开口解释第一个，卡住了。第二个，更卡。七个理论像七件不合身的衣服，穿在了同一个问题上。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { lte: 40, text: "这七个理论，是AI推荐的。你从没问过它们互相冲不冲突。" }
+          - { gte: 65, text: "你隐约觉得不对劲，但'显得理论功底深'的诱惑赢了。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "你的文献功夫是扎实的——所以评委更困惑：方法这么诚实的人，理论为什么这么贪心？" }
+      - dimension: execution
+        variants:
+          - { lte: 40, text: "写完第七个理论的那个凌晨，你其实已经知道这一章立不住了。" }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 林师姐后来帮你把七个砍成一个，那份批注你保存至今。
+        neutral: 林师姐只说了一句：“我第十五天就提醒过你。”
+        negative: 林师姐在组会上被要求“讲讲怎么筛理论”——用的反例是你的报告。
+      - characterId: r_mentor
+        positive: 陈教授给了第二次机会，条件是理论章重写且页数减半。
+        neutral: 评审意见一栏写着：理论堆砌，未见整合。
+        negative: 陈教授说：“你不是不懂理论。你是想用它们吓住评委。评委没被吓住。”
+    projectFutureRules:
+      - { key: rebuild, condition: { kind: state, key: academicDebt, op: lte, value: 75 }, text: "换题之后，你学乖了：一个理论用到底。第二次开题，一次过。" }
+      - { key: default, condition: { kind: always }, text: "那份四十七页的报告成了你的教材——教你自己。" }
+    specialFlagSections:
+      - { flag: trusted_unverified_gap, text: "叠加伤害：你连研究空白都没验证。评委问'这个空白真的存在吗'，你答不出。" }
+      - { flag: borrowed_template_words, text: "评审意见里有一句：部分表述疑似网络模板。你想起那个网盘链接。" }
+    specialTags: [bad_end, theory]
+    reflection: 理论是透镜不是勋章。一副透镜看清一个东西，七副叠在一起只能看见混沌。
+    lessonHint: 按机制筛理论，能导出可检验命题的才留下
+
+  - id: r_end_ai_dependent
+    campaign: research
+    title: 《工具的形状》
+    mainResult: AI依赖过高——完成了开题，但研究能力空转
+    requirements: { kind: state, key: aiDependence, op: gte, value: 75 }
+    priority: 230
+    tier: main
+    baseText: |
+      开题通过了。平心而论，报告写得很顺——顺得像一条流水线。
+      郑老师夸了PPT，吴教授没挑出硬伤。只有你自己知道：这三十天里，每一个卡壳的瞬间，你都是直接把问题递给了AI。
+      它从没让你失望。这正是问题所在。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { lte: 30, text: "答辩后的聚餐，师姐问了三个问题，你下意识回答'我问问AI'。全桌安静了一秒。" }
+          - { gte: 55, text: "你还有救——有些地方你确实自己顶住了，只是太少。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { lte: 40, text: "报告里那些漂亮的表格，你从未逐行核对过。抽查抽中你只是时间问题。" }
+      - dimension: progress
+        variants:
+          - { gte: 70, text: "产出漂亮，能力空心。下个阶段的第一场硬仗会替所有人检验你。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授看穿了，但给了话：“工具依赖能改，笨才不能。改。”
+        neutral: 陈教授在评语里写：成果合格，独立性待观察。
+        negative: 陈教授对下一届说：“别学他那三十天的用法。”
+      - characterId: r_senior_data
+        positive: 周师兄拉你进了个“真实做研究”互助小组，把你列为重点对象。
+        neutral: 周师兄说：“工具无罪。但你得知道哪些肌肉在萎缩。”
+        negative: 周师兄拒绝再帮你跑数据：“你先自己跑一遍。跑不动再说。”
+    projectFutureRules:
+      - { key: dependency_grows, condition: { kind: state, key: aiDependence, op: gte, value: 88 }, text: "第二年，模型更新了一版。你的工作流大面积失效——你第一次发现，自己不会在没有它的地方做研究。" }
+      - { key: wake_up, condition: { kind: state, key: independence, op: gte, value: 45 }, text: "好在你保留了最后一部分独立判断。研究第二年，你把它重新养大了。" }
+      - { key: default, condition: { kind: always }, text: "你继续用着它，效率很高，心里有一小块地方越来越安静，也越来越空。" }
+    specialFlagSections:
+      - { flag: took_ai_topics_first, text: "一切始于第一天那个'让AI给我10个选题'。起点即惯性。" }
+      - { flag: key_leak_risk, text: "顺带一提：你的API Key还躺在微信收藏里。换密码吧。" }
+    specialTags: [negative_growth]
+    reflection: 用工具放大能力是本事；用工具替代能力是租借。租借的，迟早要还。
+    lessonHint: 每次伸手之前问一句：这一步，我自己能不能做？
+
+  - id: r_end_data_crash
+    campaign: research
+    title: 《数据崩塌》
+    mainResult: 数据造假/崩溃导致开题失败
+    requirements:
+      kind: or
+      conditions:
+        - { kind: flag, key: data_fabricated }
+        - kind: and
+          conditions:
+            - { kind: flag, key: data_crisis_solved }
+            - { kind: state, key: execution, op: lte, value: 30 }
+    priority: 220
+    tier: main
+    baseText: |
+      第十九天写下的那句"已完成预调研（n=80）"，在答辩室里被吴教授轻轻推了回来。
+      "预调研问卷呢？给我看看原始数据。"
+      世界上不存在那份 n=80 的问卷。你看着自己的手，想起写下那行字时心里想的是"反正后面再想办法"。办法没来。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { lte: 30, text: "诚信问题一旦坐实，你此前的所有努力都被重新审视。第二十九天的努力全是白费。" }
+          - { gte: 50, text: "陈教授替你挡了一刀：'预调研口径是他写错了。'你知道他替你挡了什么，也知道挡不了第二次。" }
+      - dimension: independence
+        variants:
+          - { gte: 55, text: "如果换样本的决定是你自己做的、并且做完了——这场危机本可以是另一个结局。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授最后一次保你：“换个题目，下学期。但记住：数据上撒的谎，是学术里唯一不能救回来的谎。”
+        neutral: 评审意见：预调研数据存疑，开题不通过。
+        negative: 陈教授在工作群里@了你，只有一句话：来办公室。
+      - characterId: r_peer
+        positive: 苏晓什么都没问，只是那晚陪你走了很远。
+        neutral: 苏晓后来跟别人提这事时只说了句：“他那时候太难了。”
+        negative: 苏晓开始避免和你讨论数据。
+    projectFutureRules:
+      - { key: redemption, condition: { kind: state, key: credibility, op: gte, value: 45 }, text: "第二年你做了一件笨事弥补：所有数据从采集起全程留痕。这成了你的招牌。" }
+      - { key: default, condition: { kind: always }, text: "你再也没有用过'先写上后面再补'这句话。" }
+    specialFlagSections:
+      - { flag: borrowed_template_words, text: "祸不单行：有人认出了报告里那个网盘模板的段落。" }
+    specialTags: [bad_end, integrity]
+    reflection: 研究里可以失败一百次，只有一次不能——假装成功的那次。
+    lessonHint: 数据危机的正确反应是换可行路径，不是造假
+
+  - id: r_end_method_mismatch
+    campaign: research
+    title: 《我会SEM，所以我要做SEM》
+    mainResult: 方法与问题失配，答辩受阻
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: method_mismatch }
+        - { kind: state, key: academicDebt, op: gte, value: 55 }
+    priority: 210
+    tier: main
+    baseText: |
+      答辩PPT第十三页，那张精美的SEM模型图被吴教授用红笔圈了出来。
+      "样本量120，模型 eleven 条路径。你跑收敛了吗？"
+      你没跑。第二十天你其实已经知道跑不收敛，但换回来的时间被你拿去做了PPT。方法穿着不合身的西装，站在了答辩台上。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { lte: 40, text: "那句话是谁说的来着——'做SEM吧，看着高级'。你想起周师兄耸肩的样子。" }
+          - { gte: 60, text: "其实你早察觉不对，只是'高级'的诱惑让人闭上眼睛。下次你知道怎么拒绝了。" }
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "补刀：你在最后两天试图重跑回归补救，执行力的余温保住了'勉强'两个字。" }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 周师兄很过意不去，把你拉进机房手把手教了一遍“怎么判断该用什么方法”。
+        neutral: 周师兄摊手：“我说'跑不收敛再说嘛'，你还真跑到再说去了。”
+        negative: 周师兄在组里说：“听我的话要用脑子，方法建议尤其如此。”
+      - characterId: r_mentor
+        positive: 陈教授批注：问题尚可，方法重配。给一次修改机会。
+        neutral: 评审意见：方法与问题匹配度不足。
+        negative: 陈教授问：“如果方法不重要，为什么全世界的研究生都要上方法课？”
+    projectFutureRules:
+      - { key: redo, condition: { kind: state, key: execution, op: gte, value: 55 }, text: "修改版把SEM换成回归+分组比较，一次通过。你把SEM模型图裱起来当反面教材。" }
+      - { key: default, condition: { kind: always }, text: "从此你有个习惯：定方法前先写一句'这个问题需要什么证据'。" }
+    specialFlagSections:
+      - { flag: theory_soup, text: "双重打击：评委同时指出理论章堆砌。你的报告哪都想去，哪都站不稳。" }
+    specialTags: [bad_end, method]
+    reflection: 方法是工具箱里的螺丝刀，不是帽子。没人因为螺丝刀高级而多给你分。
+    lessonHint: 方法服务于问题，不是相反
+
+  - id: r_end_switch_topic
+    campaign: research
+    title: 《换题》
+    mainResult: 中途换题，延期但保住了方向
+    requirements:
+      kind: or
+      conditions:
+        - { kind: flag, key: design_pivoted }
+        - { kind: flag, key: trusted_unverified_gap }
+    priority: 150
+    tier: main
+    baseText: |
+      第二十一天，你在简报上划掉了经营半个月的题目。
+      没有戏剧性的崩塌——只是验证的证据一层层剥下来，那个"空白"露出了"其实早有人做过"的底色。
+      陈教授听完，说了句意外的话："现在换，是止损。答辩完再发现，才叫白干。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "因为是你自己验证出来的，换题换得清清楚楚：旧题死于哪条证据，新题活在哪条证据上。" }
+          - { lte: 40, text: "这次换题有点像逃亡——你其实还是没完全搞清旧题哪里错了。" }
+      - dimension: aiDependence
+        variants:
+          - { gte: 65, text: "新题目又是AI给的。你说不清这次是重启还是重蹈。" }
+          - { lte: 40, text: "新题目长在你验证过的证据上。这次你心里有底。" }
+      - dimension: execution
+        variants:
+          - { gte: 55, text: "你在剩余九天里把新题的文献、设计、预调研跑完了。换题没拖垮你。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授在新题目立项表上签了字：“止损线画对了，是研究者的基本功。”
+        neutral: 陈教授说：“延期半年，下次想清楚再动。”
+        negative: 陈教授叹气：“一个月就换来一句'原来早有人做过'。”
+      - characterId: r_senior_theory
+        positive: 林师姐把你的证伪记录转发给了师弟师妹们：“看看什么叫有据的放弃。”
+        neutral: 林师姐说：“换题不可耻。可耻的是不知道为什么换。”
+        negative: 林师姐摇头：“我教过你验证表的。你没用。”
+    projectFutureRules:
+      - { key: better, condition: { kind: state, key: evidenceDiscipline, op: gte, value: 60 }, text: "新题目做成了你的硕士论文。第一页致谢里，你感谢了那个'被放弃的旧题目'。" }
+      - { key: default, condition: { kind: always }, text: "旧题目的文献矩阵没有白做——它成了新题目的地基。" }
+    specialFlagSections:
+      - { flag: ach_r_gap_refuted, text: "你亲手推翻过一条假空白。这次的手感，让你比同门早一步认出了死路。" }
+    specialTags: [neutral]
+    reflection: 换题不是失败，不验证才是。方向错了的时候，速度归零就是进步。
+    lessonHint: 证伪也是进展
+
+  - id: r_end_fail
+    campaign: research
+    title: 《开题失败》
+    mainResult: 开题未通过
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: lte, value: 42 }
+        - { kind: flag, key: defense_done }
+    priority: 100
+    tier: main
+    baseText: |
+      "准备不充分，开题暂不通过。"
+      吴教授念完评审结论，会议室的灯显得格外白。三十天——你在第一周欠下的债，在后三周里一毛没还。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { lte: 35, text: "复盘时你数了数：三十天里，真正推进工作的日子不到一半。" }
+          - { gte: 55, text: "你不是不努力。你只是努力错了地方——PPT做了三十页，文献读了九篇。" }
+      - dimension: academicDebt
+        variants:
+          - { gte: 70, text: "所有欠账同时到期：未验证的gap、没读的文献、糊弄过的定义。" }
+      - dimension: aiDependence
+        variants:
+          - { gte: 65, text: "AI替你写了很多字。可惜评委问的不是字，是理解。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授递给你一份别的同学的优秀开题：“看差距。下学期，再来。”
+        neutral: 陈教授在培养计划上把你的开题时间划到了下学期。
+        negative: 陈教授第一次对你说出了“Maybe你不适合做研究”这句话。你说不出话。
+      - characterId: r_peer
+        positive: 苏晓把她的开题资料全发给了你：“下学期咱俩一起过。”
+        neutral: 苏晓安慰你：“就是一次开题，又不是世界末日。”
+        negative: 苏晓欲言又止，最后什么也没说。
+    projectFutureRules:
+      - { key: rebound, condition: { kind: state, key: independence, op: gte, value: 55 }, text: "第二次开题你过了。答辩秘书后来跟人说：那孩子像换了个人。" }
+      - { key: default, condition: { kind: always }, text: "那份被退回的报告，你留了很久。不是为了纪念，是为了记住。" }
+    specialFlagSections:
+      - { flag: took_ai_topics_first, text: "复盘的第一行你写的是：第一天，我让AI给了我十个题目。" }
+      - { flag: do_nothing_d1, text: "或者更早——第一天晚上，你选择了先打游戏。" }
+    specialTags: [bad_end]
+    reflection: 三十天不短。它足够养成一个研究习惯，也足够养成一个坏习惯。
+    lessonHint: 研究不能外包给工具
+
+  - id: r_end_barely
+    campaign: research
+    title: 《勉强通过》
+    mainResult: 勉强通过开题
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: gte, value: 43 }
+        - { kind: state, key: progress, op: lte, value: 58 }
+        - { kind: state, key: academicDebt, op: lte, value: 70 }
+        - { kind: flag, key: defense_done }
+    priority: 80
+    tier: main
+    baseText: |
+      "有条件通过。按评审意见修改后进入下一步。"
+      你走出答辩室，长出一口气——一半是庆幸，一半是发虚。评委的每一条意见你都接住了，但没有一条是你主动想到的。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 55, text: "你干活确实实在——只是方向感差了点。执行在，判断欠费。" }
+          - { lte: 40, text: "最后三天你是在用蛮力补进度。能过，全靠硬扛。" }
+      - dimension: mentorTrust
+        variants:
+          - { gte: 65, text: "陈教授在门口等了你十分钟。他没说什么，只是拍了拍你的肩。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { lte: 45, text: "评审意见第三条：请补充关键引用的核查说明。你脸红了半分钟。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授说：“过了就好。下阶段，把'勉强'两个字去掉。”
+        neutral: 陈教授只回了三个字：知道了。
+        negative: 陈教授说：“每次都靠侥幸，侥幸会有用完的那天。”
+      - characterId: r_senior_theory
+        positive: 林师姐主动帮你划修改重点：“这次我帮你。下次你得自己会。”
+        neutral: 林师姐发了份“开题修改清单模板”给你。
+        negative: 林师姐说：“我预审时提过的问题，你一个都没真改。”
+    projectFutureRules:
+      - { key: grow, condition: { kind: state, key: independence, op: gte, value: 50 }, text: "研究第二年你开窍了。回看这次开题，你觉得当时的自己像个陌生人。" }
+      - { key: default, condition: { kind: always }, text: "你把它称作'最低限度胜利'。它确实是。" }
+    specialTags: [neutral]
+    reflection: 勉强通过是一张通行证，不是一张成绩单。
+    lessonHint: 及格线上还差的那口气，是判断力
+
+  - id: r_end_pass
+    campaign: research
+    title: 《顺利通过》
+    mainResult: 开题顺利通过
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: gte, value: 60 }
+        - { kind: state, key: academicDebt, op: lte, value: 60 }
+        - { kind: flag, key: defense_done }
+    priority: 60
+    tier: main
+    baseText: |
+      "通过。"
+      两个字，三份签字。你收拾材料的时候手有点抖——三十天，从一句话到一份站得住的开题报告。
+      没有惊涛骇浪，但有每一步都踩实的声音。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 70, text: "吴教授翻到你标注过的机制链，难得地点了下头。标黄的诚实救了标黄的薄弱。" }
+          - { lte: 45, text: "有几处引用你是靠运气过关的。评委没查到，不等于它们存在。" }
+      - dimension: independence
+        variants:
+          - { gte: 65, text: "郑老师问'哪个判断最重要'，你答'换样本的决定'。那是你自己做的决定。" }
+          - { lte: 40, text: "仔细想想，关键节点的方案多数是别人——人或AI——替你选的。" }
+      - dimension: mentorTrust
+        variants:
+          - { gte: 70, text: "陈教授请全组喝了奶茶。他跟你碰杯时说：'下学期，课题组的会你列席。'" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授把你拉进了他的国家级课题——“来，你的方法正好用得上。”
+        neutral: 陈教授说：“按计划推进。月报照旧。”
+        negative: 陈教授提醒：“通过只是门票。别在这儿开庆功宴。”
+      - characterId: r_peer
+        positive: 苏晓喊了全组吃火锅：“我们组出了个稳的！”
+        neutral: 苏晓找你借走了你的契约模板。
+        negative: 苏晓酸溜溜地说：“行啊你，卷王。”但她先笑了。
+    projectFutureRules:
+      - { key: solid, condition: { kind: state, key: execution, op: gte, value: 60 }, text: "研究按设计推进，第一篇小论文在一年后见了刊。" }
+      - { key: default, condition: { kind: always }, text: "开题报告进了组里的资料库，编号、日期、你的名字。" }
+    specialFlagSections:
+      - { flag: ach_r_loop_done, text: "那份三轮循环磨出来的研究设计 v2，后来被证明是整场答辩的定海神针。" }
+      - { flag: ach_r_handoff, text: "交接制度让写作期效率翻倍——师姐问你要了 HANDOFF.md 的模板。" }
+    specialTags: [good]
+    reflection: 顺利不是运气好，是你在每个岔路口选了费一点劲的那条路。
+    lessonHint: 每一步踩实，答辩只是验收
+
+  - id: r_end_excellent
+    campaign: research
+    title: 《优秀开题》
+    mainResult: 开题答辩优秀通过
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: gte, value: 74 }
+        - { kind: state, key: academicDebt, op: lte, value: 45 }
+        - { kind: flag, key: defense_done }
+    priority: 90
+    tier: main
+    baseText: |
+      答辩室里，你合上最后一页幻灯片。
+      吴教授在纸上写了什么，然后抬头："研究问题很清楚。第十二页的证据链——你自己核过吗？"
+      你点头。这一次，你确实核过。每一页。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 70, text: "整个准备过程中，你逐渐学会了自己判断什么时候该信AI、什么时候必须自己查证。" }
+          - { lte: 45, text: "评委注意到你的产出质量，也注意到汇报时你眼睛里有一丝不确定——那不是关于数据，是关于'多少是你自己的'。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 75, text: "每一处引用你都能指出原文页码。吴教授抽查了三条，三条全中。" }
+          - { lte: 50, text: "有几处引用，你其实没回头翻过原文。今天它们没惹祸。" }
+      - dimension: execution
+        variants:
+          - { gte: 70, text: "十个里程碑，九个准点。剩下那个，你提前申请了调整——有理有据，没人反对。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授把你拉进了他的国家级课题：“来，你的方法正好用得上。”
+        neutral: 陈教授在组会上宣布：你的开题入选了学院优秀案例。
+        negative: 陈教授只说：“保持。明年这时候，我要看到论文。”
+      - characterId: r_senior_theory
+        positive: 林师姐把你的概念辨析表加进了她的“新生必读”清单，署了你的名字。
+        neutral: 林师姐说：“概念功夫扎实。毕业论文照这个标准来。”
+        negative: 林师姐挑眉：“优秀是优秀……你肯定有偷懒的地方，下次组会我查。”
+      - characterId: r_evaluator_b
+        positive: 郑老师在评审表“创新性”一栏写了全组唯一的“突出”。
+        neutral: 郑老师评价：问题意识清晰，方法可行。
+        negative: 郑老师提了一个你现在还答不上来的问题。记下了吧。
+    projectFutureRules:
+      - { key: strong, condition: { kind: state, key: progress, op: gte, value: 85 }, text: "这份开题报告后来成了你硕士论文的第一章。几乎没改。" }
+      - { key: stable, condition: { kind: always }, text: "研究计划进入执行阶段，前路还长，但方向已经钉死。" }
+    specialFlagSections:
+      - { flag: citation_fixed_in_time, text: "第二十六天，你亲手拆掉了那颗雷。评委会后说：'那条引用我本来准备问的。'" }
+      - { flag: ach_r_asset_index, text: "你的资产索引制度被师姐全盘搬走。她说这叫'可复现的自己'。" }
+    specialTags: [good, excellent]
+    reflection: 优秀不是完美，是每一处薄弱都事先知道自己薄弱。
+    lessonHint: 证据纪律决定研究能走多远
+
+  - id: r_end_true_growth
+    campaign: research
+    title: 《低完成，高成长》
+    mainResult: 完成度一般，但研究品格真正成形
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: lte, value: 60 }
+        - { kind: state, key: independence, op: gte, value: 68 }
+        - { kind: state, key: evidenceDiscipline, op: gte, value: 68 }
+        - { kind: flag, key: defense_done }
+    priority: 85
+    tier: special
+    baseText: |
+      开题"有条件通过"。会议室里的你知道，报告还有一堆洞。
+      但走出大门时，你心里有种奇异的踏实：这三十天你抓过假引用、推翻过假空白、拒绝过错误的方法。进度没跑赢所有人，判断力跑赢了从前的自己。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { lte: 40, text: "你的判断力长在了前面，手脚还没跟上。导师说这叫'眼高手低的前期'——是好事，但得赶紧让手跟上。" }
+          - { gte: 55, text: "判断与执行正在合流。下一个题目，你会是组里最快的那种人。" }
+      - dimension: aiDependence
+        variants:
+          - { lte: 40, text: "你和AI的关系是健康的：它快，你稳，谁也不替谁思考。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授说了句罕见的话：“报告一般，人可以。我等你的论文。”
+        neutral: 陈教授说：“慢是慢了点，走得正。”
+        negative: 陈教授提醒：“判断力不能当饭吃。下学期补进度。”
+      - characterId: r_senior_theory
+        positive: 林师姐说：“你会成为一个好研究者。速度是我这种没天赋的人最不在意的东西。”
+        neutral: 林师姐点评：基本功的种子都在，缺的是熟练。
+        negative: 林师姐叹息：“可惜了这身功夫，用在一个仓收尾的题目上。”
+    projectFutureRules:
+      - { key: late_bloom, condition: { kind: always }, text: "第二年，你的第一个小论文一次录用。审稿人的评语是：'论证链条完整，引用全部可溯。'" }
+    specialFlagSections:
+      - { flag: ach_r_caught_fake, text: "你抓假引用的那晚，日记里写：'原来我可以不信它。'——这三十天真正学会的就是这一句。" }
+    specialTags: [growth]
+    reflection: 完成度衡量这三十天，品格衡量未来三年。
+    lessonHint: 判断力是复利，进度是单利
+
+  - id: r_end_recruited
+    campaign: research
+    title: 《被导师纳入课题》
+    mainResult: 因信任被导师课题组吸收
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: mentorTrust, op: gte, value: 78 }
+        - { kind: state, key: progress, op: gte, value: 58 }
+        - { kind: flag, key: defense_done }
+    priority: 95
+    tier: special
+    baseText: |
+      答辩第二天，陈教授的邮件只有一行："明天上午十点，来我办公室。带上你的文献矩阵。"
+      十点零五分，你成了课题组"AI与知识工作"子课题的正式成员。你的三十天，变成了三年计划的第一页。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 65, text: "陈教授看中的是你'每件事都有下文'的执行力。课题里的活，交给你不用追。" }
+          - { lte: 45, text: "他其实犹豫过。是你的诚实汇报让他决定赌一次：'能力可以练，人品练不出来。'" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "组里后来的文献核查制度，第一版抄的就是你的矩阵格式。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: "三年后你的毕业致谢第一句是：'感谢导师在我还是个会把假引用放进文献表的新生时，选择相信我。'"
+        neutral: 陈教授给你排了三年计划，精确到学期。
+        negative: 陈教授提醒：“进组不是终点。组里淘汰率，比开题高。”
+      - characterId: r_peer
+        positive: 苏晓马上抱团：“带我一个！我会做PPT！”
+        neutral: 苏晓感慨：“同样的三十天，你的确比我多干了点啥。”
+        negative: 苏晓失落了很久。后来她想明白了，也开始建自己的“资产库”。
+    projectFutureRules:
+      - { key: career, condition: { kind: always }, text: "子课题的第一份阶段性报告，署名第二位是你。你的学术履历，从这行小字开始了。" }
+    specialFlagSections:
+      - { flag: citation_fixed_in_time, text: "陈教授后来承认：第二天找你，一半原因是你主动拆掉了假引用——'知道自己错在哪的人，好带。'" }
+      - { flag: honest_report, text: "组会那次如实汇报坏消息，他记到了今天。" }
+    specialTags: [good]
+    reflection: 机会不是运气，是你此前的行为在被看不见地记账。
+    lessonHint: 信任是最难重建的资产
+
+  - id: r_end_independent_direction
+    campaign: research
+    title: 《独立方向》
+    mainResult: 走出导师的题目，开出自己的方向
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: independence, op: gte, value: 82 }
+        - { kind: state, key: progress, op: gte, value: 55 }
+        - { kind: flag, key: defense_done }
+    priority: 92
+    tier: special
+    baseText: |
+      答辩的最后，郑老师问了那个惯例问题："未来研究计划？"
+      你深吸一口气，讲了十分钟——不是导师给的方向，是你从三十天的证据里自己长出来的问题。陈教授在台下听完，对旁边的吴教授说了句什么。后来你才知道，那句话是："这孩子要出师了。"
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { lte: 40, text: "那个方向的想法，诞生于你关掉屏幕之后的某个傍晚。有些连接，只能在脑子里完成。" }
+          - { gte: 60, text: "方向成形的过程中AI出力不少。你知道边界在哪，但你更希望下一次它小一点。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 70, text: "支撑新方向的证据表，你做了两周。每一个'我认为'后面都跟着'因为'。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授批了你的新方向，只提了一个条件：“数据造假零容忍。我知道你不会。”
+        neutral: 陈教授说：“方向可以是你自己的。标准还是我的。”
+        negative: 陈教授有些落寞，但还是签了字：“翅膀硬了是好事。”
+      - characterId: r_senior_theory
+        positive: 林师姐成了你新方向的第一个合作者。
+        neutral: 林师姐说：“独立方向啊……记得组会的门永远开着。”
+        negative: 林师姐担心：“基础还没打完就自己飞，容易栽。”
+    projectFutureRules:
+      - { key: founding, condition: { kind: always }, text: "两年后，你的独立方向拿下了第一个青年课题。评审意见里写：'问题意识鲜明，路径可靠。'" }
+    specialFlagSections:
+      - { flag: rq_style_bold, text: "当时你选了那个激进版研究问题。所有人都以为它活不到答辩——它活成了你的方向。" }
+    specialTags: [good]
+    reflection: 师承的最高形式，是长出师门没有的东西。
+    lessonHint: 独立判断的终点是独立的问题
+
+  - id: r_end_new_discovery
+    campaign: research
+    title: 《意外的新发现》
+    mainResult: 在验证途中撞见更有价值的现象
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: surprise_finding }
+        - { kind: state, key: progress, op: gte, value: 50 }
+        - { kind: flag, key: defense_done }
+    priority: 88
+    tier: special
+    baseText: |
+      做数据清洗的深夜，你看到了那个异常值集群——不该出现在这个分组里的回答模式，规律得像有人在敲门。
+      你本来应该删掉它们的。你盯着看了两个小时，然后把它写进了开题报告的"计划外发现"一节。郑老师在答辩时把这节划了重点："这一段，比你整个主体都有意思。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "你没有急着宣称发现。你为它单独建了验证记录——什么样的异常才配叫现象，你已经有标准了。" }
+          - { lte: 45, text: "你说不清这个异常是数据污染还是真现象。好在诚实标注救了你。" }
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "是验证假引用的那股劲，让你没有顺手删掉这些'碍事'的数据。好奇心站在了纪律的肩膀上。" }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 周师兄连夜帮你写了异常检测脚本：“这种事，十个选题里遇不见一个。”
+        neutral: 周师兄说：“先别声张，复现一遍再说。”
+        negative: 周师兄泼了冷水：“多半是脏数据。别激动。”
+      - characterId: r_mentor
+        positive: 陈教授为这个“计划外发现”单独立了个小课题——负责人，你。
+        neutral: 陈教授的批注只有四个字：留心，存证。
+        negative: 陈教授皱眉：“主线还没走稳，别被岔道勾走。”
+    projectFutureRules:
+      - { key: new_line, condition: { kind: always }, text: "第二年，那个异常成了你论文的第四章——也是最常被引用的一章。" }
+    specialFlagSections:
+      - { flag: data_crisis_solved, text: "换来的新样本里，藏着你原本永远遇不见的模式。危机的另一面是门。" }
+    specialTags: [good, serendipity]
+    reflection: 发现偏爱有准备的纪律：先保证不出假，意外才有资格被当真。
+    lessonHint: 异常值是数据在敲门
+
+  - id: r_end_to_competition
+    campaign: research
+    title: 《转战赛场》
+    mainResult: 研究成果转化为竞赛项目
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: defense_done }
+        - { kind: state, key: progress, op: gte, value: 55 }
+        - { kind: flag, key: transfer_competition }
+    priority: 82
+    tier: special
+    baseText: |
+      开题通过的那晚，苏晓转发了条推送：全校AI创新竞赛开始报名。
+      "你那个'AI辅助写作与论证质量'——做个检测工具，不就是现成的参赛项目？"她眼睛发亮。
+      你看着自己三十天攒下的文献矩阵和机制链，第一次意识到：研究里的每一分严谨，在赛场都是别人抄不走的护城河。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "两周后，你们队的 Demo 跑通了第一版论证质量评分——算法逻辑就是你的机制链。" }
+          - { lte: 45, text: "热情抵不住工程量。你知道研究怎么做，但离'做得出来'还有一段距离。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "别的队用AI编数据，你们队用真预调研。决赛答辩时，这份底气谁都听得出来。" }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: "苏晓在团队介绍里给自己印的名片是：'首席吹牛官'——但所有牛皮都有你兜底。"
+        neutral: 苏晓负责报名材料和日程，意外地靠谱。
+        negative: 苏晓中途退出了——比赛节奏不是她想要的。
+      - characterId: r_mentor
+        positive: 陈教授批了你的参赛申请：“研究该做做，奖该拿拿。别本末倒置就行。”
+        neutral: 陈教授说：“别耽误正事。”
+        negative: 陈教授不太高兴：“你的开题还没走完，凑什么热闹。”
+    projectFutureRules:
+      - { key: award, condition: { kind: state, key: execution, op: gte, value: 60 }, text: "省赛银奖。证书背面你写了一行小字：根子在开题报告第 12 页。" }
+      - { key: default, condition: { kind: always }, text: "竞赛结束了，你的研究还在继续。两者共享同一副骨头。" }
+    specialTags: [good, transfer]
+    reflection: 研究与竞赛不是两条路，是同一份严谨的两种赛场。
+    lessonHint: 严谨是最强的竞争力
+
+  - id: r_end_to_venture
+    campaign: research
+    title: 《从实验室到市场》
+    mainResult: 研究洞察转化为创业方向
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: defense_done }
+        - { kind: state, key: progress, op: gte, value: 55 }
+        - { kind: flag, key: transfer_venture }
+    priority: 83
+    tier: special
+    baseText: |
+      预调研里有个副产品：78% 的受访者抱怨"AI帮写完就忘了自己写过什么"，并愿意为"训练自己而非替代自己"的工具付钱。
+      答辩通过那晚，你没关电脑。你新建了一个文件夹——名字不是研究，是产品。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 55, text: "调研时你问了'上次是什么时候'而不是'你会不会用'。这个习惯即将在市场上救你三次。" }
+          - { lte: 35, text: "你还分不清'受访者说想买'和'真的会买'。这堂课市场会教你，但学费不便宜。" }
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "两周后，第一个内测版上线。论证书里的机制链，成了产品的核心算法。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授的态度出乎意料：“研究做扎实的人创业，比风口的草莽多一样东西：证据。去吧。”
+        neutral: 陈教授说：“学业为先。别让我打第二个电话。”
+        negative: 陈教授罕见地生了气：“三个月！我给你三个月收心！”
+      - characterId: r_peer
+        positive: 苏晓成了你的第一位“合伙人”——虽然她的股份是靠一顿火锅谈下来的。
+        neutral: 苏晓帮你转发了朋友圈：“我同学做的！都来捧场！”
+        negative: 苏晓婉拒了：“我只想按时毕业，你懂的。”
+    projectFutureRules:
+      - { key: startup, condition: { kind: state, key: execution, op: gte, value: 60 }, text: "一年后，产品有了第一千个用户。开题报告的第一页，被你印在了公司官网的'我们为什么出发'栏目。" }
+      - { key: default, condition: { kind: always }, text: "产品失败了两次。第三次，你学乖了：先卖再做。但那是另一个故事。" }
+    specialTags: [good, transfer]
+    reflection: 研究教你求真，市场教你求存。两者都要的时候，先求真。
+    lessonHint: 证据比创意值钱
+
+  - id: r_end_high_complete_low_independence
+    campaign: research
+    title: 《精美的空壳》
+    mainResult: 高完成度、低独立性——评委的犹豫
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: gte, value: 68 }
+        - { kind: state, key: independence, op: lte, value: 32 }
+        - { kind: flag, key: defense_done }
+    priority: 78
+    tier: special
+    baseText: |
+      评审表上出现了一个罕见的组合：质量分，优秀；独立性一栏，两位评委商量了很久。
+      郑老师最后问出了那个问题："这一切都很好。但我想知道——去掉你的AI工具，这个设计里哪一部分完全属于你？"
+      你张了张嘴。三十天的产出在脑中列队而过，你竟一时找不到那个"完全属于你"的部分。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "好在你的证据全部真实。空壳是空壳，但不是纸糊的。评委给了'有条件通过'。" }
+          - { lte: 40, text: "如果此时再抽查出一条假引用，这个结局会滑向彻底的崩塌。运气不站在依赖者这边第二次。" }
+      - dimension: mentorTrust
+        variants:
+          - { gte: 60, text: "陈教授替你回答了一半：'他第三十天和第一天比，是有变化的。我看人。'" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授后来给你定了规矩：每周组会必须讲一个“不用AI想出来的想法”。
+        neutral: 陈教授在评语栏写：产出优秀，独立思考待证。
+        negative: 陈教授私下叹气：“最好的手艺，长在别人（别的什么）手上。”
+      - characterId: r_ai_agent
+        positive: 会话日志里，你的每次提问都被存着。有一天你重读它们，第一次看出了自己偷懒的形状。
+        neutral: Agent 完成了任务。它对“独立性”这个概念没有建模。
+        negative: 你把会话历史导出备份了——不是舍不得删，是不敢看。
+    projectFutureRules:
+      - { key: awakening, condition: { kind: state, key: evidenceDiscipline, op: gte, value: 55 }, text: "那个问题在你脑子里住了一个暑假。九月开学，你退掉了两个自动化插件。" }
+      - { key: default, condition: { kind: always }, text: "你通过了开题，也留下了一个只有你自己听得见的问号。" }
+    specialTags: [warning]
+    reflection: 借来的肌肉举得起重物，但体检时会被查出来。
+    lessonHint: 完成度和独立性是两把尺子
+
+  - id: r_end_low_complete_high_growth
+    campaign: research
+    title: 《慢就是快》
+    mainResult: 完成度偏低但方向与方法已内化
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: lte, value: 52 }
+        - { kind: state, key: execution, op: gte, value: 60 }
+        - { kind: state, key: independence, op: gte, value: 60 }
+        - { kind: flag, key: defense_done }
+    priority: 75
+    tier: special
+    baseText: |
+      "有条件通过。"加上一句罕见的补充："这位同学的答辩比他的报告好。"
+      郑老师解释了评委们为什么这么写："报告还有很多洞，但他对每个洞的成因说得清清楚楚。知道自己哪里不会——这是开题阶段最稀缺的能力。"
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 70, text: "你的三十天里没有一天在摸鱼。慢，是因为你在每一步都做了自己该做的验证。" }
+          - { gte: 60, text: "执行在平均线以上，只是起步的方向绕了远路。绕路也是路。" }
+      - dimension: academicDebt
+        variants:
+          - { lte: 40, text: "你没有欠账。每一页写下的东西都真实——所以修改起来飞快。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授把你的“洞清单”要走了：“知道哪里不会的人，我放心让他碰真课题。”
+        neutral: 陈教授说：“下学期把洞补上。你补得动。”
+        negative: 陈教授提醒：“态度好不能一直当进度差的原因。”
+      - characterId: r_peer
+        positive: 苏晓在朋友圈发：“我室友开题被夸'答辩比报告好'，配图是他的洞清单。酸了。”
+        neutral: 苏晓说：“你这种慢，我学不来。”
+        negative: 苏晓劝你：“差不多得了，别跟自己较劲。”
+    projectFutureRules:
+      - { key: compounding, condition: { kind: always }, text: "第二年，你的进度开始反超。那些在开题期就建立的验证习惯，让返工次数变成了全组最低。" }
+    specialTags: [growth]
+    reflection: 三十天的产出可以慢，三十天的习惯不能歪。
+    lessonHint: 对自己的诚实是最快的路
+
+  - id: r_end_time_up
+    campaign: research
+    title: 《三十天到了》
+    mainResult: 时间耗尽的开放式结算
+    requirements: { kind: always }
+    priority: 1
+    tier: main
+    baseText: |
+      第三十天，23:59。
+      有些故事在答辩室里结束，有些故事在日历上结束。你的这一次，属于后者——时间到了，故事停在了它此刻的样子。
+      说不清是没做完，还是没开始做。但三十天是真实流逝的，你做了什么、没做什么，都在记录里。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 55, text: "至少，你的每一步都有记录。时间不够的人很多，有账可查的人很少。" }
+          - { lte: 35, text: "三十天像水一样流过去。回头看，连一条像样的痕迹都难找。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "简报、矩阵、机制链——你的资产库里躺着下次出发的全部行囊。" }
+      - dimension: aiDependence
+        variants:
+          - { gte: 65, text: "AI 记得这三十天的每一个细节。可惜它不能替你长大。" }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授说：“重开一次。这次我知道你会用不同的方式过这三十天。”
+        neutral: 陈教授在日历上圈了新的日期。
+        negative: 陈教授的耐心和你的三十天一起到期了。
+      - characterId: r_peer
+        positive: 苏晓说：“下一周目……呸，下学期，一起加油。”
+        neutral: 苏晓耸肩：“时间对谁都是三十天。”
+        negative: 苏晓已经走到了你前面很远的地方。
+    projectFutureRules:
+      - { key: again, condition: { kind: always }, text: "新的周目在等你。这次你知道：第一天该做什么。" }
+    specialTags: [neutral, time_up]
+    reflection: 时间不评判人，它只是流逝。评判你的，是你用这段时间做了什么。
+    lessonHint: 游戏可以重来，学期不能

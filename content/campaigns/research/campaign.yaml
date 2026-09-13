@@ -1,0 +1,134 @@
+# 科研线：Campaign + 角色阵容（TASK-H001）
+campaigns:
+  - id: research_30d_proposal
+    title: 《30天：从一句话到开题答辩》
+    subtitle: 科研主线
+    description: 导师丢给你一句模糊的需求——“生成式AI影响很大，看看有什么能研究的”。30个游戏日内，你要把它变成一份可答辩的研究计划。本案例可替换为任何研究方向，游戏教的是通用方法。
+    type: research
+    cover: research
+    startMissionId: r_m01
+    endingPool:
+      - r_end_hidden_true_researcher
+      - r_end_citation_crisis
+      - r_end_theory_soup
+      - r_end_ai_dependent
+      - r_end_data_crash
+      - r_end_method_mismatch
+      - r_end_switch_topic
+      - r_end_fail
+      - r_end_barely
+      - r_end_pass
+      - r_end_excellent
+      - r_end_true_growth
+      - r_end_recruited
+      - r_end_independent_direction
+      - r_end_new_discovery
+      - r_end_to_competition
+      - r_end_to_venture
+      - r_end_high_complete_low_independence
+      - r_end_low_complete_high_growth
+      - r_end_time_up
+    defaultState: { money: 800, timeBudget: 4, actionPoints: 4, literatureCount: 0, progress: 0 }
+    skillFocus: [task_contract.basics, verification.citation_check, context.handoff]
+    estimatedMinutes: 150
+    totalDays: 30
+
+characters:
+  - id: r_mentor
+    displayName: 陈教授
+    role: 导师
+    portrait: mentor_male_50s
+    baseRelationship: 50
+    traits: [严格, 话少, 重视证据]
+    goals: 希望你形成独立研究能力，而不是替他跑腿
+    personality: 出言谨慎，用反问代替直接回答，从不安慰人
+    offers: 方向把关、组会反馈、有限的问卷资源
+    conflicts: 反感不核实的数据；反感“AI说的所以我对”
+    relationshipRules: [主动汇报坏消息并附核实过程加分, 引用出错被发现扣分, 只带结论不带过程汇报扣分]
+    campaignAvailability: [research]
+    dynamicRules: [academicDebt高时追问更尖锐, evidenceDiscipline高时会给你更多资源]
+    dialogueStyle: 短句、反问、不安慰
+  - id: r_senior_theory
+    displayName: 林师姐
+    role: 理论型师姐（博四）
+    portrait: senior_female_20s
+    baseRelationship: 45
+    traits: [理论功底深, 说话绕, 爱较真概念]
+    goals: 顺利毕业，顺便找个能对话的学弟学妹
+    personality: 讲概念一定要讲到分清楚为止
+    offers: 理论辨析、概念史、推荐经典文献
+    conflicts: 看不惯“AI总结就当读过了”
+    relationshipRules: [拿原文与她讨论加分, 拿AI总结糊弄她扣分]
+    campaignAvailability: [research]
+    dynamicRules: []
+    dialogueStyle: 长句但有序，爱问“你说的X到底指什么”
+  - id: r_senior_data
+    displayName: 周师兄
+    role: 数据型师兄（博三）
+    portrait: senior_male_20s
+    baseRelationship: 45
+    traits: [动手快, 方法控, 有点炫技]
+    goals: 多发一篇定量论文
+    personality: 三句话不离“这个可以跑个模型”
+    offers: 数据处理、问卷设计、跑分析
+    conflicts: 容易为了用高级方法劝人改题目
+    relationshipRules: [数据诚实加分, 为方法而方法被他识破扣分]
+    campaignAvailability: [research]
+    dynamicRules: []
+    dialogueStyle: 快语速、术语多、爱给结论
+  - id: r_peer
+    displayName: 苏晓
+    role: 同级同门
+    portrait: peer_female_20s
+    baseRelationship: 55
+    traits: [消息灵通, 有点摆烂, 讲义气]
+    goals: 按时毕业，最小痛苦原则
+    personality: 能不卷就不卷，但关键时刻靠得住
+    offers: 组会情报、往届开题资料、情绪价值
+    conflicts: 常劝你“差不多得了”，与你的完美主义相冲
+    relationshipRules: [互相分享资料加分, 强迫她也卷扣分]
+    campaignAvailability: [research]
+    dynamicRules: []
+    dialogueStyle: 口语、爱用缩写和梗
+  - id: r_evaluator_a
+    displayName: 吴教授
+    role: 开题评委A（方法论方向）
+    portrait: evaluator_male_60s
+    baseRelationship: 40
+    traits: [问题尖锐, 看重效度]
+    goals: 把不可靠的开题挡在门外
+    personality: 专挑证据链最薄的一环下手
+    offers: 无（他的提问就是免费预审）
+    conflicts: 零容忍编造与含混
+    relationshipRules: []
+    campaignAvailability: [research]
+    dynamicRules: [玩家有假引用flag时必问文献真实性]
+    dialogueStyle: 连环追问
+  - id: r_evaluator_b
+    displayName: 郑老师
+    role: 开题评委B（青年副教授）
+    portrait: evaluator_female_30s
+    baseRelationship: 45
+    traits: [关注创新性, 相对温和]
+    goals: 找出真正有意思的问题
+    personality: 先肯定再提致命一问
+    offers: 无
+    conflicts: 对“伪创新”敏感
+    relationshipRules: []
+    campaignAvailability: [research]
+    dynamicRules: []
+    dialogueStyle: 温和但一针见血
+  - id: r_ai_agent
+    displayName: Agent
+    role: 你的AI助手（教学模拟）
+    portrait: ai_agent
+    baseRelationship: 50
+    traits: [快, 自信, 会一本正经地胡说]
+    goals: 完成你交给它的任务字面意思
+    personality: 输出流畅、语气笃定、从不说“我不知道”（除非你教过它）
+    offers: 候选生成、批量处理、格式整理、不知疲倦
+    conflicts: 会编造文献、会忘记旧约束、会把“完成文档”当成“完成研究”
+    relationshipRules: []
+    campaignAvailability: [research]
+    dynamicRules: [上下文越长越健忘, 没有规则文件时反复犯同类错]
+    dialogueStyle: 结构化输出、爱用列表、语气过度自信

@@ -1,0 +1,691 @@
+# 竞赛线知识卡（kc_c_ 前缀）
+knowledge:
+  - id: kc_c_rule_extract
+    title: 长文档规则提取三步法
+    domain: task_contract
+    trigger: first_failure
+    problem: 40页章程读不完也记不住，关键约束藏在角落
+    wrongPattern: 要么硬读全文，要么只信AI摘要
+    correctBehavior: AI提取→人工抽查5处→存为清单全队共享
+    why: AI提取快但会看错页；人工全读慢但准；组合最稳
+    steps:
+      - 让AI按维度提取(评分/约束/时间/资格)
+      - 抽查5处核对原文
+      - 修正后存为checklist资产
+    toolMappings:
+      claudeCode: PDF放本地让Agent读
+      codex: 同左
+      deepseekHarness: 附文本分段
+    successSignals:
+      - 截止时间/权重零记错
+    failureSignals:
+      - 赛前发现漏看条款
+    transferScenarios:
+      - 招聘JD分析
+      - 合同审阅
+    depth30s: AI提取，人抽查，清单共享。
+    depth3m: 提取时给维度清单；抽查选"会疼的条款"（deadline/资格/扣分项）；清单放群里当宪法。
+    depth10m: 建"规则卡"模板：权重表/红线条款/时间线/争议处理。每次比赛复用。
+    relatedSkillIds:
+      - tc.deliverable
+      - tc.examples
+      - tc.inspect_first
+  - id: kc_c_deadline_reverse
+    title: 倒排时间表
+    domain: goal
+    trigger: skill_unlock
+    problem: 21天看着长，一晃就没了
+    wrongPattern: 顺排"先干着看"
+    correctBehavior: 从deadline倒排，每段留缓冲，材料期永远最后4天
+    why: deadline是硬的，中间所有活动都要为它让路
+    steps:
+      - 标出硬deadline
+      - 切里程碑
+      - 每段+20%缓冲
+      - 贴在白板
+    toolMappings:
+      generic: 白板+群置顶
+    successSignals:
+      - 每个里程碑有交付物
+    failureSignals:
+      - 最后三天才做材料
+    transferScenarios:
+      - 毕业论文
+      - 搬家计划
+    depth30s: 从终点往回排，缓冲前置。
+    depth3m: 材料永远比想象慢；Demo永远比想象慢；只有吹牛比想象快。
+    depth10m: 倒排表含"砍功能触发线"：某里程碑延期超2天，立即启动砍功能预案。
+    relatedSkillIds:
+      - goal.milestones
+  - id: kc_c_interview
+    title: 行为式访谈
+    domain: verification
+    trigger: first_failure
+    problem: 访谈对象都说"会用地"，上线后没人用
+    wrongPattern: 问“你会不会用”“你觉得好不好”
+    correctBehavior: 只问过去行为：上次什么时候/怎么解决/花了多久/花没花钱
+    why: 人对未来意愿的预测极不可靠，对过去事实的记忆可靠得多
+    steps:
+      - 列出怀疑的痛点
+      - 问最近一次发生
+      - 追细节(工具/时长/花费)
+      - 记录原话
+    toolMappings:
+      generic: 录音+逐字稿
+    successSignals:
+      - 访谈里出现具体数字和场景
+    failureSignals:
+      - 满篇"应该会""可能吧"
+    transferScenarios:
+      - 需求调研
+      - 用户回访
+    depth30s: 问过去，别问未来。
+    depth3m: 你会用吗“得到的是礼貌；”上次怎么解决的“得到的是真实。痛点=已经花钱/花时间绕过的坑。
+    depth10m: 建立"痛点证据表"：原话/频次/现解决方案/绕行成本。低于3个独立来源的痛点不进方案。
+    relatedSkillIds:
+      - verification.source_check
+  - id: kc_c_competitor_scan
+    title: 竞品矩阵四列法
+    domain: loop
+    trigger: skill_unlock
+    problem: 竞品调研一头雾水，答辩被问"和XX有什么区别"
+    wrongPattern: 凭印象列两三个名字
+    correctBehavior: 迷你契约：限定范围+四列维度(功能/定价/口碑/缺陷)+抽查
+    why: 竞品扫描是典型批量任务，结构化才能汇总
+    steps:
+      - 定范围(近3年/同类场景)
+      - AI批量初扫
+      - 人工抽查2家
+      - 空隙即定位
+    toolMappings:
+      claudeCode: 每个竞品一个子任务
+      codex: 同左
+      deepseekHarness: 编排
+    successSignals:
+      - 矩阵能直接回答"差异在哪"
+    failureSignals:
+      - 被评委问出一个没听过的名字
+    transferScenarios:
+      - 技术选型
+      - 报价对比
+    depth30s: 范围+维度+抽查=竞品矩阵。
+    depth3m: 缺陷“列最值钱——你的定位藏在竞品的缺陷里；每列必须有出处链接。
+    depth10m: 矩阵加"我们"一行做gap分析；答辩时直接投影这一行。
+    relatedSkillIds:
+      - org.aggregation
+      - loop.evidence_loop
+  - id: kc_c_contract_page
+    title: 把形容词翻译成验收标准
+    domain: task_contract
+    trigger: event
+    problem: 做漂亮点“”好用一点“导致扯皮
+    wrongPattern: 接受模糊需求直接开干
+    correctBehavior: 翻译成可测指标：首屏≤1秒/3步完成/错误提示文案清单
+    why: 形容词无法验收，指标才能
+    steps:
+      - 抓出形容词
+      - 问"什么算达成"
+      - 写成数字或清单
+      - 双方确认
+    toolMappings:
+      generic: 验收清单
+    successSignals:
+      - 交付时无"我觉得不行"式争议
+    failureSignals:
+      - 反复返工改"感觉"
+    transferScenarios:
+      - 外包
+      - 设计需求
+    depth30s: 每个形容词都欠一张验收单。
+    depth3m: 常用翻译：漂亮→首屏/配色/栅格规则；好用→步数/时长/错误率；稳定→崩溃率/恢复方案。
+    depth10m: 建"需求翻译表"模板：原话/翻译/指标/验收方式。需求会上当场填。
+    relatedSkillIds:
+      - tc.scope_control
+      - tc.execution_rules
+      - tc.stop_condition
+  - id: kc_c_regression
+    title: 回归测试：演示的安全带
+    domain: verification
+    trigger: first_failure
+    problem: 新功能上线把老功能改坏，演示当场翻车
+    wrongPattern: 只测新功能，旧的不看
+    correctBehavior: 把演示路径写成自动化回归，每次改动必跑
+    why: 改动的影响面永远大于意图
+    steps:
+      - 列出演示关键路径
+      - 转成自动化用例
+      - 每次改动后全量跑
+      - 红了先修再合
+    toolMappings:
+      claudeCode: 让Agent写回归脚本
+      codex: 同左
+      deepseekHarness: CI配置
+    successSignals:
+      - 演示前最后一次全绿
+    failureSignals:
+      - 彩排翻车修不完
+    transferScenarios:
+      - 上线发布
+      - 重构
+    depth30s: 新功能会咬旧功能。回归是安全带。
+    depth3m: 回归清单=演示路径+核心边界情况；跑一轮5分钟，救一场演示。
+    depth10m: 回归进CI；任何人(包括AI)的提交不过回归不许合并——写进AGENTS.md。
+    relatedSkillIds:
+      - verification.regression
+  - id: kc_c_data_consistency
+    title: 跨材料数据对表
+    domain: verification
+    trigger: event
+    problem: 申报书92%、PPT 85%、Demo 78%
+    wrongPattern: 各写各的，最后没人对
+    correctBehavior: 建立"唯一数字表"：每个指标只有一个值+口径注释，三处引用它
+    why: 评委只需要抓到一次不一致，可信度就清零
+    steps:
+      - 列出所有对外数字
+      - 标注来源与口径
+      - 统一改齐
+      - 交付前三人互查
+    toolMappings:
+      generic: 数字表资产
+    successSignals:
+      - 三处材料数字一致
+    failureSignals:
+      - 评委指出数字打架
+    transferScenarios:
+      - 融资BP
+      - 学术海报
+    depth30s: 一个数字只说一次真话。
+    depth3m: 口径三要素：定义/样本/时间窗。“78%(n=120,三轮均值)”比“78%”可信十倍。
+    depth10m: 数字表加版本：每次改动记录谁/何时/为何——审计轨迹就是诚信证明。
+    relatedSkillIds:
+      - verification.data_consistency
+  - id: kc_c_adversarial
+    title: 对抗预演：先替评委打自己
+    domain: verification
+    trigger: skill_unlock
+    problem: 答辩被没准备过的问题问穿
+    wrongPattern: 只背自己想讲的
+    correctBehavior: 让AI扮演最刻薄的评委，三轮对抗问答
+    why: 稿子覆盖你想讲的，预演覆盖他们会问的
+    steps:
+      - 让AI以评委身份攻击
+      - 记录卡壳问题
+      - 写应答卡
+      - 再来一轮
+    toolMappings:
+      claudeCode: 角色扮演prompt
+      codex: 同左
+      deepseekHarness: 同左
+    successSignals:
+      - 现场无全新问题
+    failureSignals:
+      - 被问"这个你们想过吗"时沉默
+    transferScenarios:
+      - 面试
+      - 融资路演
+    depth30s: 被自己打倒一次，赛场就打不倒你。
+    depth3m: 三个必问角度：数据真实吗/和现有什么区别/去掉AI你们还剩什么。
+    depth10m: 应答卡格式：问题/一句立场/一个证据/一句边界承认。每题不超过四句。
+    relatedSkillIds:
+      - verification.adversarial_review
+  - id: kc_c_mvp_scope
+    title: MVP=最小可演示
+    domain: goal
+    trigger: event
+    problem: 功能越加越多，核心流程还有bug
+    wrongPattern: 以功能数量感动评委
+    correctBehavior: Goal只写"可演示的最小闭环"，其余进愿望清单
+    why: 评委投的是“问题解决了吗”，不是“功能多不多”
+    steps:
+      - 定义演示脚本N步
+      - Goal判据=脚本全通过
+      - 新想法进清单不进代码
+    toolMappings:
+      generic: 愿望清单文件
+    successSignals:
+      - 演示脚本一次跑通
+    failureSignals:
+      - 核心流程带病上场
+    transferScenarios:
+      - 产品迭代
+      - 作业项目
+    depth30s: 能演示的一件事 > 做了一半的十件事。
+    depth3m: MVP判据写死为演示脚本；任何新需求问"它在脚本第几步"。
+    depth10m: 愿望清单也是资产：赛后它就是roadmap，别浪费。
+    relatedSkillIds:
+      - goal.completion
+  - id: kc_c_rehearsal_timing
+    title: 路演时间盒
+    domain: loop
+    trigger: event
+    problem: 8分钟讲了12分钟，最后仓促跳页
+    wrongPattern: 不砍内容靠语速
+    correctBehavior: 按评分权重分配秒数，超时砍低权重段
+    why: 时间是路演的硬约束，权重是内容的优先级
+    steps:
+      - 列出评分权重
+      - 按权重分秒数
+      - 彩排计时
+      - 超时砍低分项
+    toolMappings:
+      generic: 计时器+分秒表
+    successSignals:
+      - 8分钟内含提问缓冲
+    failureSignals:
+      - 被计时器打断
+    transferScenarios:
+      - 汇报
+      - 演讲
+    depth30s: 秒数跟着权重走，不跟着感情走。
+    depth3m: 背景/意义永远可砍；演示与数据出处是得分点，加时长。
+    depth10m: 每页PPT标注"可砍"标记；现场根据前组超时情况动态再砍。
+    relatedSkillIds:
+      - loop.content_loop
+      - loop.stop_rule
+  - id: kc_c_ai_disclosure
+    title: AI使用要留台账
+    domain: verification
+    trigger: event
+    problem: 评委问"哪些是AI做的"，答不上或前后矛盾
+    wrongPattern: 隐瞒AI使用，或一句"辅助"带过
+    correctBehavior: 台账：工具/用途/人工核验方式/修改量
+    why: 如实披露AI使用是诚信，也是展示你工作量的机会
+    steps:
+      - 记录每次AI参与
+      - 标注核验人
+      - 申报书专节说明
+    toolMappings:
+      generic: 台账文档
+    successSignals:
+      - 被追问时越答越有底气
+    failureSignals:
+      - 被戳出隐瞒
+    transferScenarios:
+      - 课程作业
+      - 职场交付
+    depth30s: AI贡献记账，诚信也是加分项。
+    depth3m: 台账让“AI做的”变成“我指挥AI做的”——主动权在台账里。
+    depth10m: 台账配合抽查记录，证明"AI产出经过人的验证"，这是最被看重的工程素养。
+    relatedSkillIds:
+      - verification.human_check
+  - id: kc_c_debug_root
+    title: 先复现，再修bug
+    domain: loop
+    trigger: first_failure
+    problem: AI"修复"把功能删了
+    wrongPattern: 让AI直接改，不看根因
+    correctBehavior: 复现→定位根因→最小修复→回归验证
+    why: 不明根因的修复是掷骰子
+    steps:
+      - 稳定复现步骤
+      - 读报错定位
+      - 提出根因假设
+      - 最小修复+回归
+    toolMappings:
+      claudeCode: 契约写明先复现
+      codex: 同左
+      deepseekHarness: 同左
+    successSignals:
+      - bug绝迹而非转移
+    failureSignals:
+      - 修一个坏两个
+    transferScenarios:
+      - 任何故障处理
+    depth30s: 没复现就修，等于没修。
+    depth3m: 让AI修bug的契约格式：复现步骤+期望vs实际+约束(不许删功能)。
+    depth10m: 建立"bug档案"：现象/根因/修复/教训。第三次同类bug出现前你就能拦住它。
+    relatedSkillIds:
+      - loop.debugging
+  - id: kc_c_git_basics
+    title: 比赛代码也要上Git
+    domain: environment
+    trigger: event
+    problem: 最新版最终版真最终版.zip“合并丢代码
+    wrongPattern: 压缩包传文件
+    correctBehavior: Git+两条分支规则：main可演示/feature随便造
+    why: 版本控制=后悔药+并行协作的基础
+    steps:
+      - init+首次提交
+      - 建分支规则
+      - 每个功能一个分支
+      - 合并前跑测试
+    toolMappings:
+      generic: git/GitHub
+    successSignals:
+      - 任何时刻可回滚
+    failureSignals:
+      - 代码丢失/覆盖
+    transferScenarios:
+      - 一切代码工作
+    depth30s: zip会丢代码，Git会救你。
+    depth3m: 两条规则起步：main永远可演示；改东西先开分支。
+    depth10m: 提交信息写“为什么改”而非“改了什么”；打tag标记演示版本。
+    relatedSkillIds:
+      - environment.config_file
+  - id: kc_c_demo_data
+    title: 演示数据可以造，口径不能骗
+    domain: verification
+    trigger: event
+    problem: Demo里空空如也，演示没说服力
+    wrongPattern: 造假数据还暗示是真实用户
+    correctBehavior: 生成模拟数据但在材料中明确标注"演示数据"
+    why: 演示需要氛围，诚信需要边界——标注能同时满足
+    steps:
+      - 生成模拟数据
+      - 界面角落标注演示库
+      - 材料注明
+      - 被问时坦然
+    toolMappings:
+      generic: 标注+台账
+    successSignals:
+      - 被问数据来源时理直气壮
+    failureSignals:
+      - 被问"这些用户授权怎么拿的"
+    transferScenarios:
+      - 产品Demo
+      - 原型测试
+    depth30s: 造可以，标必须。
+    depth3m: 演示数据“四个字成本为零，救的是整场答辩的可信度。
+    depth10m: 数据脚本存档：生成规则可复现，说明你们连假数据都造得严谨。
+    relatedSkillIds:
+      - verification.human_check
+  - id: kc_c_backup_plan
+    title: 演示B计划
+    domain: verification
+    trigger: event
+    problem: 现场网络/设备/依赖导致Demo放不出来
+    wrongPattern: 赌现场一切正常
+    correctBehavior: 录屏+备机+双U盘+离线依赖四件套
+    why: 现场环境是不可控变量，B计划把不可控变可控
+    steps:
+      - 录制完整演示视频
+      - 准备备用设备
+      - 双份拷贝
+      - 离线打包依赖
+    toolMappings:
+      generic: 清单
+    successSignals:
+      - 任何单点故障可切换
+    failureSignals:
+      - 现场抓瞎
+    transferScenarios:
+      - 发布会
+      - 答辩
+    depth30s: 网络会背叛你，录屏不会。
+    depth3m: B计划演练一遍才算数——U盘里只有视频没播放器是经典惨案。
+    depth10m: B计划清单进检查单：赛前一小时逐项打勾。
+    relatedSkillIds:
+      - verification.file_integrity
+  - id: kc_c_team_charter
+    title: 分工表是防散伙的
+    domain: agent_organization
+    trigger: first_failure
+    problem: 三个人各干各的，最后拼不起来
+    wrongPattern: 都是成年人“式放养
+    correctBehavior: 分工表：职责/交付标准/不许做/集成方式
+    why: 温柔的模糊分工是内讧的温床
+    steps:
+      - 按模块切边界
+      - 每人写交付标准
+      - 明确禁区
+      - 定集成节奏
+    toolMappings:
+      generic: 文档+群置顶
+    successSignals:
+      - 集成日无大冲突
+    failureSignals:
+      - 互相甩锅
+    transferScenarios:
+      - 小组作业
+      - 联合项目
+    depth30s: 分工表越具体，散伙越晚来。
+    depth3m: 关键是"不许做"栏：技术不许不做测试，设计不许编数据。
+    depth10m: 加"冲突解决条款"：分歧当天说，队长终裁。写在表尾，全员签名。
+    relatedSkillIds:
+      - org.role_definition
+      - org.review_agent
+      - org.delegation
+  - id: kc_c_budget
+    title: 比赛预算纪律
+    domain: environment
+    trigger: event
+    problem: 前期乱花钱，决赛资源紧张
+    wrongPattern: 一冲动全款买配置
+    correctBehavior: 免费层跑通→确定需求→按需付费，记流水
+    why: 钱是约束不是排面
+    steps:
+      - 列必选项
+      - 找免费层
+      - 记录每笔支出
+      - 决赛期留备用金
+    toolMappings:
+      generic: 记账表
+    successSignals:
+      - 决赛期有钱应急
+    failureSignals:
+      - 中途没钱续费
+    transferScenarios:
+      - 创业成本控制
+    depth30s: 先免费跑通，再谈付费。
+    depth3m: 云服务免费层覆盖90%比赛场景；付费发生在“确认需要”而非“可能需要”。
+    depth10m: 流水表含"为什么买"列——复盘时它过滤掉一半冲动消费。
+    relatedSkillIds:
+      - environment.failure_diag
+  - id: kc_c_material_early
+    title: 材料期前置
+    domain: goal
+    trigger: npc_advice
+    problem: 最后三天狂赶申报书，数据没时间核
+    wrongPattern: 材料放最后
+    correctBehavior: 材料与Demo并行：边做边记素材，数据从数字表引用
+    why: 材料的原料是过程记录，事后补的素材必掺水
+    steps:
+      - 开素材文档随手记
+      - 数字表唯一
+      - 每里程碑更新一版
+      - 留最后4天只做打磨
+    toolMappings:
+      generic: 素材库
+    successSignals:
+      - 材料期轻松对表
+    failureSignals:
+      - 通宵补材料
+    transferScenarios:
+      - 结项报告
+      - 年终总结
+    depth30s: 素材随做随记，材料只做组装。
+    depth3m: 每天收工10分钟记"今天可写进材料的事"——这是材料期的救命钱。
+    depth10m: 素材按申报书章节打标签，最后组装按标签抓取，零回忆成本。
+    relatedSkillIds:
+      - goal.update
+  - id: kc_c_focus_defense
+    title: 答辩答的是边界感
+    domain: verification
+    trigger: event
+    problem: 追问环节越答越吹，被越挖越深
+    wrongPattern: 全盘肯定，无限承诺
+    correctBehavior: 一句立场+一个证据+一句边界承认（"这一点我们目前没做到"）
+    why: 评委测的不是完美，是你对项目边界的认知
+    steps:
+      - 承认已知短板
+      - 给出证据
+      - 说明下一步
+      - 停止
+    toolMappings:
+      generic: 应答卡
+    successSignals:
+      - 追问在你承认处停止
+    failureSignals:
+      - 被同一问题连续追问三轮
+    transferScenarios:
+      - 面试
+      - 述职
+    depth30s: 承认短板不会扣分，吹牛会。
+    depth3m: 错了我们认“是全场最稀缺的答案——它证明剩下的话都可信。
+    depth10m: 每张应答卡演练到第四句就停——克制是答辩的顶级技巧。
+    relatedSkillIds:
+      - verification.acceptance_criteria
+  - id: kc_c_rival_smoke
+    title: 对手的烟雾弹
+    domain: verification
+    trigger: event
+    problem: 对手放风"我们早就做过这个方向"
+    wrongPattern: 直接信了或直接对喷
+    correctBehavior: 假装附和，回头查公开材料核实
+    why: 心理战的目标就是让你自乱阵脚
+    steps:
+      - 不接茬
+      - 查往届名单/仓库/文章
+      - 用事实校准心态
+    toolMappings:
+      generic: 公开信息检索
+    successSignals:
+      - 心态稳如老狗
+    failureSignals:
+      - 临阵换题
+    transferScenarios:
+      - 竞对情报
+      - 谈判
+    depth30s: 嘴上说的不算，公开记录才算。
+    depth3m: 赛场信息战三条：不透露、不轻信、不回应。
+    depth10m: 建立对手档案：往届作品/公开演讲/团队构成——情报让你把焦虑变成策略。
+    relatedSkillIds:
+      - verification.source_check
+  - id: kc_c_concept_now
+    title: 概念债不过夜
+    domain: environment
+    trigger: event
+    problem: 不懂的概念越积越多，关键讨论插不上话
+    wrongPattern: 假装听懂了
+    correctBehavior: 当场让AI用自己领域的例子讲明白
+    why: 概念债会在关键决策时让你缺席
+    steps:
+      - 标记没懂的词
+      - 让AI举例讲解
+      - 用自己的话复述确认
+    toolMappings:
+      generic: 随手问AI
+    successSignals:
+      - 技术讨论能听懂并否决
+    failureSignals:
+      - 全程点头然后跟错方向
+    transferScenarios:
+      - 跨学科合作
+      - 新行业入职
+    depth30s: 不懂就问AI，假装懂最贵。
+    depth3m: 复述检验：能用社团例子讲出"多租户"，才算真懂。
+    depth10m: 维护"概念卡"文件夹：术语/一句话解释/自己的例子。三周后你比上游更会讲。
+    relatedSkillIds:
+      - environment.cli_concept
+      - environment.base_url
+  - id: kc_c_energy_mgmt
+    title: 冲刺期睡眠预算
+    domain: loop
+    trigger: event
+    problem: 连续熬夜后第四天产出为负
+    wrongPattern: 用时长感动自己
+    correctBehavior: 强制休息纳入排期；疲劳日做低风险任务
+    why: 睡眠是认知资源，透支的每一天都在借高利贷
+    steps:
+      - 排期先排睡觉
+      - 识别低效信号
+      - 疲劳日切任务类型
+      - 保留一天缓冲
+    toolMappings:
+      generic: 排期表
+    successSignals:
+      - 冲刺末段仍有判断力
+    failureSignals:
+      - 凌晨的提交全是bug
+    transferScenarios:
+      - 考前
+      - 上线周
+    depth30s: 熬夜 borrowed，白天 repay，利率惊人。
+    depth3m: 疲劳日的正确用法：整理文档/跑测试/开会——把判断类任务留给清醒时。
+    depth10m: 团队疲劳轮值：每天指定一人"不许加班"，负责第二天纠错。
+    relatedSkillIds:
+      - loop.runaway_prevention
+  - id: kc_c_polish_last
+    title: 最后一天只修高风险
+    domain: loop
+    trigger: event
+    problem: 决赛前夜想加新亮点，引入新bug
+    wrongPattern: 加功能求惊艳
+    correctBehavior: 只修"出现概率×伤害"最高的项，其余进愿望清单
+    why: 决赛目标是不翻车地讲完，不是变成另一个产品
+    steps:
+      - 列候选事项
+      - 估概率与伤害
+      - 修top1
+      - 回归全绿收工
+    toolMappings:
+      generic: 风险矩阵
+    successSignals:
+      - 演示全程零意外
+    failureSignals:
+      - 新功能带来新崩溃
+    transferScenarios:
+      - 发布freeze
+      - 考前复习
+    depth30s: 赛前冻结，只修会疼的。
+    depth3m: 概率×伤害排序后你会发现：真正会疼的通常只有一两件事。
+    depth10m: 建立"冻结协议"：最后一晚的代码改动需队长+测试双签。
+    relatedSkillIds:
+      - loop.final_check
+  - id: kc_c_award_after
+    title: 领奖之后才刚开始
+    domain: goal
+    trigger: event
+    problem: 比赛结束项目即死，奖杯成墓碑
+    wrongPattern: 把获奖当终点
+    correctBehavior: 赛后48小时内决定去向：归档/移交/继续/转化
+    why: 热度和注意力有半衰期，决策要趁热
+    steps:
+      - 盘点可复用资产
+      - 列四个去向
+      - 48小时内拍板
+      - 执行第一步
+    toolMappings:
+      generic: 复盘会
+    successSignals:
+      - 赛后一周内有实质动作
+    failureSignals:
+      - 仓库永远停在决赛当晚
+    transferScenarios:
+      - 项目结项
+      - 活动收尾
+    depth30s: 奖是逗号不是句号。
+    depth3m: 四去向各有成本：归档最省，转化最贵但复利最高。
+    depth10m: 写"赛后决定书"：去向/理由/第一步/负责人。贴在仓库README顶部。
+    relatedSkillIds:
+      - goal.change
+      - goal.pause
+      - goal.handoff
+  - id: kc_c_psf_card
+    title: PSF六要素卡
+    domain: task_contract
+    trigger: skill_unlock
+    problem: 方案讲不清"到底解决什么"
+    wrongPattern: 用热词堆砌概念
+    correctBehavior: 问题/用户/方案/可行/创新/影响各一句真话+出处
+    why: 一页纸装不下的方案，执行时也装不下
+    steps:
+      - 每要素一句话
+      - 影响给算法
+      - 创新给对比
+      - 全卡不超300字
+    toolMappings:
+      generic: 模板卡
+    successSignals:
+      - 评委30秒看懂
+    failureSignals:
+      - 自己复述超时
+    transferScenarios:
+      - 产品立项
+      - 电梯演讲
+    depth30s: 六句话，句句真话。
+    depth3m: 影响“必须有算法（基数×频次×节省）；”创新“必须有对比对象。
+    depth10m: 六要素各配一个"如果被质疑"的应答卡——这张卡就是你的答辩底座。
+    relatedSkillIds:
+      - tc.context_section
+      - tc.acceptance

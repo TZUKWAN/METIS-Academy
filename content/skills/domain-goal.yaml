@@ -1,0 +1,85 @@
+# Goal 域（TASK-E005）：12+ 能力原子
+skills:
+  - id: goal.when_to_use
+    domain: goal
+    title: 什么时候该用 Goal 而不是单次任务
+    description: 需要多轮、多天、状态持续的任务用 Goal；一次性问题直接问
+    whenToUse: 任务会跨越多个工作时段时
+    behaviors: [{ id: goal_when_l1, level: 1, description: 正确区分一次 Task 与 Goal 各一次, achievementId: ach_goal_when }]
+  - id: goal.final_state
+    domain: goal
+    title: Final State 描述
+    description: Goal 写“世界变成什么样”，不是“你要做什么动作”
+    whenToUse: 定义 Goal 的第一句
+    behaviors: [{ id: goal_final_l1, level: 1, description: 用终态语言重写一个目标, achievementId: ach_goal_finalstate }]
+  - id: goal.completion
+    domain: goal
+    title: Completion 判据
+    description: “怎么算完成”必须可观测：文件存在/测试通过/数据达标
+    whenToUse: Goal 定义的第二句
+    prerequisites: [goal.final_state]
+    behaviors: [{ id: goal_comp_l1, level: 1, description: 目标带可检验的完成判据, achievementId: ach_goal_completion }]
+  - id: goal.milestones
+    domain: goal
+    title: Milestones 里程碑
+    description: 把长目标切成可验收的中途站，每站都有产出
+    whenToUse: 超过 3 天的 Goal
+    prerequisites: [goal.completion]
+    behaviors: [{ id: goal_ms_l1, level: 1, description: 一个 Goal 拆出≥3个里程碑并逐个验收, achievementId: ach_goal_milestones }]
+  - id: goal.constraints
+    domain: goal
+    title: Goal 级约束
+    description: 整个目标期间都有效的限制（预算/不许改架构）
+    whenToUse: 有全局限制的项目
+    behaviors: [{ id: goal_cons_l1, level: 1, description: Goal 附带全程约束并被遵守, achievementId: ach_goal_constraints }]
+  - id: goal.update
+    domain: goal
+    title: Goal 更新
+    description: 现实变了就改 Goal 并记录原因，别让旧目标吊着 Agent
+    whenToUse: 里程碑验收发现方向问题时
+    prerequisites: [goal.milestones]
+    behaviors: [{ id: goal_upd_l2, level: 2, description: 一次有记录的目标修订, achievementId: ach_goal_update }]
+  - id: goal.pause
+    domain: goal
+    title: 暂停与挂起
+    description: 有序暂停：存状态、写当前进度、记录下一步
+    whenToUse: 被打断或要切换任务时
+    behaviors: [{ id: goal_pause_l1, level: 1, description: 一次可恢复的暂停, achievementId: ach_goal_pause }]
+  - id: goal.resume
+    domain: goal
+    title: 恢复执行
+    description: 恢复=读状态文件+核对里程碑+继续，而不是从头再来
+    whenToUse: 暂停之后回来
+    prerequisites: [goal.pause]
+    behaviors: [{ id: goal_resume_l1, level: 1, description: 从状态文件恢复一个中断的 Goal, achievementId: ach_goal_resume }]
+  - id: goal.change
+    domain: goal
+    title: 换目标的正确姿势
+    description: 明确废弃旧目标→归档→再立新目标；避免两个目标打架
+    whenToUse: 方向调整时
+    prerequisites: [goal.update]
+    behaviors: [{ id: goal_change_l2, level: 2, description: 干净地完成一次目标切换, achievementId: ach_goal_change }]
+    hiddenUntilDiscovered: true
+  - id: goal.drift
+    domain: goal
+    title: Goal Drift 识别
+    description: Agent 干着干着偏了：完成文档≠完成研究；定期对表
+    whenToUse: 长任务中期检查
+    prerequisites: [goal.completion]
+    behaviors: [{ id: goal_drift_l2, level: 2, description: 发现一次目标漂移并拉回, achievementId: ach_goal_drift }]
+  - id: goal.verification
+    domain: goal
+    title: Goal 级验证
+    description: 每个里程碑都要独立验证，不能信 Agent 说“完成了”
+    whenToUse: 每个里程碑节点
+    prerequisites: [goal.completion, verification.independent_check]
+    behaviors: [{ id: goal_ver_l2, level: 2, description: 独立验证一个里程碑产出, achievementId: ach_goal_verification }]
+    hiddenUntilDiscovered: true
+  - id: goal.handoff
+    domain: goal
+    title: Goal 跨会话交接
+    description: Goal 状态文件+handoff 文档配合，新会话 5 分钟接手
+    whenToUse: Goal 寿命超过一个会话
+    prerequisites: [goal.resume, context.handoff]
+    behaviors: [{ id: goal_handoff_l3, level: 3, description: 完成一次跨会话 Goal 交接且新会话答对四个关键问题, achievementId: ach_goal_handoff }]
+    hiddenUntilDiscovered: true

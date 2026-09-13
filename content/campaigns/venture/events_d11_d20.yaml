@@ -1,0 +1,485 @@
+# 创业线事件 D11-D20（MVP开发 + 首批用户）
+events:
+  - id: v_d12_install
+    campaign: venture
+    day: 12
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: vm5 }
+    purpose: { learning: Agent工具安装/模拟与真实模式选择 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["证据够了（手工服务6小时/错漏3处），该做工具了。选你的 Agent 环境："]
+    choices:
+      - id: sim_or_real
+        text: 教学模拟模式 / 检测本机 Claude Code·Codex·DSH（真实优先，模拟兜底）
+        visibleResponse: 工具检测完成。无论哪种模式，工程流程完全一致——模拟只是不调用你本机CLI。
+        hiddenEffects:
+          - { kind: setFlag, key: agent_env_ready }
+          - { kind: achievement, achievementId: ach_v_env }
+      - id: no_tool_manual
+        text: 不用Agent了，手写更快
+        visibleResponse: 你写了一半发现：表单校验、数据合并、通知模板——全是重复劳动。Agent的价值恰好在这些地方。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 工具先行检测，模拟真实分明
+
+  - id: v_d13_init
+    campaign: venture
+    day: 13
+    type: story
+    trigger: { kind: day, day: 13, phase: start }
+    purpose: { learning: INIT：让Agent先读懂再干活 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["开工第一件事：INIT。建目录、装依赖、空测试跑通、让Agent通读并复述项目结构。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "项目结构已通读：src/报名聚合、src/自动分组、src/通知模板。确认后开工。", mood: neutral }
+      - { speaker: 系统, text: "获得资产：code_project。手工服务那6小时的经验，现在变成了需求文档。" }
+    automaticEffects:
+      - { kind: addAsset, assetType: code_project, name: 社团报名管家 MVP, description: INIT完成的工程, content: "目录/依赖/空测试/需求摘要（来自手工服务日志）" }
+      - { kind: add, key: execution, value: 5 }
+    next: v_d13_rules
+
+  - id: v_d13_rules
+    campaign: venture
+    day: 13
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: AGENTS.md 解决持续规则 }
+    scene: { location: workbench, characters: [] }
+    choices:
+      - id: write_rules
+        text: 写 AGENTS.md：数据字段规范/中文文案/测试命令/禁改清单
+        visibleResponse: |
+          规则10行：
+          - 报名字段以 signals.md 的字段表为准，禁止自创
+          - 用户可见文案一律中文口语
+          - 改动后必跑 npm test
+          - 通知模板改动需人工预览
+          Agent 之后零再犯。
+        hiddenEffects:
+          - { kind: addAsset, assetType: agents_md, name: AGENTS.md（MVP仓）, description: 数据/文案/测试/禁改规则, content: "字段表/中文文案/测试闸门/模板预览" }
+          - { kind: add, key: execution, value: 5 }
+          - { kind: achievement, achievementId: ach_v_agents_md }
+      - id: wing_it
+        text: 项目小，不用规则文件
+        visibleResponse: 第16天Agent把“学院”字段自作主张改成了“系”，数据合并错位，你返工两小时。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 8 }
+          - { kind: scheduleEvent, eventId: v_d16_field_mismatch, onDay: 16 }
+    learningPoint: 项目再小，规则先行
+
+  - id: v_d14_contract
+    campaign: venture
+    day: 14
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 14, phase: start }
+    purpose: { learning: MVP这一轮到底做什么：Task Contract }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["第一份开发任务下达前，你按学过的规矩写契约。"]
+    choices:
+      - id: mvp_contract
+        text: 契约：本轮只做"报名聚合"单模块；交付=可跑测试+示例数据；验收=老K场景复现（72表合并<1分钟）
+        visibleResponse: |
+          背景引用手工服务日志；目标单模块；约束禁碰分组功能；
+          交付带测试；验收直接复用老K的真实场景。
+          Agent 一次做对。契约的价值=它锁住了范围。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: addAsset, assetType: task_contract, name: MVP契约·报名聚合, description: 背景/目标/约束/交付/验收, content: "以老K场景为验收（72表<1分钟）" }
+          - { kind: achievement, achievementId: ach_v_contract }
+      - id: vague_kickoff
+        text: 跟它说，把工具做出来，就这么定了
+        visibleResponse: Agent 热情地做了个含登录、支付、社区功能的"大平台"。你要的报名聚合在文件夹最深处。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 10 }]
+    learningPoint: 契约锁范围，防"热情过剩"
+
+  - id: v_d15_goal
+    campaign: venture
+    day: 15
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 15, phase: start }
+    purpose: { learning: MVP Goal：终态=能上线收首批用户 }
+    scene: { location: workbench, characters: [] }
+    choices:
+      - id: launch_goal
+        text: Goal：终态=3个社团真实使用；判据=报名-审核-通知全流程无人工干预跑通一次；里程碑D17上线/D19首批反馈
+        visibleResponse: Goal 立好贴墙。判据里"无人工干预"那条最狠——它逼你把自动化做真。
+        hiddenEffects:
+          - { kind: addAsset, assetType: goal, name: MVP Goal, description: 终态/判据/里程碑, content: "3社团真实使用；全流程自动化跑通" }
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: launch_goal_set }
+      - id: fuzzy_goal
+        text: 目标：尽快上线
+        visibleResponse: Agent 问“上线”指内测还是公测、要不要域名、支付接不接——你发现“尽快”里全是没做的决定。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: “尽快“不是目标，判据才是
+
+  - id: v_d16_loop
+    campaign: venture
+    day: 16
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 16, phase: start }
+    purpose: { learning: Build-Test-Fix + 回归在真实项目 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["核心开发日。表单解析的边界情况比想象多：附件、图片、乱码、手写体拍照……"]
+    choices:
+      - id: loop_with_regress
+        text: 小步循环：解析→测试→修复；每天收工跑全量回归
+        visibleResponse: |
+          循环5轮。第3轮Agent的手写体方案太慢，测试超时当场抓住。
+          收工回归：全绿。今晚能睡。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 7 }
+          - { kind: setFlag, key: mvp_tests_green }
+          - { kind: achievement, achievementId: ach_v_loop }
+      - id: marathon_push
+        text: 冲一天写完再统一测
+        visibleResponse: 统一测试时炸出23个问题，其中8个互相牵连。你修到凌晨四点，还剩5个。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 12 }
+          - { kind: subtract, key: energy, value: 20 }
+          - { kind: scheduleEvent, eventId: v_d18_bug_reboot, onDay: 18 }
+    learningPoint: 每轮过测试，睡得着觉
+
+  - id: v_d17_deploy
+    campaign: venture
+    day: 17
+    type: story
+    keyDecision: true
+    trigger: { kind: day, day: 17, phase: start }
+    purpose: { learning: deploy=给真实用户用，不是给自己看 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["上线日。买域名、配HTTPS、部署、用真实社团数据做最后一次全流程演练。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "部署完成。演练结果：72份模拟报名，聚合58秒，分组无错，通知已发送。", mood: pleased }
+      - { speaker: 系统, text: "对照 Goal 判据：全流程自动化 ✓。还差'3个真实社团'。" }
+    automaticEffects:
+      - { kind: add, key: execution, value: 4 }
+      - { kind: subtract, key: money, value: 60 }
+      - { kind: setFlag, key: mvp_deployed }
+    terminal: true
+
+  - id: v_d18_channels
+    campaign: venture
+    day: 18
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: vm6 }
+    purpose: { learning: 渠道参数各不同 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: ["产品上线了，用户在哪？渠道清单：私信社团熟人 / 社群发帖 / 校园墙 / 找学生会合作。"]
+    choices:
+      - id: warm_first
+        text: 先私信访谈过的熟人社团（转化率高、量小）
+        visibleResponse: 6个熟人社团，3个当天注册。老K直接把摄影社的报名搬了上来——冷启动靠熟人，天经地义。
+        hiddenEffects:
+          - { kind: add, key: users, value: 3 }
+          - { kind: setFlag, key: channel_warm }
+          - { kind: achievement, achievementId: ach_v_first_users }
+        next: v_d18_first_trial
+      - id: post_everywhere
+        text: 全渠道广撒网：社群+墙+传单一起上
+        visibleResponse: 曝光不错，注册12个——但第二天回来用的只有1个。泛流量留不住。
+        hiddenEffects:
+          - { kind: add, key: users, value: 6 }
+          - { kind: setFlag, key: channel_broad }
+        next: v_d18_first_trial
+      - id: student_union
+        text: 直接找学生会谈合作（量大但决策慢）
+        visibleResponse: 学生会 interest 很高，流程要走一周。你先拿到了口头承诺——和一 Cold 的等待。
+        hiddenEffects: [{ kind: setFlag, key: channel_union_pending }]
+    learningPoint: 冷启动靠信任，不靠曝光
+
+  - id: v_d18_first_trial
+    campaign: venture
+    day: 18
+    type: story
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { narrative: 强制——第一次用户试用, learning: 用户第一句话通常是"不会用" }
+    scene: { location: lab, characters: [v_user_club] }
+    setup: ["老K当着你的面用上了。第1分钟："]
+    dialogue:
+      - { speaker: 老K, text: "登录页在哪？……哦。这按钮是干嘛的？……算了，我直接传文件吧。", mood: neutral }
+      - { speaker: 老K, text: "传完了。诶，合并结果出来了？行啊这个。比Excel强。" }
+      - { speaker: 系统, text: "记录：3处困惑（登录入口/按钮含义/上传格式），1处惊喜（自动合并）。这就是你的真实产品。" }
+    automaticEffects:
+      - { kind: addAsset, assetType: user_feedback, name: 首批试用反馈·老K, description: 3困惑+1惊喜, content: "入口不清/按钮不明/格式限制；合并速度好评" }
+      - { kind: add, key: users, value: 2 }
+    next: v_d19_flood
+
+  - id: v_d19_flood
+    campaign: venture
+    day: 19
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { narrative: 强制——20条需求洪水, learning: 优先级=核心用户×核心场景 }
+    scene: { location: workbench, characters: [] }
+    setup:
+      - "一周下来，各渠道涌来20条需求（编号v_req_01~20）："
+      - "01深色模式 02微信登录 03数据导出Excel 04手写体识别 05多语言 06报名费代收 07短信通知 08活动签到 09小程序版 10模板库"
+      - "11导出海报 12权限分级 13操作日志 14邮件通知 15API开放 16皮肤自定义 17投票功能 18问卷功能 19移动端适配 20一键群发"
+    dialogue:
+      - { speaker: 系统, text: "你的行动点只够做4件。选哪4件？提示：核心用户（中大型社团骨干）×核心场景（报名-审核-通知）。" }
+    choices:
+      - id: core_first
+        text: 只做核心场景强相关：03导出、07短信通知、19移动端适配、12权限分级
+        visibleResponse: |
+          你按"核心用户×核心场景"筛了4件，其余16件进需求池标注来源与频次。
+          老K听说出了短信通知："早该有了。"
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: add, key: userUnderstanding, value: 6 }
+          - { kind: addAsset, assetType: user_feedback, name: 用户反馈汇总·第一周, description: 8条反馈分类处理记录, content: "3不会用/2需求/2bug/1好评——已三分处理" }
+          - { kind: setFlag, key: triage_by_core }
+          - { kind: achievement, achievementId: ach_v_triage }
+      - id: do_all
+        text: 20条全排进日程，我卷得动
+        visibleResponse: 你排了20条。第28天你会站在《功能坟场》的门口——一半做了一半，没有一件做完。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 15 }
+          - { kind: setFlag, key: feature_graveyard_path }
+          - { kind: scheduleEvent, eventId: v_d27_maintenance_crash, onDay: 27 }
+          - { kind: scheduleEvent, eventId: v_d27_maintenance_crash, onDay: 27 }
+      - id: random_pick
+        text: 挑简单的做：01深色模式、05多语言、11海报、16皮肤
+        visibleResponse: 做完四件漂亮事，核心场景的短信通知还是缺。用户说："界面好看了，但我还是要手动发通知。"
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 8 }, { kind: setFlag, key: triage_by_easy }]
+    learningPoint: 需求洪水用"核心用户×核心场景"过滤
+
+  - id: v_d20_pollution
+    campaign: venture
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 20, phase: start }
+    purpose: { learning: 上下文污染：旧需求混入新任务 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["让Agent加短信通知功能。改完后它顺手把第7天证伪的简历优化模块骨架也建了出来——那个想法还在会话上下文里飘着。"]
+    dialogue:
+      - { speaker: 系统, text: "上下文污染：已废弃的旧需求混进新任务。会话里飘着太多历史。" }
+    choices:
+      - id: clean_split
+        text: 五段式压缩+删掉废弃需求文档+新会话再继续
+        visibleResponse: |
+          你做了三件事：把废弃需求移出目录、compact 出检查点、开新会话。
+          新会话第一句："当前任务：短信通知模块，依赖需求池03/07。"
+          ——干净了。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: addAsset, assetType: compact_checkpoint, name: compact_d20, description: 需求洪水后的上下文清理, content: "已确认/未确认/范围/材料/下一步" }
+          - { kind: achievement, achievementId: ach_v_context_clean }
+        unlockKnowledge: [kc_g_compact_not_summary]
+      - id: keep_going
+        text: 凑合用，删掉那部分代码就行
+        visibleResponse: 你删了代码，但上下文里的幽灵还在。第二天它又把"宠物陪聊"的接口写了出来——你没看错。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 8 }, { kind: setFlag, key: context_pollution_seen }]
+    learningPoint: 污染清源头，不止删代码
+
+  # ---- 补充 ----
+  - id: v_x_d11_cost
+    campaign: venture
+    day: 11
+    type: decision
+    trigger: { kind: day, day: 11, phase: end }
+    purpose: { learning: API成本从第一天就要看见 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["开发第一天结束。你查了 AI 用量面板：今天消耗 ¥3.7。"]
+    choices:
+      - id: track_cost
+        text: 建成本台账：每天记录AI/API/服务器支出
+        visibleResponse: 台账建好。第一行：D11，AI ¥3.7，服务器 ¥0（免费层）。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: setFlag, key: cost_tracking }
+          - { kind: addAsset, assetType: revenue_report, name: 成本台账 v1, description: 每日支出记录, content: "D11: AI 3.7 / 服务器 0" }
+      - id: ignore_cost
+        text: 几块钱而已，不管
+        visibleResponse: 第25天，当收入和成本要在同一张表里见面时，你发现前两周的账全丢了。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+        delayed:
+          - { eventId: v_d25_bill_shock, onDay: 25 }
+    terminal: true
+
+  - id: v_x_d12_family_dinner
+    campaign: venture
+    day: 12
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: home, characters: [v_family] }
+    setup: ["回家吃饭。妈妈往你碗里夹排骨：“项目的事，跟妈说说？”"]
+    choices:
+      - id: honest_share
+        text: 说了实话：没收入，还在验证，但学到很多
+        visibleResponse: 妈妈听完沉默几秒："别耽误毕业就行。缺钱跟家里说。"你鼻子一酸。
+        hiddenEffects: [{ kind: relationship, characterId: v_family, delta: 5 }, { kind: add, key: energy, value: 8 }]
+      - id: brag
+        text: 吹了个大牛："马上要成功了！"
+        visibleResponse: 妈妈高兴了一晚上。你心里知道泡沫的滋味不好受。
+        hiddenEffects: [{ kind: setFlag, key: bragged_family }]
+    terminal: true
+
+  - id: v_x_d13_pricing_thought
+    campaign: venture
+    day: 13
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["深夜灵感：要不要顺便做个“高级版”？反正以后要收费。"]
+    choices:
+      - id: park_pricing
+        text: 记进假设板的 Revenue 格，现阶段不碰
+        visibleResponse: 假设板+1。收费的事第21天用实验说话。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 3 }]
+      - id: build_premium
+        text: 现在就把免费/付费功能切开
+        visibleResponse: 你切了半天，发现连有没有人用都不知道——为不存在的产品设计收费，纯属行为艺术。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }]
+    terminal: true
+
+  - id: v_x_d14_bin_join
+    campaign: venture
+    day: 14
+    type: npc
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["阿斌看到你的契约和测试，沉默了一会儿。"]
+    dialogue:
+      - { speaker: 阿斌, text: "……你这流程比我课设组正规。缺人吗？我周末有空。", mood: surprised }
+    choices:
+      - id: invite_bin
+        text: 来！分工写清楚：你负责后端测试，我做前端和用户
+        visibleResponse: 阿斌入伙，分工表两行搞定。他周末的第一次提交就带测试——你教的规矩起作用了。
+        hiddenEffects:
+          - { kind: add, key: teamTrust, value: 8 }
+          - { kind: setFlag, key: bin_joined }
+          - { kind: achievement, achievementId: ach_v_partner }
+      - id: solo_pride
+        text: 暂时不，我想先自己跑通全流程
+        visibleResponse: 阿斌耸肩走了。第25天的账单和bug会让你想起今天。
+        hiddenEffects: [{ kind: setFlag, key: solo_mode }]
+    terminal: true
+
+  - id: v_x_d15_test_day
+    campaign: venture
+    day: 15
+    type: story
+    trigger: { kind: day, day: 15, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: ["今天你让 Agent 给“自动分组”写了边界测试：同名社团、跨院系报名、重复提交——三红。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "测试红的每一项，都是未来某次崩溃的预演。现在抓到，成本最低。" }
+    terminal: true
+
+  - id: v_x_d16_domain
+    campaign: venture
+    day: 16
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["域名续费提醒：明年 ¥68。你的钱还够吗？"]
+    choices:
+      - id: renew
+        text: 续。品牌连续性比68块值钱
+        visibleResponse: 续费完成，余额-68。成本台账+1。
+        hiddenEffects: [{ kind: subtract, key: money, value: 68 }, { kind: setFlag, key: domain_renewed }]
+      - id: let_expire
+        text: 先不续，用免费子域名顶着
+        visibleResponse: 顶是能顶。但发给社团的链接下个月会失效——你赌用户记性不好。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_x_d17_pre_announce
+    campaign: venture
+    day: 17
+    type: story
+    trigger: { kind: day, day: 17, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["上线前夜。你把演示视频和链接发给了老K预览。10分钟后他回了三个字：“能用，上。”"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "第一个真实用户的能用，是上线前最贵的一次代码评审。" }
+    terminal: true
+
+  - id: v_x_d18_confusion
+    campaign: venture
+    day: 18
+    type: decision
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { learning: 反馈分类：能用就行 vs 立刻修 vs 进池子 }
+    scene: { location: workbench, characters: [] }
+    setup: ["首日反馈汇总：8条。3条“不会用”（同一入口问题）、2条新需求、2条bug、1条夸奖。"]
+    choices:
+      - id: triage_feedback
+        text: 分类处理：入口问题立刻修（3人共痛）、bug今日修、需求进池子、夸奖存档
+        visibleResponse: 入口加了个大按钮“上传报名表”。次日“不会用”反馈归零。分类让你把力气花在共痛上。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: feedback_triangulated }
+          - { kind: achievement, achievementId: ach_v_feedback_triage }
+      - id: read_and_chill
+        text: 都记下了，有空再说
+        visibleResponse: 有空没有来。第二天又多了5条反馈，你开始害怕打开后台。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    terminal: true
+
+  - id: v_x_d19_user_call
+    campaign: venture
+    day: 19
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [v_user_club] }
+    setup: ["老K打来电话：“辩论队那边用你工具报了120人，没出岔子。……不过他们社长问，能不能收报名费？”"]
+    dialogue:
+      - { speaker: 你, text: "（记进需求池：06 报名费代收，来源：辩论队社长，频次第2次提及）" }
+      - { speaker: 老K, text: "行，你上心。这功能要是有了，好几个社都愿意用。" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 5 }
+      - { kind: setFlag, key: payment_demand_signal }
+    terminal: true
+
+  - id: v_x_d20_moon
+    campaign: venture
+    day: 20
+    type: story
+    trigger: { kind: day, day: 20, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["上线第3天数据：注册8、周活跃5、完成一次完整报名流程的3个。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "5/8的周活不算惊艳，但对0预算冷启动来说，信号是暖的。明天，谈钱。" }
+    terminal: true
+
+  - id: v_d17_launch_choice
+    campaign: venture
+    day: 17
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 17, phase: end }
+    purpose: { learning: 上线前最后一查是工程纪律 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["部署完成。上线按钮就在眼前。"]
+    choices:
+      - id: final_regress
+        text: 先跑最后一轮全量回归再上线
+        visibleResponse: 回归全绿。你在上线记录里写下："已验证，可发布。"
+        hiddenEffects:
+          - { kind: add, key: execution, value: 3 }
+          - { kind: setFlag, key: launch_verified }
+      - id: launch_now
+        text: 直接上线，测试回头补
+        visibleResponse: 上线完成。第一次真实用户注册时正好撞上一个回归 bug。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 5 }
+          - { kind: setFlag, key: launch_unverified }
+    terminal: true

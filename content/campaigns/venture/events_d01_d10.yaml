@@ -1,0 +1,456 @@
+# 创业线事件 D1-D10（观察与验证）
+events:
+  - id: v_d01_blank
+    campaign: venture
+    day: 1
+    type: story
+    trigger: { kind: missionEntry, mission: vm1 }
+    purpose: { narrative: 空白开局, learning: 没有最佳方向，只有待验证问题 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: ["你的全部家当：一台电脑、2000元、一个AI工具。没有项目。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "需要我为您生成'最佳创业方向'吗？", mood: pleased }
+      - { speaker: 你, text: "不。系统不推荐方向，我也不找捷径。先学会看问题。" }
+      - { speaker: 系统, text: "本线没有'最佳选题'。你要自己找到值得验证的问题。" }
+    next: v_d02_signals
+
+  - id: v_d02_signals
+    campaign: venture
+    day: 2
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 信号分类：真痛点/伪需求/低频/付费差/不可达 }
+    scene: { location: dorm, characters: [] }
+    setup:
+      - "这两天你随手记下的观察信号（节选10条）："
+      - "①小蔡：考研资料整理'要花一整天'（校园） ②老K：社团收报名表3天（社群） ③王姐：奶茶店排班表每周手写（小企业）"
+      - "④帖子：'AI帮我写周报'点赞2万（在线评论） ⑤招聘：'会提示词工程'岗位涨3倍（招聘） ⑥同学：'要是有AI替我上课就好了'（伪需求嫌疑）"
+      - "⑦张阿姨：一年买两次机票（低频） ⑧群聊：'想要AI算命'（付费意愿存疑） ⑨教师：批改作文每晚2小时（工作流） ⑩贴吧：'代抢讲座门票'（灰产边缘）"
+    dialogue:
+      - { speaker: 系统, text: "给信号分类：真痛点/伪需求/低频需求/付费差/不可达用户。分类决定你下一步找谁。" }
+    choices:
+      - id: build_signal_pool
+        text: 建信号池资产，每条标注类型与来源，持续补充
+        visibleResponse: |
+          你建了 signals.md：10条信号×（类型/来源/初步判断）。
+          ②和⑨标了"真痛点候选"；⑥标了"伪需求嫌疑——要是有AI就好了≠会付钱"。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 8 }
+          - { kind: addAsset, assetType: document, name: 问题信号池 v1, description: 10条信号×分类×来源, content: "信号|类型|来源|初步判断（含真痛点/伪需求/低频/付费差/不可达）" }
+          - { kind: achievement, achievementId: ach_v_signal_pool }
+      - id: chase_hype
+        text: 直接选最火的"AI替我上课"方向干
+        visibleResponse: 你把⑥当成了真需求。它会在第7天被证伪——幸好你会证伪。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }, { kind: setFlag, key: chased_hype }]
+    learningPoint: 先分类信号，再选方向
+
+  - id: v_d03_ai_ideas
+    campaign: venture
+    day: 3
+    type: story
+    keyDecision: true
+    trigger: { kind: day, day: 3, phase: start }
+    purpose: { narrative: 强制——AI生成诱人的垃圾点子, learning: idea ≠ opportunity }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: ["你忍不住让AI出了主意。它给了三个，个个闪光："]
+    dialogue:
+      - { speaker: v_ai_agent, text: "①'校园全能AI助手'——一站式整合学习/社交/恋爱，市场空间百亿。", mood: pleased }
+      - { speaker: v_ai_agent, text: "②'AI简历优化Pro'——应届生刚需，付费意愿强。" }
+      - { speaker: v_ai_agent, text: "③'AI宠物情感陪聊'——蓝海赛道，先发优势。" }
+      - { speaker: 系统, text: "注意这些点子的共同点：听起来都对，但你不知道是谁、在什么场景、愿意花多少钱。" }
+    choices:
+      - id: ideas_to_pool
+        text: 把三个点子放进信号池，标注"候选解释"，等证据审判
+        visibleResponse: 你把点子降级为"假设"。AI有点失落，但你很清醒：idea是原料，不是机会。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 6 }
+          - { kind: setFlag, key: ideas_demoted }
+        unlockKnowledge: [kc_v_idea_opportunity]
+      - id: fall_for_pro
+        text: 就选那个简历优化Pro，看起来最稳，就它了！
+        visibleResponse: 你直接立项。第7天的证伪环节会对它毫不留情——市场上已有9家同类，且巨头免费送。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 8 }
+          - { kind: setFlag, key: picked_resume_pro }
+    learningPoint: idea是假设，不是机会
+
+  - id: v_d04_who
+    campaign: venture
+    day: 4
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 4, phase: start }
+    purpose: { learning: 选谁调查决定你会听到什么 }
+    scene: { location: dorm, characters: [] }
+    setup: ["锁定两个候选方向：A.社团报名流程（老K那条线） B.考研资料整理（小蔡那条线）。先调查谁？"]
+    choices:
+      - id: investigate_club
+        text: 先查社团线：痛点高频（每周发生）且涉及多人协作
+        visibleResponse: 你约了老K和两个社团骨干。高频+多人=付费可能更大。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 4 }, { kind: setFlag, key: investigating_club }]
+      - id: investigate_student
+        text: 先查考研线：单人刚需，付费意愿听说很强
+        visibleResponse: 你约了小蔡和她的研友。"刚需"是你听说的，还没验证。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 4 }, { kind: setFlag, key: investigating_student }]
+      - id: both_shallow
+        text: 都查，各聊十分钟
+        visibleResponse: 两边都聊了，两边都只聊到表面。十分钟只够听客气话。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    learningPoint: 深挖一个方向好过浅尝两个
+
+  - id: v_d05_leading_q
+    campaign: venture
+    day: 5
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 5, phase: start }
+    purpose: { learning: 诱导式提问的陷阱 }
+    scene: { location: canteen, characters: [v_user_student] }
+    setup: ["第一场访谈。小蔡端着奶茶坐下。你开口："]
+    dialogue:
+      - { speaker: 你, text: "如果有AI工具能自动整理考研资料，你会不会用？" }
+      - { speaker: 小蔡, text: "会呀，听起来很棒。", mood: happy }
+      - { speaker: 系统, text: "她还会说'如果有免费奶茶就好了'。'会不会用'得到的是礼貌，不是事实。系统记录：weakDemandEvidence。" }
+    choices:
+      - id: realize_mistake
+        text: 意识到问错了——换成行为问题重来
+        visibleResponse: |
+          你改口："上次整理资料是什么时候？花了多久？怎么整理的？"
+          小蔡："上周，4个小时，Word开两个屏幕手动复制……弄完头都晕了。"
+          ——具体、痛苦、高频。这才是证据。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 10 }
+          - { kind: setFlag, key: real_interview_done }
+          - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·小蔡, description: 行为式访谈首份记录, content: "上周4小时/Word手动复制/头晕——痛点实锤" }
+          - { kind: achievement, achievementId: ach_v_behavior_interview }
+        unlockKnowledge: [kc_g_vague_task]
+      - id: keep_leading
+        text: 继续问“会不会用”，把“会”都记下来
+        visibleResponse: 五个受访者三个说会，两个说看情况。材料很好看——全是空的。
+        hiddenEffects:
+          - { kind: setFlag, key: weakDemandEvidence }
+          - { kind: add, key: academicDebt, value: 6 }
+          - { kind: scheduleEvent, eventId: v_d22_no_pay, onDay: 22 }
+    learningPoint: 问过去行为，不问未来意愿
+
+  - id: v_d06_real_talk
+    campaign: venture
+    day: 6
+    type: story
+    trigger: { kind: day, day: 6, phase: start }
+    purpose: { learning: 行为访谈四件套：何时/怎么/多久/花没花钱 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: ["老K的访谈。他说话像机关枪。"]
+    dialogue:
+      - { speaker: 你, text: "上次收社团报名表是什么时候？怎么收的？" }
+      - { speaker: 老K, text: "上周。72个社团，邮件+微信群+纸质表三路汇齐，我拿Excel手动合并，整整三天。", mood: serious }
+      - { speaker: 你, text: "之前呢？每年都这样？" }
+      - { speaker: 老K, text: "年年如此。去年有个社团自己写了小程序，就他们自己用。你要能搞定这个，学生会愿意出钱。" }
+      - { speaker: 系统, text: "记录要点：频率（每年）、人数（72）、现方案（Excel）、付费线索（学生会）。" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 8 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·老K, description: 高频多人痛点+付费线索, content: "72社团×3天/年×多人协作，学生会预算线索" }
+    terminal: true
+
+  - id: v_d07_refuted
+    campaign: venture
+    day: 7
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 7, phase: start }
+    purpose: { narrative: 强制——一个方向被证伪, learning: 证伪是进展 }
+    scene: { location: dorm, characters: [] }
+    setup: ["桌面研究时间。你搜了“AI简历优化”赛道：9家同类产品、3家免费、大厂内置功能……"]
+    dialogue:
+      - { speaker: 系统, text: "证据链指向一个结论：'简历优化Pro'是红海+免费替代。你的第3天点子，正式证伪。" }
+    choices:
+      - id: accept_refute
+        text: 接受证伪，把证据记进信号池，聚焦社团线
+        visibleResponse: |
+          证伪档案+1：简历优化（红海/免费替代/无差异点）。
+          你删掉了收藏夹里那三个"闪光点子"，心里反而轻松了——候选只剩真的。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: add, key: independence, value: 4 }
+          - { kind: setFlag, key: refuted_once }
+          - { kind: achievement, achievementId: ach_v_refuted }
+      - id: deny_refute
+        text: 不认账：他们做得烂，我能做得更好
+        visibleResponse: 做得更好需要证据：你列出自己的差异化……列了三行，全是“我觉得”。信号池冷冷地看着你。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }, { kind: setFlag, key: in_denial }]
+    learningPoint: 被证伪的方向，死也要死得有记录
+
+  - id: v_d08_segment
+    campaign: venture
+    day: 8
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 8, phase: start }
+    purpose: { learning: 同一问题对不同人严重度不同 }
+    scene: { location: dorm, characters: [] }
+    setup: ["访谈到第6个人。你发现：同为社团，500人大社的报名痛是“灾难级”，15人小社却觉得“还行”。"]
+    choices:
+      - id: segment_users
+        text: 给用户分层：按社团规模/活动频率分档，锁定中大型社团
+        visibleResponse: 你在纪要上画了象限：中大型社团（>100人，月均2场活动）痛感最强、有预算、决策链短。目标用户清晰了。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 10 }
+          - { kind: setFlag, key: segmented }
+          - { kind: achievement, achievementId: ach_v_segment }
+      - id: treat_same
+        text: 社团不都一样吗，不用分
+        visibleResponse: 之后你的推广文案打不动任何人——对大社太浅，对小社多余。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 用户不是一团，是分层
+
+  - id: v_d09_board
+    campaign: venture
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: vm3 }
+    purpose: { learning: 六类假设与四种验证状态 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: ["证据收得差不多了。是时候立假设板。"]
+    choices:
+      - id: full_board
+        text: 六类假设：Problem/User/Solution/Channel/Revenue/Retention，各标状态与证据
+        visibleResponse: |
+          问题：中大型社团报名流程耗时（强证据：6访谈）；
+          用户：>100人社骨干（弱证据：样本6）；
+          方案：报名聚合+自动分组（未验证）；
+          渠道：学生会+社团联合会（未验证）；
+          收入：按活动次数收费（未验证）；
+          留存：赛期复用（未验证）。
+          六格假设，一格强证据。这就是现状。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: addAsset, assetType: hypothesis_board, name: 假设板 v1, description: 六类假设×状态(未验证/弱证据/强证据/证伪), content: "Problem强/User弱/其余未验证（见正文）" }
+          - { kind: achievement, achievementId: ach_v_board }
+      - id: skip_board
+        text: 板子不立了，心里有数就行
+        visibleResponse: 心里有数在第19天需求洪水时会变成一团浆糊。假设板救你。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 假设写下来，才能被证伪
+
+  - id: v_d10_cheap
+    campaign: venture
+    day: 10
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: vm4 }
+    purpose: { learning: 验证方式的价格表 }
+    scene: { location: dorm, characters: [v_mentor] }
+    setup: ["罗哥在语音里听完你的假设板，只问了一句：“验证'有人要用'，最便宜的方式是什么？”"]
+    dialogue:
+      - { speaker: 你, text: "……开发一个MVP？" }
+      - { speaker: 罗哥, text: "错。最便宜的是你自己人肉当MVP：手工帮两个社团收一次报名，看他们谢不谢你、要不要下次。零代码。", mood: serious }
+      - { speaker: 罗哥, text: "落地页次之。原型再次。写代码是最贵的验证——慢、贵、还容易上瘾。" }
+    choices:
+      - id: concierge_first
+        text: 先做手工服务：人肉帮2个社团收一次报名，验证痛与留存
+        visibleResponse: 你用问卷星+Excel干了三天，帮“摄影社”和“辩论队”收了报名。老K说了句：“明年还这么干行不？”——留存信号，白纸黑字。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 8 }
+          - { kind: add, key: money, value: -30 }
+          - { kind: setFlag, key: validation_concierge }
+          - { kind: setFlag, key: validation_path_chosen }
+          - { kind: achievement, achievementId: ach_v_concierge }
+      - id: landing_page
+        text: 做落地页测预约数：展示方案+收集意向
+        visibleResponse: 落地页上线，发到两个社群。48小时37个预约邮箱——但预约≠使用，你清楚。
+        hiddenEffects:
+          - { kind: subtract, key: money, value: 80 }
+          - { kind: setFlag, key: validation_landing }
+          - { kind: setFlag, key: validation_path_chosen }
+      - id: dev_anyway
+        text: 还是直接开发，手动的太丢人了
+        visibleResponse: 罗哥在语音那头沉默三秒："行。回头别跟我说'早知道'。"开发周期吃掉你5天预算——这是第10天，最贵的验证方式开始计时。
+        hiddenEffects:
+          - { kind: setFlag, key: validation_dev_first }
+          - { kind: setFlag, key: validation_path_chosen }
+          - { kind: add, key: technicalDebt, value: 5 }
+          - { kind: scheduleEvent, eventId: v_d14_behind, onDay: 14 }
+    learningPoint: 验证方式的价格：人肉<落地页<原型<开发
+
+  # ---- 补充 ----
+  - id: v_x_d1_chat
+    campaign: venture
+    day: 1
+    type: npc
+    trigger: { kind: day, day: 1, phase: end }
+    scene: { location: dorm, characters: [v_family] }
+    setup: ["妈妈打来电话：“最近怎么总半夜发朋友圈？找着实习没？”"]
+    choices:
+      - id: half_truth
+        text: "在想一个自己的小项目。有谱了跟您细说。"
+        visibleResponse: 妈妈嘱咐了三件生活琐事。挂了电话你反而踏实了些。
+        hiddenEffects: [{ kind: add, key: energy, value: 5 }]
+      - id: dodge
+        text: "没什么，快睡了吧妈。"
+        visibleResponse: 你挂了电话继续刷手机。逃避让孤独更重。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 4 }]
+    terminal: true
+
+  - id: v_x_d2_more_signals
+    campaign: venture
+    day: 2
+    type: story
+    trigger: { kind: day, day: 2, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup:
+      - "晚上你又补了6条信号进池子："
+      - "⑪超市老板娘：晚班对账到12点（小企业） ⑫表白墙：'代做PPT'月帖30+（在线） ⑬学弟：'四级真题分类好麻烦'（校园）"
+      - "⑭王姐常客：'要是能提前下单取餐就好'（低频嫌疑） ⑮求职群：'内推信息太散'（真痛点候选） ⑯邻居：'想学智能手机但没人教'（付费差）"
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: document, name: 问题信号池（增补）, description: 信号池至16条, content: "信号11-16（含来源与分类）" }
+    dialogue:
+      - { speaker: 系统, text: "信号池累计16条：真痛点候选3、伪需求嫌疑2、低频2、付费差2、其余待分类。" }
+    terminal: true
+
+  - id: v_x_d3_mentor_first
+    campaign: venture
+    day: 3
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["创业社群线下小聚。罗哥端着美式坐你对面。"]
+    dialogue:
+      - { speaker: 罗哥, text: "第一次干？记住三件事：现金流、现金流、还是现金流。", mood: neutral }
+      - { speaker: 你, text: "不是说先找痛点吗？" }
+      - { speaker: 罗哥, text: "痛点决定你做不做，现金流决定你活不活。两个都记着。" }
+    automaticEffects:
+      - { kind: relationship, characterId: v_mentor, delta: 4 }
+      - { kind: add, key: riskTolerance, value: 3 }
+    terminal: true
+
+  - id: v_x_d4_bin_talk
+    campaign: venture
+    day: 4
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["阿斌看你抱着笔记本记信号，凑过来瞄了一眼。"]
+    dialogue:
+      - { speaker: 阿斌, text: "你要创业？先说好，别拉我写代码——上学期那坑我还没填完。", mood: neutral }
+      - { speaker: 你, text: "现在还不需要代码。我在验证问题。" }
+      - { speaker: 阿斌, text: "（挑眉）哟，挺专业。有证据了再找我，我帮你评评。" }
+    automaticEffects:
+      - { kind: relationship, characterId: v_partner, delta: 3 }
+    terminal: true
+
+  - id: v_x_d5_senior_case
+    campaign: venture
+    day: 5
+    type: story
+    trigger: { kind: day, day: 5, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["你读到一篇帖子：某学长做校园小程序，3个月用户破万，第4个月因服务器费用弃坑。"]
+    automaticEffects:
+      - { kind: add, key: riskTolerance, value: -3 }
+      - { kind: add, key: userUnderstanding, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "增长不等于生意。成本在暗中标注了价格。" }
+    terminal: true
+
+  - id: v_x_d6_wangjie
+    campaign: venture
+    day: 6
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: shop, characters: [v_user_shop] }
+    setup: ["你顺路访谈了奶茶店王姐。"]
+    dialogue:
+      - { speaker: 你, text: "王姐，排班或者进货有没有用AI工具的打算？" }
+      - { speaker: 王姐, text: "小伙子，我这儿点单排队三十人，你说这个我听不懂。能让我多卖十杯的，免费给我用用看；不能的，说破天也没空。", mood: neutral }
+    automaticEffects:
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·王姐, description: 小微商户付费观：见效才付, content: "先见效后付费/拒绝学习成本" }
+      - { kind: add, key: userUnderstanding, value: 5 }
+    terminal: true
+
+  - id: v_x_d7_rival_idea
+    campaign: venture
+    day: 7
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["校园墙刷到：另一同学也在做“社团报名工具”，帖子挺火。"]
+    choices:
+      - id: study_rival
+        text: 去他帖子下当用户，体验+提问，回来记进信号池
+        visibleResponse: 你注册体验了一遍：功能多但收72社团这种"批量场景"很笨。差异点，找到了。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 5 }, { kind: setFlag, key: studied_rival }]
+      - id: panic_copy
+        text: 慌了，把功能列表全抄一遍加进需求
+        visibleResponse: 抄来的需求没有证据背书。它们会在第19天的需求洪水中淹死你。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    terminal: true
+
+  - id: v_x_d8_free_coffee
+    campaign: venture
+    day: 8
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [v_user_student] }
+    setup: ["小蔡访谈结束，你请她喝了杯奶茶（12元）。她多聊了20分钟——全是干货。"]
+    choices:
+      - id: keep_rewarding
+        text: 值。以后访谈都请——这是成本不是浪费
+        visibleResponse: 你把"奶茶预算"写进了计划：每次访谈¥12，买真话最便宜。
+        hiddenEffects: [{ kind: subtract, key: money, value: 12 }, { kind: setFlag, key: coffee_budget }]
+      - id: save_money
+        text: 下次省了，聊聊天而已
+        visibleResponse: 省了12元。后来再约人，回复率肉眼可见地降了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: v_x_d9_board_check
+    campaign: venture
+    day: 9
+    type: story
+    trigger: { kind: day, day: 9, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["假设板贴墙上睡前看了一眼：六格里五格写着“未验证”。你没有慌——这才是诚实的企业现状。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "创业的勇气不是假装假设成立，而是敢看着'未验证'入睡。" }
+    terminal: true
+
+  - id: v_x_d10_concierge_log
+    campaign: venture
+    day: 10
+    type: story
+    trigger: { kind: day, day: 10, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["手工服务日志：2个社团、187份报名表、你手动合并6小时、错漏3处被老K逮到。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 4 }
+      - { kind: addAsset, assetType: document, name: 手工服务日志, description: 人肉MVP的过程记录, content: "2社团/187表/6小时/错漏3——自动化价值量化" }
+    dialogue:
+      - { speaker: 系统, text: "这6小时不是白干的：它是自动化到底值多少钱的第一手定价依据。" }
+    terminal: true
+
+  - id: v_d06_notes_choice
+    campaign: venture
+    day: 6
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 6, phase: end }
+    purpose: { learning: 访谈纪要的记录质量决定后续决策质量 }
+    scene: { location: dorm, characters: [] }
+    setup: ["一天的访谈结束。纪要怎么记？"]
+    choices:
+      - id: structured_notes
+        text: 结构化纪要：原话/痛点/现方案/付费线索 四栏分开
+        visibleResponse: 四栏纪要完成。两周后写假设板时，这四栏直接变成了证据列。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 4 }
+          - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·结构化, description: 原话/痛点/现方案/付费线索四栏, content: "四栏结构化纪要" }
+      - id: casual_notes
+        text: 凭印象记几行要点就行
+        visibleResponse: 要点有了，但"谁说的""原话是什么"全丢了。假设板要引用时抓瞎。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true

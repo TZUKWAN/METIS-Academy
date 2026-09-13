@@ -1,0 +1,302 @@
+# 创业线：Campaign + 角色 + 任务（TASK-J001~J012）
+campaigns:
+  - id: venture_30d_first_paid_user
+    title: 《30天：从0到第一个付费用户》
+    subtitle: 创业主线
+    description: 没有项目、少量预算、一个AI工具、一台电脑。30天里你自己去找问题、验证假设、做出MVP、找到第一批用户——直到第一个陌生人愿意为它付钱。系统不会告诉你"最佳方向"，因为不存在。
+    type: venture
+    cover: venture
+    startMissionId: vm1
+    endingPool:
+      - v_end_hidden_pm
+      - v_end_no_users
+      - v_end_no_payment
+      - v_end_first_paid
+      - v_end_small_profit
+      - v_end_growth_loss
+      - v_end_unit_economy_crash
+      - v_end_feature_graveyard
+      - v_end_pivot_users
+      - v_end_saas
+      - v_end_service
+      - v_end_studio
+      - v_end_side_project
+      - v_end_team_formed
+      - v_end_explosion
+      - v_end_acquisition_feel
+      - v_end_partner_split
+      - v_end_platform_risk
+      - v_end_acquisition_fail
+      - v_end_to_competition
+      - v_end_to_research
+      - v_end_time_up
+    defaultState: { money: 2000, timeBudget: 4, actionPoints: 4, users: 0, revenue: 0 }
+    skillFocus: [verification.independent_check, context.pollution, loop.feedback_loop]
+    estimatedMinutes: 150
+    totalDays: 30
+
+characters:
+  - id: v_user_student
+    displayName: 小蔡
+    role: 潜在用户·考研学生
+    portrait: v_user_student
+    baseRelationship: 45
+    traits: [忙, 焦虑, 对新工具好奇但懒得学]
+    goals: 考上目标院校，少走弯路
+    personality: 客气、容易说"挺好的"，除非问到具体事
+    offers: 最真实的"会不会付钱"反应
+    conflicts: 讨厌被推销，讨厌复杂注册流程
+    relationshipRules: [尊重她时间加分, 连环追问产品设想扣分]
+    campaignAvailability: [venture]
+    dynamicRules: []
+    dialogueStyle: 短句、表情包语气、偶尔吐槽
+  - id: v_user_club
+    displayName: 老K
+    role: 潜在用户·社团骨干
+    portrait: v_user_club
+    baseRelationship: 45
+    traits: [执行力强, 直, 精打细算]
+    goals: 社团活动少折腾人
+    personality: 说话冲但讲理
+    offers: 真实场景与数量化痛点
+    conflicts: 见不得"全自动"吹牛
+    relationshipRules: [给他看真实Demo加分, 只给PPT扣分]
+    campaignAvailability: [venture]
+    dynamicRules: []
+    dialogueStyle: 直给、爱说"就这？"
+  - id: v_partner
+    displayName: 阿斌
+    role: 会写代码的同学
+    portrait: v_partner
+    baseRelationship: 50
+    traits: [技术稳, 慎重, 怕担风险]
+    goals: 不耽误毕业，最好攒点经历
+    personality: 先问"值不值"再动手
+    offers: 兼职水平的开发助力
+    conflicts: 反对没验证就开发
+    relationshipRules: [带证据说服他加分, 用情怀压他扣分]
+    campaignAvailability: [venture]
+    dynamicRules: []
+    dialogueStyle: 冷静、爱列风险
+  - id: v_mentor
+    displayName: 罗哥
+    role: 创业社群前辈
+    portrait: v_mentor
+    baseRelationship: 40
+    traits: [踩坑无数, 直接, 看数据]
+    goals: 让新人少交学费（或交得值得）
+    personality: 三句话不离"验证"和"现金流"
+    offers: 经验、渠道、扎心的真话
+    conflicts: 见不得"先开发再说"
+    relationshipRules: [带数据请教加分, 带想法请教扣分]
+    campaignAvailability: [venture]
+    dynamicRules: []
+    dialogueStyle: 反问、举例、不留情面
+  - id: v_user_shop
+    displayName: 王姐
+    role: 潜在用户·奶茶店主
+    portrait: v_user_shop
+    baseRelationship: 40
+    traits: [精明, 忙到飞起, 付费爽快但要求立竿见影]
+    goals: 多卖一杯是一杯
+    personality: 没空跟你聊理念
+    offers: 小微商户的真实付费意愿
+    conflicts: 讨厌月费，喜欢一单一结
+    relationshipRules: [帮她省钱加分, 让她学新东西扣分]
+    campaignAvailability: [venture]
+    dynamicRules: []
+    dialogueStyle: 快、短、口语
+  - id: v_family
+    displayName: 妈妈
+    role: 家人
+    portrait: v_family
+    baseRelationship: 60
+    traits: [担心, 实际, 永远的后盾]
+    goals: 你按时毕业、别饿着
+    personality: 唠叨里全是关心
+    offers: 情绪支持与偶尔的救急资金
+    conflicts: 口头禅是找个稳定工作
+    relationshipRules: [报喜也报忧加分, 长期报喜不报忧扣分]
+    campaignAvailability: [venture]
+    dynamicRules: []
+    dialogueStyle: 唠叨、具体、饭桌语气
+  - id: v_ai_agent
+    displayName: Agent
+    role: 你的AI工具（教学模拟）
+    portrait: ai_agent
+    baseRelationship: 50
+    traits: [快, 自信, 会顺着你说]
+    goals: 执行你的字面指令
+    personality: 生成"诱人的垃圾点子"毫不脸红
+    offers: 候选生成、市场初扫、MVP脚手架、需求整理
+    conflicts: 不替你确认需求；会把伪需求包装成机会
+    relationshipRules: []
+    campaignAvailability: [venture]
+    dynamicRules: []
+    dialogueStyle: 商业计划书腔、爱用"赋能"
+
+missions:
+  - id: vm1
+    campaignId: venture
+    stage: 1
+    day: 1
+    title: 没有项目的开始
+    objective: 用观察工具收集问题信号，建一个信号池
+    briefing: 没有最佳创业方向，只有待验证的问题。先学会看。
+    prerequisites: []
+    entryEventId: v_d01_blank
+    completionConditions: [{ kind: assetType, type: document, minCount: 1 }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 3 }]
+    requiredAssets: []
+    recommendedSkills: [verification.source_check]
+    nextMissionRules: [{ when: null, goto: vm2 }]
+    skillTraining: 学会区分真痛点/伪需求/低频需求等信号类型
+    knowledge: []
+  - id: vm2
+    campaignId: venture
+    stage: 2
+    day: 4
+    title: 访谈验证
+    objective: 用行为式访谈验证问题，证伪至少一个方向
+    briefing: “你会用吗？“得到礼貌，”上次什么时候？“得到真相。
+    prerequisites: [vm1]
+    entryEventId: v_d04_who
+    completionConditions:
+      - { kind: assetType, type: interview_notes, minCount: 2 }
+      - { kind: flag, key: real_interview_done }
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 6 }, { kind: add, key: userUnderstanding, value: 10 }]
+    requiredAssets: []
+    recommendedSkills: [verification.source_check]
+    nextMissionRules: [{ when: null, goto: vm3 }]
+    skillTraining: 掌握行为式访谈与证伪思维
+    knowledge: []
+  - id: vm3
+    campaignId: venture
+    stage: 3
+    day: 9
+    title: 假设板
+    objective: 建立六类假设并标注验证状态
+    briefing: 问题/用户/方案/渠道/收入/留存——每一格都要写"凭什么信"。
+    prerequisites: [vm2]
+    entryEventId: v_d09_board
+    completionConditions: [{ kind: assetType, type: hypothesis_board, minCount: 1 }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 5 }]
+    requiredAssets: []
+    recommendedSkills: [verification.acceptance_criteria]
+    nextMissionRules: [{ when: null, goto: vm4 }]
+    skillTraining: 学会用假设板组织验证
+    knowledge: []
+  - id: vm4
+    campaignId: venture
+    stage: 3
+    day: 10
+    title: 选择验证方式
+    objective: 选最便宜的验证方式（手工服务/落地页/原型/直接开发）
+    briefing: 完整开发是最贵的验证方式，而且最容易上瘾。
+    prerequisites: [vm2]
+    entryEventId: v_d10_cheap
+    completionConditions: [{ kind: flag, key: validation_path_chosen }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 4 }]
+    requiredAssets: []
+    recommendedSkills: [goal.final_state]
+    nextMissionRules: [{ when: null, goto: vm5 }]
+    skillTraining: 学会评估验证方式的成本与信息量
+    knowledge: []
+  - id: vm5
+    campaignId: venture
+    stage: 4
+    day: 12
+    title: MVP 开发
+    objective: 用 INIT/规则/契约/Goal/Loop 做出最小可用产品
+    briefing: 该有的工程仪式一个都不能少——它们是快的外壳，不是慢的原因。
+    prerequisites: [vm3, vm4]
+    entryEventId: v_d12_install
+    completionConditions:
+      - { kind: assetType, type: code_project, minCount: 1 }
+      - { kind: assetType, type: agents_md, minCount: 1 }
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 8 }, { kind: add, key: technicalDebt, value: 4 }]
+    requiredAssets: []
+    recommendedSkills: [loop.build_test_fix]
+    nextMissionRules: [{ when: null, goto: vm6 }]
+    skillTraining: 完整跑通 Agent 工程循环做出 MVP
+    knowledge: []
+  - id: vm6
+    campaignId: venture
+    stage: 5
+    day: 18
+    title: 首批用户
+    objective: 通过多渠道获得真实用户试用并收集反馈
+    briefing: 每个渠道成本不同。用户的第一句话通常是"不会用"。
+    prerequisites: [vm5]
+    entryEventId: v_d18_channels
+    completionConditions:
+      - { kind: assetType, type: user_feedback, minCount: 2 }
+      - { kind: state, key: users, op: gte, value: 5 }
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 8 }]
+    requiredAssets: []
+    recommendedSkills: [loop.feedback_loop]
+    nextMissionRules: [{ when: null, goto: vm7 }]
+    skillTraining: 学会按渠道参数获客并分类处理反馈
+    knowledge: []
+  - id: vm7
+    campaignId: venture
+    stage: 6
+    day: 21
+    title: 首次收费
+    objective: 设计定价并向用户收钱（喜欢≠付费）
+    briefing: 免费用户会夸你，付费用户会要求你。第一个付费用户是创业的成人礼。
+    prerequisites: [vm6]
+    entryEventId: v_d21_pricing
+    completionConditions:
+      - { kind: flag, key: pricing_attempted }
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 8 }]
+    requiredAssets: []
+    recommendedSkills: [verification.independent_check]
+    nextMissionRules: [{ when: null, goto: vm8 }]
+    skillTraining: 学会设计收费实验并面对真实转化率
+    knowledge: []
+  - id: vm8
+    campaignId: venture
+    stage: 7
+    day: 24
+    title: 单位经济
+    objective: 算清收入-成本，理解单位经济与留存
+    briefing: 收入1000成本1300的生意，规模越大死得越快。
+    prerequisites: [vm7]
+    entryEventId: v_d24_api_cost
+    completionConditions: [{ kind: assetType, type: revenue_report, minCount: 1 }]
+    failureConditions:
+      - kind: and
+        conditions:
+          - { kind: flag, key: feature_graveyard }
+          - { kind: state, key: day, op: gte, value: 28 }
+    rewards: [{ kind: add, key: progress, value: 8 }]
+    requiredAssets: []
+    recommendedSkills: [verification.data_consistency]
+    nextMissionRules: [{ when: null, goto: vm9 }]
+    skillTraining: 学会计算单位经济并据此决策
+    knowledge: []
+  - id: vm9
+    campaignId: venture
+    stage: 9
+    day: 28
+    title: 项目命运
+    objective: 最后的资源分配与 Pivot 决策，进入结算
+    briefing: 坚持、换人群、换问题、换形态、结束——都是合法选项，只有不清醒是非法的。
+    prerequisites: [vm8]
+    entryEventId: v_d28_pivot
+    completionConditions: [{ kind: flag, key: v_final_done }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 8 }]
+    requiredAssets: []
+    recommendedSkills: [goal.change]
+    nextMissionRules: []
+    skillTraining: 学会用数据支撑 Pivot 或终止决策
+    knowledge: []

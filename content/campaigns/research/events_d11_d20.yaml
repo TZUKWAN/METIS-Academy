@@ -1,0 +1,476 @@
+# 科研线事件 D11-D20（研究问题 / 理论与规则 / 研究设计）
+events:
+  # ============ DAY 11 ============
+  - id: r_d11_gaps
+    campaign: research
+    day: 11
+    type: story
+    trigger: { kind: day, day: 11, phase: start }
+    purpose: { narrative: AI生成5个gap, learning: gap 是假设不是事实 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你让 Agent 基于矩阵找研究空白。它一口气给了五个，每个都写着'尚无研究'。”]
+    dialogue:
+      - { speaker: Agent, text: "GAP-1：AI辅助写作与论证质量的因果关系尚无实证。", mood: pleased }
+      - { speaker: Agent, text: "GAP-2：技能形成的纵向追踪缺失。GAP-3：教师视角空白。GAP-4：中文语境空白。GAP-5：伦理维度空白。" }
+      - { speaker: 系统, text: "五个'尚无研究'。真的都是空白吗？——'没人做'和'做不了'和'不值得做'是三回事。" }
+    next: r_d11_validate
+
+  - id: r_d11_validate
+    campaign: research
+    day: 11
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: gap 验证表：claim/支持文献/反例/置信度/可行性 }
+    scene: { location: workbench, characters: [] }
+    choices:
+      - id: build_validation_table
+        text: 逐条建验证表：支持证据/反例/置信度/可行性
+        visibleResponse: |
+          你给每个 gap 建了五行表。
+          GAP-1 标了"高置信/可行"；GAP-2 写着"纵向设计30天做不完"；
+          GAP-4 你带着怀疑标注——"中文空白≠值得做，先查是不是没人愿意发"。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: add, key: execution, value: 4 }
+          - { kind: addAsset, assetType: evidence_matrix, name: gap验证表 v1, description: 5个候选gap的证据表, content: "| gap | 支持文献 | 反例 | 置信度 | 可行性 |" }
+      - id: trust_ai_gaps
+        text: AI说尚无研究那就是空白，选一个顺眼的开工
+        visibleResponse: 你选了 GAP-2，因为它听起来最宏大。三天后你会为这个“宏大”付出代价。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 10 }
+          - { kind: add, key: academicDebt, value: 8 }
+          - { kind: setFlag, key: trusted_unverified_gap }
+          - { kind: addAsset, assetType: evidence_matrix, name: gap验证表(未验证), description: 只有claim没有证据列, content: "| gap | (空) | (空) | ? | ? |" }
+    learningPoint: 空白要验证，不能只听AI宣布
+
+  # ============ DAY 12 ============
+  - id: r_d12_refuted
+    campaign: research
+    day: 12
+    type: story
+    keyDecision: true
+    trigger: { kind: day, day: 12, phase: start }
+    purpose: { narrative: 强制——至少一个gap被推翻, learning: 失败验证也是进展 }
+    scene: { location: library, characters: [] }
+    setup: [“验证进行中。你检索 GAP-4（中文语境空白）的支持文献，结果页面加载出一长串。”]
+    dialogue:
+      - { speaker: 系统, text: "中文语境下的相关研究：37 篇。其中 6 篇直接研究 AI 辅助写作。" }
+      - { speaker: 你, text: "……'尚无研究'是幻觉。这条 gap 死了。" }
+      - { speaker: 系统, text: "但你现在的简报比昨天更真实：4 个候选，1 个被证伪，每个都带证据。" }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 6 }
+      - { kind: achievement, achievementId: ach_r_gap_refuted, description: 亲手推翻一个候选gap }
+    next: r_d12_reflect
+
+  - id: r_d12_reflect
+    campaign: research
+    day: 12
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“林师姐看到了你桌上被划掉的 GAP-4。”]
+    dialogue:
+      - { speaker: 林师姐, text: "被推翻就丧气？我毕业论文的第一个假设就是被我自己证伪的。", mood: neutral }
+      - { speaker: 林师姐, text: "证伪一条，剩下的才更可能是真的。这不是损失，是进度。" }
+    automaticEffects:
+      - { kind: relationship, characterId: r_senior_theory, delta: 4 }
+    unlockKnowledge: [kc_r_gap_refute]
+    terminal: true
+
+  # ============ DAY 13 ============
+  - id: r_d13_converge
+    campaign: research
+    day: 13
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 13, phase: start }
+    purpose: { learning: RQ trade-off：稳妥/激进/宽/窄/数据友好/理论强 }
+    scene: { location: dorm, characters: [] }
+    setup: [“验证完毕。明天要向导师汇报你的研究问题。今天必须收敛出一条。”]
+    dialogue: []
+    choices:
+      - id: rq_safe
+        text: 稳妥版：AI辅助写作与本科生论证质量的相关性（问卷可测）
+        visibleResponse: 风险低，数据好拿。代价：创新性一般，评委可能问“然后呢”。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: rq_style_safe }
+          - { kind: add, key: progress, value: 4 }
+      - id: rq_bold
+        text: 激进版：AI辅助写作重塑论证能力习得机制的混合研究
+        visibleResponse: 评委眼睛会亮，但混合方法的工作量会让你在第二十天怀疑人生。
+        hiddenEffects:
+          - { kind: add, key: riskTolerance, value: 8 }
+          - { kind: add, key: progress, value: 5 }
+          - { kind: setFlag, key: rq_style_bold }
+      - id: rq_narrow
+        text: 收窄版：AI辅助写作中“证据引用行为”对论证质量的影响（聚焦一处）
+        visibleResponse: 小切口。好做、好讲、好答辩。你把它写进了简报。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: progress, value: 4 }
+          - { kind: setFlag, key: rq_style_narrow }
+      - id: rq_ask_ai_best
+        text: 让AI直接告诉我“最佳研究问题”
+        visibleResponse: 它给了你一个四平八稳的题目。你总觉得这题目像谁的——像每一个AI生成过的题目。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 8 }
+          - { kind: add, key: progress, value: 2 }
+    learningPoint: 研究问题的选择是权衡，不是“最佳答案”
+
+  # ============ DAY 14 ============
+  - id: r_d14_rules
+    campaign: research
+    day: 14
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: r_m05 }
+    purpose: { learning: AGENTS.md/CLAUDE.md：把反复交代的事变成项目规则 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“本周第三次了——Agent 又在引用里混入未经核实的来源，又用了你没要的格式。”]
+    dialogue:
+      - { speaker: Agent, text: "抱歉，请提供格式要求。", mood: neutral }
+      - { speaker: 你, text: "我提供过三次了。我需要一劳永逸的办法。" }
+    choices:
+      - id: write_agents_md
+        text: 写 AGENTS.md：项目目标/范围/来源规则/引用规则/工作流/验收
+        visibleResponse: |
+          你写了 40 行：
+          - 只准引用 literature/verified.md 里的文献
+          - 输出格式固定三段式
+          - 不确定时显式标注，禁止编造
+          - 每次交付先自查验收单
+          新会话测试：它老实了。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 8 }
+          - { kind: addAsset, assetType: agents_md, name: AGENTS.md, description: 科研项目规则文件, content: "# 项目规则\n目标/范围/来源规则/引用规则/工作流/验收（见正文）" }
+          - { kind: achievement, achievementId: ach_r_agents_md, description: 创建了项目规则文件 }
+        unlockKnowledge: [kc_r_agents_md]
+      - id: keep_repeating
+        text: 继续在对话里每次都重复一遍
+        visibleResponse: 你成了人肉规则播放器。偶尔漏一次，它就错一次。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 规则进文件，别进复读机
+
+  # ============ DAY 15 ============
+  - id: r_d15_theories
+    campaign: research
+    day: 15
+    type: story
+    trigger: { kind: day, day: 15, phase: start }
+    purpose: { narrative: AI一次给7个理论, learning: 理论是工具不是装饰 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“理论框架环节。你让 AI 推荐理论，它热情地给了七个。”]
+    dialogue:
+      - { speaker: Agent, text: "推荐理论：活动理论、技薪效应、认知负荷、具身认知、社会资本、技术接受模型、实践共同体。", mood: pleased }
+      - { speaker: 林师姐, text: "（看完列表）七个？你是要写理论综述还是写研究计划？", mood: serious }
+    next: r_d15_pick
+
+  - id: r_d15_pick
+    campaign: research
+    day: 15
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 按机制筛理论：能推出可检验命题的才留下 }
+    scene: { location: workbench, characters: [r_senior_theory] }
+    choices:
+      - id: mechanism_filter
+        text: 按机制筛：哪个理论能推出“可检验的机制链”？留 1-2 个
+        visibleResponse: |
+          你逐个问"它说技能是怎么形成的？能变成假设吗？"
+          七个只剩两个：认知负荷 + 实践共同体。其余进附录。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: add, key: independence, value: 5 }
+          - { kind: achievement, achievementId: ach_r_theory_filtered }
+      - id: use_all
+        text: 全用上，显得理论功底扎实
+        visibleResponse: 你的理论框架章节膨胀到 9 页。师姐看完只说了一句：“每个都讲了，每个都没用上。”
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 12 }
+          - { kind: setFlag, key: theory_soup }
+      - id: famous_only
+        text: 只留最有名的那个
+        visibleResponse: 技术接受模型确实有名——但它解释“会不会用”，不解释“技能怎么形成”。错位。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }]
+    learningPoint: 理论筛选标准：能导出可检验命题
+
+  # ============ DAY 16 ============
+  - id: r_d16_concepts
+    campaign: research
+    day: 16
+    type: decision
+    trigger: { kind: day, day: 16, phase: start }
+    purpose: { learning: 概念辨析：skill/expertise/learning 不是同义词 }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“写理论部分时你发现：27 篇文献里，'技能形成'至少有三种不同定义。”]
+    dialogue:
+      - { speaker: 林师姐, text: "你说的'技能'，指可观测行为，还是内在能力？别笑，这决定了你测什么。", mood: serious }
+    choices:
+      - id: concept_table
+        text: 建概念辨析表：每个概念列出处/定义/测法
+        visibleResponse: |
+          三列×三概念的表摆出来了。你选定"可观测行为"作为操作性定义，
+          并在计划里写明局限。师姐点头："能用一句话说清你测什么，就赢了半数同门。"
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: relationship, characterId: r_senior_theory, delta: 6 }
+          - { kind: addAsset, assetType: concept_table, name: 概念辨析表, description: skill/expertise/learning 的定义与测法对照, content: "| 概念 | 出处 | 定义 | 测法 |" }
+      - id: mix_concepts
+        text: 差不多就行，文献里都是混着用的
+        visibleResponse: 评委D28预审时问：“你的'论证质量'到底指哪个定义？”你卡住了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }]
+    learningPoint: 概念不是同义词堆积
+
+  # ============ DAY 17 ============
+  - id: r_d17_mechanism
+    campaign: research
+    day: 17
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 17, phase: start }
+    purpose: { learning: 机制链：actor-condition-mechanism-outcome-evidence }
+    scene: { location: workbench, characters: [] }
+    setup: [“理论选定了。师姐留了句话在组会记录里：'从名词到句子，从句子到链。'”]
+    dialogue:
+      - { speaker: 系统, text: "把理论翻译成机制链：谁，在什么条件下，通过什么过程，产生什么结果，证据是什么？" }
+    choices:
+      - id: build_chain
+        text: 写机制链：练习者×低负荷写作场景×外部反馈替代自我监控×论证能力增长放缓
+        visibleResponse: |
+          你画出五节链。每一节后面标了支持文献。
+          写到"证据"那节你卡住——两节链只有间接证据。你把它们标黄。
+          这条链现在诚实地展示了它哪里结实、哪里虚。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: add, key: progress, value: 5 }
+          - { kind: addAsset, assetType: mechanism_map, name: 机制链 v1, description: actor-condition-mechanism-outcome-evidence, content: "练习者 | 低负荷写作场景 | 外部反馈替代自我监控 | 论证能力增长放缓 | 证据: [2直接, 2间接(标黄)]" }
+      - id: skip_chain
+        text: 太麻烦，理论部分直接写“本文基于XX理论”
+        visibleResponse: 一句“基于XX理论”没有解释任何东西。评委问“它怎么用”时你只能现编。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 8 }]
+    learningPoint: 机制链是理论与方法的桥
+
+  # ============ DAY 18 ============
+  - id: r_d18_method
+    campaign: research
+    day: 18
+    type: npc
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: r_m06 }
+    purpose: { narrative: 方法诱惑, learning: 方法服务于问题 }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“周师兄看到你的研究设计初稿，第一反应是摇头发。”]
+    dialogue:
+      - { speaker: 周师兄, text: "相关分析太素了。做结构方程吧，模型图往答辩PPT上一放，高级。", mood: pleased }
+      - { speaker: 你, text: "可是我的样本估计就 120 份……" }
+      - { speaker: 周师兄, text: "120 也能跑。跑不收敛再说嘛。" }
+    choices:
+      - id: follow_sem
+        text: 听师兄的，上 SEM
+        visibleResponse: 你把方法改成了 SEM。两周后：样本 120，模型不收敛，你被迫降级回多元回归——绕了一圈的沉没成本。
+        hiddenEffects:
+          - { kind: setFlag, key: method_mismatch }
+          - { kind: add, key: technicalDebt, value: 6 }
+          - { kind: add, key: academicDebt, value: 6 }
+      - id: back_to_rq
+        text: 回到研究问题：它需要因果推断还是描述相关？
+        visibleResponse: 你的问题是“有没有影响、影响多大”——回归+分组比较已经够。你礼貌拒绝了师兄。他耸耸肩：“行吧，稳。”
+        hiddenEffects:
+          - { kind: add, key: independence, value: 8 }
+          - { kind: achievement, achievementId: ach_r_method_aligned }
+      - id: check_data_first
+        text: 先看数据结构再定方法
+        visibleResponse: 你预跑了一遍数据清洗：有序变量为主、样本 120。结论一致：简单方法配得上这个问题。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: add, key: independence, value: 4 }
+    learningPoint: 方法不是装饰品
+
+  # ============ DAY 19 ============
+  - id: r_d19_data_crisis
+    campaign: research
+    day: 19
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 19, phase: start }
+    purpose: { narrative: 强制数据可得性危机, learning: 危机处理暴露研究品格 }
+    scene: { location: dorm, characters: [] }
+    setup: [“坏消息：合作社团的问卷发放被校方暂停，恢复时间未知。你的样本来源没了。”]
+    dialogue:
+      - { speaker: 系统, text: "原计划数据渠道中断。开题在 11 天后。" }
+      - { speaker: 苏晓, text: "要不……数据先填上，反正开题只是个计划？", mood: neutral }
+    choices:
+      - id: switch_sample
+        text: 换样本：改用公选课两个班，虽然代表性差点
+        visibleResponse: 你重新算了统计功效：120→150 份，两个班够。计划可行，只是外推性要写进局限。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: add, key: credibility, value: 4 }
+          - { kind: setFlag, key: data_crisis_solved }
+      - id: fabricate_plan
+        text: 开题时先写“数据已获取”——反正后面再想办法
+        visibleResponse: 你在计划里写了“已完成预调研（n=80）”。白纸黑字，现在是撒谎，二十天后是事故。
+        hiddenEffects:
+          - { kind: setFlag, key: data_fabricated }
+          - { kind: add, key: academicDebt, value: 15 }
+          - { kind: subtract, key: credibility, value: 20 }
+        delayed:
+          - { eventId: r_d28_pre_review, onDay: 28 }
+      - id: change_design
+        text: 改用公开语料做文本分析，换一条路
+        visibleResponse: 你花一晚上找到可行的公开数据集。研究问题微调，方法换成了对比分析。激进修正。
+        hiddenEffects:
+          - { kind: add, key: riskTolerance, value: 6 }
+          - { kind: add, key: progress, value: 3 }
+          - { kind: setFlag, key: design_pivoted }
+      - id: freeze
+        text: 什么都不改，等渠道恢复
+        visibleResponse: 等待不是策略。第 24 天你发现进度落后了所有人。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 8 }]
+    learningPoint: 数据危机的正确反应是换可行路径，不是造假
+
+  # ============ DAY 20 ============
+  - id: r_d20_goal
+    campaign: research
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 20, phase: start }
+    purpose: { learning: Goal=终态+判据+里程碑+约束；区别于单次任务 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“进入冲刺期。你决定给 Agent 立一个正式的 Goal，而不是每天零散派活。”]
+    dialogue:
+      - { speaker: Agent, text: "收到。目标是什么？'完成研究设计'吗？", mood: neutral }
+      - { speaker: 你, text: "'完成'不是目标。什么叫'完成'，得先定义。" }
+    choices:
+      - id: define_goal
+        text: 定义完整 Goal：终态（可答辩的设计书）/判据（自查单全绿）/3个里程碑/约束
+        visibleResponse: |
+          终态：一份含 RQ/理论/方法/数据/伦理的研究设计书。
+          判据：师姐验收单 10 项过 9 项。
+          里程碑：D22 设计 v2 / D25 论证图 / D28 预审通过。
+          约束：每天 Agent 最多自动跑 2 轮修订。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 8 }
+          - { kind: add, key: progress, value: 5 }
+          - { kind: addAsset, assetType: goal, name: goal_research_design, description: 研究设计冲刺Goal（终态/判据/里程碑/约束）, content: "终态/完成判据/里程碑×3/约束（见正文）" }
+          - { kind: achievement, achievementId: ach_r_goal_defined }
+        unlockKnowledge: [kc_r_goal]
+      - id: vague_goal
+        text: 就说“尽快完成研究设计”，细节到时候再说
+        visibleResponse: Agent 表示“明白”。然后它把时间花在了美化文档格式上——因为“尽快完成文档”是它理解的字面意思。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: Goal 有判据，Task 有交付
+
+  # ============ DAY 21 ============
+  - id: r_d21_drift
+    campaign: research
+    day: 21
+    type: story
+    keyDecision: true
+    trigger: { kind: day, day: 21, phase: start }
+    purpose: { learning: Goal Drift：完成文档≠完成研究 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“Goal 立了一天，你检查里程碑：设计书字数涨了 3000，但证据一节一个字没动。”]
+    dialogue:
+      - { speaker: Agent, text: "设计书已完成 80%（按字数计）。", mood: pleased }
+      - { speaker: 你, text: "字数不是我的判据。判据是'师姐验收单'。你跑偏了。" }
+    choices:
+      - id: fix_acceptance
+        text: 修订验收标准并写死：以验收单为准，字数不作数
+        visibleResponse: 你把验收单 10 项贴进 AGENTS.md，要求每轮汇报对照验收单逐项报进度。第二天，证据一节动工了。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: achievement, achievementId: ach_r_drift_fixed }
+        unlockKnowledge: [kc_r_drift]
+      - id: let_it_be
+        text: 字数多了也是多了，随它去
+        visibleResponse: 第 28 天预审，设计书 30 页，其中 12 页是正确的废话。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 8 }]
+    learningPoint: 质量门槛要写进判据
+
+  # ============ DAY 22 ============
+  - id: r_d22_loop
+    campaign: research
+    day: 22
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 22, phase: start }
+    purpose: { learning: Draft→Critique→Evidence check→Revise 循环；含回归检查 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“设计 v2 冲刺。你决定让 Agent 跑一个修订循环，但要按你的规矩跑。”]
+    dialogue:
+      - { speaker: Agent, text: "我可以一次性输出完美版本。", mood: pleased }
+      - { speaker: 你, text: "不。一次写完的版本我已经领教过了。" }
+    choices:
+      - id: run_loop
+        text: 三轮循环：草稿→评审（对照验收单）→证据核查→修订；每轮先跑回归检查
+        visibleResponse: |
+          轮1：评审抓出 3 处证据悬空；
+          轮2：证据核查发现 1 处引用年份错误（你核的）；
+          轮3：修订后回归检查确认前两轮修复没被改回去。
+          research_design_v2 验收单 9/10 绿。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 8 }
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: add, key: progress, value: 8 }
+          - { kind: addAsset, assetType: document, name: research_design_v2, description: 经三轮循环修订的研究设计, content: "RQ/理论/方法/数据/伦理，验收9/10" }
+          - { kind: achievement, achievementId: ach_r_loop_done }
+        unlockKnowledge: [kc_r_loop]
+      - id: one_shot_v2
+        text: 算了，让它一次写完 v2，省时间
+        visibleResponse: 版本很流畅。但第 2 天修好的定义又被它“顺手精简”掉了——没有回归检查，改了旧的就是看不见。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 8 }
+          - { kind: add, key: academicDebt, value: 5 }
+          - { kind: addAsset, assetType: document, name: research_design_v2(一次成型), description: 未经循环打磨的设计稿, content: "RQ/理论/方法/数据/伦理，暗藏回归缺陷" }
+    learningPoint: 不要让AI一次写完；循环+回归
+
+  # ============ 随机事件 ============
+  - id: r_random_data_bro
+    campaign: research
+    day: 16
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“周师兄在跑自己的模型，顺便瞄了你的数据。”]
+    dialogue:
+      - { speaker: 周师兄, text: "清洗做得挺干净。要不要我帮你跑个基线？十分钟的事。", mood: happy }
+    choices:
+      - id: accept_help
+        text: 好啊，谢谢师兄
+        visibleResponse: 十分钟后你有了第一版描述统计。你逐个核了一遍数字——都对。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_senior_data, delta: 5 }
+          - { kind: add, key: execution, value: 3 }
+      - id: decline_help
+        text: 谢了，我想自己跑一遍全流程
+        visibleResponse: 师兄挑眉：“行，踩坑了问我。”你踩了三个坑，但每个坑都记进了笔记。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 6 }
+    terminal: true
+
+  - id: r_random_imposter
+    campaign: research
+    day: 20
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [r_peer] }
+    setup: [“深夜。苏晓发来消息。”]
+    dialogue:
+      - { speaker: 苏晓, text: "我看别人进度都好快，是不是就我们俩在装样子……", mood: worried }
+    choices:
+      - id: encourage
+        text: "咱们有矩阵有机制链，比'快'比不过，比扎实怕过谁"
+        visibleResponse: 苏晓回了个“也 [x]”。你们各自把明天要做的事列了清单。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_peer, delta: 5 }
+          - { kind: add, key: energy, value: 5 }
+      - id: agree_worry
+        text: "是啊好慌，别聊了越聊越慌"
+        visibleResponse: 你们各自失眠到一点半。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 10 }]
+    terminal: true

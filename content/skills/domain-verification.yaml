@@ -1,0 +1,122 @@
+# Verification 域（TASK-E009）：18 能力原子
+skills:
+  - id: verification.test_first
+    domain: verification
+    title: 测试是验收的自动化
+    description: 能写成测试的验收标准就不要靠肉眼
+    whenToUse: 代码任务验收
+    behaviors: [{ id: ver_test_l1, level: 1, description: 为一个功能补上验收测试并跑绿, achievementId: ach_ver_test }]
+  - id: verification.citation_check
+    domain: verification
+    title: 引用核验
+    description: 每条引用回原始来源；查不到=不存在
+    whenToUse: 一切正式文字材料
+    behaviors: [{ id: ver_cit_l1, level: 1, description: 抓出并处理一条假引用, achievementId: ach_ver_citation }]
+  - id: verification.source_check
+    domain: verification
+    title: 来源独立性
+    description: AI 的结论要由 AI 之外的来源确认
+    whenToUse: 事实型结论
+    behaviors: [{ id: ver_src_l1, level: 1, description: 用独立来源确认一个 AI 结论, achievementId: ach_ver_source }]
+  - id: verification.reproducibility
+    domain: verification
+    title: 可复现
+    description: 结果能被同样的步骤再次得到；不能复现=不算数
+    whenToUse: 实验/数据/部署
+    behaviors: [{ id: ver_repr_l2, level: 2, description: 把一次结果复现一遍并留证, achievementId: ach_ver_repro }]
+  - id: verification.diff_review
+    domain: verification
+    title: Diff 审查
+    description: 不看整体看变化；改动范围超出预期就是红灯
+    whenToUse: Agent 交付任何修改后
+    behaviors: [{ id: ver_diff_l1, level: 1, description: 通过 diff 抓住一次越界修改, achievementId: ach_ver_diff }]
+  - id: verification.regression
+    domain: verification
+    title: 回归验证
+    description: 新改动不破坏旧功能；改完后旧测试必须仍然全绿
+    whenToUse: 每次修改之后
+    prerequisites: [verification.test_first]
+    behaviors: [{ id: ver_reg_l1, level: 1, description: 用旧用例拦下一次破坏, achievementId: ach_ver_regression }]
+  - id: verification.independent_check
+    domain: verification
+    title: 独立检查
+    description: 检查者不能是产出者；换工具/换会话/换人都行
+    whenToUse: 关键结论与交付
+    behaviors: [{ id: ver_ind_l1, level: 1, description: 安排一次真正独立的检查, achievementId: ach_ver_independent }]
+  - id: verification.reverse_verification
+    domain: verification
+    title: 反向验证
+    description: 主动找反例：如果这结论是错的，最可能哪里错？
+    whenToUse: 结论要被采信前
+    prerequisites: [verification.independent_check]
+    behaviors: [{ id: ver_rev_l2, level: 2, description: 用反例法推翻或加固一个结论, achievementId: ach_ver_reverse }]
+    hiddenUntilDiscovered: true
+  - id: verification.adversarial_review
+    domain: verification
+    title: 对抗评审
+    description: 让另一个 Agent 以“评委/对手”立场攻击你的产出
+    whenToUse: 答辩/路演/投稿前
+    prerequisites: [verification.reverse_verification]
+    behaviors: [{ id: ver_adv_l2, level: 2, description: 完成一次对抗评审并修复暴露的弱点, achievementId: ach_ver_adversarial }]
+    hiddenUntilDiscovered: true
+  - id: verification.checklist
+    domain: verification
+    title: 验收清单
+    description: 把验收标准写成可勾选清单，逐条过
+    whenToUse: 任何交付
+    behaviors: [{ id: ver_chk_l1, level: 1, description: 制定并执行一次勾选式验收, achievementId: ach_ver_checklist }]
+  - id: verification.acceptance_criteria
+    domain: verification
+    title: 验收标准前置
+    description: 开工前就定好“什么叫完成”，写进契约
+    whenToUse: 开工前
+    prerequisites: [verification.checklist]
+    behaviors: [{ id: ver_acc_l1, level: 1, description: 契约中前置了可检验的完成定义, achievementId: ach_ver_acceptance }]
+  - id: verification.factual_claims
+    domain: verification
+    title: 事实声明抽查
+    description: 数字/日期/引文逐条标注来源，抽查三成
+    whenToUse: 报告类交付
+    prerequisites: [verification.source_check]
+    behaviors: [{ id: ver_fact_l2, level: 2, description: 抽查并修正一条不实声明, achievementId: ach_ver_factual }]
+  - id: verification.data_consistency
+    domain: verification
+    title: 数据一致性
+    description: 同一数字在所有材料里必须一致（申报书 vs PPT vs Demo）
+    whenToUse: 多材料交付
+    behaviors: [{ id: ver_datac_l2, level: 2, description: 跨材料对表并修复一次数字不一致, achievementId: ach_ver_datacons }]
+  - id: verification.file_integrity
+    domain: verification
+    title: 文件完整性
+    description: 交付物清单逐个打开验证：存在/可打开/版本对
+    whenToUse: 打包交付前
+    behaviors: [{ id: ver_file_l1, level: 1, description: 完成一次交付物完整性检查, achievementId: ach_ver_file }]
+  - id: verification.build_check
+    domain: verification
+    title: 构建/运行验证
+    description: “我这边好的”不算数；在干净环境构建并运行
+    whenToUse: 代码交付
+    prerequisites: [verification.test_first]
+    behaviors: [{ id: ver_build_l2, level: 2, description: 干净环境构建成功一次, achievementId: ach_ver_build }]
+  - id: verification.human_check
+    domain: verification
+    title: 人工终审
+    description: 有些事机器测不了：语感/合理性/伦理；人必须最后过目
+    whenToUse: 对外发布前
+    behaviors: [{ id: ver_human_l1, level: 1, description: 完成一次带记录的人工终审, achievementId: ach_ver_human }]
+  - id: verification.stop_gate
+    domain: verification
+    title: 停止闸门
+    description: 验收不过就有权喊停；不因沉没成本放水
+    whenToUse: 里程碑验收
+    prerequisites: [verification.checklist]
+    behaviors: [{ id: ver_stop_l2, level: 2, description: 行使一次停止闸门, achievementId: ach_ver_stopgate }]
+    hiddenUntilDiscovered: true
+  - id: verification.release_gate
+    domain: verification
+    title: 发布闸门
+    description: 全部验收项+人工终审+回滚预案齐备才可发布
+    whenToUse: 对外交付
+    prerequisites: [verification.stop_gate, verification.build_check, verification.human_check]
+    behaviors: [{ id: ver_rel_l3, level: 3, description: 执行一次完整发布闸门流程, achievementId: ach_ver_releasegate }]
+    hiddenUntilDiscovered: true

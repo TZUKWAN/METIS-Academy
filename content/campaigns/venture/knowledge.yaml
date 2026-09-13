@@ -1,0 +1,748 @@
+# 创业线知识卡（kc_v_ 前缀）
+knowledge:
+  - id: kc_v_signal_pool
+    title: 问题信号池：创业从观察开始
+    domain: verification
+    trigger: skill_unlock
+    problem: 想创业但不知道做什么
+    wrongPattern: 等灵感，或让AI直接给方向
+    correctBehavior: 建信号池：记录观察到的痛点，标注类型与来源
+    why: 机会是"被验证的问题"，问题要先被看见
+    steps:
+      - 随时记录观察
+      - 分类(真痛点/伪需求/低频/付费差/不可达)
+      - 标来源
+      - 定期回顾
+    toolMappings:
+      generic: signals.md 常驻
+    successSignals:
+      - 信号池持续增长
+    failureSignals:
+      - 拍脑袋定方向
+    transferScenarios:
+      - 产品规划
+      - 职业选择
+    depth30s: 创业始于看见问题，不是想到点子。
+    depth3m: 五类信号：真痛点(高频+花钱绕)/伪需求(说不会做)/低频(一年一次)/付费差(痛但不掏钱)/不可达(够不着人群)。
+    depth10m: 信号池每条含：现象/来源/分类/初判/跟进状态。30条信号里通常只有3-5条值得访谈。
+    relatedSkillIds:
+      - verification.source_check
+  - id: kc_v_idea_opportunity
+    title: idea ≠ opportunity
+    domain: verification
+    trigger: first_failure
+    problem: AI/朋友给出的点子"听起来很棒"
+    wrongPattern: 点子一响就开干
+    correctBehavior: 点子=候选假设；用证据（访谈/付费/使用）升级它或证伪它
+    why: 机会=有支付意愿的真实问题。点子离这步还很远
+    steps:
+      - 点子进假设板
+      - 找目标人群访谈
+      - 找付费证据
+      - 升级或证伪
+    toolMappings:
+      claudeCode: 让AI生成点子时同时生成"证伪清单"
+      codex: 同左
+      deepseekHarness: 同左
+    successSignals:
+      - 立项前有访谈证据
+    failureSignals:
+      - 上线即无人问津
+    transferScenarios:
+      - 课程项目
+      - 社区提案
+    depth30s: 点子是毛坯，证据才是房子。
+    depth3m: 判断机会三问：谁痛？多痛？愿意花钱解决吗？三问无答案=只是点子。
+    depth10m: 为每个点子建"证据档案"：支持/反对/未知。证据档案比点子本身值钱。
+    relatedSkillIds:
+      - verification.reverse_verification
+  - id: kc_v_behavior_interview
+    title: 创业访谈只问过去
+    domain: verification
+    trigger: first_failure
+    problem: 访谈人人都说"会买"，上线零转化
+    wrongPattern: 问"你会用吗/愿意付多少钱吗"
+    correctBehavior: 只问过去行为：上次什么时候/怎么解决/花多久/花了钱吗
+    why: 人类预测自己未来行为的能力极差，回忆过去可靠得多
+    steps:
+      - 锁定怀疑痛点
+      - 问最近一次发生
+      - 追四要素
+      - 记录原话
+    toolMappings:
+      generic: 录音+原话标注
+    successSignals:
+      - 拿到具体数字与场景
+    failureSignals:
+      - 收集到一堆"挺好的"
+    transferScenarios:
+      - 需求调研
+      - 市场测试
+    depth30s: 未来的承诺不值钱，过去的行为才是证据。
+    depth3m: 痛点证据=已经在绕路（人肉/付费/凑合）。没有绕路行为的痛点，多半是伪需求。
+    depth10m: 痛点证据表四列：原话/频率/现方案/绕行成本/付费线索。≥3个独立来源才立假设。
+    relatedSkillIds:
+      - verification.source_check
+  - id: kc_v_refute_first
+    title: 证伪优先
+    domain: verification
+    trigger: event
+    problem: 总想证明自己是对的，错方向越走越深
+    wrongPattern: 找支持自己点子的证据
+    correctBehavior: 先主动找"它会失败"的证据：竞品/免费替代/低频/不可达
+    why: 证伪一次省三个月；证实偏误是创业的头号杀手
+    steps:
+      - 写下点子死掉的N种方式
+      - 逐条检索证据
+      - 30分钟内定生死
+    toolMappings:
+      claudeCode: 让AI扮演红队攻击点子
+      codex: 同左
+      deepseekHarness: 红队模式
+    successSignals:
+      - 立项前已被攻击过一轮
+    failureSignals:
+      - 上线后才发现成熟竞品
+    transferScenarios:
+      - 投资判断
+      - 论文假设
+    depth30s: 先找“它会怎么死”，再谈“它能怎么活”。
+    depth3m: 红海检查三步：搜同类产品/查免费替代/问"为什么现在没人做成"。
+    depth10m: 建"证伪清单"模板：竞品/替代品/频率/触达/付费意愿——每项30秒检索。
+    relatedSkillIds:
+      - verification.reverse_verification
+  - id: kc_v_segment
+    title: 用户分层：不是所有人都是用户
+    domain: verification
+    trigger: event
+    problem: 推广文案打不动任何人
+    wrongPattern: 所有人都会需要它
+    correctBehavior: 按痛感/预算/决策链分层，锁定痛感最强的一层
+    why: 同一问题对不同人群严重度天差地别
+    steps:
+      - 按规模/频率/预算切层
+      - 找出痛感最强层
+      - 只为这层做产品与文案
+    toolMappings:
+      generic: 象限图
+    successSignals:
+      - 文案说"这就是给我做的"
+    failureSignals:
+      - 人人点头无人注册
+    transferScenarios:
+      - 简历定位
+      - 社群运营
+    depth30s: 说“每个人”=没有“某个人”。
+    depth3m: 分层维度：规模（用得多吗）、频率（痛得勤吗）、预算（付得起吗）、决策链（一人拍板吗）。
+    depth10m: 目标用户画像四件套：场景/频率/现方案/预算。贴墙上，所有决策对表。
+    relatedSkillIds:
+      - verification.factual_claims
+  - id: kc_v_hypothesis_board
+    title: 假设板六格
+    domain: verification
+    trigger: skill_unlock
+    problem: 想法全在脑子里，说不清"信什么、凭什么"
+    wrongPattern: 商业计划书写十页，假设从不验证
+    correctBehavior: 六格假设（Problem/User/Solution/Channel/Revenue/Retention）×四态（未验证/弱证据/强证据/证伪）
+    why: 假设写下来才能被证伪；状态标注防止自欺
+    steps:
+      - 六格各写一句
+      - 标当前证据状态
+      - 逐格设计验证实验
+      - 移动状态
+    toolMappings:
+      generic: 白板/表格
+    successSignals:
+      - 每格都有状态与证据链接
+    failureSignals:
+      - 六格全是"我觉得"
+    transferScenarios:
+      - 研究设计
+      - 求职策略
+    depth30s: 把“我相信”写成“证据显示”。
+    depth3m: 一格一实验：Problem→访谈；Channel→小批量投放；Revenue→真实定价页。
+    depth10m: 假设板每周更新状态；"证伪"格不是失败墙，是节省的学费清单。
+    relatedSkillIds:
+      - verification.acceptance_criteria
+  - id: kc_v_concierge
+    title: 人肉MVP（Concierge）
+    domain: loop
+    trigger: skill_unlock
+    problem: 验证"有人要用"却先写了三周代码
+    wrongPattern: 直接开发再找用户
+    correctBehavior: 先人肉提供服务：手工帮用户完成流程，看他们是否感谢/复用/付费
+    why: 人肉服务零开发成本，且能获得最真实的流程洞察
+    steps:
+      - 找2-3个真实用户
+      - 手工完成全流程
+      - 记录耗时与错漏
+      - 问付费意愿
+    toolMappings:
+      generic: 问卷+Excel+腿
+    successSignals:
+      - 用户主动问"下次还有吗"
+    failureSignals:
+      - 做完服务杳无音信
+    transferScenarios:
+      - 任何服务验证
+    depth30s: 先当人肉机器，再当程序员。
+    depth3m: 人肉MVP的三份产出：留存信号、流程文档、自动化定价依据。
+    depth10m: 人肉时的每一次手动操作都是需求文档：重复≥3次的动作，才值得写成代码。
+    relatedSkillIds:
+      - loop.experiment_loop
+  - id: kc_v_landing_test
+    title: 落地页测试
+    domain: loop
+    trigger: event
+    problem: 验证需求不想开发任何东西
+    wrongPattern: 只靠嘴问
+    correctBehavior: 一页展示方案+一个"预约"按钮，看真实转化
+    why: 页面上的点击是行为证据，比口头承诺硬
+    steps:
+      - 一页说清问题/方案/价格锚点
+      - 投放到目标人群
+      - 统计转化率
+    toolMappings:
+      claudeCode: 让Agent快速生成落地页
+      codex: 同左
+      deepseekHarness: 同左
+    successSignals:
+      - 有真实邮箱/预约进来
+    failureSignals:
+      - 曝光高转化低→价值主张有问题
+    transferScenarios:
+      - 活动报名
+      - 招募
+    depth30s: 一个按钮，胜过十次访谈的意愿部分。
+    depth3m: 转化率基准：冷流量1-3%正常；0%检查流量质量，10%+检查是不是没讲清价格。
+    depth10m: 落地页A/B两版价值主张，各投一半流量——用数据选文案。
+    relatedSkillIds:
+      - loop.experiment_loop
+  - id: kc_v_mvp_scope_v
+    title: MVP=最小可卖
+    domain: goal
+    trigger: event
+    problem: MVP越做越大，上线遥遥无期
+    wrongPattern: 追求"完整"再上线
+    correctBehavior: MVP判据=能收一次钱/能完成一次核心流程；其余全砍
+    why: 产品的意义是被使用/被付费，不是被完成
+    steps:
+      - 定义核心动作
+      - 只做核心动作的闭环
+      - 上线收钱或收集使用
+    toolMappings:
+      generic: 判据写进Goal
+    successSignals:
+      - 两周内上线
+    failureSignals:
+      - 一个月还在"完善"
+    transferScenarios:
+      - 毕设
+      - 内部工具
+    depth30s: 能卖的最小版本，就是MVP。
+    depth3m: 每个新功能问："砍掉它，核心流程还能跑吗？"能→砍。
+    depth10m: MVP上线后按"付费用户用了什么"决定第二期——用户的行为比你的想象诚实。
+    relatedSkillIds:
+      - goal.completion
+  - id: kc_v_channel_params
+    title: 渠道各有参数
+    domain: agent_organization
+    trigger: event
+    problem: 盲目撒网获客，成本失控
+    wrongPattern: 只看曝光量
+    correctBehavior: 每渠道记录：成本/转化率/CAC/留存差异
+    why: CAC（获客成本）超用户价值的渠道=加速死亡
+    steps:
+      - 列候选渠道
+      - 小预算测试
+      - 记录四参数
+      - 砍掉CAC高的
+    toolMappings:
+      generic: 渠道表
+    successSignals:
+      - 知道每个用户的获取成本
+    failureSignals:
+      - 只知总曝光不知转化
+    transferScenarios:
+      - 招聘
+      - 活动宣传
+    depth30s: 曝光是虚荣，CAC是生死。
+    depth3m: 冷启动优先级：熟人转介绍>垂直社群>内容>广告。前两个便宜且精准。
+    depth10m: CAC红线的算法：CAC < 用户生命周期毛利×3，超线渠道立即停。
+    relatedSkillIds:
+      - org.parallel
+      - org.subagent
+      - org.shared_context
+      - org.isolated_context
+      - org.orchestration
+  - id: kc_v_triage_demand
+    title: 需求洪水三分法
+    domain: loop
+    trigger: event
+    problem: 用户反馈20条，全做做不完，不做怕流失
+    wrongPattern: 照单全收，或按"简单"挑
+    correctBehavior: 三分：核心场景立刻修/池子里排队/明确拒绝并致谢
+    why: 需求的价值=核心用户密度×核心场景相关度，与提出音量无关
+    steps:
+      - 标需求来源用户
+      - 对表核心场景
+      - 三分处理
+      - 拒绝的致谢+解释
+    toolMappings:
+      generic: 需求池表格
+    successSignals:
+      - 核心场景体验持续变好
+    failureSignals:
+      - 产品越来越重越来越没人用
+    transferScenarios:
+      - 多方需求协调
+    depth30s: 需求按价值排，不按嗓门排。
+    depth3m: 二维过滤——核心用户×核心场景，两者都中的进本周期，否则进池子。
+    depth10m: 拒绝话术模板："已记录，当前版本聚焦XX场景，您提的会在评估池里。"诚实且留口。
+    relatedSkillIds:
+      - loop.feedback_loop
+      - loop.convergence
+  - id: kc_v_pricing_test
+    title: 定价是实验不是决定
+    domain: loop
+    trigger: event
+    problem: 不敢收费或拍脑袋定价
+    wrongPattern: 先免费，以后再说
+    correctBehavior: 定价页+限时限折扣+真实支付按钮，用转化数据迭代
+    why: 付费意愿只能被支付行为验证，不能被问卷验证
+    steps:
+      - 设价格锚点
+      - 上真实支付
+      - 48小时观察
+      - 调整再测
+    toolMappings:
+      generic: 支付+倒计时
+    successSignals:
+      - 真实订单出现
+    failureSignals:
+      - 问卷"愿意付"但按钮无人点
+    transferScenarios:
+      - 二手定价
+      - 服务报价
+    depth30s: 愿意付多少钱？——问支付按钮，别问嘴。
+    depth3m: 首个定价实验三件套：价格锚点/限时折扣/明确的收款路径。
+    depth10m: 记录"看到定价页→支付"漏斗各级数据；流失最大的一层就是优化点。
+    relatedSkillIds:
+      - loop.experiment_loop
+  - id: kc_v_churn_funnel
+    title: 免费→付费的漏斗
+    domain: verification
+    trigger: event
+    problem: 免费用户夸个不停，收费后集体消失
+    wrongPattern: 用点赞数估计收入
+    correctBehavior: 记录漏斗：注册→活跃→看定价→点支付→付款，逐层看流失
+    why: 喜欢与付费之间隔着价值感知、支付路径、价格锚点多道关
+    steps:
+      - 埋点/手工记录各级人数
+      - 找最大流失层
+      - 针对性优化
+    toolMappings:
+      generic: 漏斗表
+    successSignals:
+      - 知道每一层的转化率
+    failureSignals:
+      - 只有一个总注册数
+    transferScenarios:
+      - 活动转化
+      - 求职流程
+    depth30s: 掌声不是收入，漏斗才是真相。
+    depth3m: 免费→付费常见流失：价值感知（凭什么付）、价格锚点（比什么贵）、支付麻烦（流程长）。
+    depth10m: 每周画一次漏斗；连续两周某层无改善，说明策略错了不是执行慢。
+    relatedSkillIds:
+      - verification.data_consistency
+      - verification.build_check
+  - id: kc_v_api_cost
+    title: API成本要天天看
+    domain: environment
+    trigger: event
+    problem: 月底账单是收入的三倍
+    wrongPattern: 不看用量随便调
+    correctBehavior: 每日成本台账+缓存+小模型分流
+    why: AI产品里API常是最大变动成本，直接决定单位经济
+    steps:
+      - 建每日成本表
+      - 识别大头
+      - 缓存/降级/合并调用
+      - 复测
+    toolMappings:
+      generic: 用量面板+台账
+    successSignals:
+      - 单用户成本可知可控
+    failureSignals:
+      - 成本随用户线性失控
+    transferScenarios:
+      - 任何云服务
+    depth30s: 成本表比功能清单更保命。
+    depth3m: 降本三板斧：缓存常见结果/简单任务用小模型/批处理合并请求。
+    depth10m: 设"成本红线警报"：日成本超阈值立即人工介入——自动化也要有刹车。
+    relatedSkillIds:
+      - environment.logs
+  - id: kc_v_unit_econ
+    title: 单位经济：一单赚不赚
+    domain: verification
+    trigger: event
+    problem: 总收入在涨却总没钱
+    wrongPattern: 只看总收入总额
+    correctBehavior: 算单用户：收入-变动成本；为正才可扩张
+    why: 单位经济为负时，规模=加速亏损
+    steps:
+      - 列变动成本(AI/短信/支付手续费)
+      - 算单用户毛利
+      - 为正再谈增长
+    toolMappings:
+      generic: 报表
+    successSignals:
+      - 每单毛利可知
+    failureSignals:
+      - 越卖越亏
+    transferScenarios:
+      - 摆摊
+      - 接单定价
+    depth30s: 一单一算，为正才卖。
+    depth3m: 变动成本vs固定成本：随用户增涨的是变动——它决定每个新用户是资产还是负债。
+    depth10m: 单位经济表月更：单用户收入/变动成本/毛利/毛利趋势线。趋势比绝对值重要。
+    relatedSkillIds:
+      - verification.data_consistency
+  - id: kc_v_retention_first
+    title: 留存先于拉新
+    domain: loop
+    trigger: event
+    problem: 拉新不停，活跃不涨
+    wrongPattern: 漏桶拼命加水
+    correctBehavior: 先修留存（引导完成核心动作），再放大获客
+    why: 留存差时每分获客成本都在漏掉
+    steps:
+      - 找到"啊哈动作"(如完成首次报名)
+      - 优化引导让新用户尽早完成
+      - 留存稳了再投渠道
+    toolMappings:
+      generic: 引导流+数据表
+    successSignals:
+      - 次日/7日留存提升
+    failureSignals:
+      - 注册涨活跃平
+    transferScenarios:
+      - 社群运营
+    depth30s: 补桶再打水。
+    depth3m: 找"啊哈动作"：对比留存/流失用户的行为差异，最先完成某动作的用户留存高——那就是它。
+    depth10m: 新用户引导的唯一目标：30分钟内完成一次啊哈动作。其他引导都是干扰。
+    relatedSkillIds:
+      - loop.feedback_loop
+  - id: kc_v_cac_ltv
+    title: CAC与LTV：一进一出
+    domain: verification
+    trigger: npc_advice
+    problem: 增长很美，钱越烧越多
+    wrongPattern: 从不算获客成本
+    correctBehavior: CAC=渠道总花费/新用户数；LTV=单用户生命周期毛利；LTV≥3×CAC才健康
+    why: 这两个数字决定增长是资产还是负债
+    steps:
+      - 按渠道算CAC
+      - 估算LTV(毛利×留存期)
+      - 对比
+      - 调整渠道结构
+    toolMappings:
+      generic: 两张小表
+    successSignals:
+      - 每个渠道的CAC清楚
+    failureSignals:
+      - 只看总用户数增长
+    transferScenarios:
+      - 营销预算
+    depth30s: 花多少钱买一个用户？他能赚回几倍？
+    depth3m: CAC容易低估：别忘了你的时间成本（时间×时薪）。
+    depth10m: 每月重算LTV：留存改善会直接抬升LTV——留存是最便宜的LTV杠杆。
+    relatedSkillIds:
+      - verification.reproducibility
+  - id: kc_v_context_polution
+    title: 创业项目的上下文污染
+    domain: context
+    trigger: event
+    problem: Agent把已废弃的想法混进新功能
+    wrongPattern: 一个会话从立项用到关门
+    correctBehavior: 废弃需求立即移出目录+compact检查点+新会话
+    why: 创业决策变化快，上下文里的"幽灵需求"危害比代码bug大
+    steps:
+      - 废弃即归档
+      - 结构化压缩
+      - 新会话验证四问
+    toolMappings:
+      claudeCode: 目录即上下文，移出即失效
+      codex: 同左
+      deepseekHarness: 上下文管理
+    successSignals:
+      - 新会话只知当前需求
+    failureSignals:
+      - Agent复活已死需求
+    transferScenarios:
+      - 多次迭代的文档
+    depth30s: 死掉的想法要请出上下文。
+    depth3m: 每周一次"上下文大扫除"：检查项目目录里还有没有废弃方案的文件。
+    depth10m: 决策日志（为什么放弃X）单独存档——既保留教训，又不污染日常工作上下文。
+    relatedSkillIds:
+      - context.pollution
+      - context.source_selection
+      - context.checkpoint
+  - id: kc_v_feedback_triage
+    title: 反馈三分类
+    domain: loop
+    trigger: event
+    problem: 反馈越积越多，处理不过来
+    wrongPattern: 全部记下有空再说
+    correctBehavior: 每条反馈三分：立刻修（共痛bug）/池子（需求）/存档（夸奖与噪音）
+    why: 反馈的处理速度决定用户"被听见"的感觉
+    steps:
+      - 24小时内过一遍
+      - 标共痛点
+      - 修+回复
+      - 需求进池
+    toolMappings:
+      generic: 反馈看板
+    successSignals:
+      - 反馈当日有归类
+    failureSignals:
+      - 后台红点常驻
+    transferScenarios:
+      - 客户服务
+    depth30s: 用户不怕被拒绝，怕被无视。
+    depth3m: 同一反馈有两人以上提及即为立刻修的信号；单人提的先进池子观察。
+    depth10m: 修复后回访提出者："你上次说的XX修好了"——这是最便宜的用户惊喜。
+    relatedSkillIds:
+      - loop.feedback_loop
+  - id: kc_v_focus_reject
+    title: 聚焦的代价是拒绝
+    domain: goal
+    trigger: event
+    problem: 杂单/新方向诱惑不断，主线停滞
+    wrongPattern: 来者不拒，什么都接
+    correctBehavior: 明确"当前只做X"；拒绝时致谢并记录信号
+    why: 资源有限时，每次接单都是对主线的投资撤资
+    steps:
+      - 写下当前唯一目标
+      - 遇诱惑先对表
+      - 拒绝+存档信号
+    toolMappings:
+      generic: 目标贴墙
+    successSignals:
+      - 主线周推进可量化
+    failureSignals:
+      - 月底说不清主线进展
+    transferScenarios:
+      - 学业与副业平衡
+    depth30s: 每一个“好”的背后都是对主线的“不”。
+    depth3m: 拒绝话术：感谢+现状+可能时机。“现在不做”比“永远不做”容易说出口。
+    depth10m: 建"诱惑清单"：每次拒绝记录是什么/多少钱/为什么拒。半年后复盘你的定力值多少钱。
+    relatedSkillIds:
+      - goal.change
+  - id: kc_v_own_your_users
+    title: 用户名单要攥在自己手里
+    domain: environment
+    trigger: first_failure
+    problem: 平台限流后与用户失联
+    wrongPattern: 用户全在别人的平台里
+    correctBehavior: 第一天就建自己的名单表（微信/邮箱/手机），多平台引流到自有触达
+    why: 平台是租的，名单是自己的
+    steps:
+      - 注册即引导加微信/群
+      - 名单入库
+      - 定期自有触达
+    toolMappings:
+      generic: 名单表+群
+    successSignals:
+      - 脱离任何平台仍能触达用户
+    failureSignals:
+      - 平台变化即归零
+    transferScenarios:
+      - 社群运营
+    depth30s: 平台是租客的地盘，名单是自己的家。
+    depth3m: 触达三通道：微信（强）/邮件（中）/短信（兜底）。至少建两条。
+    depth10m: 名单表含来源渠道/标签/最近触达——这是你最值钱的数据资产。
+    relatedSkillIds: []
+  - id: kc_v_service_vs_saas
+    title: 服务还是软件？
+    domain: goal
+    trigger: event
+    problem: 纠结“做产品”还是“做服务”，迟迟不动
+    wrongPattern: 认为服务"不高级"
+    correctBehavior: 先服务验证价值与流程，利润养产品；现金流为正比形态高级
+    why: 服务变现快、产品可规模化——两者可接力
+    steps:
+      - 服务起步
+      - 沉淀流程文档
+      - 把重复步骤逐步工具化
+      - 时机成熟切产品
+    toolMappings:
+      generic: 服务日志→产品需求
+    successSignals:
+      - 服务有利润且流程文档化
+    failureSignals:
+      - 为"做SaaS"而做SaaS饿死在半路
+    transferScenarios:
+      - 外包转产品
+    depth30s: 活下去的形态就是好形态。
+    depth3m: 服务转产品的时机：同一流程每月重复≥4次且服务收入稳定。
+    depth10m: 服务期定的每个价，都是未来产品的价格实验——记录每一次报价与反应。
+    relatedSkillIds:
+      - goal.update
+  - id: kc_v_pivot_data
+    title: Pivot要有数据陪嫁
+    domain: goal
+    trigger: event
+    problem: 一遇挫折就想全盘推翻
+    wrongPattern: 凭感觉转向
+    correctBehavior: Pivot五选一（坚持/换人群/换问题/换形态/关停），每个选项附数据
+    why: 没有数据的Pivot是逃跑；带数据的转向是战略
+    steps:
+      - 汇总当前数据
+      - 列五选项及依据
+      - 选定+写下新假设
+      - 设检查点
+    toolMappings:
+      generic: 决策会+数据纸
+    successSignals:
+      - Pivot后一周内有新实验上线
+    failureSignals:
+      - 转向后旧问题重现
+    transferScenarios:
+      - 职业转型
+    depth30s: 转向可以，数据陪嫁。
+    depth3m: 关停也是Pivot的合法选项：干净关停保存名声与复盘，比僵尸项目强。
+    depth10m: 每次Pivot写"一页纸"：旧假设死因/新假设/首验实验/检查点日期。
+    relatedSkillIds:
+      - goal.change
+  - id: kc_v_cofounder_talk
+    title: 合伙先谈散伙
+    domain: agent_organization
+    trigger: event
+    problem: 与同学合伙凭感情，散伙时撕破脸
+    wrongPattern: 都是兄弟谈什么协议
+    correctBehavior: 入伙先写：分工/投入/分成/退出机制
+    why: 丑话在前是保护友谊，不是伤害它
+    steps:
+      - 四项各写一行
+      - 双方确认
+      - 留聊天记录或签字
+    toolMappings:
+      generic: 协议文档
+    successSignals:
+      - 分歧时翻协议不翻脸
+    failureSignals:
+      - 散伙时互相拉黑
+    transferScenarios:
+      - 任何合作
+    depth30s: 婚前协议保婚姻，合伙协议保友谊。
+    depth3m: 退出机制最关键：怎么退、何时结清、成果归谁。写清这三条，散伙不撕。
+    depth10m: 分成用“模块制”比“股份制”更适合学生团队：按交付结，账好算情好留。
+    relatedSkillIds:
+      - org.role_definition
+  - id: kc_v_platform_risk
+    title: 平台依赖风险
+    domain: environment
+    trigger: event
+    problem: 业务全建立在单一平台，政策一变归零
+    wrongPattern: 把所有用户与内容只放一个平台
+    correctBehavior: 识别依赖点，建备份触达与数据出口
+    why: 平台规则随时变，你的业务不能随之裸奔
+    steps:
+      - 列出依赖的平台
+      - 评估"若明天关闭"的损失
+      - 建名单与备份
+    toolMappings:
+      generic: 依赖清单
+    successSignals:
+      - 任何单平台消失业务仍在
+    failureSignals:
+      - 限流即末日
+    transferScenarios:
+      - 云服务依赖
+      - 单一供应商
+    depth30s: 不要把房子盖在别人的地基上——或者至少留一把自己的钥匙。
+    depth3m: 风险自查："如果XX平台明天封我号，我能联系到多少用户？"答案<50%就是高危。
+    depth10m: 每季度做一次"断网演习"：假设最大平台消失，演练从名单触达用户的全流程。
+    relatedSkillIds:
+      - environment.network
+      - environment.provider
+  - id: kc_v_cost_ledger
+    title: 成本台账从第一天记
+    domain: environment
+    trigger: skill_unlock
+    depth3m: 为什么花这一列最值钱——它让复盘时能区分投资与浪费。
+    problem: 算账时发现前几周的支出全忘了
+    wrongPattern: 几块钱不用记
+    correctBehavior: 每日一行：日期/项目/金额/为什么花
+    why: 成本可见才能优化；记忆不可靠
+    steps:
+      - 建表(纸质/表格均可)
+      - 每日睡前30秒补记
+      - 周汇总
+    toolMappings:
+      generic: 记账表
+    successSignals:
+      - 任一天的成本可查
+    failureSignals:
+      - 月底对不上账
+    transferScenarios:
+      - 生活理财
+    depth30s: 不记账的创业者等于闭眼开车。
+    depth10m: 台账周汇总画趋势线：成本斜率大于收入斜率就是红色警报。
+    relatedSkillIds:
+      - verification.reproducibility
+  - id: kc_v_first_customer_care
+    title: 第一个付费用户是国宝
+    domain: loop
+    trigger: skill_unlock
+    problem: 收到首单后按部就班，用户流失
+    wrongPattern: 收钱后当普通用户对待
+    correctBehavior: 超预期服务：亲自感谢/优先响应/把TA的需求提到最高
+    why: 首个付费用户是最强的口碑种子与需求信标
+    steps:
+      - 手写感谢
+      - 48小时内响应任何问题
+      - 邀请深度反馈
+      - 求转介绍
+    toolMappings:
+      generic: 用心
+    successSignals:
+      - TA带来第二个付费用户
+    failureSignals:
+      - 付费后再无互动
+    transferScenarios:
+      - 首批客户运营
+    depth30s: 对第一个掏钱的人好到过分。
+    depth3m: 首付用户的超预期成本极低（时间与真诚），回报是转介绍与真实需求。
+    depth10m: 建立"创始用户"计划：前10个付费者享受终身折扣+直达通道——他们的反馈是产品北极星。
+    relatedSkillIds:
+      - loop.feedback_loop
+      - loop.evaluator
+  - id: kc_v_sell_first
+    title: 先卖再做
+    domain: goal
+    trigger: npc_advice
+    problem: 闭门造车三个月，上线无人问
+    wrongPattern: 做完再去找用户
+    correctBehavior: 反过来：先找到愿意付钱的人，再动手做
+    why: 订单是最强的需求证明；先做后卖把最大风险留到最后
+    steps:
+      - 找到目标用户
+      - 描述方案
+      - 试收预订/定金
+      - 有单再做
+    toolMappings:
+      generic: 预订页+私信
+    successSignals:
+      - 动手前有真实承诺
+    failureSignals:
+      - 上线才第一次面对市场
+    transferScenarios:
+      - 毕设选题
+      - 活动策划
+    depth30s: 卖出去的承诺比做出来的功能值钱。
+    depth3m: “先卖”不是诈骗：明说“计划做X，现在预订享折扣，不做全退”。诚意+验证两不误。
+    depth10m: 预订目标设为"10个真实承诺"（付定金或签意向），达标再动工——这是创业版的验收标准。
+    relatedSkillIds:
+      - goal.verification

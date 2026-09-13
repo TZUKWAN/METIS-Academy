@@ -1,0 +1,107 @@
+# Agent Organization 域（TASK-E008）：15 能力原子
+skills:
+  - id: org.single_agent
+    domain: agent_organization
+    title: 单 Agent 默认原则
+    description: 一个能干的 Agent 优先；多 Agent 是复杂度不是排场
+    whenToUse: 任何任务开始前
+    behaviors: [{ id: org_single_l1, level: 1, description: 正确选择单 Agent 方案并说明理由, achievementId: ach_org_single }]
+  - id: org.subagent
+    domain: agent_organization
+    title: Subagent 概念
+    description: 主 Agent 派出子任务执行者，各自独立上下文
+    whenToUse: 子任务相互独立且量大时
+    behaviors: [{ id: org_sub_l1, level: 1, description: 完成一次 subagent 派发与回收, achievementId: ach_org_subagent }]
+    toolMappings: { claudeCode: Task 工具派发 subagent, codex: 多进程协作, deepseekHarness: 多 Agent 编排 }
+  - id: org.decomposition
+    domain: agent_organization
+    title: 任务分解
+    description: 按边界（而不是按人数）拆任务；接口先定，实现后行
+    whenToUse: 派发前的必做步骤
+    prerequisites: [org.single_agent]
+    behaviors: [{ id: org_dec_l1, level: 1, description: 把一个任务拆成边界清晰的三个子任务, achievementId: ach_org_decomposition }]
+  - id: org.role_definition
+    domain: agent_organization
+    title: 角色定义
+    description: 每个 Agent 一句话职责+输入输出+不许做什么
+    whenToUse: 多于一个 Agent 时
+    prerequisites: [org.decomposition]
+    behaviors: [{ id: org_role_l1, level: 1, description: 写出无重叠的角色卡, achievementId: ach_org_role }]
+  - id: org.parallel
+    domain: agent_organization
+    title: 并行执行
+    description: 子任务无依赖才并行；并行≠更快，汇总成本要算
+    whenToUse: 搜索/多方案草稿等独立任务
+    prerequisites: [org.decomposition]
+    behaviors: [{ id: org_par_l1, level: 1, description: 一次收益为正的并行派发, achievementId: ach_org_parallel }]
+  - id: org.sequential
+    domain: agent_organization
+    title: 串行执行
+    description: 后一步依赖前一步产出时必须串行，老老实实排队
+    whenToUse: 有依赖链的任务
+    behaviors: [{ id: org_seq_l1, level: 1, description: 正确判断串行必要性, achievementId: ach_org_sequential }]
+  - id: org.review_agent
+    domain: agent_organization
+    title: 评审 Agent
+    description: 专职挑错的 Agent；与作者分离，标准来自验收单
+    whenToUse: 重要产出交付前
+    prerequisites: [org.role_definition, verification.checklist]
+    behaviors: [{ id: org_review_l2, level: 2, description: 评审 Agent 抓到一次真实问题, achievementId: ach_org_review }]
+  - id: org.aggregation
+    domain: agent_organization
+    title: 结果汇总
+    description: 汇总者对最终一致性负责：去重/对表/标冲突
+    whenToUse: 多份产出合并时
+    prerequisites: [org.subagent]
+    behaviors: [{ id: org_agg_l1, level: 1, description: 完成一次带冲突标记的汇总, achievementId: ach_org_aggregation }]
+  - id: org.conflict_resolution
+    domain: agent_organization
+    title: 冲突结论处理
+    description: 两个 Agent 结论冲突→不能投票，回到原始来源裁决
+    whenToUse: 汇总发现矛盾时
+    prerequisites: [org.aggregation, verification.source_check]
+    behaviors: [{ id: org_conf_l2, level: 2, description: 用来源裁决一次 Agent 冲突, achievementId: ach_org_conflict }]
+  - id: org.shared_context
+    domain: agent_organization
+    title: 共享上下文
+    description: 通过公共文件（规格/状态文件）共享，而不是互相转发聊天
+    whenToUse: 多 Agent 协作基础设施
+    prerequisites: [context.state_file]
+    behaviors: [{ id: org_shared_l2, level: 2, description: 建立公共文件作为唯一事实源, achievementId: ach_org_sharedctx }]
+  - id: org.isolated_context
+    domain: agent_organization
+    title: 隔离上下文
+    description: 评审/对抗角色要干净上下文，防止被作者思路带跑
+    whenToUse: 评审类任务
+    prerequisites: [org.review_agent]
+    behaviors: [{ id: org_iso_l2, level: 2, description: 用隔离上下文完成一次独立评审, achievementId: ach_org_isolated }]
+    hiddenUntilDiscovered: true
+  - id: org.delegation
+    domain: agent_organization
+    title: 委派边界
+    description: 委派执行不委派判断；验收权和目标定义留在你手里
+    whenToUse: 决定“什么能交给 Agent”时
+    behaviors: [{ id: org_del_l1, level: 1, description: 明确一次“委派什么/保留什么”, achievementId: ach_org_delegation }]
+  - id: org.dependency
+    domain: agent_organization
+    title: 依赖管理
+    description: 画出谁等谁；关键路径上的任务优先保障
+    whenToUse: ≥3 个子任务的编排
+    prerequisites: [org.decomposition]
+    behaviors: [{ id: org_dep_l2, level: 2, description: 识别并压缩一次关键路径, achievementId: ach_org_dependency }]
+    hiddenUntilDiscovered: true
+  - id: org.cost_tradeoff
+    domain: agent_organization
+    title: 成本权衡
+    description: 多一个 Agent=多一份 token/时间/出错面；收益要算账
+    whenToUse: 决定要不要再加一个 Agent
+    prerequisites: [org.parallel]
+    behaviors: [{ id: org_cost_l2, level: 2, description: 一次算过账的 Agent 数量决策, achievementId: ach_org_cost }]
+  - id: org.orchestration
+    domain: agent_organization
+    title: 编排全景
+    description: 你是编排者：定角色/定接口/定闸门/收结果；不亲自下场抢戏
+    whenToUse: 复杂多 Agent 项目
+    prerequisites: [org.role_definition, org.aggregation, org.cost_tradeoff]
+    behaviors: [{ id: org_orch_l3, level: 3, description: 端到端编排一次三角色协作并交付, achievementId: ach_org_orchestration }]
+    hiddenUntilDiscovered: true

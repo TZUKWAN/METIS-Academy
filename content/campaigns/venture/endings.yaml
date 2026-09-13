@@ -1,0 +1,776 @@
+# 创业线主结局（TASK-J013/J014）
+endings:
+  - id: v_end_hidden_pm
+    campaign: venture
+    title: 《产品经理人诞生》
+    mainResult: 隐藏结局——验证方法论内化
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: first_paid_user }
+        - { kind: state, key: userUnderstanding, op: gte, value: 70 }
+        - { kind: state, key: evidenceDiscipline, op: gte, value: 70 }
+        - { kind: flag, key: unit_econ_negative }
+        - { kind: flag, key: pivot_focus }
+    priority: 300
+    tier: hidden
+    baseText: |
+      结算那一刻你笑了：收入不到一百块，账面还是亏的。可你比30天前富有了——你拥有了"知道下一步该干什么"的能力。
+      信号池、假设板、单位经济表、第一个付费用户的名字。这四样东西摆在一起，就是一张产品经理的出生证明。
+      罗哥说得对：能干净收尾的人不多。你就是其中一个。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants: [{ gte: 85, text: "你能脱口而出核心用户的三个具体名字、他们的活动频率和上次卡壳的按钮。这比任何商业计划书都值钱。" }]
+      - dimension: evidenceDiscipline
+        variants: [{ gte: 80, text: "从信号分类到单位经济，你的每一步决策都有数据出处。有人问'凭什么'，你翻表比翻白眼快。" }]
+      - dimension: independence
+        variants: [{ gte: 70, text: "拒绝200块的副业单、顶住'再等等'的诱惑、亲自打回访电话——每个节点都是你自己的签名。" }]
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 罗哥把你拉进了社群的导师轮值表："下期新人，你来讲'先卖再做'。"
+        neutral: 罗哥说："路子对了。剩下的交给时间和现金流。"
+        negative: 罗哥摇头："可惜，方法都会了，就是差点运气和狠劲。"
+      - characterId: v_partner
+        positive: 阿斌问下个项目什么时候开始——"这次我全职。"
+        neutral: 阿斌说："合作愉快。下次有想法还找我，先看数据。"
+        negative: 阿斌早就走了。你对着他留下的测试代码说了声谢谢。
+      - characterId: v_user_club
+        positive: 老K在下学期社团动员会上推荐了你的工具："这是我用过的唯一听人话的。"
+        neutral: 老K继续用着工具，偶尔提需求，像个真正的用户。
+        negative: 老K的工具账号静悄悄。他忙，你也是。
+    projectFutureRules:
+      - { key: next_venture, condition: { kind: always }, text: "三个月后，你用同一套方法开跑了第二个项目。这次，第1天你就去约了访谈。" }
+    specialFlagSections:
+      - { flag: cost_optimized, text: "你优化过成本结构——这让'继续'从赌博变成了计算。" }
+      - { flag: refund_handled_well, text: "那次退款事故的口碑，后来带来了两个转介绍用户。" }
+    specialTags: [hidden, best_ending]
+    reflection: 第一个付费用户买的不是你的功能，是你对问题的理解。
+    lessonHint: 验证方法论是可迁移的资产
+
+  - id: v_end_no_users
+    campaign: venture
+    title: 《无人问津》
+    mainResult: 30天没有找到真实用户
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: users, op: lte, value: 2 }
+        - { kind: flag, key: v_final_done }
+    priority: 80
+    tier: main
+    baseText: |
+      30天到了。注册用户：2个。周活：0。
+      你做了东西，发了帖子，等了又等。世界没有恶意——它只是没有注意到你。
+      复盘写到最后一条，你写下：'我从头到尾没有真正搞清楚，用户现在是怎么解决这个问题的。'
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { lte: 35, text: "访谈做了几次就停了。你其实是在对着空气做产品。" }
+          - { gte: 55, text: "你访谈了不少，但都停在'听'——没有追到行为细节。差半层窗户纸。" }
+      - dimension: execution
+        variants:
+          - { gte: 55, text: "东西做得不差。差的是从'做出来'到'递到用户手里'的那段路——它没有捷径。" }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 罗哥帮你把复盘拆成了三条可执行项："下个项目，从第一条开始。"
+        neutral: 罗哥说："没人用是常态。被使用才是意外。"
+        negative: 罗哥叹气："让你做访谈你不做，让你发渠道你不发。 "
+      - characterId: v_family
+        positive: 妈妈说："回家吃饭，项目的事不急。"你哭了，然后睡了这30天最沉的一觉。
+        neutral: 妈妈问“成功了吗”，你说“还没有”。她说“哦，那你先吃饭”。
+        negative: 你跟妈妈说"挺好的"。挂了电话，宿舍安静得可怕。
+    projectFutureRules:
+      - { key: retry, condition: { kind: state, key: independence, op: gte, value: 55 }, text: "两个月后你重开了这个项目——这次你先访谈了15个人。用户数从第5天开始涨。" }
+      - { key: default, condition: { kind: always }, text: "仓库归档。README里只有一句：它解决了我以为存在的问题。" }
+    specialFlagSections:
+      - { flag: weakDemandEvidence, text: "证据链早就提示过你：'会不会用'的回答不算数。你当时记下了weakDemandEvidence，然后没有然后。" }
+    specialTags: [bad_end]
+    reflection: 没有用户的产品不是产品，是作品——而观众不会因为你的用心而出现。
+    lessonHint: 获客是被设计的，不是被等待的
+
+  - id: v_end_no_payment
+    campaign: venture
+    title: 《掌声与空钱包》
+    mainResult: 有人用，无人付费
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: users, op: gte, value: 5 }
+        - { kind: flag, key: no_first_paid }
+        - { kind: flag, key: v_final_done }
+    priority: 85
+    tier: main
+    baseText: |
+      数据看着心酸又好笑：注册 14 人，周活 6 人，收到感谢 9 次，收到付款 0 次。
+      "挺好的""有用""支持你"——这些话像一阵风。30天结束，你的产品被喜欢着，你的钱包空着。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "你在复盘里冷静拆解：付费页转化 0/8。问题可能在价格、在支付路径、在'可要可不要'的价值感。三条都写进了下期假设。" }
+          - { lte: 40, text: "你把原因归结于'学生没钱'。这个解释最舒服，也最危险。" }
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 55, text: "有用户私下跟你说实话：'不是不值得，是流程太麻烦了。'你记下了——这是最贵的反馈。" }
+    characterEpilogueRules:
+      - characterId: v_user_shop
+        positive: 王姐说了句大实话："小伙子，让他们掏钱的事，你得让他们先离不开。"
+        neutral: 王姐的微信没回。她忙着卖奶茶，没空研究你为什么不收费。
+        negative: 王姐说："看吧，免费的东西没人珍惜。"
+    projectFutureRules:
+      - { key: repack, condition: { kind: state, key: userUnderstanding, op: gte, value: 50 }, text: "你把免费工具改成了'服务+工具'的付费包。第一个月，两个社团付了费。" }
+      - { key: default, condition: { kind: always }, text: "工具还在免费跑着。它是个不错的作品——下一个项目，你要做个生意。" }
+    specialFlagSections:
+      - { flag: avoid_pricing, text: "第21天你选了'不敢收费'。掌声与空钱包之间，隔着一个没敢按下去的按钮。" }
+    specialTags: [warning]
+    reflection: 喜欢≠付费。被使用是荣耀，被付费才是生意。
+    lessonHint: 付费意愿要用支付按钮验证
+
+  - id: v_end_first_paid
+    campaign: venture
+    title: 《成人礼》
+    mainResult: 拿到第一个付费用户
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: first_paid_user }
+        - { kind: state, key: revenue, op: lte, value: 60 }
+        - { kind: flag, key: v_final_done }
+    priority: 120
+    tier: main
+    baseText: |
+      ¥9.5。你盯着支付后台的第一条记录看了很久。
+      它买不了什么，但它证明了一整条链路：真实的问题、真实的人、真实的价值、真实的钱。30天，从0到1。
+      剩下的路很长，但1到100比0到1简单——这是罗哥说的，现在你信了。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 65, text: "从工具上线到收到付款只用了4天。快，是因为每一环都提前验证过。" }
+          - { lte: 45, text: "这单子有点运气成分——你知道的。把它变成可重复，是下个30天的题。" }
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "没有导师发题，没有系统推荐。这个问题是你从信号池里亲手捞出来的。" }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 老K说："第一单是我付的。别让我亏。"——这句丑话成了你最好的KPI。
+        neutral: 老K的备注是"短信通知快点做"。你做到了。
+        negative: 老K付完款再没登录过。付费≠留存，你又上一课。
+      - characterId: v_ai_agent
+        positive: 会话日志里存着你们30天的1000次对话。第1001次，它说："需要我做什么？"
+        neutral: Agent 无喜无悲。它不知道自己参与了一个人的成人礼。
+        negative: 你把那次"生成三个垃圾点子"的对话截图打印了出来——贴在墙上当反面教材。
+    projectFutureRules:
+      - { key: repeatable, condition: { kind: state, key: execution, op: gte, value: 60 }, text: "第二个月，你复现了收费：3单。可重复，才算模式。" }
+      - { key: default, condition: { kind: always }, text: "那张 ¥9.5 的订单截图，你设成了手机壁纸。" }
+    specialFlagSections:
+      - { flag: real_interview_done, text: "回到第5天：你把'会不会用'改成了'上次什么时候'。一切的种子在那个改口里。" }
+    specialTags: [good]
+    reflection: 第一个付费用户是分水岭：之前的都是排练。
+    lessonHint: 0到1靠验证，1到100靠复制
+
+  - id: v_end_small_profit
+    campaign: venture
+    title: 《小而盈利》
+    mainResult: 实现小额稳定盈利
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: first_paid_user }
+        - { kind: flag, key: cost_optimized }
+        - { kind: flag, key: cac_low }
+        - { kind: flag, key: v_final_done }
+    priority: 160
+    tier: special
+    baseText: |
+      月账单出来那天，你反复核了三遍：收入 ¥412，变动成本 ¥168，净 +¥244。
+      不多。但这是"活着"的钱——每服务一个用户，都在赚钱。单位经济为正的那一刻，创业从赌博变成了经营。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 70, text: "成本优化+低CAC+聚焦定价——你的盈利是三件小事做对的复利。" }
+          - { lte: 50, text: "盈利很薄，一场服务器故障就能吃掉一个月利润。你需要护城河。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 70, text: "成本台账一天没断过。这份报表是全校最诚实的创业数据。" }
+    characterEpilogueRules:
+      - characterId: v_user_shop
+        positive: 王姐听说了你的盈利，主动来问："帮我也弄一个？这回我付钱。"——你拒绝了非核心需求，但记下了市场信号。
+        neutral: 王姐说："能赚钱就行，比你们学校那些烧钱的强。"
+        negative: 王姐撇嘴：“才两百多？还没我一天赚得多。”你说：“但它每天都会赚。”
+    projectFutureRules:
+      - { key: compounding, condition: { kind: always }, text: "你把利润的三分之一固定投入新渠道测试。小生意开始有了自己的发动机。" }
+    specialFlagSections:
+      - { flag: coffee_budget, text: "别忘了第一笔'投资'：那些12块的奶茶。它们换来的洞察，是这244块的种子。" }
+    specialTags: [good]
+    reflection: 小而盈利是创业里最被低估的成就：它证明整条链路是通的。
+    lessonHint: 单位经济为正，才谈增长
+
+  - id: v_end_growth_loss
+    campaign: venture
+    title: 《增长的幻觉》
+    mainResult: 增长迅速但亏损扩大
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: cac_high }
+        - { kind: state, key: users, op: gte, value: 10 }
+        - { kind: flag, key: v_final_done }
+    priority: 110
+    tier: special
+    baseText: |
+      用户曲线很漂亮：30天注册破30。成本曲线更漂亮：¥780的支出，收入 ¥54。
+      你用钱买来了热闹。热闹散场后，账本上一行字浮出来：'获客成本 ¥25/人，用户价值 ¥1.7/人。'
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "你在CAC第一次超过阈值时就发现了问题——只是当时选择了'先冲量'。数据给过你机会。" }
+          - { lte: 40, text: "你从没算过CAC。直到今天，你才第一次打开那张表。" }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 罗哥没骂你，只发来一个链接，标题是《增长杀手：正反馈的陷阱》。
+        neutral: 罗哥说："每个创业者都要交这门学费。你的学费¥780，不算贵。"
+        negative: 罗哥说："我第26天就提醒过你。你没听。"
+    projectFutureRules:
+      - { key: fix_leak, condition: { kind: flag, key: retention_improved }, text: "幸好你修过留存。漏桶补好了，新用户开始沉淀——增长终于有了意义。" }
+      - { key: default, condition: { kind: always }, text: "你关掉了广告投放。增长回到了口碑的速度——慢，但真实。" }
+    specialTags: [warning]
+    reflection: 没有单位经济为正的增长，是给市场打工。
+    lessonHint: CAC必须小于用户价值
+
+  - id: v_end_unit_economy_crash
+    campaign: venture
+    title: 《收入1000，成本1300》
+    mainResult: 单位经济崩溃，规模即灾难
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: unit_econ_negative }
+        - { kind: flag, key: cost_bloated }
+        - { kind: state, key: users, op: gte, value: 15 }
+        - { kind: flag, key: v_final_done }
+    priority: 130
+    tier: main
+    baseText: |
+      第28天的报表：本月收入 ¥1,020，成本 ¥1,314。
+      你做成了"大家都在用"的东西——然后发现每多一个人用，你就多亏一点钱。规模没有拯救你，规模杀死了你。
+      罗哥那句话在耳边响：现金流、现金流、还是现金流。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { lte: 40, text: "如果你第11天就建成本台账……如果第25天就正视那张表……你写了五个'如果'，然后把报表设成了手机壁纸。" }
+          - { gte: 60, text: "你其实早就看见了悬崖——只是刹车装在'下个月'。下个月永远不会来。" }
+      - dimension: independence
+        variants:
+          - { gte: 55, text: "你没有甩锅给市场。复盘第一行：'定价和成本结构，是我亲自定的。'" }
+    characterEpilogueRules:
+      - characterId: v_family
+        positive: 你跟妈妈说了实话。她第二天打来 ¥2000："不算投资，算吃饭钱。"你含着泪立了新账本。
+        neutral: 妈妈不知道数字，只知道你瘦了。她寄来一箱吃的。
+        negative: 你还是说了"挺好的"。有些账，最后只有自己看得见。
+    projectFutureRules:
+      - { key: rebuild, condition: { kind: flag, key: pivot_focus }, text: "聚焦策略下，你砍掉了80%的服务器负载，单位经济第一次转正。刹车踩到底之后，车重新发动了。" }
+      - { key: default, condition: { kind: always }, text: "你把那张'1020 vs 1314'的报表裱了起来。它比任何成功学都提神。" }
+    specialFlagSections:
+      - { flag: creative_accounting, text: "如果把奶茶和学费都记成'学习投入'……报表确实好看了30天。然后现实来对账了。" }
+    specialTags: [bad_end, finance]
+    reflection: 收入1000成本1300的生意，做得越大，死得越快。
+    lessonHint: 先让单位经济为正，再谈规模
+
+  - id: v_end_feature_graveyard
+    campaign: venture
+    title: 《功能坟场》
+    mainResult: 需求照单全收，产品死于功能堆砌
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: feature_graveyard_path }
+        - { kind: state, key: technicalDebt, op: gte, value: 55 }
+        - { kind: flag, key: v_final_done }
+    priority: 135
+    tier: main
+    baseText: |
+      第28天，你数了数：20条需求，做了17条，做完的9条，做完且有人用的3条。
+      产品像一个塞满家具的房间，找不到门。核心报名流程上个月那个小bug，还躺在那里——它排在需求清单第21位，而你永远没有第21个"行动点"。
+      老K发来最后一条消息："工具越来越厉害，越来越不像原来那个好用的了。"
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "你的开发速度其实很快——快到来不及问'该不该做'。勤奋放大了方向错误。" }
+          - { lte: 40, text: "17条需求做了一半扔一半。每一半都是沉没成本在向你招手。" }
+      - dimension: independence
+        variants:
+          - { gte: 55, text: "复盘时你说：'没有人逼我。是我把每一条需求都当成了圣旨。'" }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 老K最后说："你要是回到原来那个能合并报名表的版本，我还能再用十年。"
+        neutral: 老K换回了Excel。他说那玩意虽然土，但"知道自己是干嘛的"。
+        negative: 老K在群里问"工具有没有精简版"，没人回答。他退群了。
+    projectFutureRules:
+      - { key: epitaph, condition: { kind: always }, text: "需求清单v_req_01~20变成了墓志铭：每一行都写着'有人要的'，没有一行写着'值得做的'。" }
+    specialFlagSections:
+      - { flag: triage_by_easy, text: "第19天你按'简单'挑了4条需求。坟场的墓碑，就是那天立的第一块。" }
+      - { flag: triage_by_core, text: "（本结局的遗憾：你其实会正确的做法。）" }
+    specialTags: [bad_end]
+    reflection: 功能坟场不埋葬懒人，专埋葬不懂拒绝的老好人。
+    lessonHint: 需求过滤=核心用户×核心场景
+
+  - id: v_end_pivot_users
+    campaign: venture
+    title: 《换一片森林》
+    mainResult: 成功转型用户群
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: pivot_audience }
+        - { kind: flag, key: v_final_done }
+    priority: 125
+    tier: special
+    baseText: |
+      你把工具从"给社团用"转成了"给学生会统一采购"。签约流程慢了两周，但一个合同=过去十个社团。
+      第29天，学生会盖章的那刻，你想起第28天罗哥的 Five Options。你选了最难走的那条，走通了。
+    growthVariantRules:
+      - dimension: riskTolerance
+        variants:
+          - { gte: 65, text: "换人群是推倒重来的勇气。你的访谈、演示、定价全部重做了一遍——这次更快，因为方法论还在。" }
+          - { lte: 45, text: "转型几乎是赌。你赌赢在'学生会有真实预算'这个判断上——第4天那次访谈就埋着这条线索。" }
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 60, text: "你知道 B 端要的是什么：可控、可汇报、可追责。这些词社团没教过你，是你自己悟的。" }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿斌说："学生会这单我跟进后端。这次算正式合伙。"
+        neutral: 阿斌说："方向挺好，我帮你看看架构。"
+        negative: 阿斌摇头："B端周期太长，我实习等不起。"
+    projectFutureRules:
+      - { key: b2b, condition: { kind: always }, text: "一学期后，工具覆盖了3所高校的学生会。B端的水更深，但你学会了游泳。" }
+    specialTags: [good, pivot]
+    reflection: 换人群不是背叛初心，是让初心找到付得起钱的地方。
+    lessonHint: 同一问题，不同人群价值千差万别
+
+  - id: v_end_saas
+    campaign: venture
+    title: 《订阅制生效》
+    mainResult: SaaS模式跑通，按学期收费
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: first_paid_user }
+        - { kind: flag, key: price_19 }
+        - { kind: flag, key: retention_improved }
+        - { kind: flag, key: v_final_done }
+    priority: 145
+    tier: special
+    baseText: |
+      学期订阅 ¥99，首期 5 个社团付费。次月续费 4 个——留存曲线终于像一只该死的鸭子（教科书画的那种）。
+      你把"按次收费"改成了"按学期订阅"。变化不大，但现金流第一次变得可预测。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 70, text: "订阅页、自动续费提醒、使用报告——三件套让你的'小生意'第一次有了产品的样子。" }
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 65, text: "你敢收订阅费，底气来自留存数据：核心用户真的每两周都会回来。" }
+    characterEpilogueRules:
+      - characterId: v_ai_agent
+        positive: 你的成本台账由 Agent 每天自动汇总——它成了你的CFO（分文不取的那种）。
+        neutral: Agent 照常执行任务。订阅制的成功与它无关，又与你指挥它的方式有关。
+        negative: 收入上来了，AI账单也上来了。你盯着报表，想起该优化的是调用结构。
+    projectFutureRules:
+      - { key: saas_growth, condition: { kind: always }, text: "第二学期初，订阅数 5→11。你开始理解'经常性收入'四个字为什么让创业者着迷。" }
+    specialTags: [good]
+    reflection: 可预测的收入，是创业者夜里睡得着的原因。
+    lessonHint: 订阅=把一次性信任变成长期关系
+
+  - id: v_end_service
+    campaign: venture
+    title: 《人肉即服务》
+    mainResult: 转向人工服务模式
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: validation_concierge }
+        - { kind: flag, key: pivot_focus }
+        - { kind: flag, key: v_final_done }
+    priority: 115
+    tier: special
+    baseText: |
+      你发现社团真正买的不是软件，是"有人帮我搞定"。于是你把产品改成了服务：¥300/学期，报名全托管。
+      工具降级成你的内功——你用10分钟干完以前3天的活。5个客户，月入¥1250，成本几乎为零。
+      阿斌不理解："这不就是中介吗？"你说："是中介。现金流为正的中介。"
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 65, text: "顶着'不够科技'的嘲讽做服务，需要清醒的头脑。你要的是活，不是酷。" }
+      - dimension: execution
+        variants:
+          - { lte: 50, text: "服务模式的天花板是你的时间。第10个客户来时，你已经开始失眠。" }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 老K说："你们这服务学生会早该外包。明年我介绍三个社给你。"
+        neutral: 老K按时续费，关系稳定得像自来水。
+        negative: 老K说："我就想要个软件，不想每周跟你打电话。"
+    projectFutureRules:
+      - { key: hybrid, condition: { kind: always }, text: "你在计划'服务养产品'：服务的利润，慢慢把工具磨成真SaaS。" }
+    specialTags: [good, pivot]
+    reflection: 客户买的是结果，不是形态。形态该为生存让路。
+    lessonHint: 手工服务是最诚实的MVP
+
+  - id: v_end_studio
+    campaign: venture
+    title: 《小工作室》
+    mainResult: 发展成小型接单工作室
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: bin_equity }
+        - { kind: state, key: revenue, op: gte, value: 100 }
+        - { kind: flag, key: v_final_done }
+    priority: 118
+    tier: special
+    baseText: |
+      社团工具的名声带来了杂活：活动页面、报名系统、数据看板……你和阿斌干脆挂了个"工作室"的牌子。
+      第一个月流水 ¥2300，你俩四六分。累是真累，乐是真乐。
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 70, text: "分工表 v3 贴在工作室墙上，比第一份多了两条：'周日晚不开会''分歧不过夜'。" }
+          - { lte: 45, text: "接单越多，分歧越多。你在补第28天欠阿斌的那次谈话。" }
+      - dimension: execution
+        variants:
+          - { gte: 65, text: "你们把社团工具的经验做成了模板，交付时间砍半——复利开始转动。" }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿斌在朋友圈发了工作牌合影，配文："有点意思。"
+        neutral: 阿斌照常每周来两天。稳定，但你知道他心里还有个大厂梦。
+        negative: 阿斌的座位空了两周。工作室的名牌还没来得及挂。
+    projectFutureRules:
+      - { key: studio_line, condition: { kind: always }, text: "工作室接的第3单来自校外——第一个不属于校园圈子的客户。" }
+    specialTags: [good]
+    reflection: 一门手艺+一个搭档+几个客户，就是工作室的全部秘密。
+    lessonHint: 副业做成事业，靠的是复利
+
+  - id: v_end_side_project
+    campaign: venture
+    title: 《合格的副业》
+    mainResult: 项目成为稳定的副业
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: first_paid_user }
+        - { kind: state, key: technicalDebt, op: lte, value: 45 }
+        - { kind: flag, key: solo_mode }
+        - { kind: flag, key: v_final_done }
+    priority: 105
+    tier: special
+    baseText: |
+      你没有 all in，也不想 all in。工具保持小规模运转：8个社团、月收入¥150、每周维护2小时。
+      它不影响学业，还能覆盖生活费的一部分。有人问"为什么不扩大"，你说："它现在的样子，刚刚好。"
+    growthVariantRules:
+      - dimension: riskTolerance
+        variants:
+          - { lte: 40, text: "你对'稳'的追求让你错过了一次融资机会——但你睡得好。这是选择，不是懦弱。" }
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "没有合伙人、没有投资人，你一个人把节奏掌握得恰到好处。" }
+    characterEpilogueRules:
+      - characterId: v_family
+        positive: 妈妈跟亲戚炫耀："我儿子做的那个东西，好多学校在用！"（实际是8个社团，你没有纠正她。）
+        neutral: 妈妈说："不耽误学习就行。"这是她能给出的最高评价。
+        negative: 妈妈又问"到底赚不赚钱"，你第三次转移了话题。
+    projectFutureRules:
+      - { key: steady, condition: { kind: always }, text: "副业成了你的第二张成绩单：它教你的东西，课堂给不了。" }
+    specialTags: [neutral]
+    reflection: 不是每个项目都要改变世界。养活自己也很好。
+    lessonHint: 知道何时停下来，也是决策
+
+  - id: v_end_team_formed
+    campaign: venture
+    title: 《不是一个人的战斗》
+    mainResult: 组建了正式创业团队
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: bin_joined }
+        - { kind: flag, key: bin_equity }
+        - { kind: flag, key: first_paid_user }
+        - { kind: flag, key: v_final_done }
+    priority: 138
+    tier: special
+    baseText: |
+      结算那天晚上，你、阿斌、还有后来加入的雨桐——对了，江雨桐是做竞赛线认识的？不对，是她主动找来设计订阅页——开了个会。
+      会议产出：一张分工表、一个分成协议、一个名字。
+      团队，成立了。
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 70, text: "你们的第一份团队文件不是商业计划，是'冲突解决条款'。成熟得不像学生。" }
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "是你把每个人拉进来的：说了清楚要什么、给什么、怎么散伙。组队这门课，你这次及格了。" }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿斌把分成协议拍照发了朋友圈，配文："这次，白纸黑字。"
+        neutral: 阿斌说："先干着看。"他没说出口的是：上次的坑，这次没填上他就撤。
+        negative: 阿斌最终没有签字。他说自己"更适合做朋友"。
+    projectFutureRules:
+      - { key: team_line, condition: { kind: always }, text: "团队的第一周例会开在了食堂。议题只有一个：下个30天做什么。" }
+    specialTags: [good, team]
+    reflection: 单打独斗的上限是自己，团队的上限是制度。
+    lessonHint: 先小人后君子，团队才长久
+
+  - id: v_end_explosion
+    campaign: venture
+    title: 《意外的爆发》
+    mainResult: 被校园大号转发，用户爆发增长
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: first_paid_user }
+        - { kind: state, key: users, op: gte, value: 18 }
+        - { kind: flag, key: retention_improved }
+        - { kind: flag, key: v_final_done }
+    priority: 150
+    tier: special
+    baseText: |
+      那条"全校社团告别Excel"的帖子被校园大号转发了。48小时，注册冲到 60，服务器爆了两次。
+      你在机房般的宿舍里疯狂扩容、回消息、修bug——痛并快乐着。爆发是运气，接住爆发是实力：幸好你修过留存，幸好成本是优化过的。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 70, text: "扩容、限流、公告——三件事你在两小时内做完。没有平时的工程纪律，这就是翻车现场。" }
+          - { lte: 50, text: "服务器崩了第三次的时候，你在评论区看到了'就这？'。爆发期的每一次故障都被放大十倍。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "爆发当周你依然每天记成本台账。冲动是魔鬼，报表是道符。" }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 罗哥发来消息："接住了。现在，把流量变成钱的速度要跟上——现金流不等人。"
+        neutral: 罗哥说："运气来了。接下来看本事。"
+        negative: 罗哥只回了两个字："成本。"你没懂，三天后懂了。
+    projectFutureRules:
+      - { key: scale_test, condition: { kind: flag, key: unit_econ_negative }, text: "爆发也放大了亏损：一个月 ¥3,000 的 API 账单让 euphoria 瞬间清醒。你连夜优化成本结构。" }
+      - { key: default, condition: { kind: always }, text: "爆发后回归平稳：留下了 20 个周活社团——比爆发的数字更重要。" }
+    specialTags: [good]
+    reflection: 运气是放大器：放大实力，也放大漏洞。
+    lessonHint: 接住运气靠的是平时的纪律
+
+  - id: v_end_acquisition_feel
+    campaign: venture
+    title: 《被看见的价值》
+    mainResult: 收到收购/合作意向
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: first_paid_user }
+        - { kind: state, key: users, op: gte, value: 12 }
+        - { kind: state, key: credibility, op: gte, value: 65 }
+        - { kind: flag, key: v_final_done }
+    priority: 128
+    tier: special
+    baseText: |
+      一家教育公司的 BD 加了你微信："我们对你们的校园渠道感兴趣，谈谈收购或合作？"
+      你把聊天记录截图发给罗哥。他回："先冷静。他们看上的可能是你，不一定是它。"
+      无论结果如何——30天前那个连方向都没有的你，如今被人认真出价了。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 65, text: "你没有立刻回复报价。你先做了一个动作：核算自己的用户价值和增长成本。谈判，从知道自己值多少开始。" }
+          - { lte: 45, text: "你有点上头。'被收购'三个字让30天的苦都有了画面——危险的想法。" }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿斌说："谈可以。但架构代码在托管前，版权先登记。"——冷静的合伙人是最贵的资产。
+        neutral: 阿斌说："你拿主意，我干活。"
+        negative: 阿斌担心被"卖猪仔"，第一次主动谈了退出条款。
+    projectFutureRules:
+      - { key: negotiate, condition: { kind: always }, text: "谈判持续了一个学期。最终你保留了独立运营权——被看见，不等于被买走。" }
+    specialTags: [good]
+    reflection: 被出价是市场给你的体检报告：说明某些器官很健康。
+    lessonHint: 知道自己值多少，才不会贱卖
+
+  - id: v_end_partner_split
+    campaign: venture
+    title: 《散伙协议》
+    mainResult: 合伙人分裂
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: bin_left }
+        - { kind: flag, key: v_final_done }
+    priority: 122
+    tier: main
+    baseText: |
+      阿斌退出那天很平静："没谈拢的事，拖着比谈崩更伤。"他留下了代码和一份交接文档，走得很体面。
+      你翻着第14天的分工表——当时写得太快，没写"怎么分"。现在补上了，代价是他不在了。
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { lte: 35, text: "你们最后一次合作是不欢而散。一个说对方太保守，一个说对方太冲动。都对，都晚了。" }
+          - { gte: 50, text: “好散好聚。阿斌走时说：”项目黄了随时找我，饭局随时叫我。“” }
+      - dimension: independence
+        variants:
+          - { gte: 60, text: " solo 接手全部后端的那两周，你把他写的每行注释读了一遍——那是一份迟到的地方教材。" }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 罗哥说："散伙不是失败，没谈拢就散才是成熟。我见过太多散伙谈崩把项目拖死的。"
+        neutral: 罗哥说："合伙如结婚，婚前协议最保感情。"
+        negative: 罗哥说："你俩的问题，第14天那次'再说吧'就注定了。"
+    projectFutureRules:
+      - { key: lesson, condition: { kind: always }, text: "你的下一份合伙协议第一页写着：进退机制。这是阿斌留给你的遗产。" }
+    specialTags: [bad_end, team]
+    reflection: 合伙的散场方式，暴露的是制度的缺失，不是人品。
+    lessonHint: 分工表要写"怎么散"
+
+  - id: v_end_platform_risk
+    campaign: venture
+    title: 《平台上绞刑架》
+    mainResult: 平台政策变化，渠道一夜清零
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: channel_broad }
+        - { kind: flag, key: leaky_bucket }
+        - { kind: flag, key: v_final_done }
+    priority: 112
+    tier: main
+    baseText: |
+      你把所有用户都养在别人的地盘上：社群发帖靠管理员的容忍，校园墙靠运营的照顾。
+      第27天，管理员一句话："近期清理推广帖，你的号限流了。"获客渠道一夜归零，而你没有自己的名单——没有邮件、没有微信群、没有短信。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "你其实留存了用户联系方式（成本台账旁边那个用户表）—— rebuilding 了一个月，活过来了。" }
+          - { lte: 40, text: "60个用户，你一个都联系不上。你从没想过'拥有用户'和'借用用户'的区别。" }
+      - dimension: independence
+        variants:
+          - { gte: 55, text: "这次教训让你立了规矩：任何渠道的用户，第一时间导入自己的名单。" }
+    characterEpilogueRules:
+      - characterId: v_ai_agent
+        positive: Agent 帮你写了一封《致用户的信》批量发送——可惜，能发到的只剩当初主动加你微信的那6个人。
+        neutral: Agent 如实报告：触达率 9%。数据不会安慰人。
+        negative: 你连可以发给谁都不知道。数字化的时代，你连联系方式都没数字化。
+    projectFutureRules:
+      - { key: own_list, condition: { kind: always }, text: "新项目第一天，你建了自己的用户名单表。这是本次学费买来的第一块地基。" }
+    specialTags: [bad_end]
+    reflection: 在平台的地盘上，你只是租客。租客要交的第二笔房租，随时会涨。
+    lessonHint: 用户名单是自己的，渠道是别人的
+
+  - id: v_end_acquisition_fail
+    campaign: venture
+    title: 《获客失败》
+    mainResult: 产品不错但无法触达用户
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: users, op: lte, value: 4 }
+        - { kind: state, key: execution, op: gte, value: 55 }
+        - { kind: flag, key: v_final_done }
+    priority: 108
+    tier: main
+    baseText: |
+      最憋屈的结局：东西确实好用（用过的人都说好），但"用过的人"只有4个。
+      你不擅长吆喝，也拉不下脸求转发。发帖像石沉大海，地推开口就脸红。产品的哭声，全世界都听不见。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: “复盘时你没有怪”酒香怕巷子深“。你写：”营销是我的短板，下个项目要么补课，要么找搭子。“” }
+          - { lte: 40, text: “你把这归为”运气不好“。运气：这个锅我不背。” }
+      - dimension: execution
+        variants:
+          - { gte: 65, text: “讽刺的是：你的工程能力足以撑起任何增长——比如一次成功的转介绍活动。差的是那一步”走出去“。” }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 老K不忍心："工具是好工具。下次你做推广，把脸皮给我，我替你丢。"
+        neutral: 老K说："东西是好的。可惜好东西多了去了。"
+        negative: 老K已经换用了别家。好工具输给了会吆喝的普通工具。
+    projectFutureRules:
+      - { key: marketing_study, condition: { kind: always }, text: “你把”获客“列进了下一个项目的第1周任务——和写代码同一个优先级。” }
+    specialTags: [bad_end]
+    reflection: 获客不是产品的售后，是产品的半条命。
+    lessonHint: 做出来只完成一半，送到用户手里才算完
+
+  - id: v_end_to_competition
+    campaign: venture
+    title: 《带着产品去比赛》
+    mainResult: 产品转化为竞赛项目
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: users, op: gte, value: 8 }
+        - { kind: flag, key: transfer_competition }
+    priority: 100
+    tier: special
+    baseText: |
+      你带着"社团管家"报名了AI创新竞赛——这次你的申报书上有真实用户数据：14个社团、3000次报名、1个付费用户。
+      评委问创新点，你说："创新不在技术，在于它是真的。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "别的队展示的是PPT里的饼图，你展示的是后台的真实曲线。评委的目光扫过来时，你稳如泰山。" }
+    characterEpilogueRules:
+      - characterId: v_ai_agent
+        positive: Agent 帮你把30天的成本台账转成了申报书附录——每一笔都可追溯。
+        neutral: Agent 照常干活。数据是它处理的最诚实的一批。
+        negative: 你的数据太"难看"（收入<成本），评委皱眉。真实有时不讨喜，但你不想改。
+    projectFutureRules:
+      - { key: competition_line, condition: { kind: always }, text: "竞赛线的战场已经向你开放。带着真弹药的士兵，底气不一样。" }
+    specialTags: [good, transfer]
+    reflection: 创业的数据是竞赛的弹药——两种游戏共享一套资产。
+    lessonHint: 真实运营数据是最强的申报材料
+
+  - id: v_end_to_research
+    campaign: venture
+    title: 《访谈里的论文》
+    mainResult: 创业调研转化为研究课题
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: v_final_done }
+        - { kind: flag, key: transfer_research }
+    priority: 98
+    tier: special
+    baseText: |
+      你整理访谈档案时突然意识到：你手里有16个信号、9场行为式访谈、一组完整的"学生创业决策"过程记录。
+      陈教授看完说："这就是活的社会学样本。下学期，开题。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "因为每场访谈都问的是过去行为、记的是原话，这批数据直接达到了定性研究的信度标准。" }
+    characterEpilogueRules:
+      - characterId: v_user_student
+        positive: 小蔡听说自己成了“研究样本”，笑着说：“那我的奶茶钱算科研经费咯？”
+        neutral: 小蔡耸耸肩："随便你写，别用我全名就行。"
+        negative: 小蔡的微信三天没回——她考研进入冲刺了。研究先放放。
+    projectFutureRules:
+      - { key: research_line, condition: { kind: always }, text: "你的研究问题在开题报告上闪闪发光：《青年创业者如何用行为证据做产品决策》——样本：你自己。" }
+    specialTags: [good, transfer]
+    reflection: 创业学到的验证方法，本质上是研究方法——殊途同归。
+    lessonHint: 创业与科研共享同一种底层能力
+
+  - id: v_end_time_up
+    campaign: venture
+    title: 《30天，刚起步》
+    mainResult: 时间耗尽的开放式结算
+    requirements: { kind: always }
+    priority: 1
+    tier: main
+    baseText: |
+      30天到了。故事停在它此刻的样子——也许刚做完产品，也许刚找到方向，也许刚搞清楚问题是什么。
+      创业没有 deadline，但30天是一面镜子：你做了什么、没做什么，现在都摆在假设板上。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 55, text: "你的信号池、访谈纪要、假设板、报表——样样有账。时间不够不可怕，账目不清才可怕。" }
+          - { lte: 35, text: "30天像一场没醒的梦。好在，假设板还空着——它就是你的新起点。" }
+      - dimension: aiDependence
+        variants:
+          - { gte: 65, text: "AI帮你想了很多。但方向、取舍、付钱的人——从头到尾都是你。" }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 罗哥说："下个项目见。记得：先卖再做。"
+        neutral: 罗哥说："30天算什么。我第一个项目做了两年才有一分钱。"
+        negative: 罗哥没有回复你的总结消息。也许在忙，也许在失望。
+    projectFutureRules:
+      - { key: again, condition: { kind: always }, text: "新的周目已经开放。这次，第1天你就知道：观察、访谈、验证——然后才是做。" }
+    specialTags: [neutral, time_up]
+    reflection: 创业的第一个30天，结局从来不是重点，方法才是。
+    lessonHint: 每一天都是验证，每一天都是积累

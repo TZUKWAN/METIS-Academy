@@ -1,0 +1,182 @@
+# 科研线任务链（TASK-H002~H010 阶段划分）
+missions:
+  - id: r_m01
+    campaignId: research
+    stage: 1
+    day: 1
+    title: 模糊的问题
+    objective: 把导师的一句话需求变成一份有澄清记录的研究简报
+    briefing: “生成式AI影响很大，你看看有没有什么能研究的。”——这就是你得到的全部。直接扔给AI？还是先想清楚？
+    prerequisites: []
+    entryEventId: r_d01_mentor
+    completionConditions: [{ kind: assetType, type: research_brief, minCount: 1 }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 3 }]
+    requiredAssets: []
+    recommendedSkills: [task_contract.basics]
+    nextMissionRules: [{ when: null, goto: r_m02 }]
+    skillTraining: 学会把模糊需求拆成“已确认/待澄清/下一步”，而不是直接丢给AI
+    knowledge: []
+  - id: r_m02
+    campaignId: research
+    stage: 2
+    day: 3
+    title: 给自己配一个 Agent 工作环境
+    objective: 建立可复现的 Agent 工作环境：工作目录、工具、模型
+    briefing: 研究也要有“工作台”。选一个 Agent 工具（没装也能用教学模拟），建好项目目录，配好模型。
+    prerequisites: [r_m01]
+    entryEventId: r_d03_env
+    completionConditions: [{ kind: assetType, type: agent_environment_profile, minCount: 1 }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 3 }]
+    requiredAssets: []
+    recommendedSkills: [environment.working_dir, environment.install_detect]
+    nextMissionRules: [{ when: null, goto: r_m03 }]
+    skillTraining: 学会检测CLI可用性、配置工作目录与模型，并理解“没装工具时用教学模拟”
+    knowledge: []
+  - id: r_m03
+    campaignId: research
+    stage: 2
+    day: 5
+    title: 文献侦察
+    objective: 从关键词失灵到批量阅读，建立文献矩阵并核验每条引用
+    briefing: 日常语言搜不出学术文献。扩展关键词、分层筛选、让Agent批量拆解——但每一条引用都要你亲自核验。
+    prerequisites: [r_m02]
+    entryEventId: r_d05_keywords
+    completionConditions:
+      - { kind: assetType, type: research_matrix, minCount: 1 }
+      - { kind: state, key: literatureCount, op: gte, value: 6 }
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 8 }, { kind: add, key: literatureCount, value: 5 }]
+    requiredAssets: []
+    recommendedSkills: [verification.citation_check]
+    nextMissionRules: [{ when: null, goto: r_m04 }]
+    skillTraining: 学会关键词扩展、分层筛选与批量阅读任务拆解
+    knowledge: []
+  - id: r_m04
+    campaignId: research
+    stage: 3
+    day: 9
+    title: 研究问题
+    objective: 生成候选 gap、逐条验证、收敛出你自己的研究问题
+    briefing: AI 能生成 5 个“研究空白”，但只有部分是真的。用证据表逐条验证，再收敛出你的问题。
+    prerequisites: [r_m03]
+    entryEventId: r_d09_context
+    completionConditions: [{ kind: assetType, type: evidence_matrix, minCount: 1 }]
+    failureConditions:
+      - kind: and
+        conditions:
+          - { kind: state, key: academicDebt, op: gte, value: 90 }
+          - { kind: state, key: day, op: gte, value: 13 }
+    rewards: [{ kind: add, key: progress, value: 10 }]
+    requiredAssets: []
+    recommendedSkills: [verification.reverse_verification]
+    nextMissionRules: [{ when: null, goto: r_m05 }]
+    skillTraining: 学会建立 gap 验证表，用反证和检索推翻或确认候选空白
+    knowledge: []
+  - id: r_m05
+    campaignId: research
+    stage: 4
+    day: 14
+    title: 理论与规则
+    objective: 建立项目规则文件，筛选理论并写出机制链
+    briefing: Agent 反复忘记你的引用规则？写进 AGENTS.md。AI 一次给七个理论？按机制筛，不要堆。
+    prerequisites: [r_m04]
+    entryEventId: r_d14_rules
+    completionConditions:
+      - { kind: assetType, type: agents_md, minCount: 1 }
+      - { kind: assetType, type: mechanism_map, minCount: 1 }
+    failureConditions:
+      - kind: and
+        conditions:
+          - { kind: state, key: day, op: gte, value: 20 }
+          - { kind: not, condition: { kind: assetType, type: agents_md, minCount: 1 } }
+    rewards: [{ kind: add, key: progress, value: 8 }]
+    requiredAssets: []
+    recommendedSkills: [init.create_agents_md]
+    nextMissionRules: [{ when: null, goto: r_m06 }]
+    skillTraining: 学会写项目规则文件沉淀长期约束，并从“理论名词”走到“机制链”
+    knowledge: []
+  - id: r_m06
+    campaignId: research
+    stage: 5
+    day: 18
+    title: 研究设计
+    objective: 让问题、数据、方法对齐，用 Goal 与 Loop 推进设计迭代
+    briefing: “做SEM吧，看着高级”——方法是为问题服务的。设计 Goal、写验收、跑 Draft-Critique 循环。
+    prerequisites: []
+    entryEventId: r_d18_method
+    completionConditions:
+      - { kind: assetType, type: goal, minCount: 1 }
+      - { kind: state, key: progress, op: gte, value: 45 }
+    failureConditions:
+      - kind: and
+        conditions:
+          - { kind: flag, key: data_fabricated }
+          - { kind: state, key: credibility, op: lte, value: 30 }
+    rewards: [{ kind: add, key: progress, value: 12 }]
+    requiredAssets: []
+    recommendedSkills: [goal.final_state, loop.draft_judge_revise]
+    nextMissionRules: [{ when: null, goto: r_m07 }]
+    skillTraining: 学会定义含完成判据的 Goal，并用评估循环迭代研究设计
+    knowledge: []
+  - id: r_m07
+    campaignId: research
+    stage: 6
+    day: 23
+    title: 分兵与合流
+    objective: 用 subagent 并行补证据，学会裁决冲突结论
+    briefing: 方法、数据、理论三路都要补证据。并行派发子任务，但冲突的结论不能靠投票解决。
+    prerequisites: [r_m06]
+    entryEventId: r_d23_subagent
+    completionConditions: [{ kind: assetType, type: document, minCount: 2 }]
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 8 }]
+    requiredAssets: []
+    recommendedSkills: [org.parallel, org.conflict_resolution]
+    nextMissionRules: [{ when: null, goto: r_m08 }]
+    skillTraining: 学会任务边界划分、并行派发与基于来源的冲突裁决
+    knowledge: []
+  - id: r_m08
+    campaignId: research
+    stage: 7
+    day: 25
+    title: 写作与交接
+    objective: 按论证结构搭论文骨架，完成一次干净的 Session 交接
+    briefing: 论文结构=论证结构。每个命题挂上证据；写作开始前，先给旧会话一个体面的结束。
+    prerequisites: [r_m07]
+    entryEventId: r_d25_structure
+    completionConditions:
+      - { kind: assetType, type: argument_map, minCount: 1 }
+      - { kind: assetType, type: handoff, minCount: 1 }
+    failureConditions: []
+    rewards: [{ kind: add, key: progress, value: 10 }]
+    requiredAssets: []
+    recommendedSkills: [context.handoff, context.new_session]
+    nextMissionRules: [{ when: null, goto: r_m09 }]
+    skillTraining: 学会论证图构建与跨会话交接（old summary→handoff→新会话→恢复验证）
+    knowledge: []
+  - id: r_m09
+    campaignId: research
+    stage: 9
+    day: 30
+    title: 开题答辩
+    objective: 通过模拟答辩，接受八连问的检验
+    briefing: 为什么重要？文献到哪了？你的问题是什么？数据哪来？证据可靠吗？——评委不会客气。
+    prerequisites: [r_m08]
+    entryEventId: r_d30_defense
+    completionConditions: [{ kind: flag, key: defense_done }]
+    failureConditions:
+      - kind: or
+        conditions:
+          - { kind: state, key: academicDebt, op: gte, value: 90 }
+          - kind: and
+            conditions:
+              - { kind: flag, key: used_fake_citation }
+              - { kind: state, key: evidenceDiscipline, op: lte, value: 30 }
+    rewards: [{ kind: add, key: progress, value: 10 }]
+    requiredAssets: []
+    recommendedSkills: [verification.adversarial_review]
+    nextMissionRules: []
+    skillTraining: 完整经历一次“被质疑→用证据回应”的答辩过程
+    knowledge: []

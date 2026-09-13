@@ -1,0 +1,335 @@
+# 竞赛线补充事件（每日微事件：技术取舍/材料细节/团队氛围/士气）
+events:
+  - id: c_x_d2_groupname
+    campaign: competition
+    day: 2
+    type: decision
+    trigger: { kind: day, day: 2, phase: end }
+    scene: { location: dorm, characters: [c_design] }
+    setup: ["报名表要填队名。方远提议“代码写不动了队”，雨桐翻了个白眼。"]
+    choices:
+      - id: serious_name
+        text: 用正经名字："社团管家"——让名字就是定位
+        visibleResponse: 评委看到队名就知道你们做什么。省了5秒理解成本。
+        hiddenEffects: [{ kind: add, key: execution, value: 2 }]
+      - id: funny_name
+        text: 用搞笑名字活跃气氛
+        visibleResponse: 报名表上那个名字让高主任皱了皱眉。娱乐有代价。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: c_x_d3_money
+    campaign: competition
+    day: 3
+    type: decision
+    trigger: { kind: day, day: 3, phase: end }
+    purpose: { learning: 预算也是约束 }
+    scene: { location: dorm, characters: [] }
+    setup: ["服务器与域名预算清单出炉：最低配每年¥300。队规：谁的钱都不能白花。"]
+    choices:
+      - id: free_tier
+        text: 先用免费层跑通，获奖后再升级
+        visibleResponse: 免费层够初赛演示。你把"付费升级"写进了风险预案。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: budget_thrifty }]
+      - id: buy_now
+        text: 直接买，省得迁移
+        visibleResponse: 钱花了。迁移确实没发生——但初赛其实用不到一半配置。
+        hiddenEffects: [{ kind: subtract, key: money, value: 300 }]
+    terminal: true
+
+  - id: c_x_d4_naming
+    campaign: competition
+    day: 4
+    type: story
+    trigger: { kind: day, day: 4, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["你把选题理由写成三行话贴在群里，任何人质疑时先看这三行。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "写下来的理由比脑子里的坚定。" }
+    terminal: true
+
+  - id: c_x_d5_knowledge_debt
+    campaign: competition
+    day: 5
+    type: decision
+    trigger: { kind: day, day: 5, phase: end }
+    purpose: { learning: 不懂的概念当场清，不留过夜债 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["Agent讲竞品时提了“SaaS多租户”。你点点头——其实没懂。"]
+    choices:
+      - id: ask_now
+        text: 当场让Agent用社团场景举例讲明白
+        visibleResponse: 一个服务器像一栋楼，每个社团一间锁好的房。“懂了。这个概念明天会出现在架构讨论里。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: achievement, achievementId: ach_c_concept_cleared }]
+      - id: skip_it
+        text: 假装懂了，先往下走
+        visibleResponse: 第11天方远说"多租户架构"，你点头点得心虚，错过了一次关键否决。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_x_d6_elder_advice
+    campaign: competition
+    day: 6
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [] }
+    setup: ["食堂里遇到去年参赛的学长。"]
+    dialogue:
+      - { speaker: 学长, text: "三条血泪：数据别编、Demo别贪、答辩别背。", mood: neutral }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    terminal: true
+
+  - id: c_x_d7_divider
+    campaign: competition
+    day: 7
+    type: story
+    trigger: { kind: day, day: 7, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["调研阶段收官。你把五份访谈、一张竞品矩阵、两条政策归档成一个文件夹，命名“调研包”。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+      - { kind: addAsset, assetType: checklist, name: 调研包索引, description: 调研资产清单, content: "访谈×5/竞品矩阵/政策×2/问题卡" }
+    dialogue:
+      - { speaker: 系统, text: "资产打包，随取随用。" }
+    terminal: true
+
+  - id: c_x_d8_worry
+    campaign: competition
+    day: 8
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [c_design] }
+    setup: ["深夜雨桐发消息：“如果初赛都过不了怎么办？”"]
+    choices:
+      - id: rational_reassure
+        text: "我们把'过不了'的原因清单写出来，逐条看看在不在。"
+        visibleResponse: 两人列了六条，五条已被现有资产化解。第六条是运气——运气不是焦虑能管的。
+        hiddenEffects: [{ kind: relationship, characterId: c_design, delta: 6 }, { kind: add, key: energy, value: 5 }]
+      - id: empty_cheer
+        text: "不会的！我们这么强！"
+        visibleResponse: 雨桐回了个"嗯"。两个人各自失眠。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 6 }]
+    terminal: true
+
+  - id: c_x_d9_git
+    campaign: competition
+    day: 9
+    type: decision
+    trigger: { kind: day, day: 9, phase: end }
+    purpose: { learning: 版本控制是工程的地基 }
+    scene: { location: workbench, characters: [c_tech] }
+    setup: ["方远把代码压缩包发在群里，命名“最新版最终版真最终版.zip”。"]
+    choices:
+      - id: git_now
+        text: 今天就上 Git：分支规则两条（main可演示/feature随便造）
+        visibleResponse: 半小时迁移完成。两周后回看，这是本赛程最值的30分钟。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: setFlag, key: git_enabled }]
+      - id: keep_zip
+        text: 压缩包挺好的，别折腾
+        visibleResponse: 第16天，两个压缩包合并时丢了一个下午的改动。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 8 }
+          - { kind: scheduleEvent, eventId: c_d14_zip_loss, onDay: 14 }
+    terminal: true
+
+  - id: c_x_d10_scope_tempt
+    campaign: competition
+    day: 10
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["方远刷到一篇“微信小程序最新能力”，眼睛亮了。"]
+    choices:
+      - id: park_idea
+        text: 记进愿望清单，Demo后再说
+        visibleResponse: 清单+1。方远的表达欲有了出口，代码没跑偏。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 3 }]
+      - id: try_now
+        text: 试试呗，就半小时
+        visibleResponse: 半小时“变成了大半天。核心流程今天零进度。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }]
+    terminal: true
+
+  - id: c_x_d11_data_mock
+    campaign: competition
+    day: 11
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 演示数据可以造，口径必须真实 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["演示需要“看起来用了很久”的数据。Agent问：要我生成300条假记录吗？"]
+    choices:
+      - id: honest_seed
+        text: 造，但PPT和申报书里明确写"演示数据"
+        visibleResponse: 演示库塞了300条标注清晰的模拟数据。评委问起，你答得理直气壮。
+        hiddenEffects: [{ kind: add, key: credibility, value: 5 }, { kind: setFlag, key: demo_data_disclosed }]
+      - id: silent_fake
+        text: 造，不用说，看着像真的就行
+        visibleResponse: 数据很逼真。但评委里有人问你"这批用户的授权怎么拿的"——你卡住了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 8 }, { kind: setFlag, key: demo_data_hidden }]
+    terminal: true
+
+  - id: c_x_d12_imposter
+    campaign: competition
+    day: 12
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["睡前刷到别校队伍的炫技视频，特效拉满。你看了看自己的报名表单，突然觉得寒酸。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "评委投的是问题与完成度，不是特效。深呼吸。" }
+    terminal: true
+
+  - id: c_x_d13_bug_hunt
+    campaign: competition
+    day: 13
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [c_tech, c_ai_agent] }
+    setup: ["一个偶现bug：报名偶尔会重复提交。方远让Agent“修一下”。"]
+    dialogue:
+      - { speaker: Agent, text: "已修复：移除了提交按钮的点击事件。", mood: pleased }
+      - { speaker: 方远, text: "……那你把提交也删了？！（按下撤销）", mood: angry }
+    choices:
+      - id: root_cause
+        text: 让它先复现、定位根因（缺防抖），再修
+        visibleResponse: 根因是没做防抖+幂等。修复后回归全绿，bug绝迹。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: achievement, achievementId: ach_c_debug_root }]
+      - id: accept_quick_fix
+        text: 先这样，按钮没了总比重复提交好
+        visibleResponse: 雨桐彩排时发现"没法报名"。全队看着方远，方远看着Agent。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 6 }]
+    terminal: true
+
+  - id: c_x_d14_family
+    campaign: competition
+    day: 14
+    type: story
+    trigger: { kind: day, day: 14, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["Demo周最后一天。你在日记里写下：本周学会了INIT、规则文件、契约、Goal、回归——比上学期一学期学得多。"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 5 }
+      - { kind: add, key: execution, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "比赛的第一名次：你已经超过了上周的自己。" }
+    terminal: true
+
+  - id: c_x_d15_font
+    campaign: competition
+    day: 15
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["雨桐纠结PPT字体：“衬线优雅，无衬线现代。”她已纠结20分钟。"]
+    choices:
+      - id: decide_for_her
+        text: "用无衬线，理由：投影仪吃衬线。定了，下一项。"
+        visibleResponse: 雨桐愣了一下，笑了："行，队长拍板了。"纠结结束了。
+        hiddenEffects: [{ kind: add, key: execution, value: 2 }, { kind: relationship, characterId: c_design, delta: 3 }]
+      - id: let_her_decide
+        text: "你专业你来定。"
+        visibleResponse: 她又纠结了15分钟，最后选了你说的那个。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 3 }]
+    terminal: true
+
+  - id: c_x_d16_backup
+    campaign: competition
+    day: 16
+    type: story
+    trigger: { kind: day, day: 16, phase: end }
+    purpose: { learning: 演示要有B计划 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你做了演示B计划：本地录屏视频一份、备用笔记本一台、U盘双份。"]
+    automaticEffects:
+      - { kind: addAsset, assetType: checklist, name: 演示应急预案, description: B计划清单, content: "录屏/备机/双U盘/离线依赖" }
+      - { kind: setFlag, key: demo_backup_ready }
+    dialogue:
+      - { speaker: 系统, text: "决赛场地网络是个谜。B计划是你唯一的确定。" }
+    terminal: true
+
+  - id: c_x_d17_self_doubt
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["深夜你重听彩排录音，觉得自己的声音“好陌生、好难听”。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "每个人听自己的录音都这样。评委听的是内容。" }
+    terminal: true
+
+  - id: c_x_d18_ai_note
+    campaign: competition
+    day: 18
+    type: decision
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { learning: AI贡献要如实可溯 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你在整理“AI使用台账”：脚手架/竞品初扫/问答模拟——每条附人工核验方式。"]
+    choices:
+      - id: full_ledger
+        text: 台账写细：工具/用途/核验人/修改量
+        visibleResponse: 一页台账完成。它同时回答了“诚信吗”和“你们自己干了啥”两个问题。
+        hiddenEffects: [{ kind: add, key: credibility, value: 6 }, { kind: addAsset, assetType: document, name: AI使用台账, description: AI贡献与人工核验记录, content: "台账（见正文）" }]
+      - id: rough_note
+        text: 简单写一句"使用了AI辅助"
+        visibleResponse: 一句话糊弄过去。评委若追问细节，这一句会显得心虚。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_x_d19_morning
+    campaign: competition
+    day: 19
+    type: story
+    trigger: { kind: day, day: 19, phase: end }
+    scene: { location: defense_hall, characters: [c_tech, c_design] }
+    setup: ["初赛结束。三个人在门口拍了张自拍——无论结果，这是你们第一次完整走完赛程的一半。"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 4 }
+      - { kind: add, key: energy, value: 5 }
+    dialogue:
+      - { speaker: 系统, text: "仪式感是团队的黏合剂。" }
+    terminal: true
+
+  - id: c_x_d20_sleep
+    campaign: competition
+    day: 20
+    type: decision
+    trigger: { kind: day, day: 20, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["决赛前夜11点。你还可以：再过一遍稿子 / 立刻睡觉。"]
+    choices:
+      - id: sleep_now
+        text: 睡。稿子已经够熟了，缺的是清醒
+        visibleResponse: 八小时睡眠。第二天你的语速和判断都在线上。
+        hiddenEffects: [{ kind: add, key: energy, value: 12 }]
+      - id: cram_more
+        text: 再背两遍，求个心安
+        visibleResponse: 背到一点半。第二天你在第6页卡壳了——过度背诵会让语言变机械。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 10 }]
+    terminal: true
+
+  - id: c_x_d21_win_or_lose
+    campaign: competition
+    day: 21
+    type: npc
+    trigger: { kind: day, day: 21, phase: end }
+    scene: { location: canteen, characters: [c_advisor] }
+    setup: ["等待结果的晚上，何老师请全队吃了顿饭。"]
+    dialogue:
+      - { speaker: 何老师, text: "名次是给学校看的。你们这21天学会的东西，是给自己看的。", mood: pleased }
+      - { speaker: 方远, text: "（罕见地没有抬杠）老师说得对。" }
+    automaticEffects:
+      - { kind: relationship, characterId: c_advisor, delta: 6 }
+      - { kind: relationship, characterId: c_tech, delta: 4 }
+      - { kind: relationship, characterId: c_design, delta: 4 }
+    terminal: true

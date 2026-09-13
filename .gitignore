@@ -1,0 +1,17 @@
+node_modules/
+dist/
+release/
+release2/
+release3/
+release4/
+release5/
+release6/
+release7/
+*.tsbuildinfo
+.env
+.env.*
+*.log
+pack-log*.txt
+tmp/
+.DS_Store
+NUL

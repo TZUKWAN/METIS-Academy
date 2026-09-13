@@ -1,0 +1,578 @@
+# 竞赛线主结局（TASK-I010/I011）
+endings:
+  - id: c_end_gold_real
+    campaign: competition
+    title: 《金奖：真实的重量》
+    mainResult: 决赛金奖，项目真实可信
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: gte, value: 70 }
+        - { kind: state, key: credibility, op: gte, value: 70 }
+        - { kind: flag, key: c_final_done }
+    priority: 200
+    tier: hidden
+    baseText: |
+      "金奖——社团管家，XX大学。"
+      掌声里，江雨桐哭了，方远假装没哭。孙教授握着你的手说："最打动我的不是功能，是你们那句'错了我们认'。"
+      奖杯会落灰。但这21天里你们把一句"做个工具"变成了一份真实、可查、可复现的东西——这个能力跟着你们走。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 70, text: "评审表备注栏里，高主任写了一行：数据口径清晰，见附录。全场比赛唯一一个。" }
+          - { lte: 45, text: "有惊无险。有两处数据你最后关头才对齐——再晚一天就是另一个故事。" }
+      - dimension: independence
+        variants:
+          - { gte: 65, text: "从规则提取到答辩应答，每个关键决定都有你自己的签名。" }
+      - dimension: teamTrust
+        variants:
+          - { gte: 70, text: "散伙饭上方远说：下个比赛，还组这个队。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把那套回归测试开源了，README第一行写着"献给第一次比赛"。
+        neutral: 方远把奖杯照片设成了头像，配文就俩字：够了。
+        negative: 方远说"下次别再逼我写测试了"——但你们都知道，下次他还会写。
+      - characterId: c_design
+        positive: 雨桐的作品集里，这个项目排在第一页，标题是"真实的胜利"。
+        neutral: 雨桐把路演稿裱了起来——她说这是她讲过最顺的一次。
+        negative: 雨桐感慨："要是材料时间再多两天就好了。"但她说这话时在笑。
+      - characterId: c_advisor
+        positive: 何老师把你们的申报书存进了"以后给历届看"的文件夹。
+        neutral: 何老师在朋友圈转发了获奖推送，配了三个字：应该的。
+        negative: 何老师说："奖拿了，但你们本可以赢得更稳。"
+    projectFutureRules:
+      - { key: adopted, condition: { kind: flag, key: transfer_venture }, text: "社团联合会的采购合同在一个月后签了下来。比赛结束了，产品活着。" }
+      - { key: research, condition: { kind: flag, key: transfer_research }, text: "你们的访谈数据成了一篇论文的田野素材——金奖项目发表了它的第二生命。" }
+      - { key: archived, condition: { kind: always }, text: "仓库归档，README最后一行写着：如果有人接手，测试会告诉你一切。" }
+    specialFlagSections:
+      - { flag: regression_guard, text: "决赛演示第7步——那个曾在彩排时崩溃的环节——稳稳通过。回归测试在领奖台下立了功。" }
+      - { flag: ai_disclosed, text: "你们的AI使用台账被评委称为'全场比赛最诚实的附录'。" }
+    specialTags: [good, best_ending]
+    reflection: 金奖证明的不是你们强，是你们真。真实是可以准备出来的。
+    lessonHint: 真实的数据、清晰的口径、诚实的边界感
+
+  - id: c_end_fake_exposed
+    campaign: competition
+    title: 《被揭穿的92%》
+    mainResult: 数据造假在决赛被揭穿
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: fake_metrics }
+        - { kind: state, key: day, op: gte, value: 20 }
+    priority: 220
+    tier: main
+    baseText: |
+      决赛问答环节。孙教授推了推眼镜："申报书写准确率92%，但你演示时后台日志闪过一个78。哪个是真的？"
+      房间安静了三秒。这三秒里你想起了第15天的那个下午——那个"顺手只展示最好一组"的决定。
+      你如实回答了。评委记下了你的诚实，也记下了那个数字。取消评奖资格，理由：材料与演示不一致。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { lte: 35, text: "高主任补了一句：'初赛材料我们也复核了。'雪崩是整座的。" }
+          - { gte: 55, text: "因为你当场承认、口径清楚，组委会保留了参赛记录——但奖没有了。" }
+      - dimension: independence
+        variants:
+          - { gte: 55, text: "你在复盘里写道：'造假不是方远的错，是我第15天没有喊停。'" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远扛下了技术锅的另一半："当时我说只展示好的一组，你就该骂醒我。下次互相盯着。"
+        neutral: 方远沉默地收拾设备，那晚他没说话。
+        negative: 方远说："我早说过别这么干。"队伍的裂缝比取消资格更疼。
+      - characterId: c_design
+        positive: 雨桐在赛后重新剪了一版视频——所有镜头都是真实数据。"我们亏得起奖，亏不起人。"
+        neutral: 雨桐把那次申报书从作品集里抽掉了。
+        negative: 雨桐说："我再也不想在被窝里改数据了。"
+    projectFutureRules:
+      - { key: rebuild, condition: { kind: state, key: credibility, op: gte, value: 50 }, text: "第二年你们又报了名。这次申报书的数据页只写实测——评委换了，规矩没换。" }
+      - { key: shadow, condition: { kind: always }, text: "那个78和92的故事，成了你们队每次赛前例会的第一页PPT。" }
+    specialFlagSections:
+      - { flag: missed_rule_17, text: "雪上加霜：第1天跳过的第17页条款——AI内容未标注——被一并点名。" }
+    specialTags: [bad_end, integrity]
+    reflection: 演示在撒谎和数据在撒谎，评委看来是一回事。
+    lessonHint: 数据口径统一，是最后的底线
+
+  - id: c_end_national_prize
+    campaign: competition
+    title: 《国赛入场券》
+    mainResult: 省赛金奖晋级国赛并获奖
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: gte, value: 65 }
+        - { kind: state, key: credibility, op: gte, value: 55 }
+        - { kind: flag, key: c_final_done }
+    priority: 150
+    tier: main
+    baseText: |
+      省赛金奖，国赛二等奖。领奖台上你举着证书，想起21天前的那个40页PDF。
+      从读不懂规则，到让评委点头——这条路上你掌握的不只是比赛技巧，是一套把想法做成真的流程。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 70, text: "国赛现场，偶发崩溃没有出现——你在省赛后的修复+回归起了作用。" }
+          - { lte: 45, text: "国赛的路演你讲得比省赛稳——被初赛毒打过的部分，都长成了经验。" }
+      - dimension: teamTrust
+        variants:
+          - { gte: 65, text: "三个人的分工表赛后传给了下一届——比任何'组队心得'都管用。" }
+    characterEpilogueRules:
+      - characterId: c_judge_final
+        positive: 孙教授在国赛现场认出了你们："数据口径那组。今年讲得更好。"
+        neutral: 孙教授评分表上的评语：完成度高，边界清晰。
+        negative: 孙教授提的那个问题你们还是没答好——记进下一年的功课。
+    projectFutureRules:
+      - { key: handover, condition: { kind: always }, text: "你们把项目移交给了下一届。交接文档30页——比申报书还厚。" }
+    specialFlagSections:
+      - { flag: budget_thrifty, text: "整届比赛花费：¥0。免费层撑到了国赛——预算纪律也是一种创新。" }
+    specialTags: [good]
+    reflection: 从校赛到国赛，变的是对手，不变的是方法。
+    lessonHint: 方法可迁移，奖只是副产品
+
+  - id: c_end_province_gold
+    campaign: competition
+    title: 《省赛金奖》
+    mainResult: 省赛金奖
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: gte, value: 60 }
+        - { kind: flag, key: prelim_passed }
+        - { kind: flag, key: c_final_done }
+    priority: 120
+    tier: main
+    baseText: |
+      省赛金奖拿到手的那刻，你先想到的不是奖，是第15天那个下午——把92改成78的那个决定。
+      它当时看着像吃亏，现在看着像伏笔。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "省赛答辩的三个数据追问，你们全部用口径回答。评委之间交换了一个眼神——那是认可。" }
+      - dimension: execution
+        variants:
+          - { lte: 50, text: "奖是拿了，但演示有一处小卡顿。差一点点，它就是银奖和金奖的区别。" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 邱一鸣带队来恭喜，然后问："那个回归测试，能发我们一份吗？"
+        neutral: 邱一鸣的队伍这次拿了银奖。他说"下次见"的时候是真心的。
+        negative: 邱一鸣卫冕失败，全程黑线。你们假装没看见。
+    projectFutureRules:
+      - { key: continue, condition: { kind: flag, key: transfer_venture }, text: "奖杯放进社团办公室，工具继续迭代——用户说'比金奖更实在'。" }
+      - { key: default, condition: { kind: always }, text: "证书挂在实验室墙上。下一届报名时，它是最有效的招新海报。" }
+    specialTags: [good]
+    reflection: 诚实的数据不会让你输，它会让你赢得踏实。
+    lessonHint: 对齐真实数据是最划算的决定
+
+  - id: c_end_province_bronze
+    campaign: competition
+    title: 《省赛铜奖》
+    mainResult: 省赛铜奖
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: gte, value: 48 }
+        - { kind: flag, key: prelim_passed }
+        - { kind: flag, key: c_final_done }
+    priority: 90
+    tier: main
+    baseText: |
+      省赛铜奖。不算耀眼，但奖杯是真的，答辩时的每一句回答都站得住。
+      复盘会上你们列了"如果能重来"清单——十条里八条，其实已经在21天里做对了。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "评委点评：'完成度高于多数对手，败在了创新表达。'下届改进方向明确。" }
+          - { lte: 45, text: "有几处演示小失误。你们的B计划救了场——不然连铜奖都悬。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师说："铜奖进我文件夹的左边——那是'有潜力'的意思。"
+        neutral: 何老师说："铜奖，正常发挥。"
+        negative: 何老师叹气："差的那口气，是赛前一个月欠的。"
+    projectFutureRules:
+      - { key: next_year, condition: { kind: always }, text: "你们把复盘清单发到了队群。有人回了一句：明年再来。" }
+    specialTags: [neutral]
+    reflection: 铜奖是起点线：证明方法有效，提醒差距具体。
+    lessonHint: 每一次彩排都在给奖杯上色
+
+  - id: c_end_school_third
+    campaign: competition
+    title: 《校赛三等奖》
+    mainResult: 校赛三等奖
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: gte, value: 40 }
+        - { kind: flag, key: c_final_done }
+    priority: 70
+    tier: main
+    baseText: |
+      校赛三等奖。名次不高，但你们完整走完了：规则、组队、选题、调研、Demo、材料、路演。
+      有人问方远值不值。他指了指那套自动化测试："这套东西，值回票价。"
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 60, text: "散伙饭吃到十点。三个人约好：课程设计一起组队。" }
+          - { lte: 40, text: "合影时三人站得很开。名次会过去，缝隙不一定。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "评审老师特意问了一句：你们的调研做了多久——那是褒奖的问法。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把这次路演的脱敏稿发给了学妹们："照这个练，能少走半年弯路。"
+        neutral: 雨桐把奖状收进文件夹，转身投入了下一份作业。
+        negative: 雨桐说："下次我想跟个稳的队。"
+    projectFutureRules:
+      - { key: seed, condition: { kind: flag, key: transfer_venture }, text: "三等奖的奖品是一套机械键盘。工具倒是被两个社团持续用着——用户比评委诚实。" }
+      - { key: default, condition: { kind: always }, text: "三等奖证书和那套测试一起躺在仓库里。后者被下载了37次。" }
+    specialTags: [neutral]
+    reflection: 奖项衡量21天的输出，能力衡量往后三年。
+    lessonHint: 输了比赛不等于白打
+
+  - id: c_end_school_fail
+    campaign: competition
+    title: 《止步校赛》
+    mainResult: 校赛未获奖
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: progress, op: lte, value: 42 }
+        - { kind: flag, key: c_final_done }
+    priority: 60
+    tier: main
+    baseText: |
+      校赛落选。评审意见只有一行："完成度不足。"
+      你盯着这五个字看了很久，然后打开了21天前的那份倒排表——有几格是空的，你清楚是哪几格。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { lte: 35, text: "复盘时你数了数：倒排表上的Demo周，实际有效工作日只有四天。" }
+          - { gte: 50, text: "你们输在选题创新性——执行没大错，方向差半拍。这类失败最值得复盘。" }
+      - dimension: aiDependence
+        variants:
+          - { gte: 65, text: "申报书里AI味最重的那段，被评委当场圈了出来。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师说："明年再来，我先给你们占个题。"
+        neutral: 何老师说："参赛经历也是经历。"
+        negative: 何老师把那份申报书退回："这样的材料别署我的名。"
+    projectFutureRules:
+      - { key: regroup, condition: { kind: state, key: teamTrust, op: gte, value: 55 }, text: "队伍没散。你们把这次的仓库设为私有，README写着：明年见。" }
+      - { key: default, condition: { kind: always }, text: "落选的申报书你没删。它比任何教程都更懂你的弱点。" }
+    specialFlagSections:
+      - { flag: scope_creep, text: "复盘第一条：第12天的'顺手加功能'——它吃掉了修核心bug的整整两天。" }
+      - { flag: loose_teamwork, text: "复盘第二条：没有分工表的三个人，等于六只手。" }
+    specialTags: [bad_end]
+    reflection: 比赛淘汰的不是没才华的队，是没流程的队。
+    lessonHint: 倒排表空着的格子，就是输掉的原因
+
+  - id: c_end_hollow_award
+    campaign: competition
+    title: 《空心的奖杯》
+    mainResult: 奖项不错，但项目赛后即死
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: competitionRank, op: gte, value: 1 }
+        - { kind: state, key: userUnderstanding, op: lte, value: 40 }
+        - { kind: flag, key: c_final_done }
+    priority: 105
+    tier: special
+    baseText: |
+      证书到手，热闹散场。两周后有社团想真的用你们的工具——打开仓库，没人敢动：代码没人说得清，数据是造的，文档没有。
+      奖杯很重。重得像一块墓碑。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { lte: 30, text: "你从没真正见过目标用户怎么干活。奖评审的是故事，用户要的是工具——你们只备了前者。" }
+          - { gte: 45, text: "访谈你做了，只是没做完。'报销比报名更痛'那条线索，你始终没敢追。" }
+      - dimension: credibility
+        variants:
+          - { gte: 60, text: "好在材料没有造假。奖杯至少立得住——只是里面是空的。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐后来在分享会上说："那次我们学会了做奖，下一次想学做产品。"
+        neutral: 雨桐把奖杯放在了宿舍书架最上层，落灰处。
+        negative: 雨桐说："那三个星期，我们其实一直在给评委打工。"
+    projectFutureRules:
+      - { key: revive, condition: { kind: flag, key: transfer_venture }, text: "除非——你翻开了那个仓库。补文档、清数据、找用户。奖杯从墓碑变成了奠基石。" }
+      - { key: default, condition: { kind: always }, text: "仓库最后一次提交停在决赛当晚。zip包里躺着'最新版最终版真最终版'。" }
+    specialFlagSections:
+      - { flag: demo_data_hidden, text: "有社团认真问过：'系统里那300个用户是谁？'你没法回答。" }
+    specialTags: [warning]
+    reflection: 为评委做项目，得奖即终点；为用户做项目，得奖只是开始。
+    lessonHint: 项目空心的根源是没有真用户
+
+  - id: c_end_to_venture
+    campaign: competition
+    title: 《赛场之外》
+    mainResult: 竞赛项目转化为真实产品
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: transfer_venture }
+        - { kind: flag, key: c_final_done }
+    priority: 130
+    tier: special
+    baseText: |
+      赛后一个月，社团联合会的采购意向书摆在桌上。方远看完笑了："我们居然真的有人付费了。"
+      雨桐已经开始画新界面。比赛是舱位分离：奖杯留在了原地，产品飞了出去。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 55, text: "因为访谈做得扎实，你们知道第一批真实用户是谁、痛在哪——这是队友们不知道的财富。" }
+          - { lte: 40, text: "采购靠的是人情和新鲜感。三个月后你会明白：没有留存的产品，合同只是一张纸。" }
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "仓库里那套测试直接迁移到了正式项目。老本，吃得很香。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远成了"技术合伙人"——他给这个title配的备注是：继续写测试。
+        neutral: 方远答应"帮着维护"，条件是别再逼他开会。
+        negative: 方远婉拒了："比赛打完了，我想歇歇。"产品后来换了他做。
+    projectFutureRules:
+      - { key: paying, condition: { kind: state, key: userUnderstanding, op: gte, value: 50 }, text: "第一个学期结束，工具覆盖了全校41个社团。另一个学校的社团联合会发来了邮件。" }
+      - { key: default, condition: { kind: always }, text: "产品活着，但很勉强。创业线的故事，才刚刚开始。" }
+    specialTags: [good, transfer]
+    reflection: 比赛给你观众，用户给你饭吃。分清这两件事，是创业第一课。
+    lessonHint: 有观众不等于有用户
+
+  - id: c_end_team_dissolve
+    campaign: competition
+    title: 《散伙》
+    mainResult: 团队在赛程中解散
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: loose_teamwork }
+        - { kind: state, key: teamTrust, op: lte, value: 35 }
+    priority: 140
+    tier: main
+    baseText: |
+      第16天，方远退群了。没有吵架——比吵架更冷。他说："材料你们做，代码我自己交一版。"
+      江雨桐第二天也没来。实验室白板上还留着那份没人执行的分工表——当初它太温柔了，温柔到谁都没被真正约束。
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { lte: 25, text: "复盘时你们连群聊记录都懒得翻。三个优秀的人，凑不出一个队。" }
+          - { gte: 40, text: "其实裂缝早有征兆：第一次彩排迟到、第一次互相甩锅……每一根稻草都是自己放的。" }
+      - dimension: independence
+        variants:
+          - { gte: 55, text: "你一个人交了一版残缺的作品。评委问“团队呢”，你说：'都在，只是没绑在一起。'" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 多年后方远承认："那次是我混。后来我带的每个队，第一件事都是写分工表。"
+        neutral: 方远删了群，留下了仓库。代码还在，队没了。
+        negative: 方远和你在走廊遇见，互相点了点头。就这样。
+      - characterId: c_design
+        positive: 雨桐后来转了个"如何做分工表"的视频给你，备注：下个队见。
+        neutral: 雨桐把那次没做完的PPT模板发在了网上，下载量意外地高。
+        negative: 雨桐说："你们技术男的世界我不懂。"其实懂的只是没说。
+    projectFutureRules:
+      - { key: solo, condition: { kind: state, key: independence, op: gte, value: 60 }, text: "第二年你单枪匹马又报了名，拿了校三等奖。但你知道：一个人能走，一群人才走得远。" }
+      - { key: default, condition: { kind: always }, text: "散伙饭没吃。有些饭，错过就永远错过了。" }
+    specialFlagSections:
+      - { flag: push_output, text: "你记得那个连锁反应的起点：方远状态最差的那天，你选择了催他。" }
+    specialTags: [bad_end, team]
+    reflection: 分工表约束的不是人，是失望的累积速度。
+    lessonHint: 团队死于没有边界的温柔
+
+  - id: c_end_tech_fail
+    campaign: competition
+    title: 《第7步，又崩了》
+    mainResult: 决赛演示技术故障，评分崩盘
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: crash_unfixed }
+        - { kind: flag, key: c_final_done }
+    priority: 125
+    tier: main
+    baseText: |
+      决赛演示，第7步——那个概率三成的偶发崩溃，如期而至。
+      投影屏上的报错红得刺眼。你启动了B计划录屏，可评委的目光已经变了：他们看到的不只是一个bug，是一个没被认真对待的bug。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "你坦然说明：'这个偶发问题我们已定位并发未修复，录屏显示的是修复前状态。'评委给了尊重分。" }
+          - { lte: 40, text: "你试图现场Debug。全场看着报错页面挂了四分钟——那是本场比赛最长的四分钟。" }
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "虽然演示崩了，问答环节你们扳回不少。最终名次：优秀奖。本可以是金奖的。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远在返程车上把崩溃根因写成了一篇技术博客：署名"一个差点葬送全队的bug"。
+        neutral: 方远说："概率三成……我们赌错了。下次我信测试不信运气。"
+        negative: 方远把责任推给了"机器不稳定"。你看着他，想起了第20天你自己点的头。
+    projectFutureRules:
+      - { key: redemption, condition: { kind: flag, key: demo_backup_ready }, text: "B计划保住了底线。评委私下说：'有预案的队，输也输得像专业队。'" }
+      - { key: default, condition: { kind: always }, text: "从那以后，你们队的演示标准流程第一行写着：先跑回归，再谈演示。" }
+    specialFlagSections:
+      - { flag: stayed_calm, text: "崩盘时你没有慌——第11天朋友圈事件练出来的。慌不能修bug。" }
+    specialTags: [bad_end, tech]
+    reflection: 概率三成的崩溃，在决赛就是百分之百的崩溃。
+    lessonHint: 高风险项在赛前清零，不许赌
+
+  - id: c_end_to_research
+    campaign: competition
+    title: 《数据在说话》
+    mainResult: 竞赛调研转化为研究方向
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: transfer_research }
+        - { kind: flag, key: c_final_done }
+    priority: 110
+    tier: special
+    baseText: |
+      赛后你做的第一件事是打开访谈纪要。"报销比报名更痛"——5个受访者里4个主动提过。
+      你把这个发现写成一页研究备忘，发给了陈教授。半小时后他回了三个字：来聊聊。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "因为你当初坚持问'过去的行为'而不是'会不会用'，这些数据真的能当证据用。" }
+          - { lte: 40, text: "你有点后悔访谈问得太浅。数据能用，但要用得更小心。" }
+      - dimension: independence
+        variants:
+          - { gte: 55, text: "从竞赛到研究，是你自己看见的数据在牵引——不是导师布置，不是AI推荐。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐帮你把访谈录音频转成了文字稿——她说"这算我们队的第二个项目"。
+        neutral: 雨桐说："调研那几天原来是最值钱的。"
+        negative: 雨桐耸肩："反正材料我不管了，随便转。"
+    projectFutureRules:
+      - { key: research_line, condition: { kind: always }, text: "那页备忘成了你科研线的第一块拼图。竞赛教会你的验证习惯，全部迁移了过去。" }
+    specialTags: [good, transfer]
+    reflection: 会做比赛的人很多，会从比赛里看出问题的人少。
+    lessonHint: 真实访谈的数据是双倍资产
+
+  - id: c_end_biz_validated
+    campaign: competition
+    title: 《意外的商业课》
+    mainResult: 竞赛项目完成真实商业验证
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: transfer_venture }
+        - { kind: state, key: userUnderstanding, op: gte, value: 60 }
+        - { kind: flag, key: c_final_done }
+    priority: 118
+    tier: special
+    baseText: |
+      采购合同签了；更妙的是，另外两所高校的社团联合会主动找来——他们看过你们公开的演示视频。
+      方远算了一笔账：服务器成本、维护工时、订阅定价。"如果我们收费的话……是正的。"
+      你们没打算创业。但"有人愿意付钱"这件事，比金奖更让人睡不着觉。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 70, text: "因为你们从一开始就问对了问题，付费来得像水到渠成——用户说：'你们是唯一听我们说话的团队。'" }
+      - dimension: execution
+        variants:
+          - { gte: 65, text: "那套回归测试成了服务承诺的一部分：“月度更新，全量测试后才发布。”" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 邱一鸣团队成了你们的第一家"渠道代理"——他维护本市高校客户，分成谈得明明白白。
+        neutral: 邱一鸣发来祝贺，外加一句"有好事别忘了我"。
+        negative: 邱一鸣在朋友圈内涵"某些队靠运气"。你回复了一个微笑。
+    projectFutureRules:
+      - { key: startup_line, condition: { kind: always }, text: "你把账本新建了一个文件夹：创业线。竞赛线的故事在这里存档。" }
+    specialTags: [good]
+    reflection: 竞赛验证的是 presentation，市场验证的是 value。两个都赢的人不多。
+    lessonHint: 有人付费比有人投票更真实
+
+  - id: c_end_infighting
+    campaign: competition
+    title: 《内部起火》
+    mainResult: 队伍内讧拖垮冲刺
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: loose_teamwork }
+        - { kind: state, key: teamTrust, op: lte, value: 45 }
+        - { kind: flag, key: c_final_done }
+    priority: 108
+    tier: main
+    baseText: |
+      没散伙，但也没法合作了。材料归雨桐"自愿"包揽，代码归方远，你负责所有没人爱干的活。
+      名次不算差——三个人各自的部分都还专业。可复盘时谁也不想再提这次比赛。火没烧塌房子，但烧掉了下一次。
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { lte: 35, text: "庆功宴提议了三次，改期三次，最后取消。三人组的聊天群从此只剩转发通知。" }
+          - { gte: 50, text: "好在底子还在。比赛结束一周后，方远在群里发了句“那顿饭我请”，裂痕开始愈合。" }
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你从中学到了队长最贵的一课：分工表不是用来贴的，是用来在第一天就说不的。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师单独找你聊了一小时。最后他说："带队这门课，你挂科了，但补考机会很多。"
+        neutral: 何老师在总结表“团队协作”一栏写了“一般”。
+        negative: 何老师说："名次我看重，但队伍带成这样，是队长失职。"
+    projectFutureRules:
+      - { key: heal, condition: { kind: state, key: teamTrust, op: gte, value: 50 }, text: "一年后三人重新组队，这次分工表两页纸，签了名。他们拿了金奖。" }
+      - { key: default, condition: { kind: always }, text: "第二年你换了队友。新的分工表第一行写着：任何分歧，当天说清。" }
+    specialTags: [bad_end, team]
+    reflection: 内讧不是性格不合，是规则缺位。
+    lessonHint: 冲突当天清，积怨毁全队
+
+  - id: c_end_recognized_drained
+    campaign: competition
+    title: 《好评与透支》
+    mainResult: 评委认可，但团队透支严重
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: mock_defense_done }
+        - { kind: state, key: energy, op: lte, value: 30 }
+        - { kind: flag, key: c_final_done }
+    priority: 95
+    tier: special
+    baseText: |
+      评审表上，"答辩表现"拿了全场第二高——评委说你们的应答"像打磨过一百遍"。
+      确实打磨了一百遍。代价是：领奖台上，江雨桐的嗓子哑了，方远的黑眼圈垂到了下巴，你在回去的地铁上睡着了，坐过了三站。
+      名次中上。身体的账单，晚一点也会到。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 65, text: "你们是用勤奋堆出来的完成度。有效，但不可复制——明年呢？" }
+          - { lte: 45, text: "透支让最后两天的产出几乎为零。你要的不是冲刺，是节奏。" }
+      - dimension: teamTrust
+        variants:
+          - { gte: 60, text: "好在你们互相逼着对方睡觉过——至少这一次。团队账上还有存款。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐在赛后请全队做了按摩，说这是"团队建设的正确形态"。
+        neutral: 雨桐睡了两天。醒来发的第一条动态是："再也不熬了。"三个月后她破了纪录。
+        negative: 雨桐病了一场，期中考试垮了两门。这个代价没人提前算过。
+    projectFutureRules:
+      - { key: sustainable, condition: { kind: always, }, text: "你在复盘文档顶部加了一行粗体：所有排期，先排睡觉。" }
+    specialTags: [warning]
+    reflection: 拿健康换的完成度，利息高得吓人。
+    lessonHint: 疲劳是隐藏的硬伤
+
+  - id: c_end_time_up
+    campaign: competition
+    title: 《21天，到这里》
+    mainResult: 时间耗尽的开放式结算
+    requirements: { kind: always }
+    priority: 1
+    tier: main
+    baseText: |
+      21天到了。故事停在它此刻的样子——也许在半途，也许还差最后一步。
+      时间是比赛最公平的地方：每个队都是21天。你们用掉的那些，都真实地花在了某些地方。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 55, text: "你的倒排表大部分打了勾。时间不够的队很多，账目清楚的队很少。" }
+          - { lte: 35, text: "21天像一场没睡醒的梦。醒来时，白板上的时间轴才画了一半。" }
+      - dimension: aiDependence
+        variants:
+          - { gte: 65, text: "AI记得这21天的每个细节。可比赛是你们打的。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远说："仓库留着，明年这周，我还有空。"
+        neutral: 方远耸肩："反正比上课有意思。"
+        negative: 方远已经拉了新队。头像换得很快。
+    projectFutureRules:
+      - { key: again, condition: { kind: always }, text: "新的周目已经开放。这一次，第1天你就知道该干什么。" }
+    specialTags: [neutral, time_up]
+    reflection: 比赛教的最贵一课：deadline不会等你准备好。
+    lessonHint: 时间对谁都一样，方法决定它去哪

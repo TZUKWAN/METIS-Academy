@@ -1,0 +1,871 @@
+# 科研线知识卡（TASK-F005，kc_r_ 前缀）
+knowledge:
+  - id: kc_r_task_framing
+    title: 模糊需求先拆解，再开工
+    domain: task_contract
+    trigger: first_failure
+    problem: “看看有什么能研究的”这类一句话需求直接开干，产出必然跑偏
+    wrongPattern: 把模糊需求原样扔给AI，指望它替你理解导师
+    correctBehavior: 拆成已确认/待澄清/下一步三栏，先补齐第二栏
+    why: AI会用最可能的假设填补空白，而最可能的往往不是你导师想要的
+    steps:
+      - 列出需求原文
+      - 分三栏拆解
+      - 拿澄清问题去问人
+      - 更新后才开始检索
+    toolMappings:
+      claudeCode: 把三栏放进简报文件让Agent先读
+      codex: 同左
+      deepseekHarness: 契约附简报
+    successSignals:
+      - 三天内拿到关键澄清
+    failureSignals:
+      - 第二周还在换方向
+    transferScenarios:
+      - 接兼职需求
+      - 社团任务
+    depth30s: 模糊进=垃圾出。先拆，再干。
+    depth3m: 已确认/待澄清/下一步。待澄清栏写满你的问题，拿去问人——问完才开工。
+    depth10m: 模板化：任何新需求先复制三栏模板；24小时内消灭待澄清栏；此后所有Agent任务引用这份简报。
+    relatedSkillIds:
+      - task_contract.basics
+      - tc.constraints
+      - tc.report_format
+      - tc.uncertainty
+  - id: kc_r_candidate_fact
+    title: AI选题：候选≠事实
+    domain: verification
+    trigger: event
+    problem: AI给出的研究方向“看起来都很新”
+    wrongPattern: 挑顺眼的直接立项
+    correctBehavior: 逐条检索验证：有人做过吗/概念清楚吗/数据存在吗
+    why: 模型生成的是“像研究方向的东西”，不是经过查证的空白
+    steps:
+      - 列出候选
+      - 每条检索2-3个数据库
+      - 记录证据
+      - 再决定去留
+    toolMappings:
+      generic: 检索结果贴回给AI让它复核
+    successSignals:
+      - 立项后很少换方向
+    failureSignals:
+      - 频繁“发现早有人做过”
+    transferScenarios:
+      - 竞赛选题
+      - 产品方向
+    depth30s: AI给的选题，先查再爱。
+    depth3m: 三问过滤：已有人做？概念含混？数据可得？三问全过才进候选池。
+    depth10m: 建候选跟踪表：候选/三问结果/证据/去留原因。这表本身就是开题报告的素材。
+    relatedSkillIds:
+      - verification.source_check
+  - id: kc_r_env_setup
+    title: Agent环境的四件套
+    domain: environment
+    trigger: skill_unlock
+    problem: 工具装了但每次用都在重新折腾
+    wrongPattern: 想起来才配置，配置散落在聊天记录里
+    correctBehavior: 一次性配好：工作目录/工具检测/模型/Key安全存储
+    why: 环境是复利资产；每次重配都在烧时间
+    steps:
+      - 建项目目录
+      - 检测CLI版本
+      - 配模型
+      - Key进安全存储
+    toolMappings:
+      claudeCode: claude --version
+      codex: codex --version
+      deepseekHarness: dsh --version
+    successSignals:
+      - 新会话开工零配置
+    failureSignals:
+      - 每周都在修环境
+    transferScenarios:
+      - 新课程项目
+      - 团队协作
+    depth30s: 目录/检测/模型/Key，一次配齐。
+    depth3m: 项目一个目录，Agent只认启动目录；先测version再干活；Key永远不进聊天和代码。
+    depth10m: 写成环境档案资产，含复现步骤；换电脑按档案10分钟恢复。
+    relatedSkillIds:
+      - environment.working_dir
+      - environment.install_detect
+      - environment.api_key
+      - environment.permissions
+  - id: kc_r_contract
+    title: 任务契约五要素
+    domain: task_contract
+    trigger: event
+    problem: “帮我研究一下这些”产出混乱
+    wrongPattern: 用自然语言随手描述任务
+    correctBehavior: 背景/目标/约束/交付/验收五段写清
+    why: 缺哪段，Agent就在哪段自由发挥
+    steps:
+      - 写背景
+      - 写目标
+      - 列约束
+      - 定交付物
+      - 列验收清单
+    toolMappings:
+      claudeCode: 契约存为文件在任务里引用
+      codex: 同左
+      deepseekHarness: contract模板
+    successSignals:
+      - 一次任务到位率高
+    failureSignals:
+      - 反复“不是我要的”
+    transferScenarios:
+      - 外包沟通
+      - 团队分工
+    depth30s: 五要素：背景/目标/约束/交付/验收。
+    depth3m: 验收是契约的灵魂：写成可勾选清单，Agent交活前自查。
+    depth10m: 为高频任务建契约模板库；每次复用后微调，模板越来越准。
+    relatedSkillIds:
+      - task_contract.basics
+      - tc.objective
+  - id: kc_r_keyword
+    title: 学术检索的关键词树
+    domain: environment
+    trigger: first_failure
+    problem: 日常用词搜不出学术文献
+    wrongPattern: 只用日常语言反复搜索
+    correctBehavior: 核心/同义/上位/相邻四层扩展成树
+    why: 学术数据库吃术语，不吃口语
+    steps:
+      - 定核心词
+      - 扩同义词
+      - 找上位词
+      - 补相邻概念
+      - 分层组合检索
+    toolMappings:
+      generic: 检索式存档可复现
+    successSignals:
+      - 检索结果量级上来且相关
+    failureSignals:
+      - 结果全是新闻和公众号
+    transferScenarios:
+      - 竞品调研
+      - 行业报告
+    depth30s: 换学术黑话，搜两遍。
+    depth3m: 每个概念找同义词和上位词；中英各建一份；检索式存档保证可复现。
+    depth10m: 关键词树+检索日志（库/式/日期/命中数），这就是检索策略资产。
+    relatedSkillIds:
+      - environment.network
+  - id: kc_r_filtering
+    title: 分层筛选代替全读
+    domain: loop
+    trigger: event
+    problem: 一百多篇文献读不完
+    wrongPattern: 全读，或只看引用量
+    correctBehavior: 综述打底+代表作看脉络+近三年实证看进展
+    why: 不同文献承担不同功能，混着读效率最低
+    steps:
+      - 综述2篇建框架
+      - 代表作6篇看源头
+      - 近三年实证20篇看进展
+    toolMappings:
+      generic: 分组标签管理
+    successSignals:
+      - 两周内建立领域地图
+    failureSignals:
+      - 读了一个月还没框架
+    transferScenarios:
+      - 进入新行业
+      - 学习新技术
+    depth30s: 综述打底、经典看根、新文看尖。
+    depth3m: 先摘要定去留；高被引看经典，但本领域近年才爆发时近三年优先。
+    depth10m: 精读池28篇上限；每篇按六维提取进矩阵；每周清一次待读池。
+    relatedSkillIds:
+      - loop.content_loop
+  - id: kc_r_batch
+    title: 批量阅读要拆维度
+    domain: loop
+    trigger: npc_advice
+    problem: 让AI“读完50篇告诉我答案”产出张冠李戴
+    wrongPattern: 一次性全量任务
+    correctBehavior: 每篇按问题/方法/数据/发现/局限提取，分批交，抽查
+    why: 大批量单轮任务的错误率随批量上升，必须分批+抽检
+    steps:
+      - 定提取模板
+      - 分批7篇一批
+      - 每批抽查2篇
+      - 发现偷懒打回重做
+    toolMappings:
+      claudeCode: 每批一个任务，结果进矩阵文件
+      codex: 同左
+      deepseekHarness: 批处理脚本
+    successSignals:
+      - 矩阵每行可回溯原文
+    failureSignals:
+      - 抽查发现两篇结论串了
+    transferScenarios:
+      - 简历筛选
+      - 评论分析
+    depth30s: 批量任务=模板+分批+抽查。
+    depth3m: 维度拆解让输出可比；抽查让偷懒现形；批间留检查点。
+    depth10m: 建立“批量任务SOP”：模板/批次/抽检率/返工规则，形成可复用资产。
+    relatedSkillIds:
+      - loop.iteration_cap
+      - loop.build_test_fix
+  - id: kc_r_fake_citation
+    title: AI会编造文献
+    domain: verification
+    trigger: first_failure
+    problem: AI给出的参考文献查无实据
+    wrongPattern: 直接复制进文献表
+    correctBehavior: 每条引用回原始数据库核对，查不到=不存在
+    why: 模型生成“像引用的文本”，不是数据库查询
+    steps:
+      - 复制标题与DOI
+      - 数据库反查
+      - 比对作者年份期刊
+      - 查不到标记证伪
+    toolMappings:
+      claudeCode: 规则文件写死“只引用verified.md”
+      codex: 同左
+      deepseekHarness: 附已核实清单
+    successSignals:
+      - 文献表全部可检索
+    failureSignals:
+      - 评审指出引用不存在
+    transferScenarios:
+      - 报告引用
+      - 新闻事实
+    depth30s: 查不到=不存在。先查，再引。
+    depth3m: 假引用特征：DOI解析失败/作者领域不符/期刊卷期错位。三处有一个就 deep check。
+    depth10m: 建三清单（已核实/待核实/已证伪）；规则文件写死引用白名单；交付前抽查三成。
+    relatedSkillIds:
+      - verification.citation_check
+  - id: kc_r_statefile
+    title: 状态文件：Agent的“续集前情提要”
+    domain: context
+    trigger: skill_unlock
+    problem: 会话长了Agent忘记研究范围与约束
+    wrongPattern: 每次人肉重复交代
+    correctBehavior: 维护 research_state.md：范围/已确认/未确认/关键文献
+    why: 会话记忆不可靠，文件是唯一稳定的外部记忆
+    steps:
+      - 建状态文件
+      - 每次开工先喂
+      - 状态变化即更新
+      - 每周复核
+    toolMappings:
+      claudeCode: 放在项目根目录自动可见
+      codex: 同左
+      deepseekHarness: 附在任务上下文
+    successSignals:
+      - 新会话第一次输出就在正轨
+    failureSignals:
+      - 重复纠正同一问题
+    transferScenarios:
+      - 长期项目
+      - 换人接手
+    depth30s: 状态进文件，别进记忆。
+    depth3m: 四段式：范围/已确认/未确认/关键文献。未确认栏是防跑偏的护栏。
+    depth10m: 状态文件+规则文件+handoff三件套是长项目标配；状态过期比没有更危险。
+    relatedSkillIds:
+      - context.state_file
+  - id: kc_r_compact
+    title: 五段式Compact
+    domain: context
+    trigger: event
+    problem: 上下文将满，随便总结丢失硬约束
+    wrongPattern: 总结一下我们聊过的
+    correctBehavior: 已确认事实/待确认/当前范围/关键材料/下一步
+    why: 压缩的目的是保留约束与事实，丢弃过程
+    steps:
+      - 列硬约束
+      - 列已确认事实
+      - 列未确认
+      - 列关键材料
+      - 写下一步
+    toolMappings:
+      claudeCode: /compact 或手动五段
+      codex: 五段摘要
+      deepseekHarness: compact
+    successSignals:
+      - 压缩后行为不退化
+    failureSignals:
+      - 压缩后重犯老错
+    transferScenarios:
+      - 长会话
+      - 项目交接
+    depth30s: 压缩保约束，扔过程。
+    depth3m: 写完自查：新会话拿这段能答“研究什么/数据哪来/已证什么/下一步”吗？
+    depth10m: compact产物存为checkpoint文件；这是回滚点，也是交接素材。
+    relatedSkillIds:
+      - context.compact
+      - context.summaries
+  - id: kc_r_gap_validation
+    title: 研究空白要建验证表
+    domain: verification
+    trigger: event
+    problem: AI宣称的“尚无研究”未必是真的
+    wrongPattern: 相信AI宣布的gap直接立项
+    correctBehavior: 五列验证表：gap/支持文献/反例/置信度/可行性
+    why: “没人做”有三种：不值得/做不了/真空白，只有第三种值得
+    steps:
+      - 抄下gap原文
+      - 检索支持与反例
+      - 评置信度
+      - 评可行性
+    toolMappings:
+      generic: 验证表存为资产
+    successSignals:
+      - 立项后不再发现“早有人做”
+    failureSignals:
+      - 开题后被评委指出相关研究
+    transferScenarios:
+      - 专利检索
+      - 竞品分析
+    depth30s: 空白先验证，再立项。
+    depth3m: 反例优先：先找“已经有人做”的证据，找不到再信。
+    depth10m: 验证表含检索式与日期，可复现；证伪的gap进“证伪档案”，是成果不是污点。
+    relatedSkillIds:
+      - verification.reverse_verification
+  - id: kc_r_gap_refute
+    title: 被推翻的空白是进度
+    domain: verification
+    trigger: event
+    problem: 验证推翻了自己的候选gap，感觉白干了
+    wrongPattern: 沮丧后偷偷换gap不记录原因
+    correctBehavior: 把证伪过程完整记录进验证表
+    why: 证伪档案证明你验证过，也防止将来重蹈
+    steps:
+      - 记录反例文献
+      - 写明当时为何误判
+      - 归档
+      - 迁移到下一候选
+    toolMappings:
+      generic: 证伪档案进简报附录
+    successSignals:
+      - 同样的错不犯第二次
+    failureSignals:
+      - 反复栽在同一类“空白”上
+    transferScenarios:
+      - 实验失败复盘
+      - 产品方向证伪
+    depth30s: 证伪一条，剩下的更真。
+    depth3m: 每次证伪问一句：当时为什么信？——那是你认知偏差的地图。
+    depth10m: 组建“证伪博物馆”：每条含claim/反例/教训。一年后它比任何方法论书都好用。
+    relatedSkillIds:
+      - verification.reverse_verification
+      - verification.release_gate
+  - id: kc_r_rq_tradeoff
+    title: 研究问题是权衡题
+    domain: goal
+    trigger: event
+    problem: 想找一个“完美的”研究问题
+    wrongPattern: 让AI直接给“最佳研究问题”
+    correctBehavior: 在稳妥/激进/宽/窄/数据友好/理论强之间做有意识的取舍
+    why: 没有完美RQ，只有符合你资源与目标的RQ
+    steps:
+      - 列出3-5个候选
+      - 每个标注代价
+      - 对照资源与时间选
+      - 记录取舍理由
+    toolMappings:
+      generic: 取舍表进简报
+    successSignals:
+      - 能说清“为什么是这个问题”
+    failureSignals:
+      - 答不出“为什么不选那个”
+    transferScenarios:
+      - 选题决策
+      - 职业选择
+    depth30s: RQ没有最优，只有取舍。
+    depth3m: 稳妥=好毕业创新弱；激进=出彩风险高；窄=好答辩天花板低。选你能承受的。
+    depth10m: 用“资源×时间×风险偏好”三轴评估候选；把取舍理由写进简报，答辩被问时不慌。
+    relatedSkillIds:
+      - goal.final_state
+  - id: kc_r_agents_md
+    title: AGENTS.md/CLAUDE.md怎么写
+    domain: initialization
+    trigger: event
+    problem: Agent反复忘记格式/引用/范围要求
+    wrongPattern: 在对话里反复重复
+    correctBehavior: 写项目规则文件：目标/范围/来源规则/引用规则/工作流/验收
+    why: 规则文件每次会话自动加载，是对抗遗忘的唯一手段
+    steps:
+      - 收集重复交代的要求
+      - 六段写入AGENTS.md
+      - 新会话验证生效
+      - 违规即补规则
+    toolMappings:
+      claudeCode: CLAUDE.md 同步维护
+      codex: AGENTS.md 默认读取
+      deepseekHarness: rules路径
+    successSignals:
+      - 新会话自查复述规则
+    failureSignals:
+      - 第四次纠正同一问题
+    transferScenarios:
+      - 团队规范
+      - 开源项目
+    depth30s: 说过两遍的规矩，进规则文件。
+    depth3m: 短而硬的规则最好用：禁令+白名单+验收单。长篇大论没人读。
+    depth10m: 规则文件月度修剪：删失效、并重复、补新坑。版本记录保留。
+    relatedSkillIds:
+      - init.create_agents_md
+      - init.project_rules
+      - init.read_before_write
+      - init.scan_repo
+      - init.readme
+      - init.run_command
+  - id: kc_r_theory_filter
+    title: 按机制筛理论
+    domain: verification
+    trigger: event
+    problem: AI一次推荐七个理论
+    wrongPattern: 全用上显功底
+    correctBehavior: 只留能推出可检验机制链的1-2个
+    why: 理论的价值在解释力，不在数量
+    steps:
+      - 逐个问“它说机制是什么”
+      - 能否变成假设
+      - 与RQ对表
+      - 其余进附录
+    toolMappings:
+      generic: 筛选记录留档
+    successSignals:
+      - 理论章每段都服务于假设
+    failureSignals:
+      - 理论章与设计两张皮
+    transferScenarios:
+      - 分析框架选择
+    depth30s: 理论是透镜不是勋章。
+    depth3m: 一个理论用到底。它能导出你的假设吗？能，就留；不能，进附录。
+    depth10m: 理论-假设-方法对齐表：三列对不齐就是设计漏洞。
+    relatedSkillIds:
+      - verification.acceptance_criteria
+      - verification.checklist
+  - id: kc_r_concept_table
+    title: 概念辨析表
+    domain: verification
+    trigger: npc_advice
+    problem: 不同文献对同一概念定义不同
+    wrongPattern: 混用定义
+    correctBehavior: 表格列出：概念/出处/定义/测法，选定操作性定义
+    why: 你测什么取决于你定义什么
+    steps:
+      - 收集定义
+      - 对比差异
+      - 选操作性定义
+      - 声明局限
+    toolMappings:
+      generic: 概念表进附录
+    successSignals:
+      - 一句话说清“我测的是什么”
+    failureSignals:
+      - 被问定义时卡壳
+    transferScenarios:
+      - 需求分析
+      - 指标设计
+    depth30s: 定义先行，测量后行。
+    depth3m: 操作性定义=可观测行为+测量方式。写不出测法的定义不能用。
+    depth10m: 概念表的“局限”列是答辩加分项：主动声明比被查出体面得多。
+    relatedSkillIds:
+      - verification.factual_claims
+      - verification.independent_check
+  - id: kc_r_mechanism_map
+    title: 从理论名词到机制链
+    domain: goal
+    trigger: event
+    problem: 理论只出现在“本文基于XX理论”
+    wrongPattern: 名词式引用理论
+    correctBehavior: 写五节链：actor/condition/mechanism/outcome/evidence
+    why: 机制链是理论与方法的桥，每节都应可检验
+    steps:
+      - 谁
+      - 在什么条件下
+      - 通过什么过程
+      - 产生什么结果
+      - 证据是什么
+    toolMappings:
+      generic: 机制链可视化
+    successSignals:
+      - 每节能指出证据或标黄
+    failureSignals:
+      - 答不出“理论怎么用的”
+    transferScenarios:
+      - 产品逻辑梳理
+    depth30s: 名词→句子→链。
+    depth3m: 证据不充分的环节标黄——诚实标注薄弱比假装完整更安全。
+    depth10m: 机制链每节标注证据等级（直接/间接/二手）；标黄节点就是你要补的实证。
+    relatedSkillIds:
+      - goal.verification
+      - goal.when_to_use
+      - goal.constraints
+      - goal.resume
+  - id: kc_r_method_fit
+    title: 方法服务于问题
+    domain: verification
+    trigger: event
+    problem: 做SEM吧，看着高级
+    wrongPattern: 按方法炫技程度选择
+    correctBehavior: 先问问题需要什么证据，再配方法；样本与方法必须匹配
+    why: 方法失配的成本=全部返工
+    steps:
+      - 问题要什么证据
+      - 数据长什么样
+      - 样本够什么方法
+      - 再定方法
+    toolMappings:
+      generic: 方法-问题对齐表
+    successSignals:
+      - 方法章一页讲清
+    failureSignals:
+      - 模型跑不收敛
+    transferScenarios:
+      - 工具选型
+      - 架构决策
+    depth30s: 不是我会什么就用什么，是问题需要什么用什么。
+    depth3m: 相关问题用回归；因果要设计；机制要混合。样本量先于模型复杂度。
+    depth10m: 写“方法选择备忘”：候选方法/适配理由/放弃理由——答辩必被问。
+    relatedSkillIds:
+      - verification.acceptance_criteria
+      - verification.diff_review
+  - id: kc_r_data_availability
+    title: 数据可得性是硬约束
+    domain: environment
+    trigger: first_failure
+    problem: 设计完美的研究却拿不到数据
+    wrongPattern: 开题时假设“总能拿到数据”
+    correctBehavior: 立项前确认数据渠道；危机时换可行路径而非造假
+    why: 数据是研究的粮食，渠道断供等于战争断粮
+    steps:
+      - 列数据需求
+      - 逐项确认渠道
+      - 准备备选
+      - 记录危机决策
+    toolMappings:
+      generic: 数据台账
+    successSignals:
+      - 有备选渠道
+    failureSignals:
+      - 开题后才发现拿不到
+    transferScenarios:
+      - API依赖
+      - 第三方数据
+    depth30s: 先确认数据存在，再设计研究。
+    depth3m: 主渠道+备选渠道；伦理与权限前置确认；渠道断供的预案写进设计。
+    depth10m: 数据台账：字段/来源/权限/备份/风险。每周更新一次。
+    relatedSkillIds:
+      - environment.network
+  - id: kc_r_goal_def
+    title: Goal四件套
+    domain: goal
+    trigger: skill_unlock
+    problem: “尽快完成研究设计”这类目标让Agent去做格式美化
+    wrongPattern: 用愿望当目标
+    correctBehavior: 终态+完成判据+里程碑+约束
+    why: 缺判据的Goal是许愿；Agent只对字面负责
+    steps:
+      - 写终态
+      - 定判据(可检验)
+      - 拆里程碑
+      - 列约束
+    toolMappings:
+      generic: Goal文件+里程碑表
+    successSignals:
+      - 里程碑按期验收
+    failureSignals:
+      - 忙碌但偏航
+    transferScenarios:
+      - 求职计划
+      - 健身计划
+    depth30s: 终态+判据+里程碑+约束。
+    depth3m: 判据示例：验收单10项过9项。字数、页数不是判据。
+    depth10m: Goal状态文件随里程碑更新；每个里程碑是一次小型答辩。
+    relatedSkillIds:
+      - goal.completion
+      - goal.milestones
+  - id: kc_r_drift
+    title: Goal跑偏的信号与拉回
+    domain: goal
+    trigger: event
+    problem: Agent追求“完成文档”忽略证据
+    wrongPattern: 看到产出多就满意
+    correctBehavior: 对照判据检查；发现跑偏立即修订验收标准并写死
+    why: 没有质量门槛的目标会被字面化执行
+    steps:
+      - 对照判据盘点
+      - 识别跑偏
+      - 修订判据
+      - 要求按判据汇报
+    toolMappings:
+      generic: 汇报模板绑定判据
+    successSignals:
+      - 汇报与判据对齐
+    failureSignals:
+      - 字数涨证据不动
+    transferScenarios:
+      - 外包监管
+      - 团队管理
+    depth30s: 字数不是进度，判据才是。
+    depth3m: 跑偏三信号：优化无关项/重复劳动/回避判据项。见一个拉一次。
+    depth10m: 让Agent每轮汇报格式固定为“判据逐项状态”，跑偏无处藏身。
+    relatedSkillIds:
+      - goal.drift
+  - id: kc_r_loop_draft
+    title: 写作与设计的Draft-Critique循环
+    domain: loop
+    trigger: skill_unlock
+    problem: 一次性生成的文稿看着流畅但漏洞后置
+    wrongPattern: 让AI一次写完
+    correctBehavior: 草稿→对照验收单评审→证据核查→修订→回归检查
+    why: 循环把大错误拆成小错误，每轮可拦截
+    steps:
+      - 定验收单
+      - 草稿
+      - 评审
+      - 证据核查
+      - 修订
+      - 回归检查
+    toolMappings:
+      claudeCode: 每轮独立任务
+      codex: 同左
+      deepseekHarness: 循环编排
+    successSignals:
+      - 每轮捕获真实问题
+    failureSignals:
+      - 一轮完成且从不返工
+    transferScenarios:
+      - 报告写作
+      - 方案设计
+    depth30s: 不要一次写完；循环+回归。
+    depth3m: 评审用验收单不用感觉；回归检查确认旧修复没被改回去。
+    depth10m: 三轮起步，两轮无改进即停；每轮产出存档可比对。
+    relatedSkillIds:
+      - loop.draft_judge_revise
+      - loop.regression_check
+  - id: kc_r_subagent_boundaries
+    title: 并行子任务先定边界
+    domain: agent_organization
+    trigger: event
+    problem: 并行检索回来三套口径
+    wrongPattern: 开多个会话同时问，谁快用谁的
+    correctBehavior: 每路迷你契约：范围/格式/禁区+统一汇总表
+    why: 并行的收益只在边界清晰时成立
+    steps:
+      - 拆任务到互斥
+      - 每路写迷你契约
+      - 定汇总格式
+      - 收口对表
+    toolMappings:
+      claudeCode: Task并行
+      codex: 多进程
+      deepseekHarness: 编排
+    successSignals:
+      - 汇总表一次可用
+    failureSignals:
+      - 三套结果互相打架
+    transferScenarios:
+      - 多人分工
+      - 外包并行
+    depth30s: 先定边界，再并行。
+    depth3m: 互斥拆分：A路禁碰B路范围；统一五列汇总表；收口人只有一个。
+    depth10m: 并行前画依赖图；关键路径串行保障；并行数≤3防止汇总爆炸。
+    relatedSkillIds:
+      - org.parallel
+      - org.decomposition
+      - org.sequential
+  - id: kc_r_conflict_arbitration
+    title: 冲突结论靠来源裁决
+    domain: agent_organization
+    trigger: event
+    problem: 两个子任务给出相反结论
+    wrongPattern: 少数服从多数
+    correctBehavior: 双方给出原始文献与页码，回来源亲自读
+    why: Agent一致只说明相似；二手转述不能当证据
+    steps:
+      - 列冲突点
+      - 索要原始来源
+      - 区分直接/二手证据
+      - 裁决并记录
+    toolMappings:
+      generic: 汇总表加来源列
+    successSignals:
+      - 裁决有据
+    failureSignals:
+      - 投票产生的错误结论
+    transferScenarios:
+      - 评审意见冲突
+      - 数据口径
+    depth30s: 真相不是投出来的。
+    depth3m: 证据分级：直接实验>直接观察>综述转述。冲突时高等级赢。
+    depth10m: 把“来源列”制度写进AGENTS.md；没有来源的结论进“未决区”。
+    relatedSkillIds:
+      - org.conflict_resolution
+      - org.single_agent
+  - id: kc_r_argument_map
+    title: 论证图：结构自己长出来
+    domain: goal
+    trigger: event
+    problem: 通用目录装不下自己的论证
+    wrongPattern: 让AI生成标准目录再填空
+    correctBehavior: 画主张→三层支撑→证据编号的图，目录随之而定
+    why: 论文结构是论证结构的投影
+    steps:
+      - 写核心主张
+      - 列支撑层
+      - 每层挂证据
+      - 薄层即写作重点
+    toolMappings:
+      generic: 论证图工具或手画
+    successSignals:
+      - 每章能指回论证图节点
+    failureSignals:
+      - 某章与论证无关
+    transferScenarios:
+      - 路演结构
+      - 申诉信
+    depth30s: 先论证，后目录。
+    depth3m: 三层支撑：机制/证据/可行性。哪层薄，哪章重写。
+    depth10m: 论证图与命题-证据映射联动：图上每个节点有编号，可追溯。
+    relatedSkillIds:
+      - goal.final_state
+  - id: kc_r_claim_evidence
+    title: 命题-证据映射
+    domain: verification
+    trigger: event
+    problem: 写作时证据与论点脱钩
+    wrongPattern: 凭印象引用
+    correctBehavior: 每个命题编号并挂证据与页码
+    why: 可追溯性是学术信用的基础设施
+    steps:
+      - 命题编号
+      - 挂证据
+      - 标页码
+      - 标证据等级
+    toolMappings:
+      generic: 映射表资产
+    successSignals:
+      - 任一命题10秒内可溯源
+    failureSignals:
+      - 被问出处翻文档
+    transferScenarios:
+      - 尽调报告
+      - 法务文书
+    depth30s: 每个主张带编号和证据。
+    depth3m: 映射表四列：命题/证据/页码/等级。空白格就是危险格。
+    depth10m: 每周对表一次；发现挂空证据的命题，要么补证据要么删命题。
+    relatedSkillIds:
+      - verification.factual_claims
+      - verification.test_first
+  - id: kc_r_handoff_flow
+    title: 四步交接法
+    domain: context
+    trigger: skill_unlock
+    problem: 换会话后一切重来
+    wrongPattern: 复制聊天记录
+    correctBehavior: 旧会话总结→HANDOFF.md→新会话→四问验证
+    why: 交接质量由接手者的恢复速度衡量
+    steps:
+      - 总结旧会话
+      - 写handoff五段
+      - 开新会话
+      - 四问验证
+    toolMappings:
+      claudeCode: HANDOFF.md
+      codex: 交接文件
+      deepseekHarness: handoff
+    successSignals:
+      - 新会话四问全对
+    failureSignals:
+      - 重复已完成工作
+    transferScenarios:
+      - 轮班
+      - 项目移交
+    depth30s: 总结→交接→新会话→验证。
+    depth3m: handoff五段：目标/现状/关键决定/下一步/坑。缺“坑”段的交接是定时炸弹。
+    depth10m: 把四问（RQ/方法/缺口/下一步）作为恢复检查仪式；答错补交接再开工。
+    relatedSkillIds:
+      - context.handoff
+      - context.recovery
+      - context.budget
+      - context.contradiction
+      - context.long_project
+  - id: kc_r_session_hygiene
+    title: 会话卫生
+    domain: context
+    trigger: npc_advice
+    problem: 一个会话混做调研、写作、数据
+    wrongPattern: 全在同一个窗口里
+    correctBehavior: 按阶段分session：调研期/设计期/写作期
+    why: 任务种类切换是污染主源
+    steps:
+      - 识别阶段边界
+      - 关旧开新
+      - 交接
+      - 命名会话
+    toolMappings:
+      generic: 会话命名=阶段+任务
+    successSignals:
+      - 各阶段输出对题
+    failureSignals:
+      - 写文档时冒出代码细节
+    transferScenarios:
+      - 多项目并行
+    depth30s: 一个会话一件事。
+    depth3m: 阶段切换的三个动作：compact、handoff、新会话。缺一不可。
+    depth10m: 项目启动时规划会话地图：几个阶段、各开几个会话、交接点在哪。
+    relatedSkillIds:
+      - context.session
+      - context.new_session
+      - context.stale
+  - id: kc_r_prereview
+    title: 预审与应答卡
+    domain: verification
+    trigger: event
+    problem: 答辩被问倒
+    wrongPattern: 只准备自己想讲的
+    correctBehavior: 预审暴露最弱处；按“被问概率×伤害”做应答卡
+    why: 评委的问题有规律：证据链最薄处+创新性+数据来源
+    steps:
+      - 自问八连
+      - 找人预审
+      - 列问题清单
+      - 做应答卡
+    toolMappings:
+      generic: 用另一个AI当评委
+    successSignals:
+      - 答辩无意外问题
+    failureSignals:
+      - 现场第一次听到某问题
+    transferScenarios:
+      - 求职面试
+      - 融资路演
+    depth30s: 按概率×伤害准备，别按舒适度准备。
+    depth3m: 八连问：重要性/文献/问题/理论/方法/数据/证据/创新。每问一张卡。
+    depth10m: 预审两轮：自己一轮、他人一轮；每轮输出修订清单并闭环。
+    relatedSkillIds:
+      - verification.adversarial_review
+  - id: kc_r_triage
+    title: 最后48小时的取舍
+    domain: loop
+    trigger: event
+    problem: 待办五件，行动点三件
+    wrongPattern: 挑容易的做
+    correctBehavior: 按“被问概率×伤害”排序；硬伤>薄弱证据>睡觉>美化
+    why: 收尾期的目标是消灭最大风险，不是消灭最多待办
+    steps:
+      - 列全部待办
+      - 估被问概率
+      - 估伤害
+      - 排序执行
+      - 保证睡眠
+    toolMappings:
+      generic: 风险矩阵
+    successSignals:
+      - 答辩期无新雷
+    failureSignals:
+      - Presentation精美内容翻车
+    transferScenarios:
+      - 发布前冲刺
+      - 考前复习
+    depth30s: 优先级=概率×伤害。
+    depth3m: 硬伤（假引用/造假）永远第一；美化永远最后。睡觉在中间——疲劳是隐藏硬伤。
+    depth10m: 把风险矩阵变成习惯工具：任何截止期先画它再动手。
+    relatedSkillIds:
+      - loop.final_check
+      - verification.stop_gate

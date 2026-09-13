@@ -1,0 +1,127 @@
+# Context 域（TASK-E007）：18 能力原子
+skills:
+  - id: context.budget
+    domain: context
+    title: 上下文预算
+    description: 上下文是有限资源；塞得越多，重点越糊
+    whenToUse: 长会话感觉 Agent 变笨时
+    behaviors: [{ id: ctx_budget_l1, level: 1, description: 有意识精简一次喂给 Agent 的材料, achievementId: ach_ctx_budget }]
+  - id: context.relevance
+    domain: context
+    title: 只给相关的
+    description: 与当前任务无关的历史/文件是噪音
+    whenToUse: 每次提供材料前
+    behaviors: [{ id: ctx_rel_l1, level: 1, description: 删掉无关材料后效果提升, achievementId: ach_ctx_relevance }]
+  - id: context.pollution
+    domain: context
+    title: 上下文污染
+    description: 旧需求/已废弃结论混在新任务里导致输出错乱
+    whenToUse: 同一会话干过几件不同的事之后
+    prerequisites: [context.relevance]
+    behaviors: [{ id: ctx_poll_l2, level: 2, description: 识别一次污染并开新会话解决, achievementId: ach_ctx_pollution }]
+  - id: context.compact
+    domain: context
+    title: Compact（压缩）
+    description: 有结构地压缩：已确认事实/未确认/范围/下一步；不是随便总结
+    whenToUse: 上下文快满、但任务还要继续
+    prerequisites: [context.budget]
+    behaviors: [{ id: ctx_compact_l1, level: 1, description: 完成一次结构化压缩并继续任务, achievementId: ach_ctx_compact }]
+    toolMappings: { claudeCode: /compact 或手动让 Agent 输出结构化摘要后开新会话, codex: 输出状态摘要再继续, deepseekHarness: 自带 compact 指令 }
+  - id: context.session
+    domain: context
+    title: Session 的边界
+    description: 一个会话一件事；会话是上下文卫生的基本单位
+    whenToUse: 规划工作时
+    behaviors: [{ id: ctx_session_l1, level: 1, description: 按任务正确划分会话, achievementId: ach_ctx_session }]
+  - id: context.new_session
+    domain: context
+    title: 何时开新会话
+    description: 换任务/上下文污染/压缩两次以上→新会话
+    whenToUse: 任何“感觉 Agent 记性变差”的时刻
+    prerequisites: [context.session]
+    behaviors: [{ id: ctx_newsess_l1, level: 1, description: 在正确时机开启新会话, achievementId: ach_ctx_newsession }]
+  - id: context.handoff
+    domain: context
+    title: Handoff 交接文档
+    description: 跨会话/跨人的交接：目标/现状/关键决定/下一步/坑
+    whenToUse: 关闭旧会话之前
+    prerequisites: [context.compact]
+    behaviors: [{ id: ctx_handoff_l1, level: 1, description: 写出一份让新会话答对四问的 handoff, achievementId: ach_ctx_handoff }]
+    toolMappings: { claudeCode: 让 Agent 生成 HANDOFF.md 并自查, codex: 同样输出交接文件, deepseekHarness: handoff 指令 }
+  - id: context.project_memory
+    domain: context
+    title: 项目长期记忆
+    description: 该记的进规则文件/状态文件，不该记的不占上下文
+    whenToUse: 需要跨会话稳定生效的信息
+    prerequisites: [init.project_rules]
+    behaviors: [{ id: ctx_mem_l1, level: 1, description: 把长期信息沉淀到项目文件, achievementId: ach_ctx_memory }]
+  - id: context.temporary_memory
+    domain: context
+    title: 临时记忆
+    description: 只在本任务有效的信息放对话里，用完即弃
+    whenToUse: 与项目记忆区分时
+    behaviors: [{ id: ctx_tmp_l1, level: 1, description: 正确区分临时与长期信息, achievementId: ach_ctx_temp }]
+  - id: context.state_file
+    domain: context
+    title: 状态文件
+    description: research_state.md / STATUS.md：当前进度的事实快照
+    whenToUse: 长任务随时更新
+    prerequisites: [context.project_memory]
+    behaviors: [{ id: ctx_state_l1, level: 1, description: 维护一份状态文件并用于恢复, achievementId: ach_ctx_statefile }]
+  - id: context.summaries
+    domain: context
+    title: 摘要的纪律
+    description: 摘要必须保留数字、结论、出处；丢细节的摘要等于重来
+    whenToUse: 压缩/交接时
+    prerequisites: [context.compact]
+    behaviors: [{ id: ctx_sum_l1, level: 1, description: 摘要保住关键数字与出处, achievementId: ach_ctx_summaries }]
+  - id: context.source_selection
+    domain: context
+    title: 材料选择策略
+    description: 20 篇文献≠全塞进去；先摘要层，再按需取全文
+    whenToUse: 大量材料任务
+    behaviors: [{ id: ctx_src_l1, level: 1, description: 用分层方式投喂大量材料, achievementId: ach_ctx_sourcesel }]
+  - id: context.stale
+    domain: context
+    title: 过期上下文
+    description: 昨天的结论今天可能已错；引用前看日期与版本
+    whenToUse: 长项目复用旧材料
+    prerequisites: [context.state_file]
+    behaviors: [{ id: ctx_stale_l2, level: 2, description: 拦截一次过期信息被引用, achievementId: ach_ctx_stale }]
+    hiddenUntilDiscovered: true
+  - id: context.contradiction
+    domain: context
+    title: 上下文自相矛盾
+    description: 新指令与旧指令冲突时 Agent 会随机选一个；发现矛盾立即显式废除旧指令
+    whenToUse: 输出忽左忽右时
+    behaviors: [{ id: ctx_contra_l2, level: 2, description: 显式废除一次冲突指令, achievementId: ach_ctx_contradiction }]
+  - id: context.reset
+    domain: context
+    title: 上下文重置
+    description: 污染严重时果断清空重来，重置比修补便宜
+    whenToUse: 修补两轮无效时
+    prerequisites: [context.pollution]
+    behaviors: [{ id: ctx_reset_l2, level: 2, description: 果断重置并快速恢复现场, achievementId: ach_ctx_reset }]
+    hiddenUntilDiscovered: true
+  - id: context.checkpoint
+    domain: context
+    title: 检查点习惯
+    description: 阶段性存档（compact checkpoint），崩溃/失忆可回滚
+    whenToUse: 每完成一个里程碑
+    prerequisites: [context.state_file]
+    behaviors: [{ id: ctx_ckpt_l1, level: 1, description: 建立检查点并成功回滚一次, achievementId: ach_ctx_checkpoint }]
+  - id: context.recovery
+    domain: context
+    title: 恢复验证
+    description: 恢复后先测四问：目标/现状/缺口/下一步；答不上来交接就不合格
+    whenToUse: 每次新会话接手
+    prerequisites: [context.handoff]
+    behaviors: [{ id: ctx_rec_l2, level: 2, description: 用四问法验证一次恢复质量, achievementId: ach_ctx_recovery }]
+  - id: context.long_project
+    domain: context
+    title: 长项目上下文制度
+    description: 状态文件+规则文件+handoff 三件套的组合使用
+    whenToUse: 数周级项目
+    prerequisites: [context.state_file, context.handoff]
+    behaviors: [{ id: ctx_long_l3, level: 3, description: 在≥5个会话的项目中保持上下文连贯, achievementId: ach_ctx_longproject }]
+    hiddenUntilDiscovered: true

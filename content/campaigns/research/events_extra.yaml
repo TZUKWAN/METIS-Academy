@@ -1,0 +1,414 @@
+# 科研线补充事件：每日复盘/角色互动/资产盘点（D2-D29 日暮触发）
+events:
+  - id: r_d02_group_chat
+    campaign: research
+    day: 2
+    type: npc
+    trigger: { kind: day, day: 2, phase: end }
+    scene: { location: dorm, characters: [r_peer] }
+    setup: [“晚上，年级群里炸了：有人在传'用ChatGPT一周写完开题'的经验帖。”]
+    dialogue:
+      - { speaker: 苏晓, text: "你看这个帖子，七天写完开题，还发了网盘链接。", mood: surprised }
+      - { speaker: 苏晓, text: "……你觉得靠谱吗？" }
+    choices:
+      - id: skeptical
+        text: "模板和生产线的区别就在于：答辩时谁坐在被告席上"
+        visibleResponse: 苏晓默默撤回了转发。你关掉手机，对自己的简报更有数了一点。
+        hiddenEffects: [{ kind: add, key: independence, value: 4 }]
+      - id: tempted
+        text: 下载看看，就参考一下框架
+        visibleResponse: 框架确实像模像样。你借了两段措辞——两周后组会上，陈教授恰好也看过那个帖子。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+          - { kind: setFlag, key: borrowed_template_words }
+    terminal: true
+
+  - id: r_d03_key_storage
+    campaign: research
+    day: 3
+    type: decision
+    trigger: { kind: day, day: 3, phase: end }
+    purpose: { learning: API Key 属于敏感凭据：加密存储，不进代码、不进聊天 }
+    scene: { location: workbench, characters: [] }
+    setup: [“配置进行中。系统询问 API Key 的保存方式。”]
+    dialogue:
+      - { speaker: 系统, text: "Key 相当于你的付费身份。存哪里？" }
+    choices:
+      - id: safe_storage
+        text: 存入系统安全存储（加密，不落明文）
+        visibleResponse: Key 进了系统密钥库。配置文件里只有加密指纹。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+          - { kind: setFlag, key: key_stored_safely }
+      - id: paste_everywhere
+        text: 先贴在微信收藏里，方便随时拷
+        visibleResponse: 方便是方便。但任何能看你电脑的人、任何被导出的聊天记录，都等于拿到了你的钱包。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 5 }
+          - { kind: setFlag, key: key_leak_risk }
+    terminal: true
+
+  - id: r_d04_bro_comment
+    campaign: research
+    day: 4
+    type: npc
+    trigger: { kind: day, day: 4, phase: end }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“周师兄看到了你写的任务契约。”]
+    dialogue:
+      - { speaker: 周师兄, text: "哟，写契约了？难怪你今天没像别人一样骂 Agent。", mood: happy }
+      - { speaker: 周师兄, text: "记住：它不缺智商，缺边界。你给的就是边界。" }
+    automaticEffects:
+      - { kind: relationship, characterId: r_senior_data, delta: 4 }
+    terminal: true
+
+  - id: r_d05_database_choice
+    campaign: research
+    day: 5
+    type: decision
+    trigger: { kind: day, day: 5, phase: end }
+    purpose: { learning: 不同库收录不同：中文选CNKI/万方，英文选WoS/Scopus }
+    scene: { location: library, characters: [] }
+    setup: [“正式检索前，选数据库。”]
+    choices:
+      - id: multi_db
+        text: 中文 CNKI + 英文 WoS 各建一份检索式
+        visibleResponse: 两边的检索结果各导出一份。中文语境的证据，明天会救你一命。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 4 }]
+      - id: single_db
+        text: 就用一个，方便
+        visibleResponse: 方便是方便。视角缺了一半。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: r_d06_tooling
+    campaign: research
+    day: 6
+    type: story
+    trigger: { kind: day, day: 6, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“你花半小时把文献导入管理工具，按'综述/代表作/实证'打了分组标签。”]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: lit_tooling_ready }
+    dialogue:
+      - { speaker: 系统, text: "工具不替你思考，但它替你记住。" }
+    terminal: true
+
+  - id: r_d07_spot_check
+    campaign: research
+    day: 7
+    type: decision
+    trigger: { kind: day, day: 7, phase: end }
+    purpose: { learning: 批量产出一律抽查——抽中的行错，说明整批都不可信 }
+    scene: { location: workbench, characters: [] }
+    setup: [“矩阵 28 行填完。你决定抽查两行。”]
+    choices:
+      - id: check_two
+        text: 抽 2 行回原文核对
+        visibleResponse: 第 12 行的“发现”把两篇文献的结论揉在了一起。你修正它，并对全部 28 行做了一轮快速核对——又揪出 2 处。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: achievement, achievementId: ach_r_spot_check }
+      - id: trust_batch
+        text: AI 批量做的，应该差不多
+        visibleResponse: “差不多”这个信念，会在答辩前的某个深夜反噬。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: r_d08_aftermath
+    campaign: research
+    day: 8
+    type: story
+    trigger: { kind: day, day: 8, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“睡前你想：那条假文献，到底是从哪'长'出来的？”]
+    automaticEffects:
+      - { kind: add, key: independence, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "模型生成引用靠的是'统计上像'。它是真话的形状，不是真话本身。" }
+    terminal: true
+
+  - id: r_d09_senior_note
+    campaign: research
+    day: 9
+    type: npc
+    trigger: { kind: day, day: 9, phase: end }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“林师姐瞥到你的 research_state.md。”]
+    dialogue:
+      - { speaker: 林师姐, text: "状态文件？开窍了。我们当年管这叫'实验日志'，逻辑是一样的。", mood: pleased }
+      - { speaker: 林师姐, text: "记住每周更新。过期状态比没状态更危险。" }
+    automaticEffects: [{ kind: relationship, characterId: r_senior_theory, delta: 4 }]
+    terminal: true
+
+  - id: r_d10_asset_review
+    campaign: research
+    day: 10
+    type: decision
+    trigger: { kind: day, day: 10, phase: end }
+    purpose: { learning: 资产要可复用：命名/说明/索引 }
+    scene: { location: workbench, characters: [] }
+    setup: [“工作室里资产堆了七份。命名开始混乱：'新建文档2''最终版真最终版'。”]
+    choices:
+      - id: organize_assets
+        text: 统一命名、写用途说明、建索引 README
+        visibleResponse: 十分钟后你的资产库井井有条。两周后赶工时，你会感谢现在的自己。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 4 }
+          - { kind: addAsset, assetType: checklist, name: 资产索引, description: 全部资产的名称/用途/位置清单, content: "7 项资产已索引" }
+          - { kind: achievement, achievementId: ach_r_asset_index }
+      - id: leave_mess
+        text: 能找到就行
+        visibleResponse: 第 24 天，你会花 40 分钟找一份明明两分钟能找到的表。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 3 }]
+    terminal: true
+
+  - id: r_d11_gap_types
+    campaign: research
+    day: 11
+    type: npc
+    trigger: { kind: day, day: 11, phase: end }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“你把五个 gap 拿给林师姐看。”]
+    dialogue:
+      - { speaker: 林师姐, text: "'没人做'有三种：不值得做、做不了、真空白。你要找的是第三种。", mood: neutral }
+      - { speaker: 林师姐, text: "前两种伪装得最像第三种。" }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: relationship, characterId: r_senior_theory, delta: 3 }
+    terminal: true
+
+  - id: r_d13_brief_feedback
+    campaign: research
+    day: 13
+    type: story
+    trigger: { kind: day, day: 13, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“你把研究问题写进简报 v1，并把被证伪的 GAP-4 一并记录在案。”]
+    automaticEffects:
+      - { kind: add, key: progress, value: 3 }
+      - { kind: addAsset, assetType: research_brief, name: 研究简报 v1, description: 含已验证RQ与证伪记录, content: "RQ / 验证记录 / 证伪档案" }
+    dialogue:
+      - { speaker: 系统, text: "证伪记录是简报的一部分。它证明你验证过。" }
+    terminal: true
+
+  - id: r_d14_test_rules
+    campaign: research
+    day: 14
+    type: story
+    trigger: { kind: day, day: 14, phase: end }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“规则文件写好了。你开了个全新会话测试。”]
+    dialogue:
+      - { speaker: Agent, text: "已读取项目规则。检测到规则要求'只引用已核实清单'——本次任务将遵守。", mood: neutral }
+      - { speaker: 你, text: "（它自己复述了规则。这次稳了。）" }
+    automaticEffects: [{ kind: add, key: execution, value: 3 }]
+    terminal: true
+
+  - id: r_d15_theory_why
+    campaign: research
+    day: 15
+    type: npc
+    trigger: { kind: day, day: 15, phase: end }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“师姐在白板上画了个圈。”]
+    dialogue:
+      - { speaker: 林师姐, text: "理论的用处就一句话：替你回答'为什么会发生'。", mood: neutral }
+      - { speaker: 林师姐, text: "答不了这个的理论，再有名也是装饰。" }
+    automaticEffects: [{ kind: add, key: evidenceDiscipline, value: 3 }]
+    terminal: true
+
+  - id: r_d16_after
+    campaign: research
+    day: 16
+    type: story
+    trigger: { kind: day, day: 16, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“概念表定稿。你把操作性定义单独抄在了第一页。”]
+    automaticEffects: [{ kind: add, key: progress, value: 2 }]
+    dialogue:
+      - { speaker: 系统, text: "定义先行。后面所有测量都从这里出发。" }
+    terminal: true
+
+  - id: r_d17_chain_check
+    campaign: research
+    day: 17
+    type: story
+    trigger: { kind: day, day: 17, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“机制链贴在了墙上。你盯着标黄的两节看了很久。”]
+    automaticEffects: [{ kind: add, key: independence, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "知道哪里虚，本身就是一种结实。" }
+    terminal: true
+
+  - id: r_d18_after
+    campaign: research
+    day: 18
+    type: story
+    trigger: { kind: day, day: 18, phase: end }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“周师兄对你拒绝了 SEM 的态度出人意表。”]
+    dialogue:
+      - { speaker: 周师兄, text: "其实我更佩服不跟风的人。方法这东西，用了再拆，成本比想象大。", mood: pleased }
+    automaticEffects: [{ kind: relationship, characterId: r_senior_data, delta: 4 }]
+    terminal: true
+
+  - id: r_d19_after
+    campaign: research
+    day: 19
+    type: story
+    trigger: { kind: day, day: 19, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“晚上你重算了新样本的统计功效，并把数据危机的处理过程写进了简报附录。”]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: add, key: credibility, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "危机记录是研究诚信的一部分。" }
+    terminal: true
+
+  - id: r_d20_after
+    campaign: research
+    day: 20
+    type: story
+    trigger: { kind: day, day: 20, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“Goal 立起来了。你把它打印出来贴在墙上——不是给 Agent 看的，是给你自己看的。”]
+    automaticEffects: [{ kind: add, key: energy, value: 5 }]
+    dialogue:
+      - { speaker: 系统, text: "冲刺 10 天。里程碑：D22 / D25 / D28。" }
+    terminal: true
+
+  - id: r_d21_after
+    campaign: research
+    day: 21
+    type: npc
+    trigger: { kind: day, day: 21, phase: end }
+    scene: { location: canteen, characters: [r_peer] }
+    setup: [“苏晓听说你抓了 Agent 一次'字数注水'。”]
+    dialogue:
+      - { speaker: 苏晓, text: "合着 Agent 也会摸鱼啊。", mood: surprised }
+      - { speaker: 你, text: "它只对字面目标负责。所以目标得我自己盯紧。" }
+    automaticEffects: [{ kind: relationship, characterId: r_peer, delta: 3 }]
+    terminal: true
+
+  - id: r_d22_after
+    campaign: research
+    day: 22
+    type: story
+    trigger: { kind: day, day: 22, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“验收单 9/10。差的那一项是'预调研数据'——那是 D30 之前唯一的大活。”]
+    automaticEffects: [{ kind: add, key: progress, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "研究设计 v2 完成。验收清单制度建立。" }
+    terminal: true
+
+  - id: r_d23_after
+    campaign: research
+    day: 23
+    type: story
+    trigger: { kind: day, day: 23, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: [“三路结果都在汇总表里。你给每行标了证据等级：直接/间接/二手。”]
+    automaticEffects: [{ kind: add, key: evidenceDiscipline, value: 4 }]
+    terminal: true
+
+  - id: r_d24_after
+    campaign: research
+    day: 24
+    type: story
+    trigger: { kind: day, day: 24, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“冲突裁决完。你在 AGENTS.md 里补了一条：'多路结论冲突时，必须回原始来源，禁止投票。'”]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "教训变成了规则。这是它最好的归宿。" }
+    terminal: true
+
+  - id: r_d12_after
+    campaign: research
+    day: 12
+    type: story
+    trigger: { kind: day, day: 12, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“你把 GAP-4 的证伪过程完整记进了验证表——包括你当时为什么信它。”]
+    automaticEffects: [{ kind: add, key: evidenceDiscipline, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "记录错误发生的过程，比记录结果更值钱。" }
+    terminal: true
+
+  - id: r_d29_after
+    campaign: research
+    day: 29
+    type: story
+    trigger: { kind: day, day: 29, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“应答卡写完了：三张卡片，每张一个问题+证据页码。你把假引用那页（如果还有）最后检查了一遍。”]
+    automaticEffects: [{ kind: add, key: energy, value: 5 }]
+    dialogue:
+      - { speaker: 系统, text: "睡吧。该做的都做了——或者，你清楚哪些没做。" }
+    terminal: true
+
+  - id: r_d25_anomaly
+    campaign: research
+    day: 25
+    type: decision
+    trigger: { kind: day, day: 25, phase: end }
+    purpose: { learning: 异常数据不能顺手删除——先查原因再处置 }
+    scene: { location: dorm, characters: [] }
+    setup: [“深夜做预调研数据清洗。第 41、77、102 号问卷的回答模式整齐得反常：全部反向题全选'非常同意'。”]
+    dialogue:
+      - { speaker: 系统, text: "三个异常样本。删掉？保留？还是查清楚？" }
+    choices:
+      - id: investigate_anomaly
+        text: 追查：联系到其中一个填答者，原来她们把反向题当成了正向题
+        visibleResponse: 你找到了填答的三个同学——同一个宿舍，都把反向题读岔了。你把这三个样本标记为'作废但记录原因'，并在报告里写明处理方式。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: setFlag, key: surprise_finding }
+          - { kind: achievement, achievementId: ach_r_anomaly_investigated }
+      - id: delete_anomaly
+        text: 反正才三个样本，直接删了干净
+        visibleResponse: 干净是干净。但你不知道删掉的是污染还是信号——以后也不会知道了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: r_d25_after
+    campaign: research
+    day: 25
+    type: story
+    trigger: { kind: day, day: 25, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“论证图钉在了墙上。三层支撑里最薄的一层一眼可见。”]
+    automaticEffects: [{ kind: add, key: progress, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "薄弱处可见，是论证图的真正功能。" }
+    terminal: true
+
+  - id: r_d27_after
+    campaign: research
+    day: 27
+    type: story
+    trigger: { kind: day, day: 27, phase: end }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: ["新会话第一句输出：已读取 HANDOFF.md，当前任务：按论证图完成初稿写作。"]
+    dialogue:
+      - { speaker: 系统, text: "干净上下文 + 明确任务 = 写作期最好的开局。" }
+    automaticEffects: [{ kind: add, key: execution, value: 3 }]
+    terminal: true
+
+  - id: r_d28_after
+    campaign: research
+    day: 28
+    type: story
+    trigger: { kind: day, day: 28, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“预审结束。你列了最后 48 小时的修改清单，按'被问概率×伤害'排了序。”]
+    automaticEffects: [{ kind: add, key: progress, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "明天：取舍。后天：答辩。" }
+    terminal: true

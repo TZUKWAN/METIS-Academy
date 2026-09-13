@@ -1,0 +1,99 @@
+# Environment 域（TASK-E002）：15+ 能力原子
+skills:
+  - id: environment.cli_concept
+    domain: environment
+    title: CLI 是什么、为什么 Agent 工具都是命令行
+    description: 理解 CLI Agent（Claude Code/Codex/DSH）是运行在终端里的程序，图形界面只是外壳
+    whenToUse: 第一次接触 Agent 工具时
+    maxLevel: 2
+    behaviors: [{ id: env_cli_l1, level: 1, description: 完成一次 CLI 概念教学并成功识别三种工具, achievementId: ach_env_cli }]
+    toolMappings: { generic: 所有 CLI Agent 都以 `工具名 + 子命令 + 参数` 方式工作 }
+  - id: environment.working_dir
+    domain: environment
+    title: 工作目录
+    description: Agent 只能看到你启动它时所在的目录；先 cd 到项目目录再启动
+    whenToUse: 每次启动 Agent 之前
+    behaviors: [{ id: env_wd_l1, level: 1, description: 启动前确认工作目录正确, achievementId: ach_env_workdir }]
+    toolMappings: { claudeCode: 在项目目录运行 claude, codex: 在项目目录运行 codex, deepseekHarness: dsh --cwd 项目路径 }
+  - id: environment.api_key
+    domain: environment
+    title: API Key 的申请与配置
+    description: 在服务商控制台生成 Key，只粘贴到安全存储，不进代码不进聊天
+    whenToUse: 配置 AI Provider 时
+    behaviors: [{ id: env_key_l1, level: 1, description: 完成一次 Key 配置并通过连接测试, achievementId: ach_env_apikey }]
+    toolMappings: { generic: Key 相当于你的付费身份，泄露=别人花你的钱 }
+  - id: environment.base_url
+    domain: environment
+    title: Base URL 与中转
+    description: API 地址决定你实际调用谁；官方地址或兼容中转地址
+    whenToUse: 使用中转/代理/本地模型时
+    behaviors: [{ id: env_url_l1, level: 1, description: 正确填写 Base URL 并测试成功, achievementId: ach_env_baseurl }]
+  - id: environment.model
+    domain: environment
+    title: 模型选择
+    description: 不同任务选不同模型；名字必须与服务商完全一致
+    whenToUse: 新建 Provider 或任务效果不佳时
+    behaviors: [{ id: env_model_l1, level: 1, description: 为任务选择合适模型并说明理由, achievementId: ach_env_model }]
+  - id: environment.provider
+    domain: environment
+    title: Provider 概念
+    description: OpenAI 兼容 / Anthropic 兼容 / DeepSeek 兼容三类接口协议
+    whenToUse: 添加 AI 服务时
+    behaviors: [{ id: env_provider_l1, level: 1, description: 添加一个 Provider 并测试连接, achievementId: ach_env_provider }]
+  - id: environment.env_vars
+    domain: environment
+    title: 环境变量
+    description: KEY 放环境变量而不是代码里；不同系统设置方式不同
+    whenToUse: CLI 工具要求 ANTHROPIC_API_KEY 等变量时
+    behaviors: [{ id: env_envvar_l1, level: 1, description: 设置一个环境变量并被工具读到, achievementId: ach_env_envvar }]
+  - id: environment.install_detect
+    domain: environment
+    title: 安装检测
+    description: 用 `工具 --version` 判断是否装好；检测不到就按官方指引安装
+    whenToUse: 配置 CLI Agent 的第一步
+    behaviors: [{ id: env_detect_l1, level: 1, description: 完成一次 CLI 检测并读懂结果, achievementId: ach_env_detect }]
+    toolMappings: { claudeCode: claude --version, codex: codex --version, deepseekHarness: dsh --version }
+  - id: environment.version
+    domain: environment
+    title: 版本与升级
+    description: 版本过旧会导致新功能不可用；知道去哪查最新版本
+    whenToUse: 工具行为与文档不符时
+    behaviors: [{ id: env_version_l1, level: 1, description: 查询并记录工具版本, achievementId: ach_env_version }]
+  - id: environment.permissions
+    domain: environment
+    title: 权限与授权模式
+    description: Agent 的文件写入/命令执行权限要按需授予，不能无脑全开
+    whenToUse: 首次运行 Agent、或它要求授权时
+    behaviors: [{ id: env_perm_l1, level: 1, description: 有意识地选择一次权限模式, achievementId: ach_env_perm }]
+  - id: environment.network
+    domain: environment
+    title: 网络问题诊断
+    description: 超时/连接拒绝/代理问题的基本分流：本地网络→代理→服务状态
+    whenToUse: API 连接失败时
+    behaviors: [{ id: env_net_l1, level: 1, description: 完成一次网络故障排查, achievementId: ach_env_network }]
+  - id: environment.project_dir
+    domain: environment
+    title: 项目目录结构
+    description: 一个项目一个目录；Agent 的所有读写都发生在这里
+    whenToUse: 开始新项目时
+    behaviors: [{ id: env_projdir_l1, level: 1, description: 为任务建立规范的项目目录, achievementId: ach_env_projdir }]
+  - id: environment.config_file
+    domain: environment
+    title: 配置文件
+    description: CLI 工具的配置文件位置与格式；改配置前先备份
+    whenToUse: 需要持久化工具设置时
+    behaviors: [{ id: env_cfg_l1, level: 1, description: 定位并安全修改一次配置文件, achievementId: ach_env_config }]
+  - id: environment.logs
+    domain: environment
+    title: 日志在哪、怎么看
+    description: 出错先看日志最后 30 行；日志是诊断的第一现场
+    whenToUse: 任何工具异常时
+    behaviors: [{ id: env_logs_l1, level: 1, description: 通过日志定位一次故障原因, achievementId: ach_env_logs }]
+  - id: environment.failure_diag
+    domain: environment
+    title: 环境失败诊断流程
+    description: 按序检查：命令存在→版本→网络→Key→权限→日志
+    whenToUse: 工具“就是不行”时
+    prerequisites: [environment.install_detect, environment.logs]
+    behaviors: [{ id: env_diag_l2, level: 2, description: 独立完成一次完整环境诊断, achievementId: ach_env_diag }]
+    hiddenUntilDiscovered: true

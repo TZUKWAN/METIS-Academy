@@ -1,0 +1,323 @@
+# 竞赛线事件 D8-D14（方案收敛 + Demo 冲刺）
+events:
+  - id: c_d08_psf
+    campaign: competition
+    day: 8
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: cm5 }
+    purpose: { learning: 一页纸收敛：Problem/User/Solution/Feasibility/Innovation/Impact }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["调研结束，今天必须把方案钉死。何老师只给你们20分钟陈述时间。"]
+    dialogue:
+      - { speaker: 何老师, text: "六个词说清楚：什么问题、给谁用、怎么解、做得出、新在哪、有什么用。说不清就是没想清。", mood: serious }
+    choices:
+      - id: six_card
+        text: 六要素各写一句真话，宁短勿吹
+        visibleResponse: |
+          问题：72社团×纸质报名=3天无效劳动；
+          用户：社团骨干（全校600人）；
+          方案：表单自动聚合+AI分类；
+          可行：方远评估2周可跑通；
+          创新：报名-审核-通知闭环+本地化数据；
+          影响：单校每学期省约900人时。
+          何老师看完："这句'900人时'哪来的？"你："访谈折算的，公式在附录。"他点头。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 8 }
+          - { kind: addAsset, assetType: business_model, name: PSF六要素卡, description: 一页纸方案（含数据出处）, content: "问题/用户/方案/可行/创新/影响（见正文）" }
+          - { kind: achievement, achievementId: ach_c_psf }
+      - id: buzzword_card
+        text: 多写点热词：AI大模型赋能、颠覆式创新、生态闭环
+        visibleResponse: 卡片写得气势磅礴。何老师圈出三个词："这三个，评委任何一个都会让你现场解释。你解释得了吗？"
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 8 }
+          - { kind: setFlag, key: buzzword_heavy }
+        next: c_d08_card
+    learningPoint: 一句真话胜过十句热词
+
+  - id: c_d08_card
+    campaign: competition
+    day: 8
+    type: story
+    trigger: { kind: manual }
+    scene: { location: lab, characters: [] }
+    setup: ["PSF卡钉在实验室墙上。方远拍了张照设成手机壁纸：“对着它写代码，跑不了题。”"]
+    automaticEffects:
+      - { kind: add, key: progress, value: 2 }
+    terminal: true
+
+  - id: c_d09_init
+    campaign: competition
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: cm6 }
+    purpose: { learning: INIT：目录/依赖/测试骨架/规则文件，先于一切代码 }
+    scene: { location: workbench, characters: [c_tech, c_ai_agent] }
+    setup: ["Demo周开始。方远已经准备直接开写。你按住了他。"]
+    dialogue:
+      - { speaker: 方远, text: "初始化？我脑子里已经有架构了，直接写省时间。", mood: neutral }
+      - { speaker: 你, text: "六天工期，没有骨架的代码第二天就会散架。先用Agent做INIT。" }
+    choices:
+      - id: proper_init
+        text: INIT流程：建目录→装依赖→空测试跑通→让Agent通读结构并复述
+        visibleResponse: |
+          Agent 在教学模拟模式（界面明确标注）下执行INIT：
+          建目录、装依赖、跑通一个空测试、输出项目结构摘要。
+          方远抽查了它的复述——准确。25分钟，地基打完。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 8 }
+          - { kind: addAsset, assetType: code_project, name: 社团管家 demo 工程, description: INIT完成的代码工程, content: "目录/依赖/空测试/结构摘要" }
+          - { kind: setFlag, key: init_done }
+          - { kind: achievement, achievementId: ach_c_init }
+      - id: skip_init
+        text: 不折腾，直接开写
+        visibleResponse: 前两天神速。第三天两个模块路径冲突，方远花了一下午理文件——比INIT贵五倍。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 10 }
+          - { kind: setFlag, key: init_skipped }
+    learningPoint: INIT不是仪式，是地基
+
+  - id: c_d10_rules
+    campaign: competition
+    day: 10
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 10, phase: start }
+    purpose: { learning: AGENTS.md：让每个会话自动继承约束 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["Agent 第二次把注释写成了英文——你昨天刚纠正过。"]
+    dialogue:
+      - { speaker: 方远, text: "它又忘了。这玩意记性不如我。", mood: angry }
+      - { speaker: 你, text: "不是它的记性，是我们的用法。写规则文件。" }
+    choices:
+      - id: write_repo_rules
+        text: 写 AGENTS.md：中文注释/数据本地化/测试命令/交付前自查
+        visibleResponse: |
+          规则文件8行搞定：
+          - 注释与UI文案用中文
+          - 用户数据仅存本地（政策约束）
+          - 每次改动后运行 npm test 并贴结果
+          - 不确定的字段名先问我
+          新会话测试通过。方远："行，这下不用我当复读机了。"
+        hiddenEffects:
+          - { kind: addAsset, assetType: agents_md, name: AGENTS.md（demo仓）, description: 项目规则：注释/本地化/测试/自查, content: "中文注释/本地存储/测试命令/自查清单" }
+          - { kind: add, key: execution, value: 6 }
+          - { kind: achievement, achievementId: ach_c_agents_md }
+        unlockKnowledge: [kc_g_rule_file]
+      - id: keep_reminding
+        text: 我盯着就行，错了就说
+        visibleResponse: 你盯着它改了六次注释。第七次你不在，它又错了。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+          - { kind: scheduleEvent, eventId: c_d13_format_error, onDay: 13 }
+    learningPoint: 规则写一次，处处生效
+
+  - id: c_d11_contract
+    campaign: competition
+    day: 11
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 11, phase: start }
+    purpose: { learning: 把"做个漂亮网页"翻译成工程任务 }
+    scene: { location: workbench, characters: [c_tech] }
+    setup: ["雨桐提需求：“报名页要做漂亮点。”方远问：“多漂亮？漂亮是什么？”两人吵起来了。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "就是……用户打开第一眼不觉得这是个作业！", mood: angry }
+      - { speaker: 方远, text: "这算什么需求？", mood: angry }
+    choices:
+      - id: translate_contract
+        text: 翻译成契约：首屏≤1秒/移动端适配/3步完成报名/错误提示文案清单
+        visibleResponse: |
+          你把"漂亮"翻译成四条可验收标准。雨桐补充了一条："报名成功页要有社团海报位。"
+          方远拿到契约，20分钟写完第一版。两人都闭嘴了。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: add, key: teamTrust, value: 6 }
+          - { kind: achievement, achievementId: ach_c_contract_translate }
+        unlockKnowledge: [kc_c_contract_page]
+      - id: let_them_fight
+        text: 让他们自己磨合，你去忙材料
+        visibleResponse: 一天后页面有了，雨桐说“不行”，方远说“哪不行？”——循环继续。
+        hiddenEffects: [{ kind: subtract, key: teamTrust, value: 5 }]
+    learningPoint: 模糊形容词→可验收标准
+
+  - id: c_d12_goal
+    campaign: competition
+    day: 12
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 12, phase: start }
+    purpose: { learning: MVP Goal：可演示≠功能全 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["中期检查。方远的想法越写越多：他想加积分系统、活动相册、还能刷脸签到。"]
+    dialogue:
+      - { speaker: 方远, text: "都写了吧？反正顺手。", mood: happy }
+      - { speaker: 江雨桐, text: "初赛只要可演示的MVP！我们要的是演示那天它别崩！", mood: serious }
+    choices:
+      - id: mvp_goal
+        text: 立Goal：终态=报名-审核-通知三环节可流畅演示；判据=雨桐的10步演示脚本全通过；禁止加新模块
+        visibleResponse: |
+          Goal写死：终态/判据（10步脚本）/里程碑（D13核心流程/D14演示彩排）/约束（禁新增模块）。
+          方远的积分系统进了"赛后愿望清单"。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: addAsset, assetType: goal, name: MVP Goal, description: 终态/判据/里程碑/约束, content: "10步演示脚本全通过为判据" }
+          - { kind: setFlag, key: mvp_goal_set }
+      - id: feature_creeep
+        text: 顺手就加吧，反正比赛看功能量
+        visibleResponse: 功能树越种越多。第14天，核心报名流程还有一个致命bug没人管。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 10 }
+          - { kind: setFlag, key: scope_creep }
+    learningPoint: 可演示是Goal，全功能是妄想
+
+  - id: c_d13_loop
+    campaign: competition
+    day: 13
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 13, phase: start }
+    purpose: { learning: Build-Test-Fix：每轮改动必须过测试 }
+    scene: { location: workbench, characters: [c_tech, c_ai_agent] }
+    setup: ["核心流程开发日。Agent负责生成样板代码，方远负责业务逻辑。"]
+    choices:
+      - id: strict_loop
+        text: 每轮：生成→跑测试→修复→再跑，测试不绿不合并
+        visibleResponse: |
+          循环跑了4轮。第3轮Agent生成的表单校验和已有工具函数重名，测试当场抓住。
+          方远："这测试……有点东西。"
+        hiddenEffects:
+          - { kind: add, key: execution, value: 8 }
+          - { kind: add, key: technicalDebt, value: -3 }
+          - { kind: achievement, achievementId: ach_c_loop }
+        unlockKnowledge: [kc_g_loop_needs_stop]
+      - id: batch_merge
+        text: 让Agent一次生成全部，最后统一测
+        visibleResponse: 一次生成800行，报错37个。方远修到凌晨两点，修好10个又冒出15个。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 12 }
+          - { kind: subtract, key: energy, value: 20 }
+    learningPoint: 小步快跑，测试闸门
+
+  - id: c_d14_regression
+    campaign: competition
+    day: 14
+    type: story
+    keyDecision: true
+    trigger: { kind: day, day: 14, phase: start }
+    purpose: { narrative: 强制——回归错误, learning: 新功能破坏旧功能 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["演示彩排。雨桐照着10步脚本走——第3步就卡死：昨天新加的“自动分类”把报名表单的提交按钮盖住了。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "点不了。核心流程坏了。", mood: worried }
+      - { speaker: 方远, text: "不可能，我昨天测的是分类功能……（翻日志）它把前端的提交事件覆盖了。" }
+      - { speaker: 系统, text: "这就是回归：新功能没坏，坏的是被它碰过的旧功能。" }
+    next: c_d14_fix
+
+  - id: c_d14_fix
+    campaign: competition
+    day: 14
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 回归的代价与防护：回归测试清单 }
+    scene: { location: lab, characters: [c_tech] }
+    choices:
+      - id: regression_suite
+        text: 修复+建立10步演示脚本的自动化回归，此后每次改动必跑
+        visibleResponse: |
+          修复用了20分钟；把10步脚本转成自动回归用了一小时。
+          方远嘟囔着跑了一遍全绿——"以后谁改坏了，测试会骂他。"
+        hiddenEffects:
+          - { kind: add, key: execution, value: 8 }
+          - { kind: addAsset, assetType: test_report, name: 回归测试报告, description: 10步演示脚本自动化+全绿记录, content: "10/10 步骤通过" }
+          - { kind: setFlag, key: regression_guard }
+          - { kind: achievement, achievementId: ach_c_regression }
+        unlockKnowledge: [kc_c_regression]
+      - id: hotfix_only
+        text: 赶紧修这个bug，测试以后再说
+        visibleResponse: bug修了。彩排第7步又发现一个新问题——没有回归防护，每个新改动都是开盲盒。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 8 }
+          - { kind: setFlag, key: regression_broken }
+          - { kind: scheduleEvent, eventId: c_d19_rework_night, onDay: 19 }
+    learningPoint: 回归测试是演示的安全带
+
+  # ---- 日暮/随机 ----
+  - id: c_d09_sim_note
+    campaign: competition
+    day: 9
+    type: system
+    trigger: { kind: day, day: 9, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: ["关于工具的说明：使用真实CLI时，输出来自你本机的 claude/codex/dsh；使用教学模拟时，每段输出都标注“教学模拟环境”。两者永不混淆。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "模拟学流程，真实验能力。" }
+    terminal: true
+
+  - id: c_d10_night_debug
+    campaign: competition
+    day: 10
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["深夜，方远对着一个报错已经坐了40分钟。"]
+    dialogue:
+      - { speaker: 方远, text: "（自言自语）……等等，报错最后写着端口被占。是昨天没关的dev server。", mood: surprised }
+      - { speaker: 系统, text: "报错最后30行是金子。他自己读出来了。" }
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+    terminal: true
+
+  - id: c_d11_rival_leak
+    campaign: competition
+    day: 11
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: classroom, characters: [c_rival] }
+    setup: ["邱一鸣在朋友圈晒进度：功能列表长长一串，配文“稳了”。"]
+    choices:
+      - id: ignore_showoff
+        text: 不看。我们的判据是10步脚本，不是功能数量
+        visibleResponse: 你关掉朋友圈。雨桐默默给10步脚本又加了一条边界情况。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 3 }, { kind: setFlag, key: stayed_calm }]
+      - id: panic_add_features
+        text: 慌了，让方远也加点功能撑场面
+        visibleResponse: 方远冷冷地看着你："Goal里写着禁止新增模块。你签字的。"你收回成命。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_d12_advisor_check
+    campaign: competition
+    day: 12
+    type: npc
+    trigger: { kind: day, day: 12, phase: end }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["中期汇报。何老师边听边在纸上画了三个圈。"]
+    dialogue:
+      - { speaker: 何老师, text: "数据出处、演示脚本、分工边界——这三样有，你们就赢了八成队伍。", mood: pleased }
+      - { speaker: 何老师, text: "剩下两成，看初赛前三天你们舍不舍得砍功能。" }
+    automaticEffects:
+      - { kind: relationship, characterId: c_advisor, delta: 4 }
+    terminal: true
+
+  - id: c_d13_energy_low
+    campaign: competition
+    day: 13
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["连续冲刺第四天，雨桐的PPT配色被方远说“和上周一样”。她没反驳——她眼里有血丝。"]
+    choices:
+      - id: order_rest
+        text: 全队今晚强制休息，明天9点再战
+        visibleResponse: 方远难得没抬杠。第二天三个人效率翻倍——疲劳的第四天本来就是负产出。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 6 }, { kind: add, key: energy, value: 20 }]
+      - id: push_through
+        text: 冲！初赛不等人
+        visibleResponse: 凌晨三点的实验室产出稀碎。第二天方远写出了本周最多bug。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 15 }, { kind: add, key: technicalDebt, value: 5 }]
+    terminal: true

@@ -1,0 +1,19 @@
+# 技能树根节点（TASK-E001）
+# METIS Academy Agent 能力图谱 —— 8 大域
+# 升级原则：等级只能由"行为成就"解锁，玩家不可手动加经验
+skill_tree:
+  name: METIS Agent 能力图谱
+  version: "1.0"
+  domains:
+    - { id: environment, label: 环境搭建, minAtoms: 15 }
+    - { id: initialization, label: 项目初始化, minAtoms: 12 }
+    - { id: task_contract, label: 任务契约, minAtoms: 15 }
+    - { id: goal, label: 目标工程, minAtoms: 12 }
+    - { id: loop, label: 循环工程, minAtoms: 15 }
+    - { id: context, label: 上下文工程, minAtoms: 18 }
+    - { id: agent_organization, label: 多智能体组织, minAtoms: 15 }
+    - { id: verification, label: 验证与验收, minAtoms: 18 }
+  progression:
+    level_1: 能在引导下完成一次正确操作
+    level_2: 能独立判断何时使用并完成
+    level_3: 能诊断失败、迁移到新场景、教别人

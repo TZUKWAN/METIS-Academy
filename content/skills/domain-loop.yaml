@@ -1,0 +1,99 @@
+# Loop 域（TASK-E006）：15+ 能力原子
+skills:
+  - id: loop.build_test_fix
+    domain: loop
+    title: Build-Test-Fix 循环
+    description: 写→测→修的最小开发循环，每圈都必须跑测试
+    whenToUse: 一切代码任务
+    behaviors: [{ id: loop_btf_l1, level: 1, description: 完成一次完整三步循环且测试由你亲自确认, achievementId: ach_loop_btf }]
+    toolMappings: { claudeCode: “契约写明：每轮改动后运行 npm test 并贴结果”, codex: 同样要求贴测试输出, deepseekHarness: 循环脚本中固定 test 步骤 }
+  - id: loop.search_verify
+    domain: loop
+    title: Search-Verify 循环
+    description: 搜到≠查证过；每个关键信息回到原始来源
+    whenToUse: 调研/文献/竞品任务
+    behaviors: [{ id: loop_sv_l1, level: 1, description: 捕获一次未验证搜索结论并核实修正, achievementId: ach_loop_searchverify }]
+  - id: loop.draft_judge_revise
+    domain: loop
+    title: Draft-Judge-Revise 循环
+    description: 初稿→按标准评审→修订；评审用检查单而不是“看看好不好”
+    whenToUse: 写作/方案类任务
+    behaviors: [{ id: loop_djr_l1, level: 1, description: 用检查单完成一轮三步写作循环, achievementId: ach_loop_djr }]
+  - id: loop.iteration_cap
+    domain: loop
+    title: 迭代上限
+    description: 事先约定最多循环几轮，防止无限打磨
+    whenToUse: 定义任何循环时
+    behaviors: [{ id: loop_cap_l1, level: 1, description: 循环带明确轮数上限, achievementId: ach_loop_cap }]
+  - id: loop.stop_rule
+    domain: loop
+    title: 停止规则
+    description: 连续两轮无改进即停；停止条件先于循环定义
+    whenToUse: 所有循环
+    prerequisites: [loop.iteration_cap]
+    behaviors: [{ id: loop_stop_l1, level: 1, description: 一次按停止规则主动收手, achievementId: ach_loop_stoprule }]
+  - id: loop.regression_check
+    domain: loop
+    title: 回归检查
+    description: 每轮修改后除新测试外还要跑旧测试，防止按下葫芦起了瓢
+    whenToUse: 每轮 Fix 之后
+    prerequisites: [loop.build_test_fix]
+    behaviors: [{ id: loop_reg_l2, level: 2, description: 捕获一次回归并回滚修复, achievementId: ach_loop_regression }]
+  - id: loop.evaluator
+    domain: loop
+    title: 独立评审者
+    description: 循环里放一个“挑毛病”角色（另一个 Agent 或检查单），作者不能自评
+    whenToUse: 质量要求高的产出
+    behaviors: [{ id: loop_eval_l1, level: 1, description: 引入独立评审视角并采纳其意见, achievementId: ach_loop_evaluator }]
+  - id: loop.evidence_loop
+    domain: loop
+    title: 证据循环
+    description: 论点→找证据→核证据→改论点；研究写作专用
+    whenToUse: 综述/论文/报告
+    behaviors: [{ id: loop_evi_l2, level: 2, description: 完成一轮证据循环并更新论证, achievementId: ach_loop_evidence }]
+  - id: loop.debugging
+    domain: loop
+    title: 调试循环
+    description: 复现→定位→假设→验证→修复；不验证的假设不许改代码
+    whenToUse: 修 bug 时
+    behaviors: [{ id: loop_dbg_l2, level: 2, description: 用五步法修掉一个非平凡 bug, achievementId: ach_loop_debug }]
+  - id: loop.content_loop
+    domain: loop
+    title: 内容循环
+    description: 写→对照要求→改；适合 PPT/申报书等多要求文档
+    whenToUse: 多要求文档撰写
+    behaviors: [{ id: loop_content_l1, level: 1, description: 用要求对照表完成一轮内容循环, achievementId: ach_loop_content }]
+  - id: loop.experiment_loop
+    domain: loop
+    title: 实验循环
+    description: 假设→实验→记录→结论→新假设；每次只改一个变量
+    whenToUse: 研究/调参/方案对比
+    behaviors: [{ id: loop_exp_l2, level: 2, description: 完成一轮单变量实验并留下记录, achievementId: ach_loop_experiment }]
+  - id: loop.feedback_loop
+    domain: loop
+    title: 用户反馈循环
+    description: 交付→收集真实反馈→排优先级→改；反馈要分类不照单全收
+    whenToUse: 产品/原型迭代
+    behaviors: [{ id: loop_fb_l2, level: 2, description: 处理一批反馈并说明取舍理由, achievementId: ach_loop_feedback }]
+  - id: loop.convergence
+    domain: loop
+    title: 收敛判断
+    description: 区分“在变好”和“在打转”；打转就换方法而不是加轮数
+    whenToUse: 循环进行到一半
+    prerequisites: [loop.stop_rule]
+    behaviors: [{ id: loop_conv_l3, level: 3, description: 判定一次不收敛并更换方法, achievementId: ach_loop_convergence }]
+    hiddenUntilDiscovered: true
+  - id: loop.runaway_prevention
+    domain: loop
+    title: 防失控
+    description: 循环+自动执行必须有人工闸门；日志异常立即暂停
+    whenToUse: 让 Agent 长时间自动干活时
+    prerequisites: [loop.iteration_cap]
+    behaviors: [{ id: loop_run_l2, level: 2, description: 设置过一次人工确认闸门, achievementId: ach_loop_runaway }]
+  - id: loop.final_check
+    domain: loop
+    title: 终检
+    description: 交付前最后一轮全量验收：所有验收标准逐条核对
+    whenToUse: 声明“完成”之前
+    prerequisites: [loop.stop_rule, verification.checklist]
+    behaviors: [{ id: loop_final_l2, level: 2, description: 完成一次逐条终检并签字, achievementId: ach_loop_finalcheck }]

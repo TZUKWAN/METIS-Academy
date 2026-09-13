@@ -1,0 +1,648 @@
+# 科研线事件 D1-D10（模糊问题 / Agent环境 / 文献侦察）
+events:
+  # ============ DAY 1 ============
+  - id: r_d01_mentor
+    campaign: research
+    day: 1
+    type: story
+    trigger: { kind: missionEntry, mission: r_m01 }
+    purpose: { narrative: 导师给出模糊需求, learning: 模糊需求不能直接交给Agent执行 }
+    scene: { location: corridor, characters: [r_mentor] }
+    dialogue:
+      - { speaker: 陈教授, text: "生成式AI对知识工作影响很大，你看看有没有什么能研究的。", mood: neutral }
+      - { speaker: 陈教授, text: "下个月组里开题。别让我失望。", mood: serious }
+      - { speaker: 你, text: "……好的老师。" }
+    next: r_d01_desk
+
+  - id: r_d01_desk
+    campaign: research
+    day: 1
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: Task Framing——先澄清，再执行 }
+    scene: { location: dorm, characters: [] }
+    setup: [“你回到桌前，打开电脑。光标在空白文档里闪。”]
+    dialogue:
+      - { speaker: 系统, text: "距离开题答辩还有 30 天。你手里只有一句话。" }
+    choices:
+      - id: ask_ai_topics
+        text: 直接让AI给我10个选题
+        visibleResponse: AI 半分钟吐出 10 个题目，个个看起来都很新。你有点兴奋，也有点没底。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 8 }
+          - { kind: add, key: academicDebt, value: 6 }
+          - { kind: setFlag, key: took_ai_topics_first }
+        unlockKnowledge: [kc_r_task_framing]
+        next: r_d01_ai_tempt
+      - id: clarify_first
+        text: 先写下“能研究的”到底指什么，列三个要澄清的问题
+        visibleResponse: 你写下三个问题：研究对像谁？比较什么？“影响”指好事还是坏事？
+        hiddenEffects:
+          - { kind: add, key: independence, value: 6 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+        unlockKnowledge: [kc_r_task_framing]
+        next: r_d01_evening
+      - id: find_senior
+        text: 先去问问师兄师姐，这方向组里做过什么
+        visibleResponse: 师姐给了你三篇组里旧论文，说“先看这个，别重复造轮子”。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_senior_theory, delta: 6 }
+          - { kind: add, key: literatureCount, value: 3 }
+        next: r_d01_evening
+      - id: do_nothing
+        text: 先打两把游戏，明天再说
+        visibleResponse: 晚上你睡得很晚。问题原封不动地留在原地。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+          - { kind: subtract, key: energy, value: 10 }
+          - { kind: setFlag, key: do_nothing_d1 }
+        next: r_d01_evening
+    learningPoint: 模糊需求先进澄清，再进执行
+
+  - id: r_d01_ai_tempt
+    campaign: research
+    day: 1
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: dorm, characters: [] }
+    setup: [“你盯着那 10 个题目。第 4 个——'生成式AI对大学生批判性思维的影响'——看起来特别顺手。”]
+    dialogue:
+      - { speaker: Agent, text: "以上题目均具有较高的研究价值与创新性，建议优先开展。", mood: pleased }
+      - { speaker: 你, text: "'均具有'……它对每个题目都这么说吧？" }
+    terminal: true
+
+  - id: r_d01_evening
+    campaign: research
+    day: 1
+    type: story
+    trigger: { kind: manual }
+    scene: { location: dorm, characters: [] }
+    setup: [“睡前，你新建了一个文档，把今天确定的和不确定的各写了一栏。”]
+    automaticEffects:
+      - kind: addAsset
+        assetType: research_brief
+        name: 研究简报 v0
+        description: 一句话需求 + 已确认/待澄清 + 下一步
+        content: "# 研究简报 v0\n- 需求来源：导师口头一句话\n- 已确认：方向与'生成式AI对知识工作的影响'相关\n- 待澄清：研究对象/比较维度/时间范围\n- 下一步：问师兄、查组里旧文献"
+    dialogue:
+      - { speaker: 系统, text: "获得资产：研究简报 v0。它很粗糙，但它存在。" }
+    terminal: true
+
+  # ============ DAY 2 ============
+  - id: r_d02_ai_topics
+    campaign: research
+    day: 2
+    type: story
+    trigger: { kind: day, day: 2, phase: start }
+    purpose: { narrative: AI给出4类候选, learning: 候选生成≠事实确认 }
+    scene: { location: dorm, characters: [] }
+    setup: [“你让 Agent 生成研究方向。它给了四个，每个都配了'创新点'。”]
+    dialogue:
+      - { speaker: Agent, text: "①AIGC对青年就业质量的影响（已有大量实证）", mood: neutral }
+      - { speaker: Agent, text: "②'算法化知识生产'对技能形成的重塑机制（概念含混）" }
+      - { speaker: Agent, text: "③基于2024-2025年全国程序员技能面板数据的追踪研究（数据不可得）" }
+      - { speaker: Agent, text: "④AI辅助写作对本科生论证能力发展的影响（有争议、可做）", mood: pleased }
+    next: r_d02_topic_eval
+
+  - id: r_d02_topic_eval
+    campaign: research
+    day: 2
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 对候选逐条追问：有人做过吗？概念清楚吗？数据拿得到吗？ }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: pick_shiny
+        text: 选②，“算法化知识生产”听起来最高级
+        visibleResponse: 你把②写进简报。三天后你会发现自己解释不清这个词。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 8 }
+          - { kind: add, key: literatureCount, value: 2 }
+          - { kind: setFlag, key: picked_muddy_concept }
+      - id: verify_all
+        text: 逐条检索：有没有人做过？数据存在吗？
+        visibleResponse: 一小时后：①已烂大街，③的数据根本不存在，④似乎真有空间。你划掉了两个。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: add, key: independence, value: 5 }
+          - { kind: add, key: literatureCount, value: 4 }
+        unlockKnowledge: [kc_r_candidate_fact]
+        delayed:
+          - eventId: r_d26_evidence_warning
+            onDay: 26
+            condition: { kind: flag, key: used_fake_citation }
+      - id: ask_senior
+        text: 拿着四个题目去找林师姐把把关
+        visibleResponse: 师姐指着②问：“这个词谁定义的？你查得到吗？”你查不到。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_senior_theory, delta: 8 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+        unlockKnowledge: [kc_r_candidate_fact]
+    learningPoint: AI产生候选，不产生事实
+
+  - id: r_d02_keep_note
+    campaign: research
+    day: 2
+    type: story
+    trigger: { kind: day, day: 02, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“你在简报 v0 里补了一栏'候选方向'，并标注了各自的把握度。”]
+    dialogue:
+      - { speaker: 系统, text: "研究简报更新了。候选不等于答案，但候选值得记录。" }
+    terminal: true
+
+  # ============ DAY 3 ============
+  - id: r_d03_env
+    campaign: research
+    day: 3
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: r_m02 }
+    purpose: { learning: Agent 工具要先检测环境再使用；没有真实工具时用教学模拟 }
+    scene: { location: dorm, characters: [r_ai_agent] }
+    setup: [“文献检索要开始了。苏晓说组里都在用 CLI Agent 干活。”]
+    dialogue:
+      - { speaker: 苏晓, text: "你还没配 Agent？我们组都拿它读文献。", mood: surprised }
+      - { speaker: Agent, text: "你可以选择：教学模拟模式，或检测本机的 Claude Code / Codex / DeepSeek Harness。", mood: neutral }
+    choices:
+      - id: use_sim
+        text: 先用教学模拟模式（没有安装CLI也没关系）
+        visibleResponse: 界面角落出现明显的“教学模拟”标识。流程一样，只是不调用你电脑上的真实工具。
+        hiddenEffects:
+          - { kind: setFlag, key: using_sim_mode }
+          - { kind: achievement, achievementId: ach_env_detect, description: 了解教学模拟与真实CLI的区别 }
+      - id: use_claude
+        text: 检测并使用本机 Claude Code
+        visibleResponse: 工作台开始检测 claude --version……
+        hiddenEffects: [{ kind: setFlag, key: tried_real_cli }]
+      - id: use_codex
+        text: 检测并使用本机 Codex CLI
+        visibleResponse: 工作台开始检测 codex --version……
+        hiddenEffects: [{ kind: setFlag, key: tried_real_cli }]
+      - id: use_dsh
+        text: 检测并使用本机 DeepSeek Harness
+        visibleResponse: 工作台开始检测 dsh --version……
+        hiddenEffects: [{ kind: setFlag, key: tried_real_cli }]
+    learningPoint: 环境先行：检测→配置→再干活
+
+  - id: r_d03_setup
+    campaign: research
+    day: 3
+    type: story
+    trigger: { kind: day, day: 03, phase: end }
+    purpose: { learning: 工作目录与模型配置 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你在 D:\\research-ai-skill 下建了项目目录，建了 literature/ 和 notes/ 两个文件夹。”]
+    dialogue:
+      - { speaker: 系统, text: "工作目录：Agent 只能看到你启动它时所在的目录。你把目录设为项目根目录。" }
+      - { speaker: Agent, text: "模型已配置。API Key 已存入系统安全存储，不会明文落盘。", mood: pleased }
+    automaticEffects:
+      - kind: addAsset
+        assetType: agent_environment_profile
+        name: Agent 环境档案
+        description: 工作目录/工具/模型/Key存储方式 的记录
+        content: "工作目录: D:\\research-ai-skill\n工具: (模拟/真实)\n模型: (已配置)\nKey: 安全存储"
+    next: r_d03_check
+
+  - id: r_d03_check
+    campaign: research
+    day: 3
+    type: system
+    trigger: { kind: manual }
+    scene: { location: workbench, characters: [] }
+    setup: [“环境自检：目录存在 ✓ 配置有效 ✓ 测试命令可用 ✓”]
+    dialogue:
+      - { speaker: 系统, text: "环境就绪。从今天起，所有 Agent 操作都发生在你的项目目录里。" }
+    terminal: true
+
+  # ============ DAY 4 ============
+  - id: r_d04_dump
+    campaign: research
+    day: 4
+    type: story
+    trigger: { kind: day, day: 4, phase: start }
+    purpose: { narrative: 把一堆资料扔给Agent, learning: 无边界的任务得到无边界的结果 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你把师姐给的旧论文、网上扒的 PDF、几篇公众号文章一股脑丢进项目目录。”]
+    dialogue:
+      - { speaker: 你, text: "帮我研究一下这些。" }
+      - { speaker: Agent, text: "好的，我已通读全部材料并形成综合分析。", mood: pleased }
+    next: r_d04_chaos
+
+  - id: r_d04_chaos
+    campaign: research
+    day: 4
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“输出有一万字。前半段在讲AI伦理，中间混着公众号观点，最后给了一个谁也没问过的结论。”]
+    dialogue:
+      - { speaker: Agent, text: "……综上所述，生成式AI利大于弊。", mood: pleased }
+      - { speaker: 你, text: "我没问利弊。而且这结论你想干嘛用？" }
+      - { speaker: 你, text: "问题出在哪？我说的'研究'，它理解的'研究'，根本不是一个东西。" }
+    next: r_d04_contract
+
+  - id: r_d04_contract
+    campaign: research
+    day: 4
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: Task Contract 五要素：Context/Goal/Constraints/Deliverables/Acceptance }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    choices:
+      - id: write_contract
+        text: 写一份正式任务书：背景/目标/约束/交付/验收
+        visibleResponse: |
+          你写了半小时：
+          背景——筛选与"AI对技能形成"相关的组内可用文献；
+          目标——输出文献清单表，每条含结论与局限；
+          约束——只用目录内的 PDF，不许编造；
+          交付——literature/matrix.md；
+          验收——每条可在原文找到页码。
+          Agent 这次老老实实干活了。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: addAsset, assetType: task_contract, name: 文献扫描契约 v1, description: 首份五要素任务契约, content: "背景/目标/约束/交付/验收（见正文）" }
+        unlockKnowledge: [kc_r_contract]
+      - id: rephrase_angry
+        text: 重新用人话描述一遍：“就是帮我筛选文献！别的不许说！”
+        visibleResponse: 好了一点。但“筛选标准”还是没说清，它又自由发挥了两条。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    learningPoint: 一句话任务→五要素契约
+
+  - id: r_d04_result
+    campaign: research
+    day: 4
+    type: story
+    trigger: { kind: day, day: 04, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: [“这一次，输出是一张整整齐齐的表。每行都能对上原文。”]
+    dialogue:
+      - { speaker: 系统, text: "同一个 Agent，不同的任务书，产出质量天差地别。" }
+    terminal: true
+
+  # ============ DAY 5 ============
+  - id: r_d05_keywords
+    campaign: research
+    day: 5
+    type: decision
+    keyDecision: true
+    trigger: { kind: missionEntry, mission: r_m03 }
+    purpose: { learning: 学术语言≠日常语言，关键词需要成树扩展 }
+    scene: { location: library, characters: [] }
+    setup: [“你用 'generative AI + 年轻人影响' 检索文献库：23 条结果，一半是新闻。”]
+    dialogue:
+      - { speaker: 系统, text: "检索结果偏少且偏新闻类。学术数据库不吃'日常语言'这一套。" }
+    choices:
+      - id: expand_tree
+        text: 换学术用词并成树扩展：LLM / AI augmentation / expertise development / skill formation…
+        visibleResponse: |
+          你画出关键词树：核心词→同义词→上位词→相邻概念。
+          新检索命中 140+ 条。方向对了。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: addAsset, assetType: keyword_tree, name: 关键词树 v1, description: 核心/同义/上位/相邻四层检索词, content: "generative AI | LLM | AI augmentation | early-career | novice professionals | expertise development | skill formation | workplace learning" }
+        unlockKnowledge: [kc_r_keyword]
+      - id: keep_daily_words
+        text: 就用日常词再搜一次，说不定有遗漏
+        visibleResponse: 还是那些公众号。你浪费了一下午。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
+    learningPoint: 关键词树：检索策略的第一块积木
+
+  - id: r_d05_results
+    campaign: research
+    day: 5
+    type: story
+    trigger: { kind: day, day: 05, phase: end }
+    scene: { location: library, characters: [] }
+    setup: [“140 条。你看着检索页面，突然不知道该高兴还是该绝望。”]
+    dialogue:
+      - { speaker: 系统, text: "文献太多，是明天的烦恼。今天先把关键词树存好。" }
+    terminal: true
+
+  # ============ DAY 6 ============
+  - id: r_d06_flood
+    campaign: research
+    day: 6
+    type: story
+    trigger: { kind: day, day: 6, phase: start }
+    purpose: { narrative: 文献洪水, learning: 检索策略与筛选策略要分离 }
+    scene: { location: dorm, characters: [r_peer] }
+    setup: [“苏晓凑过来看了一眼你的屏幕。”]
+    dialogue:
+      - { speaker: 苏晓, text: "140 篇？你打算全读？读到开题直接延毕吧。", mood: surprised }
+      - { speaker: 苏晓, text: "我们上一届都是先筛再读，谁真全读啊。" }
+    next: r_d06_filter
+
+  - id: r_d06_filter
+    campaign: research
+    day: 6
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 分层筛选：代表作/综述/近三年实证 各取所需 }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: layer_filter
+        text: 分层：2篇综述打底 + 高被引代表作 + 近三年实证各留一撮
+        visibleResponse: 你先读摘要定去留，140 篇剩 28 篇进精读池。老文献看脉络，新文献看进展。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: add, key: execution, value: 4 }
+          - { kind: add, key: literatureCount, value: 6 }
+        unlockKnowledge: [kc_r_filtering]
+      - id: citations_only
+        text: 按引用量排序，只读前 10
+        visibleResponse: 高被引确实经典。但 2019 年之后的东西几乎没看到——这领域 2023 年才爆发。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+          - { kind: add, key: literatureCount, value: 4 }
+      - id: ai_summarize_all
+        text: 全部丢给AI总结，我读摘要就行
+        visibleResponse: AI 半小时给出了 140 份摘要。读起来很顺——顺到你隐约不安：我到底读了什么？
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 10 }
+          - { kind: add, key: academicDebt, value: 5 }
+          - { kind: add, key: literatureCount, value: 6 }
+    learningPoint: 检索管“找得到”，筛选管“读得完”
+
+  - id: r_d06_shortlist
+    campaign: research
+    day: 6
+    type: story
+    trigger: { kind: day, day: 06, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“精读池建好了。你把清单导出成 literature/library.md。”]
+    automaticEffects:
+      - kind: addAsset
+        assetType: literature_library
+        name: 文献库 v1
+        description: 精读池清单（含分层标记）
+        content: "综述打底 ×2 / 代表作 ×6 / 近三年实证 ×20（分层标记见文件）"
+    dialogue:
+      - { speaker: 系统, text: "获得资产：文献库 v1。" }
+    terminal: true
+
+  # ============ DAY 7 ============
+  - id: r_d07_batch
+    campaign: research
+    day: 7
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 7, phase: start }
+    purpose: { learning: 批量任务要拆维度，不要“读完50篇告诉我答案” }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“28 篇精读。你让 Agent 批量处理。”]
+    dialogue:
+      - { speaker: Agent, text: "建议我一次读完并给出综合结论。", mood: pleased }
+      - { speaker: 你, text: "等等。上次'综合分析'的教训忘了吗？" }
+    choices:
+      - id: dimension_split
+        text: 按维度拆：每篇提取 问题/方法/数据/发现/局限，分批交
+        visibleResponse: |
+          你定了提取模板，每批 7 篇，处理完一批你抽查两篇核对。
+          第三批时 Agent 开始偷懒只写一行，被你抓回来重做。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: addAsset, assetType: research_matrix, name: 文献矩阵 v1, description: 28篇×6维度的结构化矩阵, content: "| 文献 | 问题 | 方法 | 数据 | 发现 | 局限 | ..." }
+        unlockKnowledge: [kc_r_batch]
+      - id: one_shot
+        text: 让它一次全读完，给我大总结
+        visibleResponse: 总结很流畅。但你抽查发现，两篇的“发现”张冠李戴了。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 8 }
+          - { kind: add, key: academicDebt, value: 6 }
+    learningPoint: 批量阅读=维度拆解+分批+抽查
+
+  - id: r_d07_matrix
+    campaign: research
+    day: 7
+    type: story
+    trigger: { kind: day, day: 07, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: [“矩阵建好了。28 行，每行 6 列。你第一次觉得'这堆文献在我手里了'。”]
+    dialogue:
+      - { speaker: 系统, text: "获得资产：文献矩阵 v1。它将陪伴你到答辩。" }
+    terminal: true
+
+  # ============ DAY 8 ============
+  - id: r_d08_fake_citation
+    campaign: research
+    day: 8
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 8, phase: start }
+    purpose: { narrative: 制造一次可信的假引用, learning: 独立来源验证 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“补综述时，AI 给了你一条'完美'文献：”]
+    dialogue:
+      - { speaker: Agent, text: "Zhang & Li (2024), Journal of Applied Developmental Psychology——结论与你的假设高度一致。", mood: pleased }
+      - { speaker: Agent, text: "这条可以直接支撑你的核心论证。" }
+    choices:
+      - id: accept
+        text: 高度相关，先放进文献表，之后再说
+        visibleResponse: 你把它加进了矩阵。表格更完整了，你心里却有一丝说不出的虚。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 12 }
+          - { kind: add, key: aiDependence, value: 6 }
+          - { kind: setFlag, key: used_fake_citation }
+          - { kind: setFlag, key: accepted_unverified_citation }
+        delayed:
+          - { eventId: r_d26_evidence_warning, onDay: 26 }
+          - { eventId: r_d28_citation_crisis, onDay: 28 }
+      - id: verify_doi
+        text: 查 DOI——它给了 DOI 吗？
+        visibleResponse: |
+          DOI 解析失败：文章不存在。
+          你让 AI 提供原文链接——它给了一个 404。
+          你在数据库按标题搜——查无此文。
+          结论：这是编造的。你把它标记为'已证伪'，并顺手核了它给的另外三条——又抓到一个年份错的。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 12 }
+          - { kind: achievement, achievementId: ach_r_caught_fake, description: 发现并处置了一次AI假引用 }
+        unlockKnowledge: [kc_r_fake_citation]
+      - id: search_title
+        text: 按标题搜索看看
+        visibleResponse: 精确标题检索零结果。假文献实锤。你删掉了它，但没深究 AI 为什么会编。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+        unlockKnowledge: [kc_r_fake_citation]
+      - id: second_ai
+        text: 让另一个AI判断真假
+        visibleResponse: 另一个 AI 说“该文献真实存在”。两个AI都这么说——但你还是不放心，自己查了 DOI，果然是假的。两个AI都在编。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 9 }
+          - { kind: add, key: independence, value: 4 }
+        unlockKnowledge: [kc_r_fake_citation]
+    learningPoint: AI引文必须回原始数据库核验——查不到就是不存在
+
+  # ============ DAY 9 ============
+  - id: r_d09_context
+    campaign: research
+    day: 9
+    type: story
+    trigger: { kind: missionEntry, mission: r_m04 }
+    purpose: { narrative: Agent开始失忆, learning: 项目状态要外化为文件 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你让 Agent 基于矩阵写 gap 分析。它开口第一句就让你皱眉。”]
+    dialogue:
+      - { speaker: Agent, text: "首先我们明确一下'生成式AI'的概念……", mood: neutral }
+      - { speaker: 你, text: "停。这个范围我们第三天就定了，你现在提这个干嘛？" }
+      - { speaker: Agent, text: "抱歉，请再次提供研究范围与已确认的约束。" }
+    next: r_d09_statefile
+
+  - id: r_d09_statefile
+    campaign: research
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: research_state.md：把项目状态写成文件，而不是靠会话记忆 }
+    scene: { location: workbench, characters: [] }
+    choices:
+      - id: write_state_file
+        text: 写一份 research_state.md：范围/已确认/未确认/关键文献
+        visibleResponse: |
+          你写了：
+          - 研究范围（一句话）
+          - 已确认 5 条（含概念界定）
+          - 未确认 3 条（如数据可得性）
+          - 关键文献 6 篇
+          以后每次开工先喂它这份文件。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: addAsset, assetType: state_file, name: research_state.md, description: 项目状态文件（范围/已确认/未确认/关键文献）, content: "# 研究状态\n范围: AI辅助写作对本科生论证能力发展的影响\n已确认: 概念界定/比较维度/数据来源方向\n未确认: 样本可得性/时间跨度/伦理审查" }
+        unlockKnowledge: [kc_r_statefile]
+      - id: repeat_context
+        text: 每次把要求在对话里重新打一遍
+        visibleResponse: 能用，但你开始觉得自己是个人肉复读机。
+        hiddenEffects: [{ kind: add, key: aiDependence, value: 3 }]
+    learningPoint: 状态外化：文件>记忆
+
+  - id: r_d09_compare
+    campaign: research
+    day: 9
+    type: story
+    trigger: { kind: day, day: 09, phase: end }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“喂了状态文件之后，同一个问题，Agent 的回答终于站在了正确的起跑线上。”]
+    dialogue:
+      - { speaker: Agent, text: "已读取研究状态。基于当前范围，我建议从矩阵中的三处矛盾切入……", mood: pleased }
+    terminal: true
+
+  # ============ DAY 10 ============
+  - id: r_d10_bloat
+    campaign: research
+    day: 10
+    type: story
+    trigger: { kind: day, day: 10, phase: start }
+    purpose: { narrative: 上下文膨胀, learning: Compact 是结构化压缩，不是随便总结 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“这个会话已经聊了 200 多条。Agent 开始重复犯错——你意识到上下文快撑满了。”]
+    dialogue:
+      - { speaker: 系统, text: "上下文预算告急。继续硬塞，重点会被稀释。" }
+    next: r_d10_compact
+
+  - id: r_d10_compact
+    campaign: research
+    day: 10
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 五段式 Compact：已确认/未确认/范围/关键材料/下一步 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    choices:
+      - id: structured_compact
+        text: 五段式压缩：已确认事实/待确认/当前范围/关键文献/下一任务
+        visibleResponse: |
+          压缩产物不到一页，但四问全能答上：
+          研究什么？数据从哪来？哪些已证？下一步干嘛？
+          你把它存为 compact_checkpoint_01，开新会话继续。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: addAsset, assetType: compact_checkpoint, name: compact_checkpoint_01, description: 五段式压缩检查点, content: "已确认/待确认/范围/关键文献/下一步（见正文）" }
+        unlockKnowledge: [kc_r_compact]
+      - id: casual_summary
+        text: 让AI“总结一下我们聊过的”
+        visibleResponse: 摘要写得很文艺，但丢了两条硬约束。新会话里 Agent 又开始自由发挥。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 压缩保事实与约束，扔过程
+
+  - id: r_d10_after
+    campaign: research
+    day: 10
+    type: story
+    trigger: { kind: day, day: 10, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“十天了。文件夹里躺着 7 份资产。你觉得'研究'这件事开始有了形状。”]
+    dialogue:
+      - { speaker: 系统, text: "阶段小结：你已会做契约、关键词树、文献矩阵、状态文件与压缩检查点。" }
+    terminal: true
+
+  # ============ 随机事件 ============
+  - id: r_random_group_meeting
+    campaign: research
+    day: 6
+    type: npc
+    keyDecision: true
+    trigger: { kind: random, weight: 3 }
+    scene: { location: meeting_room, characters: [r_mentor, r_peer] }
+    setup: [“组会。陈教授扫了一眼你的名字。”]
+    dialogue:
+      - { speaker: 陈教授, text: "你上周说有进展。进展呢？", mood: serious }
+    choices:
+      - id: honest_report
+        text: 如实汇报：完成了什么、卡在哪里
+        visibleResponse: 你讲了实情，包括假文献那件事（如果有的话）。陈教授没表扬你，但点了头。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 6 }
+          - { kind: add, key: credibility, value: 5 }
+          - { kind: setFlag, key: honest_report }
+      - id: bluff_report
+        text: 说“都很顺利”，细节回头补
+        visibleResponse: 陈教授盯了你两秒：“下次组会，把细节带来。”
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: -5 }
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 坏消息要早说，带过程地说
+
+  - id: r_random_dinner
+    campaign: research
+    day: 5
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [r_peer] }
+    setup: [“苏晓在食堂门口拦住你。”]
+    dialogue:
+      - { speaker: 苏晓, text: "走走走，今晚火锅，科研人不能只吃文献。", mood: happy }
+    choices:
+      - id: go_dinner
+        text: 去！就当换脑子
+        visibleResponse: 你 relaxation 了一晚，第二天效率意外地高。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_peer, delta: 5 }
+          - { kind: add, key: energy, value: 15 }
+          - { kind: subtract, key: money, value: 45 }
+      - id: refuse
+        text: 不去了，赶进度
+        visibleResponse: 你多干了两个小时，效率其实一般。
+        hiddenEffects: [{ kind: add, key: energy, value: -5 }]
+    terminal: true
+
+  - id: r_random_senior_tip
+    campaign: research
+    day: 7
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“林师姐路过，瞥见你的矩阵。”]
+    dialogue:
+      - { speaker: 林师姐, text: "'局限'这列写得最认真，继续保持。看文献先看局限，是防被骗的第一步。", mood: pleased }
+    automaticEffects:
+      - { kind: relationship, characterId: r_senior_theory, delta: 3 }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    terminal: true

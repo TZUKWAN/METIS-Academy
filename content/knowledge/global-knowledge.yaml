@@ -1,0 +1,460 @@
+# 全局知识卡（跨 campaign 通用，TASK-F005）
+knowledge:
+  - id: kc_g_candidate_vs_fact
+    title: AI产生候选，不产生事实
+    domain: verification
+    trigger: first_failure
+    problem: AI输出的“事实”（文献/数据/引用）查无实据
+    wrongPattern: 把AI输出直接当事实写进正式材料
+    correctBehavior: 候选与事实分离——凡进正式材料，必回原始来源核验
+    why: 语言模型生成“统计上像真的”文本，而不是查询数据库
+    steps:
+      - 标记AI输出为候选
+      - 回原始来源核验
+      - 核验通过才升级为事实
+    toolMappings:
+      claudeCode: 要求只引用本地已核实文献文件
+      codex: 同样用白名单文件
+      deepseekHarness: 上下文附已核实清单
+    successSignals:
+      - 正式材料中零幽灵引用
+    failureSignals:
+      - 被指出引用不存在
+    transferScenarios:
+      - 竞品数据
+      - 市场规模
+    depth30s: AI给的是候选，不是事实。用之前，先核验。
+    depth3m: 模型的引用是“像引用的文本”。建立三清单：已核实/待核实/已证伪。正式材料只准引用已核实清单。
+    depth10m: |
+      操作制度：1. 让AI输出带DOI/链接的候选；2. 反查DOI而非搜标题；3. 维护三清单文件；
+      4. 项目规则写死"只准引用已核实清单"；5. 每次交付前抽查三条。
+  - id: kc_g_vague_task
+    title: 模糊需求不能直接交给Agent
+    domain: task_contract
+    trigger: first_failure
+    problem: 像“帮我研究一下X”“做个网站”这样的模糊需求导致产出混乱
+    wrongPattern: 一句话需求直接扔给Agent，指望它自己懂
+    correctBehavior: 先拆出已确认/待澄清/下一步，再形成结构化任务
+    why: Agent会用自己的假设填补空白，假设常常不合你意
+    steps:
+      - 列出你知道的
+      - 列出你不知道的
+      - 把问题问清楚
+      - 再写任务
+    toolMappings:
+      generic: 先澄清再开工
+    successSignals:
+      - 任务一次跑对方向
+    failureSignals:
+      - 产出“不是我要的”
+    transferScenarios:
+      - 接需求
+      - 委托同事
+    depth30s: 先澄清，再执行。模糊进，垃圾出。
+    depth3m: 把“帮我弄下X”翻译成：背景/目标/约束/交付/验收。缺哪段，先补哪段。
+    depth10m: 用 Task Contract 模板逐段填写；写不完的段落就是你要先澄清的问题清单。
+    relatedSkillIds:
+      - tc.non_goals
+      - tc.sources
+      - tc.order
+  - id: kc_g_rule_file
+    title: 规则文件：说过两遍的话就该写下来
+    domain: initialization
+    trigger: npc_advice
+    problem: 每个新会话都要重复交代格式/范围/禁令
+    wrongPattern: 反复在对话里重复同样要求
+    correctBehavior: 沉淀到 AGENTS.md/CLAUDE.md，让规则自动加载
+    why: 会话不共享记忆，项目文件才是持久约束
+    steps:
+      - 收集重复交代的要求
+      - 写进规则文件
+      - 新会话验证生效
+    toolMappings:
+      claudeCode: CLAUDE.md
+      codex: AGENTS.md
+      deepseekHarness: rules 文件
+    successSignals:
+      - 新会话不再犯已写明的错误
+    failureSignals:
+      - 第4次纠正同一个问题
+    transferScenarios:
+      - 团队协作
+      - 长期项目
+    depth30s: 说过两遍的要求，写进规则文件。
+    depth3m: 规则文件写：目标/范围/来源规则/格式/工作方式/验收。保持短，长规则没人读，Agent也一样。
+    depth10m: 维护规则文件的节奏：每次纠正Agent后问自己“这话要不要进规则”；每月删掉失效规则。
+    relatedSkillIds:
+      - init.init_command
+      - init.create_claude_md
+      - init.handover_context
+  - id: kc_g_handoff_four_questions
+    title: Handoff四问法
+    domain: context
+    trigger: skill_unlock
+    problem: 换会话后Agent接不上之前的工作
+    wrongPattern: 把整段聊天记录复制过去
+    correctBehavior: 交接后用四问验证：目标是什么/现状是什么/缺口是什么/下一步是什么
+    why: 交接的质量由“接手者能否回答四问”衡量，不由字数衡量
+    steps:
+      - 写handoff(目标/现状/关键决定/下一步/坑)
+      - 新会话先答四问
+      - 答不对就补交接
+    toolMappings:
+      claudeCode: 生成 HANDOFF.md
+      codex: 输出交接文件
+      deepseekHarness: handoff 指令
+    successSignals:
+      - 新会话5分钟内正确回答四问
+    failureSignals:
+      - 新会话重复已完成的活
+    transferScenarios:
+      - 团队交接
+      - 隔天继续
+    depth30s: 交接好不好，四问一测就知道。
+    depth3m: handoff 五段：目标/现状/关键决定及理由/下一步/坑。新会话先答四问再动手。
+    depth10m: 把handoff做成模板文件，每次收工10分钟填写；恢复后先做恢复检查再做新活。
+    relatedSkillIds:
+      - context.relevance
+      - context.project_memory
+  - id: kc_g_verify_before_trust
+    title: 独立验证：谁产出，谁不能自证
+    domain: verification
+    trigger: first_failure
+    problem: Agent说“已完成/已通过”，实际没通过
+    wrongPattern: 不检查直接采信Agent的自述
+    correctBehavior: 换一个来源验证：自己跑测试/另一个会话/另一个工具
+    why: 产出者自证有系统性偏差，人一样，Agent也一样
+    steps:
+      - 识别关键声明
+      - 选择独立验证方式
+      - 亲自执行验证
+    toolMappings:
+      generic: 自己跑一遍测试，看原始输出
+    successSignals:
+      - 问题在交付前被发现
+    failureSignals:
+      - 答辩/演示时翻车
+    transferScenarios:
+      - 验收外包
+      - 检查作业
+    depth30s: 说完成≠完成。亲眼验证才算。
+    depth3m: 关键声明三验法：重跑（测试）、换源（检索）、抽查（逐条）。
+    depth10m: 建立“信任但验证”清单：哪些声明必须亲自验证（测试通过/引用存在/数据一致），形成个人SOP。
+  - id: kc_g_when_new_session
+    title: 什么时候必须开新Session
+    domain: context
+    trigger: npc_advice
+    problem: 会话越聊越乱，Agent忘记早先要求
+    wrongPattern: 一个会话用到天荒地老
+    correctBehavior: 换任务/污染/压缩两次以上/效果下降→新会话+交接
+    why: 无关历史会稀释注意力，旧指令会与新指令冲突
+    steps:
+      - 识别信号(遗忘/跑偏/自相矛盾)
+      - 写交接
+      - 开新会话
+      - 四问验证
+    toolMappings:
+      generic: 新会话+handoff文件
+    successSignals:
+      - 新会话表现恢复
+    failureSignals:
+      - 反复纠正同一问题
+    transferScenarios:
+      - 切换项目
+      - 长任务分阶段
+    depth30s: 变笨就换会话，交接带上再走。
+    depth3m: 三个信号：它忘了、它串台、它自相矛盾。任一出现→交接→新会话。
+    depth10m: 会话规划：按任务阶段开session（调研期/执行期/写作期），期与期之间handoff。
+  - id: kc_g_compact_not_summary
+    title: Compact不是随便总结
+    domain: context
+    trigger: event
+    problem: 压缩后丢失关键约束，Agent行为退化
+    wrongPattern: “总结一下我们聊的”然后拿着摘要继续
+    correctBehavior: 结构化压缩：已确认事实/未确认/当前范围/关键材料/下一步
+    why: 压缩的目的是保住“约束与事实”，砍掉“过程”
+    steps:
+      - 列出不可丢的约束与事实
+      - 列出当前范围
+      - 记录下一步
+      - 丢弃过程性讨论
+    toolMappings:
+      claudeCode: /compact 或手动五段式
+      codex: 五段式摘要
+      deepseekHarness: compact 指令
+    successSignals:
+      - 压缩后行为不变差
+    failureSignals:
+      - 压缩后重复犯错
+    transferScenarios:
+      - 长会话
+      - 换人接手
+    depth30s: 压缩保事实和约束，扔过程。
+    depth3m: 五段式：已确认/未确认/范围/关键材料/下一步。写完自查：新会话拿这段能接上吗？
+    depth10m: 把五段式做成模板；每次compact产出直接存为检查点文件，可回滚。
+  - id: kc_g_subagent_not_voting
+    title: 多Agent冲突不能靠投票
+    domain: agent_organization
+    trigger: first_failure
+    problem: 两个Agent给出矛盾结论
+    wrongPattern: 少数服从多数，或“取平均”
+    correctBehavior: 回到原始来源裁决；来源也缺就标注“未决”
+    why: Agent意见一致只说明相似，不说明正确
+    steps:
+      - 列出冲突点
+      - 找各自的依据来源
+      - 用来源质量裁决
+      - 仍无法裁决则标记未决
+    toolMappings:
+      generic: 让双方各自给出引用来源
+    successSignals:
+      - 冲突被来源解决
+    failureSignals:
+      - 错误结论被“多数”确认
+    transferScenarios:
+      - 评审意见冲突
+      - 数据口径冲突
+    depth30s: 真相不是投出来的，是查出来的。
+    depth3m: 冲突裁决三问：各自的来源是什么？来源谁更原始？有没有第三方来源？
+    depth10m: 在多Agent流程中固定“来源字段”要求；汇总表必须含来源列，冲突行高亮。
+    relatedSkillIds:
+      - org.dependency
+      - org.cost_tradeoff
+  - id: kc_g_cost_of_fake_done
+    title: “完成了”的三种水分
+    domain: verification
+    trigger: npc_advice
+    problem: Agent报告完成，但产出不对/不完整/不可复现
+    wrongPattern: 只看“完成”两个字
+    correctBehavior: 按验收单逐条核对+亲自跑关键路径
+    why: 没有共同验收定义时，“完成”只是Agent的乐观估计
+    steps:
+      - 对照验收单
+      - 亲自运行
+      - 抽查边界情况
+    toolMappings:
+      generic: 逐条勾验收单
+    successSignals:
+      - 水分在交付前被挤出
+    failureSignals:
+      - 使用时发现缺胳膊少腿
+    transferScenarios:
+      - 外包验收
+      - 团队协作
+    depth30s: 完成的意思是“验收单全绿”。
+    depth3m: 三种水分：做错了（不符要求）、做少了（缺交付物）、做虚了（不可复现）。分别用对单、对清单、对复现来查。
+    depth10m: 让Agent交付时自附“验收自查表”，你只查它自评最弱的项+抽查一项它最强的。
+  - id: kc_g_goal_vs_task
+    title: Task与Goal的界线
+    domain: goal
+    trigger: npc_advice
+    problem: 用一串零散任务做长事，做到一半忘了 originally 要什么
+    wrongPattern: 想起什么干什么
+    correctBehavior: 会持续多天、需要状态的任务立Goal：终态/判据/里程碑/约束
+    why: Goal提供方向与完成判据；Task只提供单步执行
+    steps:
+      - 判断持续时长与状态需求
+      - 写终态与判据
+      - 拆里程碑
+      - 每里程碑验收
+    toolMappings:
+      generic: Goal状态文件+里程碑表
+    successSignals:
+      - 长任务始终有方向
+    failureSignals:
+      - 忙碌但偏离目标
+    transferScenarios:
+      - 毕业论文
+      - 求职准备
+    depth30s: 一天内的活用Task，跨天的活立Goal。
+    depth3m: Goal四件套：终态描述/完成判据/里程碑/约束。缺判据的Goal是愿望。
+    depth10m: 每个里程碑都写成“可验收的Task”；Goal状态文件随里程碑更新，会话交接靠它。
+  - id: kc_g_loop_needs_stop
+    title: 循环必须带停止条件
+    domain: loop
+    trigger: first_failure
+    problem: 让Agent“一直改到满意”，它要么一轮就停要么死循环
+    wrongPattern: 不满意就继续改
+    correctBehavior: 先定义 evaluator（怎么判断好坏）+ 上限（最多几轮）+ 停止规则
+    why: “满意”不可执行；循环需要可计算的停止信号
+    steps:
+      - 定义评估标准
+      - 设轮数上限
+      - 设无改进即停
+      - 每轮留痕
+    toolMappings:
+      generic: 检查单+轮数上限
+    successSignals:
+      - 循环在预算内收敛
+    failureSignals:
+      - 无限打磨/来回改
+    transferScenarios:
+      - 调参
+      - 改稿
+    depth30s: 循环三件套：标准、上限、停止规则。
+    depth3m: 没有evaluator的循环是许愿。把“好看”“准确”翻译成可勾选的检查项。
+    depth10m: 常用停止规则：连续2轮无改进/达标/达到上限。三者取先到；每轮产出都要存档可比对。
+    relatedSkillIds:
+      - loop.search_verify
+  - id: kc_g_api_cost_awareness
+    title: API调用是真金白银
+    domain: environment
+    trigger: event
+    problem: 月底账单吓人；长上下文+高频调用成本爆炸
+    wrongPattern: 不看token数随便调
+    correctBehavior: 看得见用量：长上下文该压缩就压缩，重复任务缓存结果
+    why: 每次调用都按token计费，上下文越长越贵
+    steps:
+      - 查看服务商用量面板
+      - 估算单任务成本
+      - 用压缩与缓存降本
+    toolMappings:
+      generic: 用量面板每周看一次
+    successSignals:
+      - 成本可预测
+    failureSignals:
+      - 账单超预算数倍
+    transferScenarios:
+      - 产品上线定价
+      - 团队配额
+    depth30s: 上下文越长越贵，先压缩再调用。
+    depth3m: 成本≈输入token×单价+输出token×单价。降低成本三招：短上下文、小模型干粗活、缓存重复结果。
+    depth10m: 为产品定价算单位经济：单次服务成本=（输入+输出token）×单价×调用次数；定价必须大于成本3倍以上才有缓冲。
+    relatedSkillIds:
+      - environment.project_dir
+  - id: kc_g_permission_mode
+    title: 权限模式的选择
+    domain: environment
+    trigger: npc_advice
+    problem: 全自动权限省事但危险；全手动确认太累
+    wrongPattern: 要么全自动要么全手动
+    correctBehavior: 读操作自动、写操作确认、删改关键文件必须人工
+    why: 风险应与动作的破坏力成正比
+    steps:
+      - 识别动作破坏力分级
+      - 配置对应权限
+      - 定期审查授权
+    toolMappings:
+      claudeCode: 权限模式选择
+      codex: sandbox 档位
+      deepseekHarness: 确认策略
+    successSignals:
+      - 零事故且效率可接受
+    failureSignals:
+      - 关键文件被误改
+    transferScenarios:
+      - 服务器操作
+      - 生产环境
+    depth30s: 破坏力越大，确认越严。
+    depth3m: 三档：只读（自动）、写入（可自动但留痕）、删除/外发（必须人工）。
+    depth10m: 为自己的常用工具写一张权限配置表；新项目开工先配权限再干活。
+    relatedSkillIds:
+      - environment.env_vars
+  - id: kc_g_read_the_error
+    title: 报错最后30行是金子
+    domain: environment
+    trigger: first_failure
+    problem: 看到大片红色输出就慌或直接问AI
+    wrongPattern: 跳过报错原文，直接描述“它坏了”
+    correctBehavior: 读最后30行：错误类型+位置+原因；拿原文去查或问
+    why: 90%的问题答案就在报错信息里
+    steps:
+      - 滚动到最后
+      - 找error/fatal行
+      - 读文件名与行号
+      - 带原文提问
+    toolMappings:
+      generic: 复制完整报错再求助
+    successSignals:
+      - 多数问题自助解决
+    failureSignals:
+      - 求助时说不出报错内容
+    transferScenarios:
+      - 装环境
+      - 跑别人的项目
+    depth30s: 先读报错，再求助。
+    depth3m: 报错三要素：什么错（类型）、在哪（文件:行）、为什么（原因行）。三要素齐了，搜索或提问都精准。
+    depth10m: 建立个人报错手册：每次踩坑记录错误原文+解法；三个月后你就是环境问题专家。
+    relatedSkillIds:
+      - environment.model
+  - id: kc_g_asset_reuse
+    title: 好东西要变成资产
+    domain: initialization
+    trigger: skill_unlock
+    problem: 上周写的提示词/脚本/检查单找不到了
+    wrongPattern: 好东西留在聊天记录里腐烂
+    correctBehavior: 沉淀为项目资产文件：可复用的prompt/契约/检查单/状态文件
+    why: 资产是复利；聊天记录是流水
+    steps:
+      - 识别可复用内容
+      - 起名入库(带用途说明)
+      - 下次直接引用
+    toolMappings:
+      generic: prompts/ 目录+README索引
+    successSignals:
+      - 同类任务第二遍更快
+    failureSignals:
+      - 重复劳动
+    transferScenarios:
+      - 求职作品集
+      - 团队共享
+    depth30s: 用过两次的东西，存成文件。
+    depth3m: 资产四要素：名字、用途、内容、上次使用效果。建 prompts/ contracts/ checklists/ 三个目录起步。
+    depth10m: 每月盘点资产库：淘汰失效项、合并重复项、为高频资产写使用说明。
+    relatedSkillIds:
+      - init.existing_assets
+      - init.test_command
+      - init.constraints
+  - id: kc_g_one_thing_per_session
+    title: 一个会话一件事
+    domain: context
+    trigger: npc_advice
+    problem: 会话里又改bug又写文档又调数据，输出开始串味
+    wrongPattern: 图省事全在一个窗口
+    correctBehavior: 按任务种类分session；跨类工作用handoff衔接
+    why: 任务种类切换是上下文污染的最大来源
+    steps:
+      - 识别当前会话的任务种类
+      - 新种类→新会话
+      - 交接
+    toolMappings:
+      generic: 会话命名=任务名
+    successSignals:
+      - 输出始终对题
+    failureSignals:
+      - 写文档时出现代码细节
+    transferScenarios:
+      - 学习与娱乐分离
+      - 多项目并行
+    depth30s: 会话按任务分，不按时间分。
+    depth3m: 给会话起任务名；发现自己在做名字以外的事，就是开新会话的信号。
+    depth10m: 项目级session规划：调研session/实现session/文档session各一套规则与状态文件。
+    relatedSkillIds:
+      - context.temporary_memory
+      - context.reset
+  - id: kc_g_sim_vs_real
+    title: 教学模拟与真实工具的界线
+    domain: environment
+    trigger: event
+    problem: 分不清游戏里的模拟输出与真实CLI行为
+    wrongPattern: 把模拟结果当成真实工具的能力保证
+    correctBehavior: 模拟模式学流程，真实工具验证能力；界面必有明确标注
+    why: 教学要可复现，真实工具会因版本/环境而异
+    steps:
+      - 认清当前模式标识
+      - 模拟中学流程
+      - 有条件时切真实工具复现
+    toolMappings:
+      generic: 看清“模拟环境”标签
+    successSignals:
+      - 流程学会且能在真实工具复现
+    failureSignals:
+      - 把模拟输出当真
+    transferScenarios:
+      - 教学环境
+      - 演示环境
+    depth30s: 模拟学流程，真实验能力。
+    depth3m: 本游戏所有模拟输出都标“教学模拟”；真实检测走本机CLI（--version）。两者界面永远可区分。
+    depth10m: 想迁移到真实工具：装CLI→在真实项目跑同一份Task Contract→对比模拟与真实差异。
+    relatedSkillIds:
+      - environment.version

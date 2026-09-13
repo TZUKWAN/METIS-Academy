@@ -1,0 +1,84 @@
+# Initialization 域（TASK-E003）：12+ 能力原子
+skills:
+  - id: init.read_before_write
+    domain: initialization
+    title: read-before-write
+    description: 让 Agent 先读项目再动手，禁止不读就改
+    whenToUse: Agent 接手任何已有项目时
+    behaviors: [{ id: init_rbw_l1, level: 1, description: 一次任务中明确要求先读后写并验证它读了, achievementId: ach_init_readfirst }]
+    toolMappings: { claudeCode: “任务第一步写明：先通读 src/ 结构再提方案”, codex: 同样在任务开头声明, deepseekHarness: 在 contract 中固定 inspect-first 顺序 }
+  - id: init.scan_repo
+    domain: initialization
+    title: 项目扫描
+    description: 让 Agent 输出目录树、入口文件、依赖清单，确认它理解了项目
+    whenToUse: 大项目第一次合作
+    behaviors: [{ id: init_scan_l1, level: 1, description: 获得一份准确的仓库结构摘要, achievementId: ach_init_scan }]
+  - id: init.readme
+    domain: initialization
+    title: README 先行
+    description: 没有 README 的项目先补一个；它是 Agent 的第一份上下文
+    whenToUse: 新项目第一步
+    behaviors: [{ id: init_readme_l1, level: 1, description: 为项目创建或修订 README, achievementId: ach_init_readme }]
+  - id: init.project_rules
+    domain: initialization
+    title: 项目规则文件的意义
+    description: 规则文件=每次会话自动加载的长期约束，避免重复交代
+    whenToUse: 同类要求说过两遍之后
+    prerequisites: [init.readme]
+    behaviors: [{ id: init_rules_l1, level: 1, description: 把重复交代的要求沉淀进规则文件, achievementId: ach_init_rules }]
+  - id: init.init_command
+    domain: initialization
+    title: 项目 INIT 流程
+    description: 初始化=建立目录+依赖+测试骨架+规则文件；INIT 完成才开工
+    whenToUse: 每个新代码项目的开始
+    prerequisites: [init.readme]
+    behaviors: [{ id: init_init_l1, level: 1, description: 完成一次完整 INIT 并验证测试可跑, achievementId: ach_init_init }]
+    toolMappings: { claudeCode: “让 Agent 执行：分析需求→建目录→装依赖→写最小测试”, codex: 同上, deepseekHarness: dsh init 流程 }
+  - id: init.create_agents_md
+    domain: initialization
+    title: 创建 AGENTS.md
+    description: 跨工具通用的项目规则文件；包含目标/约束/工作方式/测试/验收
+    whenToUse: 项目有了固定工作方式之后
+    prerequisites: [init.project_rules]
+    behaviors: [{ id: init_agents_l1, level: 1, description: 写出一份有效的 AGENTS.md, achievementId: ach_init_agents_md }]
+    toolMappings: { claudeCode: 与 CLAUDE.md 内容保持一致或互相引用, codex: 默认读取 AGENTS.md, deepseekHarness: 指定 rules 文件路径 }
+  - id: init.create_claude_md
+    domain: initialization
+    title: 创建 CLAUDE.md
+    description: Claude Code 专属规则文件；每个 session 自动加载
+    whenToUse: 使用 Claude Code 且规则较多时
+    prerequisites: [init.create_agents_md]
+    behaviors: [{ id: init_claude_l1, level: 1, description: 创建 CLAUDE.md 并验证被遵守, achievementId: ach_init_claude_md }]
+  - id: init.existing_assets
+    domain: initialization
+    title: 盘点已有资产
+    description: 先列出可复用的文档/数据/代码，避免重复造或误删
+    whenToUse: 接手项目或开始新阶段时
+    behaviors: [{ id: init_assets_l1, level: 1, description: 完成一次资产盘点并复用其中一项, achievementId: ach_init_assets }]
+  - id: init.run_command
+    domain: initialization
+    title: 验证运行方式
+    description: 搞清楚这个项目怎么跑起来，并实际跑一次
+    whenToUse: INIT 之后、开发之前
+    behaviors: [{ id: init_run_l1, level: 1, description: 成功运行项目并记录启动命令, achievementId: ach_init_run }]
+  - id: init.test_command
+    domain: initialization
+    title: 确定测试命令
+    description: 找到/建立“一键测试”命令；后续所有改动都以它为准
+    whenToUse: INIT 阶段
+    prerequisites: [init.run_command]
+    behaviors: [{ id: init_test_l1, level: 1, description: 固化测试命令且首次跑通, achievementId: ach_init_testcmd }]
+  - id: init.constraints
+    domain: initialization
+    title: 写下硬约束
+    description: 不许动哪些文件、必须兼容什么版本，先写下来再开工
+    whenToUse: 有不可破坏的既有约定时
+    behaviors: [{ id: init_constraints_l1, level: 1, description: 在规则文件中明确硬约束, achievementId: ach_init_constraints }]
+  - id: init.handover_context
+    domain: initialization
+    title: 交接上下文准备
+    description: 新会话/新 Agent 接手需要的三件事：目标、现状、下一步
+    whenToUse: 长任务换会话时
+    prerequisites: [context.handoff]
+    behaviors: [{ id: init_handover_l2, level: 2, description: 一次干净的跨会话交接, achievementId: ach_init_handover }]
+    hiddenUntilDiscovered: true

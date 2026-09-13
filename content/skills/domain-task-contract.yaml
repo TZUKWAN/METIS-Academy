@@ -1,0 +1,107 @@
+# Task Contract 域（TASK-E004）：15+ 能力原子
+skills:
+  - id: task_contract.basics
+    domain: task_contract
+    title: Task Contract 是什么
+    description: 一份让 Agent 不跑偏的结构化任务书：背景/目标/约束/交付/验收
+    whenToUse: 任何超过一句话的任务
+    behaviors: [{ id: tc_basics_l1, level: 1, description: 写出第一份五要素齐全的任务契约, achievementId: ach_tc_first }]
+    toolMappings: { generic: 契约就是结构化的 prompt，可放文件里反复引用 }
+  - id: tc.context_section
+    domain: task_contract
+    title: Context 段
+    description: 契约开头交代背景与已有材料，Agent 不需要猜
+    whenToUse: 每份契约的第一段
+    behaviors: [{ id: tc_ctx_l1, level: 1, description: 契约含明确背景段, achievementId: ach_tc_context }]
+  - id: tc.objective
+    domain: task_contract
+    title: Objective 段
+    description: 一句话说清“做成什么样”，而不是“帮我弄一下”
+    whenToUse: 每份契约
+    behaviors: [{ id: tc_obj_l1, level: 1, description: 目标可被第三人复述且不产生歧义, achievementId: ach_tc_objective }]
+  - id: tc.non_goals
+    domain: task_contract
+    title: Non-goals（不做什么）
+    description: 明确排除项，防止 Agent 顺手扩scope
+    whenToUse: 任何容易被“顺手多做”的任务
+    behaviors: [{ id: tc_nongoals_l1, level: 1, description: 契约中写明至少一条 non-goal, achievementId: ach_tc_nongoals }]
+  - id: tc.constraints
+    domain: task_contract
+    title: Constraints 约束段
+    description: 技术/时间/格式/不许动的部分，逐条列出
+    whenToUse: 每份契约
+    behaviors: [{ id: tc_cons_l1, level: 1, description: 约束具体到可检验, achievementId: ach_tc_constraints }]
+  - id: tc.sources
+    domain: task_contract
+    title: Sources 材料清单
+    description: 指明允许使用的资料与文件路径，禁止凭空发挥
+    whenToUse: 事实型任务（综述/调研/总结）
+    behaviors: [{ id: tc_src_l1, level: 1, description: 限定材料来源后幻觉明显减少, achievementId: ach_tc_sources }]
+  - id: tc.deliverable
+    domain: task_contract
+    title: Deliverable 交付物
+    description: 写清交付什么文件、什么格式、放哪里
+    whenToUse: 每份契约
+    behaviors: [{ id: tc_del_l1, level: 1, description: 交付物精确到文件名与格式, achievementId: ach_tc_deliverable }]
+  - id: tc.acceptance
+    domain: task_contract
+    title: Acceptance 验收标准
+    description: Agent 交活前自己要先过的检查单；验收=契约的钥匙
+    whenToUse: 每份契约的最后一段
+    prerequisites: [tc.deliverable]
+    behaviors: [{ id: tc_acc_l1, level: 1, description: 写出可勾选的验收清单, achievementId: ach_tc_acceptance }]
+  - id: tc.examples
+    domain: task_contract
+    title: Examples 示例
+    description: 给一个“好的输出长这样”的样例，胜过十句形容
+    whenToUse: 输出格式要求复杂时
+    behaviors: [{ id: tc_ex_l1, level: 1, description: 附上输出样例并提升一次输出质量, achievementId: ach_tc_examples }]
+  - id: tc.scope_control
+    domain: task_contract
+    title: Scope 控制
+    description: 一份契约一件事；发现范围膨胀就拆契约
+    whenToUse: 任务写到半页纸还说不完时
+    prerequisites: [tc.objective, tc.non_goals]
+    behaviors: [{ id: tc_scope_l2, level: 2, description: 主动拆分过大任务为多份契约, achievementId: ach_tc_scope }]
+    hiddenUntilDiscovered: true
+  - id: tc.order
+    domain: task_contract
+    title: 执行顺序
+    description: 契约里写明步骤顺序（先读后写、先测后改），Agent 不会自己排
+    whenToUse: 步骤之间有依赖时
+    behaviors: [{ id: tc_order_l1, level: 1, description: 契约步骤有序且被遵守, achievementId: ach_tc_order }]
+  - id: tc.inspect_first
+    domain: task_contract
+    title: Inspect-first 条款
+    description: 契约第一条永远是“先检查现状，报告发现，再动手”
+    whenToUse: 修改已有内容前
+    prerequisites: [tc.order]
+    behaviors: [{ id: tc_inspect_l1, level: 1, description: 契约包含 inspect-first 条款, achievementId: ach_tc_inspect }]
+  - id: tc.execution_rules
+    domain: task_contract
+    title: Execution 执行规则
+    description: 遇到不确定要停下来问，还是做最保守选择——写明白
+    whenToUse: 任务有歧义风险时
+    behaviors: [{ id: tc_exec_l1, level: 1, description: 契约写明不确定时的行为, achievementId: ach_tc_execution }]
+  - id: tc.report_format
+    domain: task_contract
+    title: Report 汇报格式
+    description: 规定 Agent 结束时汇报什么：改了什么/怎么验证的/遗留什么
+    whenToUse: 每份契约
+    behaviors: [{ id: tc_report_l1, level: 1, description: 获得“改动+验证+遗留”三段式汇报, achievementId: ach_tc_report }]
+  - id: tc.uncertainty
+    domain: task_contract
+    title: Uncertainty 声明
+    description: 要求 Agent 对没把握的部分显式标注“不确定”，而不是装懂
+    whenToUse: 事实密集型任务
+    prerequisites: [tc.report_format]
+    behaviors: [{ id: tc_unc_l2, level: 2, description: 从汇报中识别出被标注的不确定点并逐一处理, achievementId: ach_tc_uncertainty }]
+    hiddenUntilDiscovered: true
+  - id: tc.stop_condition
+    domain: task_contract
+    title: Stop Condition 停止条件
+    description: 什么情况必须停下来（找不到X文件/测试连续失败3次）
+    whenToUse: 防止 Agent 死磕或瞎编时
+    prerequisites: [tc.acceptance]
+    behaviors: [{ id: tc_stop_l2, level: 2, description: 契约含停止条件且被触发过一次, achievementId: ach_tc_stop }]
+    hiddenUntilDiscovered: true
