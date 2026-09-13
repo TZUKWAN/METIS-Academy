@@ -120,15 +120,19 @@ export function StoryPage(): React.JSX.Element {
         <div className="relative z-10 mx-auto mb-6 w-full max-w-4xl">
           {event?.setup && lineIdx === -1 + 0 && null}
           {visibleDialogue.length === 0 && (
-            <div className="rounded-lg border border-ink-600 bg-ink-950/95 p-5">
+            <div className="rounded-xl border p-5" style={{ background: 'rgba(10,15,28,0.82)', backdropFilter: 'blur(20px)', borderColor: 'var(--glass-border)' }}>
               <p className="font-serif text-paper-200">{event?.setup?.[0] ?? "……"}</p>
               <p className="mt-2 text-xs text-paper-400">点击空白处继续 →</p>
             </div>
           )}
           {visibleDialogue.map((l, i) => (
-            <div key={i} className={`mb-2 rounded-lg border border-ink-600 bg-ink-950/95 p-4 ${i === visibleDialogue.length - 1 ? "" : "opacity-50"}`}>
-              <p className="mb-1 text-sm font-semibold text-accent">{l.speaker}</p>
-              <p className="font-serif leading-relaxed">{l.text}</p>
+            <div
+              key={i}
+              className={`mb-2 rounded-xl border p-5 transition-all duration-200 ${i === visibleDialogue.length - 1 ? "border-white/10" : "border-white/5 opacity-40"}`}
+              style={{ background: "rgba(10,15,28,0.82)", backdropFilter: "blur(20px) saturate(130%)", boxShadow: "0 8px 32px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)" }}
+            >
+              <p className="mb-1 text-sm font-semibold" style={{ color: "var(--accent-text)" }}>{l.speaker}</p>
+              <p className="font-serif leading-relaxed" style={{ color: "var(--text-primary)" }}>{l.text}</p>
             </div>
           ))}
           {!atLastLine && (
@@ -146,7 +150,7 @@ export function StoryPage(): React.JSX.Element {
             {event.choices.map((c) => (
               <button
                 key={c.id}
-                className="rounded-lg border border-ink-600 bg-ink-800 px-4 py-3 text-left text-sm leading-relaxed transition-colors hover:border-accent hover:bg-ink-700"
+                className="rounded-xl border border-white/8 bg-white/4 px-4 py-3.5 text-left text-sm leading-relaxed transition-all duration-150 hover:border-accent/40 hover:bg-white/6 active:scale-[0.99] cursor-pointer" style={{ backdropFilter: 'blur(12px)' }}
                 onClick={(e) => {
                   e.stopPropagation();
                   choose(c.id);
