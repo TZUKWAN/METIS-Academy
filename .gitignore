@@ -15,3 +15,6 @@ pack-log*.txt
 tmp/
 .DS_Store
 NUL
+release-final/
+*.exe
+*.zip

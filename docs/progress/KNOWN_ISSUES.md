@@ -38,7 +38,7 @@
 2. `campaign_complete` 结算判定把"已解锁未完成"的最终任务误判为已处理 → 已修复（`pending` 状态参与判定）。
 3. 多处 manual 事件无入口指针成为孤儿事件 → 已全部链接或改为日暮触发，可达性脚本守护。
 
-## 7. release5 之后新增的 2 个决策事件尚未重打包（不阻断；重打包遇 AV 竞态）
+## 7. NSIS 重打包 AV 竞态（已解决：换用全新输出目录名）
 
 - 现象：07:46 的 release5/METIS Academy Setup 1.0.0.exe 构建后，又于 07:52 追加了 2 个决策事件（创业线 v_d06_notes_choice / v_d17_launch_choice）与若干 relatedSkillIds 接线。重打包尝试连续遇到 Windows Defender 对新写入大 exe 的 UNKNOWN 占用（release6 尝试 5 次，含 2 分钟等待）。
 - 影响：安装版游戏内容与当前内容头存在 2 个事件的差异；portable zip 同样为 07:46 内容。游戏本体功能完整。

@@ -5,8 +5,8 @@
 
 ## 你需要准备
 
-1. 安装包：`apps/desktop/release5/METIS Academy Setup 1.0.0.exe`（92.8 MB，NSIS 安装器）
-   - 或免安装版：`apps/desktop/release5/METIS Academy-1.0.0-win.zip`（解压即用）
+1. 安装包：`apps/desktop/release-final/METIS Academy Setup 1.0.0.exe`（92.8 MB，NSIS 安装器）
+   - 或免安装版：`apps/desktop/release-final/METIS Academy-1.0.0-win.zip`（解压即用）
 2. 一台 Windows 10/11 电脑（无需任何开发环境、无需 AI Key）
 3. 本文件 + `PLAYTEST_RECORDS.md`（打印或分屏）
 
