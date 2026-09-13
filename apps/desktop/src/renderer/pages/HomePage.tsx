@@ -3,7 +3,7 @@ import { Plus, Play, Trophy, Save, FolderOpen } from "lucide-react";
 import { useGame } from "../store.js";
 import { metis } from "../api.js";
 
-/** 首页（G002）：当前角色/主线/任务、继续游戏、三条 campaign、最近资产、已发现 endings、存档 */
+/** 首页：当前角色/主线/任务、继续游戏、三条 campaign、最近资产、已发现 endings、存档 */
 export function HomePage(): React.JSX.Element {
   const { index, state, profile, newGame, setPage, loadFrom } = useGame();
   const [showNew, setShowNew] = useState(false);
@@ -59,7 +59,7 @@ export function HomePage(): React.JSX.Element {
         </section>
       )}
 
-      {/* 三条主线（G002） */}
+      {/* 三条主线 */}
       <section className="mb-6">
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-paper-400">三条主线</h2>
         <div className="grid grid-cols-3 gap-4">
@@ -219,7 +219,7 @@ export function SavesModal({ onClose, onLoad }: { onClose: () => void; onLoad?: 
         </div>
         {state && (
           <p className="mt-3 text-xs text-paper-400">
-            自动存档在每次选择、结束一天、任务完成与结局前触发（C015）。存档含版本号，未来格式变更可迁移（C017）。
+            自动存档在每次选择、结束一天、任务完成与结局前触发。存档含版本号，未来格式变更可迁移。
           </p>
         )}
       </div>

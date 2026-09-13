@@ -5,7 +5,7 @@ import { useGame } from "../store.js";
 import { SavesModal } from "./HomePage.js";
 import { refreshBGM, setVolume as setAudioVolume, setAudioEnabled } from "../audio.js";
 
-/** 设置页（G009）：AI Provider / Agent CLI / 外观 / 字体 / 音量 / 存档 / 数据目录 / 隐私 */
+/** 设置页：AI Provider / Agent CLI / 外观 / 字体 / 音量 / 存档 / 数据目录 / 隐私 */
 export function SettingsPage(): React.JSX.Element {
   const [providers, setProviders] = useState<ProviderCfg[]>([]);
   const [clis, setClis] = useState<CliInfo[]>([]);
@@ -54,7 +54,7 @@ export function SettingsPage(): React.JSX.Element {
           </button>
         </div>
         <p className="mb-3 text-xs text-paper-400">
-          API Key 通过系统安全存储加密保存，绝不写入明文文件或日志（P001）。未配置任何 Provider 时，游戏所有主线均可完整游玩（L004）。
+          API Key 通过系统安全存储加密保存，绝不写入明文文件或日志。未配置任何 Provider 时，游戏所有主线均可完整游玩。
         </p>
         <div className="space-y-2">
           {providers.length === 0 && <p className="text-sm text-paper-400">尚未配置。三条主线无需 AI 也可完整体验。</p>}
@@ -95,7 +95,7 @@ export function SettingsPage(): React.JSX.Element {
         </div>
       </section>
 
-      {/* CLI Agent（D011） */}
+      {/* CLI Agent */}
       <section className="card mb-4">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-paper-400">Agent CLI 工具</h2>
@@ -165,7 +165,7 @@ export function SettingsPage(): React.JSX.Element {
           <span className="tag">数据目录：{dataDir}</span>
           <span className="tag">存储后端：{backend === "sqlite" ? "SQLite" : "JSON（回退）"}</span>
           <span className="tag">
-            版本：app {versions?.app} · content {versions?.content}（T004）
+            版本：app {versions?.app} · content {versions?.content}
           </span>
         </div>
         <h3 className="mb-2 flex items-center gap-1 text-xs font-semibold text-rose">
@@ -197,7 +197,7 @@ export function SettingsPage(): React.JSX.Element {
           ))}
         </div>
         <p className="mt-2 text-[11px] text-paper-400">
-          隐私（P003）：本游戏不记录 API Key、不记录你的敏感文件内容；日志只包含任务摘要与退出码。
+          隐私：本游戏不记录 API Key、不记录你的敏感文件内容；日志只包含任务摘要与退出码。
         </p>
       </section>
 

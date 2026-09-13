@@ -10,6 +10,7 @@ import { LibraryPage } from "./pages/LibraryPage.js";
 import { SettingsPage } from "./pages/SettingsPage.js";
 import { Onboarding } from "./pages/Onboarding.js";
 import { sfx, startBGM } from "./audio.js";
+import { AuroraBackground } from "./design/components/ui.js";
 
 const NAV: { id: Page; label: string; icon: React.ReactNode }[] = [
   { id: "home", label: "首页", icon: <Home size={18} /> },
@@ -30,7 +31,6 @@ export function App(): React.JSX.Element {
   }, [index.campaigns.size, onboardingDone]);
 
   useEffect(() => {
-    // BGM 需用户手势后启动（浏览器音频策略）；音量滑杆变化时经 refreshBGM 调整
     const once = (): void => startBGM();
     window.addEventListener('pointerdown', once, { once: true });
     window.addEventListener('keydown', once, { once: true });
@@ -41,53 +41,55 @@ export function App(): React.JSX.Element {
   }, []);
 
   return (
-    <div className="flex h-full">
-      {/* 左侧主导航（G001） */}
-      <nav className="flex w-16 flex-col items-center gap-1 border-r border-ink-700 bg-ink-950 py-3">
-        <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-accent font-serif text-sm font-bold text-white">M</div>
-        {NAV.map((n) => (
-          <button
-            key={n.id}
-            onClick={() => setPage(n.id)}
-            className={`flex w-14 flex-col items-center gap-1 rounded-md py-2 text-[11px] transition-colors ${
-              page === n.id ? "bg-ink-700 text-white" : "text-paper-400 hover:bg-ink-800 hover:text-paper-200"
-            }`}
-            title={n.label}
-          >
-            {n.icon}
-            {n.label}
-          </button>
-        ))}
-        {contentIssues > 0 && (
-          <span className="mt-auto rounded bg-rose px-1 text-[10px] text-white" title={`内容问题 ${contentIssues} 条`}>
-            内容{contentIssues}
-          </span>
+    <>
+      <AuroraBackground />
+      <div className="flex h-full">
+        <nav className="flex w-16 flex-col items-center gap-1 border-r border-ink-700 bg-ink-950 py-3">
+          <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-accent font-serif text-sm font-bold text-white">M</div>
+          {NAV.map((n) => (
+            <button
+              key={n.id}
+              onClick={() => setPage(n.id)}
+              className={`flex w-14 flex-col items-center gap-1 rounded-md py-2 text-[11px] transition-colors ${
+                page === n.id ? "bg-ink-700 text-white" : "text-paper-400 hover:bg-ink-800 hover:text-paper-200"
+              }`}
+              title={n.label}
+            >
+              {n.icon}
+              {n.label}
+            </button>
+          ))}
+          {contentIssues > 0 && (
+            <span className="mt-auto rounded bg-rose px-1 text-[10px] text-white" title={`内容问题 ${contentIssues} 条`}>
+              内容{contentIssues}
+            </span>
+          )}
+        </nav>
+
+        <main className="min-w-0 flex-1 overflow-hidden">
+          {page === "home" && <HomePage />}
+          {page === "story" && (state ? <StoryPage /> : <HomePage />)}
+          {page === "workbench" && <WorkbenchPage />}
+          {page === "studio" && <StudioPage />}
+          {page === "skills" && <SkillsPage />}
+          {page === "library" && <LibraryPage />}
+          {page === "settings" && <SettingsPage />}
+          {composed && <EndingOverlay />}
+        </main>
+
+        {toast && (
+          <div className="absolute left-1/2 top-4 z-50 -translate-x-1/2 rounded-md bg-ink-700 px-4 py-2 text-sm shadow-lg">{toast}</div>
         )}
-      </nav>
-
-      <main className="min-w-0 flex-1 overflow-hidden">
-        {page === "home" && <HomePage />}
-        {page === "story" && (state ? <StoryPage /> : <HomePage />)}
-        {page === "workbench" && <WorkbenchPage />}
-        {page === "studio" && <StudioPage />}
-        {page === "skills" && <SkillsPage />}
-        {page === "library" && <LibraryPage />}
-        {page === "settings" && <SettingsPage />}
-        {composed && <EndingOverlay />}
-      </main>
-
-      {toast && (
-        <div className="absolute left-1/2 top-4 z-50 -translate-x-1/2 rounded-md bg-ink-700 px-4 py-2 text-sm shadow-lg">{toast}</div>
-      )}
-      {showOnboarding && (
-        <Onboarding
-          onDone={() => {
-            setShowOnboarding(false);
-            useGame.getState().finishOnboarding();
-          }}
-        />
-      )}
-    </div>
+        {showOnboarding && (
+          <Onboarding
+            onDone={() => {
+              setShowOnboarding(false);
+              useGame.getState().finishOnboarding();
+            }}
+          />
+        )}
+      </div>
+    </>
   );
 }
 
@@ -129,7 +131,7 @@ function EndingOverlay(): React.JSX.Element {
         </div>
         {fateReview && fateReview.length > 0 && (
           <div className="mt-5">
-            <p className="mb-2 text-sm font-semibold">命运回溯（Fate Review）——影响结局的关键决定</p>
+            <p className="mb-2 text-sm font-semibold">命运回溯——影响结局的关键决定</p>
             <div className="space-y-2">
               {fateReview.map((f, i) => (
                 <div key={i} className="rounded-md border border-ink-600 bg-ink-900 p-3 text-sm">

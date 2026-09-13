@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-/** 新手引导（G010）：只教最低限度——继续剧情、做选择、进工作台、返回 */
+/** 新手引导：只教最低限度——继续剧情、做选择、进工作台、返回 */
 export function Onboarding({ onDone }: { onDone: () => void }): React.JSX.Element {
   const steps = [
     {

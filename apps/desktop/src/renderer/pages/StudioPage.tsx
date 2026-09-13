@@ -3,7 +3,7 @@ import { useGame } from "../store.js";
 import { ASSET_TYPE_CATALOG, type AssetType } from "@metis/content-schema";
 import { assetsByCategory } from "@metis/game-core";
 
-/** 工作室（G006）：按 Research/Competition/Venture/Agent/通用 分类展示玩家资产 */
+/** 工作室：按 Research/Competition/Venture/Agent/通用 分类展示玩家资产 */
 export function StudioPage(): React.JSX.Element {
   const { state } = useGame();
   const categories = ["Research", "Competition", "Venture", "Agent", "通用"];

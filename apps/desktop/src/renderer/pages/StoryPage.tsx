@@ -17,7 +17,7 @@ export function StoryPage(): React.JSX.Element {
   const autoRef = useRef(false);
   autoRef.current = autoPlay;
 
-  // 自动播放（G003）：无选项时每 1.2s 自动推进
+  // 自动播放：无选项时每 1.2s 自动推进
   useEffect(() => {
     if (!autoPlay) return;
     const t = setInterval(() => {

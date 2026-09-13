@@ -8,7 +8,7 @@ import { scoreTaskContract, scoreAgentsMd, scoreGoal, scoreLoop, type ScoreResul
 
 type CenterTab = "editor" | "terminal" | "history";
 
-/** 工作台（G005）：左=项目/资产；中=编辑器/终端/运行历史；右=AI 对话与任务（D013/D014/M001-M006） */
+/** 工作台：左=项目/资产；中=编辑器/终端/运行历史；右=AI 对话与任务（D013/D014/M001-M006） */
 export function WorkbenchPage(): React.JSX.Element {
   const { state, index } = useGame();
   const [tab, setTab] = useState<CenterTab>("editor");
@@ -182,7 +182,7 @@ function scoreFor(type: string, text: string): ScoreResult | null {
   }
 }
 
-/** 终端（D013）：xterm.js 实现——输出/状态/停止/清空/搜索 */
+/** 终端：xterm.js 实现——输出/状态/停止/清空/搜索 */
 function TerminalPanel(): React.JSX.Element {
   const [cwd, setCwd] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
@@ -286,7 +286,7 @@ function TerminalPanel(): React.JSX.Element {
       <div ref={termHostRef} className="min-h-0 flex-1 bg-black/70 p-2" />
       {state && (
         <p className="border-t border-ink-700 px-3 py-1 text-[11px] text-paper-400">
-          游戏日 第 {state.nums["day"]} 天 · 渲染进程无任何 Shell 权限，所有命令经主进程白名单执行（D012）。
+          游戏日 第 {state.nums["day"]} 天 · 渲染进程无任何 Shell 权限，所有命令经主进程白名单执行。
         </p>
       )}
     </div>
@@ -305,7 +305,7 @@ function RunHistory(): React.JSX.Element {
   return (
     <div className="h-full overflow-y-auto p-3 text-sm">
       <div className="mb-2 flex items-center justify-between">
-        <h3 className="font-semibold">Agent 运行历史（D014）</h3>
+        <h3 className="font-semibold">Agent 运行历史</h3>
         <button
           className="btn-ghost text-xs"
           onClick={() => {

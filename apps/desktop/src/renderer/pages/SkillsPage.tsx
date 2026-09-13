@@ -2,7 +2,7 @@ import { Lock } from "lucide-react";
 import { useGame } from "../store.js";
 import { SKILL_DOMAIN_LABEL, type SkillDomain } from "@metis/content-schema";
 
-/** 能力树（G007）：只显示玩家已知信息；未发现的技能模糊显示 */
+/** 能力树：只显示玩家已知信息；未发现的技能模糊显示 */
 export function SkillsPage(): React.JSX.Element {
   const { index, state, profile } = useGame();
   const domains = Object.keys(SKILL_DOMAIN_LABEL) as SkillDomain[];
