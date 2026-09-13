@@ -438,7 +438,7 @@ events:
     type: npc
     trigger: { kind: random, weight: 2 }
     scene: { location: dorm, characters: [v_user_club] }
-    setup: ["老K打来电话：“辩论队那边用你工具报了120人，没出岔子。……不过他们社长问，能不能收报名费？”"]
+    setup: ["老K打来电话：辩论队那边用你工具报了120人，没出岔子。不过他们社长问，能不能收报名费？”"]
     dialogue:
       - { speaker: 你, text: "（记进需求池：06 报名费代收，来源：辩论队社长，频次第2次提及）" }
       - { speaker: 老K, text: "行，你上心。这功能要是有了，好几个社都愿意用。" }

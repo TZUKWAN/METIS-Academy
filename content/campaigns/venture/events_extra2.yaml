@@ -13,7 +13,7 @@ events:
         visibleResponse: 便签贴在屏幕边。过程目标比结果目标更可执行。
         hiddenEffects: [{ kind: add, key: independence, value: 3 }]
       - id: vanity_goal
-        text: 赚他一个亿！“（开玩笑地）
+        text: 赚他一个亿（开玩笑地）
         visibleResponse: 室友笑了。你也笑了。然后便签空着。
         hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
     terminal: true
@@ -257,7 +257,7 @@ events:
     type: decision
     trigger: { kind: random, weight: 2 }
     scene: { location: cafe, characters: [v_mentor] }
-    setup: [“上线首日你有点手足无措，去问罗哥：”先做什么？“]
+    setup: [上线首日你有点手足无措，去问罗哥：先做什么？]
     dialogue:
       - { speaker: 罗哥, text: "反问你：今天最重要的一件事是什么？" }
     choices:
@@ -490,7 +490,7 @@ events:
     type: story
     trigger: { kind: day, day: 11, phase: end }
     scene: { location: workbench, characters: [] }
-    setup: [“你给仓库打了个标签 v0.1，备注：”第一次跑通报名聚合。“]
+    setup: [你给仓库打了个标签 v0.1，备注：第一次跑通报名聚合。]
     automaticEffects: [{ kind: add, key: execution, value: 2 }]
     terminal: true
 

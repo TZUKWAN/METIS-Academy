@@ -320,7 +320,7 @@ events:
         visibleResponse: 挂了电话你眼眶有点热。情绪稳定也是战斗力。
         hiddenEffects: [{ kind: add, key: energy, value: 8 }]
       - id: pretend_fine
-        text: 挺好的不累！“然后继续熬
+        text: 挺好的不累，然后继续熬
         visibleResponse: 报喜不报忧是你的自由。但熬夜是你的损失。
         hiddenEffects: [{ kind: subtract, key: energy, value: 6 }]
     terminal: true

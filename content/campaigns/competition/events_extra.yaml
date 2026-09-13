@@ -61,7 +61,7 @@ events:
     choices:
       - id: ask_now
         text: 当场让Agent用社团场景举例讲明白
-        visibleResponse: 一个服务器像一栋楼，每个社团一间锁好的房。“懂了。这个概念明天会出现在架构讨论里。
+        visibleResponse: 一个服务器像一栋楼，每个社团一间锁好的房。懂了，这个概念明天会出现在架构讨论里。
         hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: achievement, achievementId: ach_c_concept_cleared }]
       - id: skip_it
         text: 假装懂了，先往下走
@@ -149,7 +149,7 @@ events:
         hiddenEffects: [{ kind: add, key: teamTrust, value: 3 }]
       - id: try_now
         text: 试试呗，就半小时
-        visibleResponse: 半小时“变成了大半天。核心流程今天零进度。
+        visibleResponse: 半小时变成了大半天，核心流程今天零进度。
         hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }]
     terminal: true
 

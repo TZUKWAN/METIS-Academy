@@ -340,7 +340,7 @@ events:
     type: story
     trigger: { kind: random, weight: 2 }
     scene: { location: dorm, characters: [] }
-    setup: ["校园墙出现一条差评：“界面糙，bug有，但居然是全校唯一能自动合并报名表的。三星。"]
+    setup: ["校园墙出现一条差评：界面糙，bug有，但居然是全校唯一能自动合并报名表的。三星。"]
     automaticEffects:
       - { kind: add, key: credibility, value: 3 }
     dialogue:

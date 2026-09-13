@@ -80,7 +80,7 @@ knowledge:
       - 需求调研
       - 用户回访
     depth30s: 问过去，别问未来。
-    depth3m: 你会用吗“得到的是礼貌；”上次怎么解决的“得到的是真实。痛点=已经花钱/花时间绕过的坑。
+    depth3m: 问会不会用得到的是礼貌，问上次怎么解决的得到的是真实。痛点=已经花钱或花时间绕过的坑。
     depth10m: 建立"痛点证据表"：原话/频次/现解决方案/绕行成本。低于3个独立来源的痛点不进方案。
     relatedSkillIds:
       - verification.source_check
@@ -109,7 +109,7 @@ knowledge:
       - 技术选型
       - 报价对比
     depth30s: 范围+维度+抽查=竞品矩阵。
-    depth3m: 缺陷“列最值钱——你的定位藏在竞品的缺陷里；每列必须有出处链接。
+    depth3m: 缺陷列最值钱——你的定位藏在竞品的缺陷里。每列必须有出处链接。
     depth10m: 矩阵加"我们"一行做gap分析；答辩时直接投影这一行。
     relatedSkillIds:
       - org.aggregation
@@ -385,7 +385,7 @@ knowledge:
       - 产品Demo
       - 原型测试
     depth30s: 造可以，标必须。
-    depth3m: 演示数据“四个字成本为零，救的是整场答辩的可信度。
+    depth3m: 演示数据四个字成本为零，救的是整场答辩的可信度。
     depth10m: 数据脚本存档：生成规则可复现，说明你们连假数据都造得严谨。
     relatedSkillIds:
       - verification.human_check
@@ -521,7 +521,7 @@ knowledge:
       - 面试
       - 述职
     depth30s: 承认短板不会扣分，吹牛会。
-    depth3m: 错了我们认“是全场最稀缺的答案——它证明剩下的话都可信。
+    depth3m: 错了我们认，是全场最稀缺的答案——它证明剩下的话都可信。
     depth10m: 每张应答卡演练到第四句就停——克制是答辩的顶级技巧。
     relatedSkillIds:
       - verification.acceptance_criteria
@@ -684,7 +684,7 @@ knowledge:
       - 产品立项
       - 电梯演讲
     depth30s: 六句话，句句真话。
-    depth3m: 影响“必须有算法（基数×频次×节省）；”创新“必须有对比对象。
+    depth3m: 影响必须有算法（基数×频次×节省），创新必须有对比对象。
     depth10m: 六要素各配一个"如果被质疑"的应答卡——这张卡就是你的答辩底座。
     relatedSkillIds:
       - tc.context_section
