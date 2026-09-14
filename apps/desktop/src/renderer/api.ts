@@ -84,3 +84,62 @@ export function metis(): MetisApi {
   if (!window.metis) throw new Error("METIS API 不可用（preload 未加载）");
   return window.metis;
 }
+
+
+// ===== 浏览器模式 Mock（无 Electron 时自动启用） =====
+function createBrowserMock(): MetisApi {
+  const noop = () => Promise.resolve(undefined as never);
+  const saves: Record<number, { slot: number; label: string; savedAt: string; payload: string }> = {};
+  return {
+    app: {
+      versions: () => Promise.resolve({ app: 'browser-dev', electron: 'browser', chrome: 'browser', node: 'browser', content: '1.0.0' }),
+      dataDir: () => Promise.resolve('/tmp/metis-browser'),
+      storageBackend: () => Promise.resolve('json' as const),
+      reset: () => Promise.resolve(true),
+    },
+    dialog: {
+      chooseDirectory: () => Promise.resolve('/tmp/mock-project'),
+      isAllowed: () => Promise.resolve(true),
+    },
+    saves: {
+      list: () => Promise.resolve(Object.values(saves)),
+      put: (row: { slot: number; label: string; savedAt: string; payload: string }) => { saves[row.slot] = row; return Promise.resolve(true); },
+      get: (slot: number) => Promise.resolve(saves[slot] ?? null),
+      delete: (slot: number) => { delete saves[slot]; return Promise.resolve(true); },
+    },
+    profile: {
+      get: () => Promise.resolve(null),
+      put: () => Promise.resolve(true),
+    },
+    providers: {
+      list: () => Promise.resolve([]),
+      upsert: () => Promise.resolve({ ok: true }),
+      remove: () => Promise.resolve(true),
+      setDefault: () => Promise.resolve(true),
+      test: () => Promise.resolve({ ok: false, message: '浏览器模式不支持真实 API 调用' }),
+    },
+    ai: {
+      chat: () => Promise.resolve({ ok: false, error: '浏览器模式不支持 AI 调用' }),
+      stream: () => Promise.resolve(false),
+      onChunk: () => () => {},
+      onStreamError: () => () => {},
+    },
+    cli: {
+      list: () => Promise.resolve([
+        { id: 'claude-code-sim', displayName: 'Claude Code（教学模拟）', simulated: true, installed: true, version: 'sim', guide: { steps: [], docsUrl: '' } },
+        { id: 'codex-sim', displayName: 'Codex CLI（教学模拟）', simulated: true, installed: true, version: 'sim', guide: { steps: [], docsUrl: '' } },
+      ]),
+      run: () => Promise.resolve({ ok: true }),
+      cancel: () => Promise.resolve(true),
+      history: () => Promise.resolve([]),
+      clearHistory: () => Promise.resolve(true),
+      onOutput: () => () => {},
+      onDone: () => () => {},
+    },
+  } as unknown as MetisApi;
+}
+
+// 自动检测：如果是浏览器环境（无 Electron preload），使用 mock
+if (typeof window !== 'undefined' && !window.metis) {
+  (window as unknown as { metis: MetisApi }).metis = createBrowserMock();
+}

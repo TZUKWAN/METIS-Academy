@@ -1,0 +1,31 @@
+# Asset Manifest
+
+All third-party assets must be registered here with full license provenance.
+
+## Schema
+
+```yaml
+id: unique-asset-key
+path: relative/path/from/assets/
+type: font | image | audio | icon | ui
+sourceName: Kenney UI Pack
+sourceUrl: https://kenney.nl/assets/ui-pack
+author: Kenney
+license: CC0
+licenseUrl: https://creativecommons.org/publicdomain/zero/1.0/
+downloadDate: 2026-09-15
+sourceVersion: 1.0
+checksum: sha256:...
+modified: false
+derivedFiles: []
+usedIn: []
+notes: ""
+```
+
+## Allowlist
+
+CC0, MIT, ISC, BSD-2-Clause, BSD-3-Clause, Apache-2.0, SIL OFL 1.1
+
+## Denylist
+
+CC BY-SA, GPL, AGPL, CC BY-NC, CC BY-ND, Custom "free for personal use", unknown
