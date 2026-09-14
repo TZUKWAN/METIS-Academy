@@ -118,7 +118,7 @@ knowledge:
     title: 把形容词翻译成验收标准
     domain: task_contract
     trigger: event
-    problem: 做漂亮点“”好用一点“导致扯皮
+    problem: 做漂亮点、好用一点等模糊需求导致扯皮
     wrongPattern: 接受模糊需求直接开干
     correctBehavior: 翻译成可测指标：首屏≤1秒/3步完成/错误提示文案清单
     why: 形容词无法验收，指标才能
@@ -340,7 +340,7 @@ knowledge:
     title: 比赛代码也要上Git
     domain: environment
     trigger: event
-    problem: 最新版最终版真最终版.zip“合并丢代码
+    problem: 压缩包合并丢代码
     wrongPattern: 压缩包传文件
     correctBehavior: Git+两条分支规则：main可演示/feature随便造
     why: 版本控制=后悔药+并行协作的基础
@@ -421,7 +421,7 @@ knowledge:
     domain: agent_organization
     trigger: first_failure
     problem: 三个人各干各的，最后拼不起来
-    wrongPattern: 都是成年人“式放养
+    wrongPattern: 放养式管理
     correctBehavior: 分工表：职责/交付标准/不许做/集成方式
     why: 温柔的模糊分工是内讧的温床
     steps:

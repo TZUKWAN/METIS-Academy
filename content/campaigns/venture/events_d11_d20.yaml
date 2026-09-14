@@ -114,7 +114,7 @@ events:
         text: 目标：尽快上线
         visibleResponse: Agent 问“上线”指内测还是公测、要不要域名、支付接不接——你发现“尽快”里全是没做的决定。
         hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
-    learningPoint: “尽快“不是目标，判据才是
+    learningPoint: 尽快不是目标，判据才是
 
   - id: v_d16_loop
     campaign: venture

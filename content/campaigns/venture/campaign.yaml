@@ -159,7 +159,7 @@ missions:
     day: 4
     title: 访谈验证
     objective: 用行为式访谈验证问题，证伪至少一个方向
-    briefing: “你会用吗？“得到礼貌，”上次什么时候？“得到真相。
+    briefing: 问会不会用得到的是礼貌，问上次什么时候得到的是真相。
     prerequisites: [vm1]
     entryEventId: v_d04_who
     completionConditions:
