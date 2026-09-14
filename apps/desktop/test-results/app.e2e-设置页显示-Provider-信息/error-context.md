@@ -6,15 +6,15 @@
 
 # Test info
 
-- Name: app.e2e.spec.ts >> 方法库可搜索
-- Location: tests\e2e\app.e2e.spec.ts:72:5
+- Name: app.e2e.spec.ts >> 设置页显示 Provider 信息
+- Location: tests\e2e\app.e2e.spec.ts:81:5
 
 # Error details
 
 ```
 TimeoutError: locator.click: Timeout 30000ms exceeded.
 Call log:
-  - waiting for locator('nav button').filter({ hasText: '方法库' }).first()
+  - waiting for locator('nav button').filter({ hasText: '设置' }).first()
 
 ```
 
@@ -111,8 +111,7 @@ Call log:
   72 | test('方法库可搜索', async () => {
   73 |   await enterGame();
   74 |   const libBtn = page.locator('nav button', { hasText: '方法库' }).first();
-> 75 |   await libBtn.click({ force: true });
-     |                ^ TimeoutError: locator.click: Timeout 30000ms exceeded.
+  75 |   await libBtn.click({ force: true });
   76 |   await page.waitForTimeout(500);
   77 |   const hasLib = await page.getByText(/知识卡|方法|搜索/).first().isVisible().catch(() => false);
   78 |   expect(hasLib).toBe(true);
@@ -121,7 +120,8 @@ Call log:
   81 | test('设置页显示 Provider 信息', async () => {
   82 |   await enterGame();
   83 |   const setBtn = page.locator('nav button', { hasText: '设置' }).first();
-  84 |   await setBtn.click({ force: true });
+> 84 |   await setBtn.click({ force: true });
+     |                ^ TimeoutError: locator.click: Timeout 30000ms exceeded.
   85 |   await page.waitForTimeout(500);
   86 |   const hasSettings = await page.getByText(/AI|设置|Provider|存储/).first().isVisible().catch(() => false);
   87 |   expect(hasSettings).toBe(true);

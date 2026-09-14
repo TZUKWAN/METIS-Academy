@@ -6,16 +6,16 @@
 
 # Test info
 
-- Name: app.e2e.spec.ts >> 方法库可搜索
-- Location: tests\e2e\app.e2e.spec.ts:72:5
+- Name: app.e2e.spec.ts >> 进入游戏后剧情页可见
+- Location: tests\e2e\app.e2e.spec.ts:48:5
 
 # Error details
 
 ```
-TimeoutError: locator.click: Timeout 30000ms exceeded.
-Call log:
-  - waiting for locator('nav button').filter({ hasText: '方法库' }).first()
+Error: expect(received).toBe(expected) // Object.is equality
 
+Expected: true
+Received: false
 ```
 
 # Page snapshot
@@ -87,7 +87,8 @@ Call log:
   48 | test('进入游戏后剧情页可见', async () => {
   49 |   await enterGame();
   50 |   const hasStory = await page.getByText(/任务：|剧情|DAY|天/).first().isVisible().catch(() => false);
-  51 |   expect(hasStory).toBe(true);
+> 51 |   expect(hasStory).toBe(true);
+     |                    ^ Error: expect(received).toBe(expected) // Object.is equality
   52 | });
   53 | 
   54 | test('工作台可导航', async () => {
@@ -111,8 +112,7 @@ Call log:
   72 | test('方法库可搜索', async () => {
   73 |   await enterGame();
   74 |   const libBtn = page.locator('nav button', { hasText: '方法库' }).first();
-> 75 |   await libBtn.click({ force: true });
-     |                ^ TimeoutError: locator.click: Timeout 30000ms exceeded.
+  75 |   await libBtn.click({ force: true });
   76 |   await page.waitForTimeout(500);
   77 |   const hasLib = await page.getByText(/知识卡|方法|搜索/).first().isVisible().catch(() => false);
   78 |   expect(hasLib).toBe(true);
