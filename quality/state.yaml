@@ -2,34 +2,34 @@ version: 1
 releaseStatus: NOT_RELEASE_READY
 git:
   branch: v2-rebuild
-  sha: 7821d281955205aef07194a1e78905dd678ccf9c
+  sha: eb9ac82a458916c165d43246fa33defacad7e0b1
 round:
   current: 1
   cleanConsecutive: 0
 metrics:
   research:
-    events: 508
-    baseEndings: 119
-    meaningfulDecisions: 154
+    events: 521
+    baseEndings: 138
+    meaningfulDecisions: 161
     delayedConsequences: 71
     npcInteractions: 201
-    hiddenEvents: 24
-    ngPlusEvents: 16
-    hiddenBaseEndings: 18
-    ngPlusBaseEndings: 13
+    hiddenEvents: 34
+    ngPlusEvents: 17
+    hiddenBaseEndings: 24
+    ngPlusBaseEndings: 14
     ultraRareBaseEndings: 3
-    displayVariantCount: 1116
+    displayVariantCount: 1230
     endingTones:
-      positive: 45
-      negative: 25
-      mixed: 22
+      positive: 61
+      negative: 27
+      mixed: 23
       ambiguous: 0
       unset: 27
-    visibleEventRange: 218
+    visibleEventRange: 221
   competition:
-    events: 481
-    baseEndings: 130
-    meaningfulDecisions: 118
+    events: 486
+    baseEndings: 135
+    meaningfulDecisions: 123
     delayedConsequences: 57
     npcInteractions: 224
     hiddenEvents: 30
@@ -37,14 +37,14 @@ metrics:
     hiddenBaseEndings: 18
     ngPlusBaseEndings: 11
     ultraRareBaseEndings: 3
-    displayVariantCount: 878
+    displayVariantCount: 908
     endingTones:
-      positive: 39
+      positive: 44
       negative: 26
       mixed: 31
       ambiguous: 12
       unset: 22
-    visibleEventRange: 188
+    visibleEventRange: 193
   venture:
     events: 531
     baseEndings: 110
@@ -83,4 +83,4 @@ issues:
   S3: 0
   S4: 0
 nextWorkItem: WP-002 FULL GAP INVENTORY
-lastUpdated: 2026-09-15T20:17:27.750Z
+lastUpdated: 2026-09-15T20:40:27.487Z

@@ -1,28 +1,28 @@
 {
-  "gitSha": "b03c227cd1914a44586c109b504634adeae4fdf9",
+  "gitSha": "eb9ac82a458916c165d43246fa33defacad7e0b1",
   "appVersion": "1.0.0",
   "contentVersion": "unknown",
-  "calculatedAt": "2026-09-15T20:31:55.029Z",
+  "calculatedAt": "2026-09-15T20:40:23.618Z",
   "research": {
-    "events": 508,
-    "baseEndings": 119,
-    "meaningfulDecisions": 154,
+    "events": 521,
+    "baseEndings": 138,
+    "meaningfulDecisions": 161,
     "delayedConsequences": 71,
     "npcInteractions": 201,
-    "hiddenEvents": 24,
-    "ngPlusEvents": 16,
-    "hiddenBaseEndings": 18,
-    "ngPlusBaseEndings": 13,
+    "hiddenEvents": 34,
+    "ngPlusEvents": 17,
+    "hiddenBaseEndings": 24,
+    "ngPlusBaseEndings": 14,
     "ultraRareBaseEndings": 3,
-    "displayVariantCount": 1116,
+    "displayVariantCount": 1230,
     "endingTones": {
-      "positive": 45,
-      "negative": 25,
-      "mixed": 22,
+      "positive": 61,
+      "negative": 27,
+      "mixed": 23,
       "ambiguous": 0,
       "unset": 27
     },
-    "visibleEventRange": 218
+    "visibleEventRange": 221
   },
   "competition": {
     "events": 486,
@@ -67,9 +67,9 @@
     "visibleEventRange": 145
   },
   "totals": {
-    "events": 1525,
-    "baseEndings": 364,
-    "meaningfulDecisions": 400,
+    "events": 1538,
+    "baseEndings": 383,
+    "meaningfulDecisions": 407,
     "delayedConsequences": 170
   }
 }

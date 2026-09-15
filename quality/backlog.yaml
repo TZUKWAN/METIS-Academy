@@ -4,7 +4,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research base endings 119/160
+    description: Research base endings 138/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: pnpm quality:metrics 显示 research.baseEndings >= 160
     status: open
@@ -16,7 +16,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition base endings 130/160
+    description: Competition base endings 135/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: competition.baseEndings >= 160
     status: open
@@ -52,7 +52,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition meaningful decisions 118/140
+    description: Competition meaningful decisions 123/140
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: competition.meaningfulDecisions >= 140
     status: open
@@ -229,7 +229,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research hidden events 24/40
+    description: Research hidden events 34/40
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.hiddenEvents >= 40
     status: open
@@ -241,7 +241,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research NG+ events 16/30
+    description: Research NG+ events 17/30
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.ngPlusEvents >= 30
     status: open
@@ -256,16 +256,16 @@ backlog:
     description: Research hidden base endings 18/20
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.hiddenBaseEndings >= 20
-    status: open
+    status: fixed
     dependencies: []
     gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
-    gitShaFixed: ""
+    gitShaFixed: eb9ac82a458916c165d43246fa33defacad7e0b1
   - id: GAP-NGE-RES
     requirementId: research.ngPlusBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Research NG+ base endings 13/16
+    description: Research NG+ base endings 14/16
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.ngPlusBaseEndings >= 16
     status: open
