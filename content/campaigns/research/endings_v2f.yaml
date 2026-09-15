@@ -1,0 +1,361 @@
+# METIS Academy Research V2 结局批次九 —— 孤儿旗标回收第二批（紧凑批）
+endings:
+  - id: r_v2_babysat_end
+    campaign: research
+    title: 《保姆式跑数》
+    mainResult: 亲自盯完每一步数据的回报
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_agent_babysat }
+        - { kind: flag, key: rv2_babysat_paid, expected: false }
+    priority: 91
+    tier: main
+    baseText: 让 Agent 跑数据的那两天，你守在屏幕前像守着婴儿的保姆：每一步都问“为什么”、每一步都查输出。辛苦吗？辛苦。但答辩时评委追问“这一步的中间变量怎么来的”，你张口就答——因为每一步你都亲眼看着发生。保姆式的笨功夫，换来了对全流程的肌肉记忆。那个陪你熬夜的 Agent 不知道，它跑的是数据，你养的是理解。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { lte: 45, text: 保姆式的结果是双向的：你懂了全流程，Agent 也被你的追问训练得更懂这个项目。 }
+          - { gte: 60, text: 你发现自己盯的时间远超必要。保姆和隐形人的边界，你还在找。 }
+    characterEpilogueRules:
+      - characterId: r_ai_agent
+        positive: 后来 Agent 学会了主动汇报中间步骤——它被你的保姆式风格调教出了透明人格。
+        neutral: Agent 按步执行，你按步检查。节奏稳定得像钟表。
+        negative: 你守到第三步就困了，剩下五步交给了信任。第二天果然有惊喜——坏的哪种。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的“保姆清单”后来被师弟奉为圭臬：AI 跑数的七个人工检查点。 }
+    reflection: AI 可以替你跑，不能替你懂——盯过程的时间，是理解必缴的学费。
+    lessonHint: AI 执行关键流程时必须人工盯检关键步骤。
+    tone: positive
+    family: agent_use
+    whyDistinct: 核心结果是“保姆式盯检的流程理解”，与付费外包（babysat_paid）结局互斥。
+
+  - id: r_v2_babysat_paid_end
+    campaign: research
+    title: 《睡个好觉的价格》
+    mainResult: 委托执行换来的睡眠与风险
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_babysat_paid }
+        - { kind: flag, key: rv2_agent_babysat, expected: false }
+    priority: 89
+    tier: special
+    baseText: 你让 Agent 全自动跑完了整夜的数据，自己去睡了——睡前定了三个闹钟。早上醒来，数据齐了，报表美了，而你看着那些数字像看别人家的孩子：认识，但不亲。答辩时评委问中间步骤，你答了个大概——大概，通过了。但你知道，那些数字的每一个毛孔你都没有摸过。省下的觉是真的睡了，缺的理解也是真的缺着。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 60, text: 全自动第一次让你有点慌。你在日程里补了一栏“人工抽查”——每个环节 10 分钟。 }
+          - { lte: 40, text: 你睡得很香。但醒来复查时发现的那个小错误，让你后怕了一整天。 }
+    characterEpilogueRules:
+      - characterId: r_ai_agent
+        positive: 醒来发现 Agent 留了运行日志，每一步都有记录——它比你想象的靠谱，但靠谱不等于可理解。
+        neutral: Agent 完成了任务。你们的分工是它跑你睡——各取所需。
+        negative: 夜里跑挂了一次，Agent 自动重试并成功——但你不知道中间的数据差异。无声的事故最贵。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的自动化任务从此必配“晨检清单”——睡可以，盲睡不行。 }
+    reflection: 委托省下的是时间，透支的是理解—— sleep 与 understanding 之间的汇率，每天都在变。
+    lessonHint: 全自动执行后必须人工抽查关键环节。
+    tone: mixed
+    family: agent_use
+    whyDistinct: 核心结果是“全自动委托的睡眠交易”，与亲自盯检结局在同一链互斥。
+
+  - id: r_v2_own_framework_end
+    campaign: research
+    title: 《自己搭的脚手架》
+    mainResult: 自建分析框架的掌控力
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_own_framework }
+        - { kind: flag, key: rv2_agent_framework, expected: false }
+    priority: 92
+    tier: main
+    baseText: 你拒绝了几套现成框架，用三个晚上搭了自己的分析脚手架——简陋，但每一根梁柱你知道为什么立在那里。答辩时评委问“为什么用这个维度切分”，你没有引用任何文献，只说了一句：“因为我的数据长这样。”评委愣了一下，然后笑了。自己搭的东西可能不好看，但它合身——而且你知道每一颗钉子的位置。这份掌控力，是现成框架永远给不了的。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 自建框架的第三晚你差点放弃。坚持到成型的你，收获的不只是框架，是“我能造”的底气。 }
+          - { lte: 40, text: 框架搭好了，但你偷偷参考了三套现成的。自己搭的和抄的，你心里分的清清楚楚。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄看完你的框架说：“简陋。但这是我今年见过唯一一个'活着'的分析框架。”
+        neutral: 师兄说“能用就行”，然后继续用他的成熟框架。
+        negative: 师兄说“重复造轮子是浪费生命”。你们在方法论上的分歧，从此摆在了明面上。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那个框架后来迭代了七版，成了你的看家工具。第一版的简陋图纸你留着。 }
+    reflection: 现成框架给你效率，自己搭的框架给你理解——先有后者，前者才有意义。
+    lessonHint: 核心分析框架优先自建，至少要亲手拆解过一遍现成方案。
+    tone: positive
+    family: method
+    whyDistinct: 核心结果是“自建框架的掌控力”，与采用 Agent 框架结局在同一链互斥。
+
+  - id: r_v2_agent_framework_end
+    campaign: research
+    title: 《借来的骨架》
+    mainResult: AI 生成框架的隐性成本
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_agent_framework }
+        - { kind: flag, key: rv2_own_framework, expected: false }
+    priority: 90
+    tier: main
+    baseText: Agent 十分钟给出的分析框架，结构严谨、逻辑流畅、一用就顺——顺到你答辩前夜才发现一个问题：你说不清它为什么这样设计。评委一问“维度之间的因果假设”，你只能翻出 Agent 当时的解释邮件，念了一段AI味十足的说明。念完你自己都笑了。框架是别人的，作业是你的——这感觉，像穿着别人的西装答辩：合身，但袖口长短不属于你。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 60, text: 你后来花一周把借来的骨架拆开重装了一遍——这次每根梁柱都过了你的手。 }
+          - { lte: 40, text: 你安慰自己“框架只是工具”。但答辩的追问证明：评委分得清工具和思想。 }
+    characterEpilogueRules:
+      - characterId: r_ai_agent
+        positive: 你让 Agent 逐条解释框架假设。它解释得很流畅——直到你问到第三层。第三层的沉默，教育了你。
+        neutral: Agent 的框架照常运转。它不需要理解自己，但你需要。
+        negative: 第二位评委也追问了框架假设。你的第二次照念，比第一次更尴尬。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的工具箱里所有“借来的骨架”都贴着同一张便利贴：我能解释它的每一层吗？ }
+    reflection: 借来的框架是拐杖——走得快，但你的腿会一直弱下去。AI 时代，“能解释”比“能用”更稀缺。
+    lessonHint: AI 生成的分析框架必须逐层理解后方可采用。
+    tone: negative
+    family: agent_use
+    whyDistinct: 核心结果是“借来框架的隐性成本”，与自建框架结局在同一链互斥。
+
+  - id: r_v2_definition_settled_end
+    campaign: research
+    title: 《一场定义之争》
+    mainResult: 与同门的概念之争以证据收场
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_definition_debate }
+        - { kind: flag, key: rv2_definition_settled }
+    priority: 90
+    tier: main
+    baseText: 你和苏晓为一个核心概念的定义争了两周——“参与度”到底算行为还是态度？最后你们没有靠嗓门，靠的是各自抱来的一摞文献和一份数据检验。结果证明两个定义都对，只是适用场景不同。你们把结论写成了双定义框架，反而让研究更立体了。争完那天苏晓说：“下次还跟你吵——吵完能长东西的架，是好架。”
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了在概念之争里先问“争的是定义还是事实”——一半的架，吵错了对象。 }
+          - { lte: 40, text: 那两周你们谁也没说服谁，是数据替你们收的场。运气好的话，数据总是站在较真的人那边。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 那份双定义框架后来你们联名发了一篇小论文。署名排序你们石头剪刀布——她赢了，你请客。
+        neutral: 苏晓说“这事翻篇了”，然后该吵还是吵——只是吵得更讲证据了。
+        negative: 争执最凶的时候你说过“你根本不懂”。这句话她记了很久，比框架记得还牢。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那份双定义框架的草稿你们各存一份——它是你们友谊的学术资产版。 }
+    reflection: 概念之争的最高境界不是分对错，是把争论本身变成研究的一部分。
+    lessonHint: 概念定义分歧应诉诸文献与数据检验，产出框架而非胜负。
+    tone: positive
+    family: academic_relationships
+    whyDistinct: 核心结果是“概念之争的证据化收场”，与定义糊弄（definition_gamed）结局互斥。
+
+  - id: r_v2_lent_credit_end
+    campaign: research
+    title: 《署名的学问》
+    mainResult: 数据外借的信用规则
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_lent_with_credit }
+        - { kind: flag, key: rv2_lent_bare, expected: false }
+        - { kind: flag, key: rv2_lent_no_credit, expected: false }
+    priority: 90
+    tier: main
+    baseText: 借数据给别人之前，你提了一个条件：使用时注明来源，产出共享。对方答应得很痛快，你们也签了简单的借用单。半年后他的论文引用了你的数据，致谢里你的名字排在第一位。你因此多了两个合作邀约——都是从他那篇论文顺藤摸瓜来的。借出去的是数据，收回来的是信用。这笔生意，你做成了教科书。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你把“借用单”做成了组里的标准流程。白纸黑字，谁都不欠谁。 }
+          - { lte: 40, text: 你提条件时有点不好意思。事实证明，先小人后君子的“小人”，是君子最好的朋友。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐听完说：“数据借出去还能涨信用，你这操作我学到了。”
+        neutral: 师姐说“规矩定得好”，然后继续忙她的。
+        negative: 对方曾经想反悔署名条款。你出示了借用单——他红着脸签了补充协议。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的数据出借单模板在组里流传至今，编号 001 的那份你自己留着。 }
+    reflection: 数据共享的最高形态不是无偿，是有规矩的有偿——规矩护住了双方的脸面和利益。
+    lessonHint: 数据外借必须书面约定来源署名与产出共享。
+    tone: positive
+    family: evidence_integrity
+    whyDistinct: 核心结果是“数据外借的信用规则”，与裸借、无署名结局在同一链互斥。
+
+  - id: r_v2_checkpoint_mid_end
+    campaign: research
+    title: 《第 14 天的体检》
+    mainResult: 中期自查点的制度化
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_mid_checkpoint }
+        - { kind: flag, key: rv2_fake_checkpoint, expected: false }
+    priority: 91
+    tier: main
+    baseText: 第 14 天的自查你做了两个小时，产出一页“体检报告”：进度 62%（达标）、数据质量 8/10（达标）、文献覆盖 75%（预警）、心态 6/10（需要休息）。你按报告行动：周六半天彻底休息，周日补文献。这个“体检日”后来每月一次，成了你的研究节律。中期检查不是形式——它是你给未来二十天的自己，留下的路况信息。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: 你的体检报告有固定模板：进度、质量、覆盖、心态四个维度。模板后来传遍了全组。 }
+          - { lte: 40, text: 体检做了，但“心态 6/10”那栏你没有行动。报告只对执行它的人有效。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 苏晓跟着你做了中期体检，发现问题比想象的大。她说：“幸好体检了——不查不知道，一查吓一跳。”
+        neutral: 苏晓觉得形式主义，但还是做了一遍——然后发现了两个盲区。
+        negative: 你的体检报告是给自己看的。全组里没有第二个人知道你有这个习惯。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的“体检日”日历事件设了永久循环。日期你换过，仪式没换过。 }
+    reflection: 中期自查是研究的心电图——节律性体检，才能在症状变成疾病之前介入。
+    lessonHint: 长周期项目必须设中期自查点，四维度打分。
+    tone: positive
+    family: project_management
+    whyDistinct: 核心结果是“中期体检的制度化”，与走过场式自查（fake_checkpoint）结局在同一链互斥。
+
+  - id: r_v2_prereg_paid_end
+    campaign: research
+    title: 《锁定的甜头》
+    mainResult: 预注册在答辩中的兑现
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_prereg_paid }
+        - { kind: flag, key: rv2_preregistered, expected: false }
+    priority: 90
+    tier: main
+    baseText: 上一条的预注册没白做——答辩现场，评委对“你是不是先看了数据才定假设”的疑虑，被你那个时间戳一秒化解。预注册平台的那份锁定文件，你前后只打开过两次：一次是锁，一次是赢。你后来跟师弟说：“预注册像保险，买的时候觉得浪费，出事的时候觉得真香。最好的一生，是一次都没理赔的保险加一次都没争议的答辩。”
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 那个时间戳截图你设成了答辩 PPT 的隐藏页——评委问起才展示，一击必中。 }
+          - { lte: 40, text: 保险买了但你差点忘了用。是师姐提醒你“把时间戳放进附录”的。习惯要有提醒机制。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授说：“这孩子连后路都是合规的。”
+        neutral: 陈教授看了一眼时间戳，点头，翻页。一切尽在不言中。
+        negative: 评委里有人质疑“预注册也可能选择性登记”。你展示了登记前的研究日志——那才是真正的杀手锏。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的每项研究都留有预注册时间戳。它们像一串脚印，记录着你的每一步都走在阳光下。 }
+    reflection: 预注册的甜头不在锁的那一刻，在被质疑时你有钥匙的那一刻。
+    lessonHint: 预注册的时间戳证据要纳入答辩材料。
+    tone: positive
+    family: method
+    whyDistinct: 核心结果是“预注册的答辩兑现”，与预注册建立（先期成就）结局的叙事时点不同。
+
+  - id: r_v2_number_mismatch_end
+    campaign: research
+    title: 《摘要里的 63%》
+    mainResult: 正文与摘要数据不一致的惊魂
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_number_mismatch }
+    priority: 90
+    tier: main
+    baseText: 打印店里你最后校对了一遍：摘要说 63%，正文表格算出来 68%。五个百分点，两个版本的数据——v_final 和 v_final_final 的恩怨，最后缠到了摘要里。你花了一夜统一了所有数字，从此发明了“单一数据源”工作法：所有数字从一个总表引用，谁也不许手填。摘要里的 63% 没能出现在最终稿——但差点出现的它，把你逼成了一个更严谨的研究者。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 单一数据源工作法你坚持至今。所有文档的数字都是“活的”——源头改，处处变。 }
+          - { lte: 40, text: 你手动改了摘要的数字，没改工作法。下一个不一致的数字，还在路上。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐听完说：“你运气好——打印店救了你。大多数人是在盲审意见里遇见它的。”
+        neutral: 师姐说“改了就好”，顺手教你用了她的总表模板。
+        negative: 你没改工作法，只改了数字。三个月后，另一处不一致出现在了致谢里——谢错了一位老师。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的总表有个脾气：所有引用它的文档都会自动更新。这是被 63% 逼出来的工程。 }
+    reflection: 数字的一致性不是细心问题，是架构问题——手填的每一个数字，都是一枚待爆的地雷。
+    lessonHint: 建立单一数据源引用机制，杜绝手工填数。
+    tone: negative
+    family: evidence_integrity
+    whyDistinct: 核心结果是“摘要数据不一致的惊魂”，与两版数据（版本混乱主体）结局的触发场景不同（打印店 vs 答辩）。
+
+  - id: r_v2_narrow_survived_end
+    campaign: research
+    title: 《窄门的幸存者》
+    mainResult: 窄化选题后的深耕回报
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_narrow_survived }
+        - { kind: flag, key: rv2_narrow_doubt, expected: false }
+    priority: 90
+    tier: main
+    baseText: 你把选题从“生成式AI对知识工作的影响”窄化到“AI 辅助文献综述对研究生综述质量的影响机制”——窄得像条门缝。同门笑你“把蛋糕切成渣”，答辩时评委却说：“这个切口，是全场唯一一个 30 天能做完还能做完的。”窄门的另一边不是委屈，是深耕的甜：因为你只研究一件事，你把它研究到了别人够不着的深度。蛋糕切成渣的人，才尝得到渣里的味道。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 窄化是你的主动选择——你清楚“做大”和“做完”只能选一个的时候，选哪个。 }
+          - { lte: 40, text: 窄化是被 deadline 逼的。同样到了窄门，主动的人和被逼的人，走的姿势不一样。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授说：“选题窄不是问题，窄而无物才是。你窄出了深度。”
+        neutral: 陈教授圈出窄化后的题目：“可行。”两个字，值过千言。
+        negative: 你窄化时砍掉的部分，后来被证明是重要方向。你安慰自己“30 天做不完的就是不该做”。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来习惯把宽题目写在纸上，然后一条条划窄——划痕就是你的思考路径。 }
+    reflection: 选题的艺术不是找大蛋糕，是找你能一口吞下的那块——窄门的深处，别有洞天。
+    lessonHint: 选题窄化是 30 天周期的生存策略，窄而有物优于宽而无当。
+    tone: positive
+    family: research_outcome
+    whyDistinct: 核心结果是“窄化选题的深耕回报”，与窄化后的自我怀疑路径在同一链互斥。
+
+  - id: r_v2_sample_cleaned_end
+    campaign: research
+    title: 《剔除的 17 份》
+    mainResult: 数据清洗原则的坚守
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_sample_cleaned }
+        - { kind: flag, key: rv2_sample_doubled_down, expected: false }
+    priority: 90
+    tier: main
+    baseText: 数据清洗时你剔了 17 份问卷——作答时间低于 40 秒的、连续 20 题同一选项的。有同学说“数据多多益善”，你摇头：“脏数据不是数据，是噪音，是地雷。”剔除后样本从 217 变 200，置信区间宽了一点，但每个数据点都站得直。答辩时评委看了清洗规则，问了一句“标准是事先定的吗”，你展示了预注册里的清洗条款——先定规矩后洗数据，这才叫清洗。先看数据再定规矩，那叫整容。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 清洗规则事先写入预注册的做法，成了你的招牌——师弟们叫它“先立后破”。 }
+          - { lte: 40, text: 剔除标准是临时定的。幸亏你剔得合理——但“合理”和“合规”，隔着一道程序正义。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐把你的清洗条款抄进了组里的问卷模板。“17 份”从此成了组里判断作答质量的门槛梗。
+        neutral: 师姐说“剔得对”，然后继续她的清洗——两套数据，一样的严谨。
+        negative: 有组员把你的 17 份当成了“可以剔除的合理数量”，剔除比例高达 20%。东施效颦，害了他们的样本。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的清洗规则永远写在发放问卷之前——顺序，是方法论的尊严。 }
+    reflection: 数据清洗的正义在于顺序——先定标准后看数据是科学，先看数据再定标准是手艺，而手艺会骗人。
+    lessonHint: 数据清洗标准须事先声明，剔除记录全程留痕。
+    tone: positive
+    family: evidence_integrity
+    whyDistinct: 核心结果是“清洗原则的坚守”，与将错就错（doubled_down）结局在同一链互斥。
+
+  - id: r_v2_sweep_documented_end
+    campaign: research
+    title: 《文献扫描仪》
+    mainResult: 引用批量核验工具化
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_citation_sweep }
+        - { kind: flag, key: rv2_sweep_documented, expected: false }
+    priority: 90
+    tier: main
+    baseText: 你把逐条核验的土办法写成了半自动脚本：批量抓 DOI、比对元数据、标记可疑项。一夜之间，84 条引用的核验从 5.6 小时压到 40 分钟。你把脚本命名为“文献扫描仪”，在全组推广。周师兄用它扫出了自己论文里两条幽灵引用——他请你喝奶茶那天说：“你这个小工具，救的是全组的学术生命。”工具化的意义正在于此：把个人的严谨，变成组织的免疫。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: 脚本写了一天半。第一天半里你学会了正则表达式——顺便解锁了新技能树。 }
+          - { lte: 40, text: 脚本只覆盖了 DOI 类引用。那条“私人通信”格式的幽灵引用，它看不见。工具的盲区要人补。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄用扫描仪扫出了自己硕士论文里的两条错引，惊出一身冷汗后加入了你的工具维护小组。
+        neutral: 师兄说“工具不错”，然后继续用他的手动办法——直到扫描仪揪出他的错。
+        negative: 扫描仪漏网的一条幽灵引用后来被人指出。你学会了：工具降本增效，但终审永远是人。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “文献扫描仪”后来迭代到 3.0，作者栏里写着你的名字和“全体被它救过的人”。 }
+    reflection: 把严谨工具化，是你的严谨变成集体免疫的唯一路径——一个人查得再勤，也查不完一个组织的论文。
+    lessonHint: 重复性核验工作应工具化并在组织内推广。
+    tone: positive
+    family: agent_use
+    whyDistinct: 核心结果是“引用核验的工具化推广”，与人工核验/混合漏斗结局的叙事焦点（组织化）不同。
