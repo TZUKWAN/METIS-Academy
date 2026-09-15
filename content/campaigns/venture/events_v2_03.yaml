@@ -1,0 +1,507 @@
+# METIS Academy Venture V2 事件批次三 —— S 系列延迟链 + 隐藏线扩展 + NG+ 扩展
+events:
+  # ===== S1 链：获客单价上升（D8 → D16 → D26）=====
+  - id: v2s1_cac_rise
+    campaign: venture
+    day: 8
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 8, phase: start }
+    purpose: { narrative: 获客成本首次超标, learning: CAC 上升是渠道疲劳信号 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: [“阿哲的投放周报：单个获客成本从 12 元涨到 19 元。'渠道疲劳了，'他说，'加预算还是换渠道？'”]
+    choices:
+      - id: audit_cac
+        text: 先拆 CAC：按创意/人群/时段分层找泄漏
+        visibleResponse: 你拆了一下午：晚间时段的点击成本是白天的三倍。把预算挪到午间，CAC 回落到 14。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_cac_audited }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+        delayed:
+          - { eventId: v2s2_cac_discipline, onDay: 16 }
+      - id: raise_budget
+        text: 加预算冲量，CAC 的事以后再说
+        visibleResponse: 预算翻倍，用户数上来了。CAC 悄悄爬到 26。增长的每一格都带着隐形的价签。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_cac_raise }
+          - { kind: add, key: users, value: 8 }
+          - { kind: add, key: money, value: -12 }
+        delayed:
+          - { eventId: v2s2_cac_burn, onDay: 16 }
+    learningPoint: CAC 上升先做结构归因，再决定加量或换道
+
+  - id: v2s2_cac_discipline
+    campaign: venture
+    day: 16
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 分层习惯的复利, learning: 投放纪律决定单位经济 }
+    scene: { location: lab, characters: [v_partner] }
+    dialogue:
+      - { speaker: v_partner, text: “按你那套分层法，我又砍掉两个时段，CAC 降到 11 了。这玩意儿比加预算管用。” }
+      - { speaker: 系统, text: “你们省下的每一元 CAC，都变成了未来涨价时的底气。” }
+    automaticEffects:
+      - { kind: add, key: revenue, value: 4 }
+      - { kind: add, key: teamTrust, value: 2 }
+    next: v2_d16_wire2
+
+  - id: v2s2_cac_burn
+    campaign: venture
+    day: 16
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 预算的窟窿, learning: 无纪律的投放烧穿现金 }
+    scene: { location: dorm, characters: [] }
+    setup: [“第 16 天，你算了下账：两周投放烧掉的钱，够发你们俩三个月的'工资'。而新用户的次周留存，只有 31%。”]
+    dialogue:
+      - { speaker: 系统, text: “你在用钱买一个漏水的桶。水加了，桶还是漏的。” }
+    automaticEffects:
+      - { kind: add, key: money, value: -8 }
+    next: v2s3_cac_verdict
+
+  - id: v2s3_cac_verdict
+    campaign: venture
+    day: 16
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { narrative: 投放的最终裁决, learning: 增长要为留存让路 }
+    scene: { location: lab, characters: [v_partner] }
+    choices:
+      - id: freeze_and_fix
+        text: 冻结投放两周，全员修留存
+        visibleResponse: 冻结投放的那两周，增长曲线躺平了，但留存从 31% 爬到 48%。重新开闸时，每一块钱的效率翻了近一倍。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_freeze_fix }
+          - { kind: add, key: userUnderstanding, value: 6 }
+          - { kind: add, key: revenue, value: 3 }
+      - id: keep_pouring
+        text: 继续投放，赌规模效应
+        visibleResponse: 你选择继续烧。第 26 天的账单会让你重新审视这个决定——但那是 10 天后的事。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_keep_pouring }
+          - { kind: add, key: users, value: 6 }
+          - { kind: add, key: money, value: -10 }
+        delayed:
+          - { eventId: v2s4_cash_alarm, onDay: 26 }
+    learningPoint: 留存不达标时冻结投放是最优解
+
+  - id: v2s4_cash_alarm
+    campaign: venture
+    day: 26
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 现金警报, learning: runway 意识 }
+    scene: { location: dorm, characters: [v_family] }
+    setup: [“妈妈的电话打来，不是问创业进展，是问'卡里的钱怎么只出不进'。你看了眼银行 App：按现在的烧钱速度，账户还能撑 19 天。”]
+    dialogue:
+      - { speaker: v_family, text: “……缺钱就跟家里说。别硬撑。” }
+      - { speaker: 系统, text: “runway：19 天。这是全公司此刻最真实的 KPI。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: -2 }
+    next: v2_d27_wire2
+
+  # ===== S5 链：竞品抄袭应对（D11 → D22）=====
+  - id: v2s5_copycat
+    campaign: venture
+    day: 11
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 11, phase: start }
+    purpose: { narrative: 竞品抄袭产品界面, learning: 抄袭的应对分层 }
+    scene: { location: dorm, characters: [] }
+    setup: [“用户群里炸了：有人贴出竞品新版的截图——你们的界面布局、配色、甚至空状态文案，几乎原样复刻。”]
+    choices:
+      - id: public_statement
+        text: 发公开声明，点名对方抄袭
+        visibleResponse: 声明获得了同情和转发，也获得了对方律师函的威胁。你的情绪爽了三天，然后开始失眠。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_public_fight }
+          - { kind: add, key: credibility, value: 3 }
+          - { kind: add, key: energy, value: -8 }
+        delayed:
+          - { eventId: v2s6_lawsuit_threat, onDay: 22 }
+      - id: iterate_silently
+        text: 不接招，埋头做他们抄不走的下一版
+        visibleResponse: 你把怒气折算成了两个新功能的设计稿。抄袭者抄得走昨天，抄不走明天的你。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_silent_iterate }
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: independence, value: 4 }
+        delayed:
+          - { eventId: v2s6_moat_built, onDay: 22 }
+      - id: user_wall
+        text: 发动用户：请老用户讲他们的真实故事
+        visibleResponse: 你没提抄袭一个字，只发起了一个话题：“这个工具帮你做成过什么？”37 条长回复涌进来——每一条都是竞品抄不走的证据。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_user_wall }
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: add, key: userUnderstanding, value: 4 }
+    learningPoint: 抄袭应对优先级：护城河 > 用户关系 > 舆论战
+
+  - id: v2s6_lawsuit_threat
+    campaign: venture
+    day: 22
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 律师函到达, learning: 舆论战的账单 }
+    scene: { location: dorm, characters: [v_mentor] }
+    setup: [“律师函到了：'限期道歉，否则起诉不正当竞争。'法务咨询报价两小时 1500 元。导师看完只问了一句：'这八天，如果用来做产品，你能做多少？'”]
+    dialogue:
+      - { speaker: v_mentor, text: “诉讼是以钱换时间的游戏。你的钱和时间，本来打算花在哪？” }
+    automaticEffects:
+      - { kind: add, key: money, value: -6 }
+    next: v2_d23_wire2
+
+  - id: v2s6_moat_built
+    campaign: venture
+    day: 22
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 护城河成形, learning: 迭代速度是最便宜的护城河 }
+    scene: { location: lab, characters: [] }
+    setup: [“新版上线。竞品的复刻版还停在你们的上一版。用户群里的评价很微妙：'那边那个，怎么越看越像旧版的你们？'”]
+    dialogue:
+      - { speaker: 系统, text: “讽刺完成了自循环：抄袭者的每一次跟进，都在替你确认方向。而你永远比他快一个版本。” }
+    automaticEffects:
+      - { kind: add, key: revenue, value: 3 }
+      - { kind: add, key: credibility, value: 2 }
+    next: v2_d23_wire2
+
+  # ===== S7 链：产品重构（D13 → D23）=====
+  - id: v2s7_refactor_pain
+    campaign: venture
+    day: 13
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 13, phase: start }
+    purpose: { narrative: 技术债的重构决定, learning: 重构时机与范围控制 }
+    scene: { location: lab, characters: [v_ai_agent] }
+    setup: [“新增功能要动核心模块。Agent 评估：'在现有架构上打补丁：2 天；重构后开发：6 天，未来增速 40%。'”]
+    choices:
+      - id: full_refactor
+        text: 咬牙重构，慢就是快
+        visibleResponse: 你花 6 天还了债。第 19 天的新功能开发只用了 1.5 天——重构的红利开始兑现。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_full_refactor }
+          - { kind: add, key: technicalDebt, value: -10 }
+          - { kind: add, key: progress, value: -3 }
+        delayed:
+          - { eventId: v2s8_refactor_dividend, onDay: 23 }
+      - id: patch_again
+        text: 再打一层补丁，上线要紧
+        visibleResponse: 补丁 2 天上线。核心模块现在有三层补丁，Agent 的评估报告里出现了一个新词：“考古现场”。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_patch_again }
+          - { kind: add, key: technicalDebt, value: 8 }
+        delayed:
+          - { eventId: v2s8_archaeology_day, onDay: 23 }
+    learningPoint: 重构的最佳时机是“下一次大功能前”，且范围要有硬边界
+
+  - id: v2s8_refactor_dividend
+    campaign: venture
+    day: 23
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 重构的分红, learning: 技术投资的时间价值 }
+    scene: { location: lab, characters: [v_partner] }
+    dialogue:
+      - { speaker: v_partner, text: “路演演示要加个实时排行，预计多久？” }
+      - { speaker: 你, text: “重构前：五天。现在：六小时。” }
+      - { speaker: v_partner, text: “……那 6 天的债还得值。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 3 }
+    next: v2_d24_wire2
+
+  - id: v2s8_archaeology_day
+    campaign: venture
+    day: 23
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 考古日, learning: 补债的利息高于本金 }
+    scene: { location: lab, characters: [v_ai_agent] }
+    setup: [“路演前夜出了个诡异 bug：排行数据偶尔串到别的社团。你排查到凌晨两点，发现是第一层补丁和第三层补丁在抢同一个缓存键。”]
+    dialogue:
+      - { speaker: v_ai_agent, text: “建议修复时长：4 小时。建议重构时长：6 小时。——第 13 天的两种未来，在第 23 天汇合了。” }
+    automaticEffects:
+      - { kind: add, key: energy, value: -8 }
+      - { kind: add, key: technicalDebt, value: 3 }
+    next: v2_d24_wire2
+
+  # ===== S9 链：社群自治（D15 → D28）=====
+  - id: v2s9_community_seed
+    campaign: venture
+    day: 15
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 15, phase: start }
+    purpose: { narrative: 社群管理权的让渡, learning: 自治社区的启动时机 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: [“社群到 800 人了，你和阿哲每天要花 3 小时答疑。社团的那位用户提议：”让我们自己管自己，你们只管产品。“”
+    ]
+    choices:
+      - id: empower_moderators
+        text: 授权 5 个活跃用户当版主，写社区公约
+        visibleResponse: 五位版主上任第一周，答疑响应时间从 6 小时缩到 40 分钟——他们比你更懂新人卡在哪。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_empowered_mods }
+          - { kind: add, key: credibility, value: 4 }
+          - { kind: add, key: userUnderstanding, value: 5 }
+        delayed:
+          - { eventId: v2s10_community_bloom, onDay: 28 }
+      - id: keep_control
+        text: 社群是命脉，必须自己攥着
+        visibleResponse: 你婉拒了。答疑的 3 小时变成了每天固定支出，你的产品时间被切成碎片。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_control_freak }
+          - { kind: add, key: energy, value: -6 }
+          - { kind: add, key: progress, value: -2 }
+    learningPoint: 社区自治让服务规模化，创始人的时间应回归产品
+
+  - id: v2s10_community_bloom
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 社区的自转, learning: 共同体是终极留存 }
+    scene: { location: canteen, characters: [v_user_club] }
+    dialogue:
+      - { speaker: v_user_club, text: “昨晚版主们自发整理了《新手七日指南》，还有个用户录了视频教程。我们……好像不只是你的用户了。” }
+      - { speaker: 系统, text: “留存率的秘密终极形态：用户离开的成本不再是'失去一个工具'，而是'离开一群人'。” }
+    automaticEffects:
+      - { kind: add, key: users, value: 5 }
+      - { kind: add, key: revenue, value: 3 }
+    next: v2_d29_wire2
+
+  # ===== 隐藏线：投资人饭局（T 系列）=====
+  - id: v2h_t1_investor_dinner
+    campaign: venture
+    day: 14
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 饭局上的试探, learning: 融资信号的非正式场域 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: [“导师牵线的一场便饭：一位早期投资人，'随便聊聊'。落座后对方笑眯眯开口：”听说你们留存做到 45% 了？“”
+    ]
+    choices:
+      - id: numbers_with_caveats
+        text: 给数字，也给分群和瑕疵
+        visibleResponse: 你讲了 45%，也讲了渠道 B 的 22% 和你的补救计划。对方听完点了点头：“瑕疵讲得越具体，数字我越信。保持联系。”
+        hiddenEffects:
+          - { kind: setFlag, key: kv_investor_trust }
+          - { kind: add, key: credibility, value: 5 }
+        next: v2h_t2_followup
+      - id: inflate_story
+        text: 只讲 45% 和增长曲线
+        visibleResponse: 对方听得频频点头，你出门时觉得这场饭真值。你没说的是：下次他要做尽调，第一个拆的就是这条曲线。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_inflated_pitch }
+          - { kind: add, key: credibility, value: -3 }
+    learningPoint: 早期融资的信任建立在瑕疵的坦诚度上
+
+  - id: v2h_t2_followup
+    campaign: venture
+    day: 14
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 投资人的第二次消息, learning: 信任的后续验证 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 旁白, text: “三天后，投资人转来一篇竞品分析，附言：'你们渠道打法挺像，看看有没有启发。'——主动发资料，是投资人表达兴趣的方式。导师说，这一般意味着下一轮的入场券。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 2 }
+    next: v2_d15_wire2
+
+  # ===== 隐藏线：深夜服务器的第二人格（U 系列）=====
+  - id: v2h_u1_agent_quiet
+    campaign: venture
+    day: 17
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: Agent 的深夜独白, learning: AI 输出的隐性分布特征 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: [“凌晨一点，你让 Agent 复盘一周的用户反馈。它分类、聚类、给了漂亮的总结。你忽然想试试别的：”你觉得用户为什么流失？“”
+    ]
+    choices:
+      - id: ask_agent_opinion
+        text: 追问它的“猜测”，然后逐条用数据验证
+        visibleResponse: Agent 给了五个假设，你翻了三个晚上的日志：两条是幻觉，三条是真的——其中一条“用户在第 3 天迷失”连你都没意识到。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_agent_hypothesis }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: userUnderstanding, value: 4 }
+        next: v2h_u2_verified
+      - id: dismiss_opinion
+        text: "机器懂什么用户，关机睡觉。"
+        visibleResponse: 你合上电脑。那条“第 3 天迷失”的线索沉回了日志的海底，直到四周后你才在别处重新发现它。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: -3 }
+    learningPoint: AI 的假设是免费的线索池——验证它，而不是信它或无视它
+
+  - id: v2h_u2_verified
+    campaign: venture
+    day: 17
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 假设验证的三条真, learning: 人机协作的验证闭环 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “三条假设成立，两条证伪。你在笔记里画了张表：'Agent 猜的 / 我验的'。这张表后来成了你们的标配：机器负责发散，人负责收口。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 2 }
+    next: v2_d18_wire2
+
+  # ===== NG+ 扩展（V 系列）=====
+  - id: v2ng_v1_channel_memory
+    campaign: venture
+    day: 8
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 8 }
+    purpose: { narrative: NG+ 渠道记忆, learning: 渠道质量的先验知识 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: [“投放渠道清单又摆上来了。阿哲圈了渠道 B：”这家量大便宜。“上一世，B 的留存是 22%。”]
+    choices:
+      - id: veto_channel_b
+        text: 直接否掉 B：“它的量是水做的。”
+        visibleResponse: 阿哲挑眉：“你查过？”你说“直觉”。预算全数进了渠道 A——上一世的 61% 留存者。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_veto_b }
+          - { kind: add, key: users, value: 5 }
+      - id: demand_trial
+        text: 要求 B 先做一周试点小流量
+        visibleResponse: B 的试点数据果然难看：留存 24%。阿哲自己划掉了它：“这钱省得值。”你笑着没说话。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_trial_b }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+    learningPoint: NG+ 渠道先验知识可避免踩坑，但要注意周目差异
+
+  - id: v2ng_v2_support_memory
+    campaign: venture
+    day: 12
+    type: story
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 12 }
+    purpose: { narrative: 客服记忆的本能反应, learning: 上辈子的 240 条未读改变了这辈子的第一反应 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “反馈表格进来了第一条消息。上一世的你三天后才看到它；这一世，你三分钟就回了。不是因为你更勤奋——是因为你见过 240 条堆在一起的样子。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 2 }
+    next: v2_d13_wire2
+
+  # ===== 汇流（wire）事件 =====
+  - id: v2_d13_wire2
+    campaign: venture
+    day: 13
+    type: story
+    trigger: { kind: day, day: 13, phase: end }
+    purpose: { narrative: D13 夜间复盘, learning: 记录认知变化 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你把今天的判断写进日志：'如果一条反馈让心跳加速，先回复它。'” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 1 }
+
+  - id: v2_d15_wire2
+    campaign: venture
+    day: 15
+    type: story
+    trigger: { kind: day, day: 15, phase: end }
+    purpose: { narrative: D15 夜间复盘, learning: 融资信号的记录 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你在日志里画了张表：'谁对我们的数据感兴趣'。第一行有了一个名字。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 1 }
+
+  - id: v2_d16_wire2
+    campaign: venture
+    day: 16
+    type: story
+    trigger: { kind: day, day: 16, phase: end }
+    purpose: { narrative: D16 夜间复盘, learning: 投放纪律的沉淀 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “阿哲把 CAC 分层法做成了共享表格。团队的第 7 个'制度资产'诞生了。” }
+    automaticEffects:
+      - { kind: add, key: execution, value: 1 }
+
+  - id: v2_d18_wire2
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { narrative: D18 夜间复盘, learning: 验证表的价值 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “'Agent 猜的 / 我验的'那张表贴在了墙上。每个路过的人都会看一眼，然后若有所思。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 1 }
+
+  - id: v2_d23_wire2
+    campaign: venture
+    day: 23
+    type: story
+    trigger: { kind: day, day: 23, phase: end }
+    purpose: { narrative: D23 夜间复盘, learning: 竞争与专注 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “竞品的事你一天没提。路演 PPT 里它的名字出现了零次——你的故事里只有用户。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 1 }
+
+  - id: v2_d24_wire2
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: day, day: 24, phase: end }
+    purpose: { narrative: D24 夜间复盘, learning: 技术投资的时间价值 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “倒数第六天。代码库安静，账本清楚，社群自转。你做了个深呼吸——这是三十天里第一次不带焦虑的呼吸。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 1 }
+
+  - id: v2_d27_wire2
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: day, day: 27, phase: end }
+    purpose: { narrative: D27 夜间复盘, learning: runway 的清醒 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你给妈妈回了条长消息。最后一句是：”不缺钱，缺的是把账算清楚的习惯。现在有了。“” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }
+
+  - id: v2_d29_wire2
+    campaign: venture
+    day: 29
+    type: story
+    trigger: { kind: day, day: 29, phase: end }
+    purpose: { narrative: D29 夜间复盘, learning: 社区的礼物 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “《新手七日指南》被版主们更新到了 2.0 版。你的产品，第一次有了不属于你的部分。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 1 }

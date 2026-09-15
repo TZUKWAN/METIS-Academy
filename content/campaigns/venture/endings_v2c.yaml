@@ -1,0 +1,392 @@
+# METIS Academy Venture V2 结局批次三 —— 与 events_v2_03.yaml 的 kv_* 旗标配套
+endings:
+  - id: v2_cac_discipline_end
+    campaign: venture
+    title: 《11 块钱的底气》
+    mainResult: 投放分层纪律确立
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_cac_audited }
+        - { kind: flag, key: kv_cac_raise, expected: false }
+    priority: 92
+    tier: main
+    baseText: CAC 从 19 降到 11 的那个晚上，阿哲把分层表格截图发进了朋友圈，配文是“投放界的显微镜”。后来融资时，投资人问“你们怎么看待烧钱获客”，你把那张分层表调了出来——三个维度，两周数据，一条下降曲线。投资人看完只说了一句：“这是第一次有人给我看'省下来'的钱。”增长的艺术，一半在于花，另一半在于不乱花。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 分层复盘成了每周例会第一项。你和阿哲用数据吵架的次数，比用情绪多。 }
+          - { lte: 40, text: 分层是你做的，坚持是阿哲做的。你们的分工在数字里越来越默契。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲后来转岗做了投放负责人。他说启蒙教材是你那张“泄漏地图”。
+        neutral: 阿哲说“这波省得漂亮”，然后继续优化下一组创意。
+        negative: 阿哲说“太抠了会错过窗口期”。这句话在三个月后应验了一半。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “显微镜”表格成了公司标配。新投放同学的第一课：先分层，再花钱。 }
+    reflection: CAC 的每一个铜板都有来路——找不到泄漏点的人，只会把漏斗越灌越满。
+    lessonHint: 获客成本上升应先做结构归因（创意/人群/时段），再决定预算动作。
+    tone: positive
+    family: unit_economics
+    whyDistinct: 核心结果是“CAC 分层纪律的建立”，与加预算烧钱路径在同一链互斥。
+
+  - id: v2_freeze_fix_end
+    campaign: venture
+    title: 《躺平的两周》
+    mainResult: 冻结投放修复留存的决断
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_freeze_fix }
+        - { kind: flag, key: kv_keep_pouring, expected: false }
+    priority: 92
+    tier: main
+    baseText: 冻结投放的决定像一场禁食疗法：增长曲线躺平的两周里，你和阿哲把全部精力灌进留存——修引导、砍复杂度、加了第 3 天的激活邮件。重新开闸那天，留存从 31% 涨到 48%。你给投资人发消息：“停了两周，值了。”对方回：“敢停的人，才配加速。”增长不是勇气的问题，是顺序的问题——先修桶，再打水。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: “你顶着”增长停了“的恐慌坚持了 14 天。恐慌是真实的，决定是对的。” }
+          - { lte: 40, text: 冻结到第 9 天你差点破功——是阿哲把账户权限收走了。你们笑称那叫“制度性自律”。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲说：“那两周是我创业以来最踏实的日子——终于不用一边烧钱一边心虚了。”
+        neutral: 阿哲执行了冻结，没有异议。他知道数据站在你这边。
+        negative: 阿哲当时的原话是“你疯了”。两周后他把这句话收了回去，但你们都记得。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “先修桶，再打水”成了团队的增长第一原则，刻在投放账户的备注栏里。 }
+    reflection: 增长的顺序不可颠倒——留存不达标时的每一分投放，都是往漏桶里灌水。
+    lessonHint: 留存低于阈值应冻结投放，集中修复产品价值。
+    tone: positive
+    family: unit_economics
+    whyDistinct: 核心结果是“冻结投放修复留存”的顺序决断，与继续烧钱路径在同一链互斥。
+
+  - id: v2_cash_alarm_end
+    campaign: venture
+    title: 《19 天的 runway》
+    mainResult: 现金危机边缘的清醒
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_keep_pouring }
+        - { kind: flag, key: kv_freeze_fix, expected: false }
+    priority: 90
+    tier: main
+    baseText: 妈妈的电话之后，你在 Excel 里建了个叫“生存模型”的表格：收入、成本、烧钱速度、还有那个刺眼的 19。你把每天的开销贴在显示器边上，像贴了一张CT片。19 天后，你没有死，但那种“账户余额就是氧气瓶”的感觉，从此长在了身体里。后来公司账上有钱了，你依然每周更新那张表——有些习惯是恐惧给的，但它确实好用。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你在危机后建立了“红线制度”：账户低于三个月运营成本，自动冻结一切投放。 }
+          - { lte: 40, text: 危机过去你就把表格藏起来了。恐惧驱动的纪律，往往活不过恐惧本身。 }
+    characterEpilogueRules:
+      - characterId: v_family
+        positive: 妈妈后来在你融资成功那天说：“我听不懂你做什么，但我知道你那次真的怕了。怕过的人靠谱。”
+        neutral: 家人不再过问你的账。你也不再让他们看到。
+        negative: 你拒绝了家里的帮助，说“能撑住”。撑住的方式是又拆东墙三个月。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “19”这个数字你记了很多年。它比你所有融资金额加起来都更定义你的创业。 }
+    reflection: runway 是创业者的真实寿命——它的每一次缩短，都是你某次“以后再说”的账单到期。
+    lessonHint: 现金流预警必须前置，增长动作要接受 runway 约束。
+    tone: negative
+    family: unit_economics
+    whyDistinct: 核心结果是“烧钱到现金危机边缘的代价”，与冻结修复路径在同一链互斥。
+
+  - id: v2_silent_iterate_end
+    campaign: venture
+    title: 《快一个版本的你》
+    mainResult: 用迭代速度回应抄袭
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_silent_iterate }
+        - { kind: flag, key: kv_public_fight, expected: false }
+    priority: 92
+    tier: main
+    baseText: 十一天后，新版上线，竞品还停在你们的旧版。用户群里的那句“那边越看越像旧版的你们”，成了你们的免费广告——你在群里看到时笑出了声。抄袭最讽刺的惩罚是：它把对方的创新力锁死在了你的过去。而你要做的只有一件事：跑。永远快一个版本，让他们追得辛苦，让你自己自由。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你再也没有为竞品分过神。你的竞争对象只有一个：昨天的自己。 }
+          - { lte: 40, text: 你承认那十天里每天都在刷对方的动态。不接招不难，不看不生气才难。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲在版本日志里写了一句“献给某位抄作业的同学”，全组会心一笑。
+        neutral: 阿哲说“做自己的事就好”，然后照常排他的迭代计划。
+        negative: 竞品后来靠资本弯道超车。你开始怀疑“快一个版本”在资本面前的分量。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的迭代节奏从此以“周”为单位。抄袭者可以抄功能，抄不走节奏。 }
+    reflection: 对抄袭最有力的回应不是控诉，是让对方的复刻永远慢半拍——速度是最便宜的护城河。
+    lessonHint: 面对抄袭优先加速迭代建立护城河，舆论战是高成本选项。
+    tone: positive
+    family: innovation
+    whyDistinct: 核心结果是“迭代速度护城河”，与公开宣战路径在同一链互斥。
+
+  - id: v2_public_fight_end
+    campaign: venture
+    title: 《律师函的温度》
+    mainResult: 舆论战的代价清单
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_public_fight }
+        - { kind: flag, key: kv_silent_iterate, expected: false }
+    priority: 90
+    tier: main
+    baseText: 声明发出后的第三天，对方律师函到了。第八天，你的律师费账单到了。第十四天，你发现用户群里已经开始有人腻烦：“还在撕啊？”导师那句话你越想越对——这八天如果用来做产品，你能做多少？你最终撤了声明，专心迭代。舆论战像烈酒：入口很爽，宿醉很久，而它对你的核心指标——留存和收入——的贡献是零。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你在复盘里写下“情绪成本”这个新科目。此后每个公开决定，你都先算这一笔。 }
+          - { lte: 40, text: 你不后悔发声明——“至少让他们知道我不是好欺负的”。这个“至少”，你付了两周。 }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 导师后来说：“你撤声明的那个决定，比发声明需要更大的勇气。”
+        neutral: 导师没提这茬。他见过太多创始人打过这种仗。
+        negative: 同行圈子里，你们被称为“那两个对撕的”。标签贴上容易，撕下来很难。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的笔记本里有一页“公开发言守则”，第一条是导师的话：“以钱换时间的游戏，先看你的钱和时间。 }
+    reflection: 舆论战的成本是隐形的——它消耗的不是预算，是你本可以用来建造的心力。
+    lessonHint: 公开对抗前核算机会成本，保护核心指标优先。
+    tone: negative
+    family: rules_execution
+    whyDistinct: 核心结果是“舆论战的代价清单”，与沉默迭代路径在同一链互斥。
+
+  - id: v2_user_wall_end
+    campaign: venture
+    title: 《37 条故事》
+    mainResult: 用户故事墙对抗抄袭
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_user_wall }
+        - { kind: flag, key: kv_public_fight, expected: false }
+        - { kind: flag, key: kv_silent_iterate, expected: false }
+    priority: 93
+    tier: main
+    baseText: 你没提抄袭一个字。你只发了一个话题：“这个工具帮你做成过什么？”三十七个用户写下了自己的故事：有人靠它组织了毕业晚会，有人用它带完了一个学期的小组作业，有人只是说“它陪我熬过了考研”。你把故事做成了一面墙。抄袭者可以复制界面，复制不了这三十七段关系。你后来明白，那面墙才是你的第一份“商业机密”。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了在最愤怒的时刻问“我的用户需要看到什么”。这个问题救过你三次。 }
+          - { lte: 40, text: 三十七条故事里，有几条你读了很多遍。它们在低谷时的作用，比任何数据都大。 }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 社团的那位用户第一个投稿。他说：“你们没骂人，只是让我们说话。那一刻我知道你们会赢。”
+        neutral: 话题平静地结束了。墙挂在办公室最显眼的地方。
+        negative: 竞品后来也发起了同样的话题。他们的用户写不出故事——墙的本质是关系，不是活动。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那面故事墙你们一直挂着，搬了三次办公室，拆装了三次。 }
+    reflection: 真正的商业机密无法被抄走——它藏在用户和你的关系里，不在代码和界面里。
+    lessonHint: 危机中动员用户真实故事，是最强且最正当的防御。
+    tone: positive
+    family: retention
+    whyDistinct: 核心结果是“用户故事墙的关系防御”，与舆论战、纯迭代路径在同一链互斥。
+
+  - id: v2_refactor_dividend_end
+    campaign: venture
+    title: 《六小时的排行》
+    mainResult: 重构红利兑现
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_full_refactor }
+        - { kind: flag, key: kv_patch_again, expected: false }
+    priority: 92
+    tier: main
+    baseText: 路演现场的加需求来的毫无预兆：“能现场展示实时排行吗？”重构前的你会冷汗直冒，但那天你说“六小时”。第 13 天那 6 天的债，在第 24 天变成了 6 小时——你用十倍速把需求变成了演示。台下投资人不知道这段历史，阿哲知道。他散场后说：“还记得你说'慢就是快'吗？今天我亲眼看到了。”
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: “慢就是快”从鸡汤变成了你们的排期公式。每个大功能前，你们都会先问架构。 }
+          - { lte: 40, text: 六小时里有一小时是你在赌。重构的红利是真的，但你的预估能力还是靠运气补。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲把“六小时”设成了团队黑话——意思是“还过债的团队才配谈敏捷”。
+        neutral: 阿哲点点头，继续路演。他知道那六个小时的来历。
+        negative: 后来有投资人质疑“你们重构太早了”。你花了一顿饭的时间解释，没说服他。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的技术债看板永远公开。每个成员都知道：债不是不能欠，是要记账。 }
+    reflection: 技术债的时间价值是复利计息的——还债的最好时机是下一次加速之前。
+    lessonHint: 重构应在下一个大功能前进行，且设置硬性范围边界。
+    tone: positive
+    family: technology_agent
+    whyDistinct: 核心结果是“重构红利的兑现时刻”，与补丁堆叠路径在同一链互斥。
+
+  - id: v2_archaeology_end
+    campaign: venture
+    title: 《考古现场》
+    mainResult: 补丁堆叠的深夜还债
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_patch_again }
+        - { kind: flag, key: kv_full_refactor, expected: false }
+    priority: 90
+    tier: main
+    baseText: 凌晨两点，你终于挖到了 bug 的根：第一层补丁和第三层补丁在抢同一个缓存键。Agent 的诊断报告冷冰冰的：“建议修复 4 小时，建议重构 6 小时——这是第 13 天的两种未来。”你看着屏幕上的代码，看到了自己当时的侥幸。最终你花了 6 小时当场重构——用最贵的方式（凌晨、路演前），做了本可以便宜做的事。侥幸从不省钱，它只是把账单换成了深夜版。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: 天亮后你在白板上写下“侥幸的复利”。这次之后，你们再没让补丁超过两层。 }
+          - { lte: 40, text: 修复完你没重构，继续赶路。考古现场又深了一层——下一次的凌晨会更长。 }
+    characterEpilogueRules:
+      - characterId: v_ai_agent
+        positive: 重构完成后，Agent 的代码评估第一次给出了“结构清晰”的评语。你截图发给了阿哲。
+        neutral: Agent 如实报告了问题。机器的诚实，反衬出人的侥幸。
+        negative: Agent 提出过重构建议，被你否了两次。第三次的代价是凌晨两点。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “考古现场”成了你们的技术债代号。看板上一出现这个词，全员都紧张。 }
+    reflection: 技术债不会消失，只会换算成你最不想支付的形式——在最坏的时刻，用最高的利息。
+    lessonHint: 补丁堆叠的代价是指数级的，重构窗口错过即翻倍。
+    tone: negative
+    family: technology_agent
+    whyDistinct: 核心结果是“补丁债的深夜清算”，与重构红利结局在同一链互斥。
+
+  - id: v2_community_bloom_end
+    campaign: venture
+    title: 《不属于你的部分》
+    mainResult: 社区自治成功运转
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_empowered_mods }
+        - { kind: flag, key: kv_control_freak, expected: false }
+    priority: 92
+    tier: main
+    baseText: 《新手七日指南》2.0 版发布那天，你通读了一遍，然后承认：写得比你自己的官方教程好。版主们用的是真实卡点、真实语气、真实案例——这些东西，产品团队永远写不出来。你把指南链接设成了官方引导页的第一条。把方向盘交给用户的那一刻，你失去的是控制感，得到的是一个会自己长大的社区。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了区分“我的产品”和“我们的社区”——所有权不同，爱是相同的。 }
+          - { lte: 40, text: 版主删过一条你发的官方公告，理由是“太硬广”。你憋了一晚，最后承认他是对的。 }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 版主团队后来有了自己的年度聚会——没叫你。你看到照片时笑了很久。
+        neutral: 社区井井有条，你渐渐不再是讨论串里的第一个名字。
+        negative: 有位版主带着核心成员跳去了竞品的社区。你第一次体会到“放权”的代价。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 每年社区生日，你们只做一件事：把维护者名单放在首页最中间。 }
+    reflection: 社区的终极形态是不需要你——而愿意走向这个形态的创始人，才能得到它。
+    lessonHint: 社区规模化依赖授权与自治公约，创始人应回归产品。
+    tone: positive
+    family: retention
+    whyDistinct: 核心结果是“社区自治的成熟”，与控制欲路径在同一链互斥。
+
+  - id: v2_investor_trust_end
+    campaign: venture
+    title: 《瑕疵的信用》
+    mainResult: 坦诚分群数据赢得投资兴趣
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_investor_trust }
+        - { kind: flag, key: kv_inflated_pitch, expected: false }
+    priority: 93
+    tier: hidden
+    baseText: 三天后投资人转来竞品分析的那条微信，导师看了只说了一句：“他开始给你递东西了——这是兴趣的暗号。”你后来才懂那顿饭的真正考点：不是你的增长曲线多漂亮，而是你讲 22% 的时候语气平不平稳。瑕疵的坦诚度，就是信用_audit 的第一道题。你答对了，入场券在路上了。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你把“先讲瑕疵再讲数字”做成了路演模板。顺序本身就是态度。 }
+          - { lte: 40, text: 那顿饭你其实紧张到胃疼。投资人看到的平静，是你练了三遍的版本。 }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 导师饭后说：“我带过很多学生，敢在投资人面前讲 22% 的，你是第二个。”
+        neutral: 导师说“聊得还行”，然后照常收了他的那杯茶钱——AA 制。
+        negative: 后来你听说投资人也见了竞品团队，对方讲了更漂亮的曲线。你不知道他信没信。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的路演第一页永远有一个“当前最大的问题”板块。投资人管这页叫“诚实页”。 }
+    reflection: 融资的本质是出售信用，而信用的第一性原理是：连你的瑕疵都是可信的。
+    lessonHint: 对投资人主动披露数据瑕疵并附补救计划，是信任的加速器。
+    tone: positive
+    family: founder_team
+    whyDistinct: 核心结果是“投资信任的瑕疵坦白”，与吹 inflated pitch 路径在同一隐藏链互斥。
+
+  - id: v2_agent_hypothesis_end
+    campaign: venture
+    title: 《机器猜的三条》
+    mainResult: 人机假设验证闭环建立
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_agent_hypothesis }
+    priority: 97
+    tier: hidden
+    baseText: 五个假设，两条幻觉，三条真——其中“用户在第 3 天迷失”那条，连你自己都从没意识到。你把验证过程画成了一张表：“Agent 猜的 / 我验的”，贴在墙上。有人问你怕不怕 AI 抢走产品经理的活，你指着那张表说：“它一晚能猜一百条，但它不知道哪条值得验证。挑问题的品味，猜问题的速度——加起来才是未来。”那张表后来被同事拍下来，发到了行业群里。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { lte: 45, text: 你把 Agent 当成了“不知疲倦的实习生”——发散归它，判断归你，互相都不越界。 }
+          - { gte: 60, text: 那两条幻觉让你后怕：如果没验证就采信，你会把产品带向哪里？ }
+    characterEpilogueRules:
+      - characterId: v_ai_agent
+        positive: 你的验证表成了提示词工程的教学案例：机器不需要对，只需要有用。
+        neutral: Agent 不知道自己的假设被验证过。它继续猜，你继续验，各司其职。
+        negative: 有人问“如果 Agent 的假设全错了呢”，你没答上来。你开始思考机器幻觉的责任归属。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “猜-验表”成了团队标配。每个 AI 输出的结论旁边，都有一个“人验过”的勾选框。 }
+    reflection: 人机协作的正确姿势不是信任或防备，是流程——让机器发散，让人收口。
+    lessonHint: AI 假设是免费线索池，必须经人工数据验证后方可采纳。
+    tone: positive
+    family: technology_agent
+    whyDistinct: 核心结果是“人机假设验证闭环”的隐藏方法叙事，由深夜 Agent 对话解锁。
+
+  - id: v2_ng_channel_end
+    campaign: venture
+    title: 《上一世的 22%》
+    mainResult: NG+ 渠道先验的应用或验证
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_veto_b }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: “它的量是水做的。”这句话出口时，阿哲愣了——你没看任何数据就否掉了一个渠道。这一世的后台数据会证明你是对的：B 的留存果然是 24%。但你自己心里清楚，你说“直觉”的时候，其实是在引用一个不存在的报告——上一世的、用真金白银换来的那份。先验知识是超能力，也是盲区：它只在两个世界相同的时候有效。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 一个月后你还是补跑了 B 的试点数据。先验给了答案，你要给它证据。 }
+          - { lte: 40, text: 你发现自己开始跳过验证。“我上一世见过”成了危险的习惯性托词。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲后来说：“你那次'直觉'准得吓人。我到现在还想知道为什么。”
+        neutral: 阿哲接受了你的否决。团队的分工里，“谁的领域谁拍板”。
+        negative: 如果这一世的 B 渠道换了优化师呢？你没想过。先验的边界，你从来没测过。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你在笔记本里建了一页“先验清单”——每一条都标注：需在本世重新验证。 }
+    reflection: 记忆里的数据不是数据，是假设——哪怕它来自上一个世界。
+    lessonHint: NG+ 先验知识应标注置信度，重大决策仍需本世验证。
+    tone: mixed
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 渠道先验的直接否决”，仅 NG+ 可达，与试点验证路径互斥。
+
+  - id: v2_ng_trial_end
+    campaign: venture
+    title: 《让 B 自己证明》
+    mainResult: NG+ 记忆的实验化落地
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_trial_b }
+        - { kind: flag, key: kv_ng_veto_b, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 你没有说“我见过它的结局”。你说：“先跑一周小流量。”B 的试点数据出来那天——留存 24%——阿哲自己划掉了它，嘴里念叨“这钱省得值”。你笑了。上一世，这个数字是烧了两万块才买来的；这一世，只花了两千。你不仅避开了坑，还让团队学会了“用试点说话”。记忆的正确用法不是替代证据，而是降低取证的代价。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 小流量试点成了你们的渠道准入流程。第 001 号流程的灵感，来自一个说不出口的来源。 }
+          - { lte: 40, text: 你把“预知”包装成“谨慎”。团队以为你保守，其实你在还一个跨世界的债。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲后来把“先试点”挂在了嘴边。他不知道这个习惯的种子，是你从另一个世界带来的。
+        neutral: 阿哲划掉 B 时没有任何波澜。流程之所以是流程，就是因为它不依赖奇迹。
+        negative: 试点延误了一周排期。阿哲嘀咕“早说不行不就不浪费了”——他不懂，这一周才是真正的价值。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的小流量试点标准（7 天/留存 40%）后来被写进行业分享。没人知道它来自一次“轮回”。 }
+    reflection: 先验知识的最高形态，是把它降维成一条所有人都能执行的流程。
+    lessonHint: NG+ 记忆转化为制度与流程，比直接决策更可复制。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 记忆的流程化落地”，仅 NG+ 可达，与直觉否决路径互斥。

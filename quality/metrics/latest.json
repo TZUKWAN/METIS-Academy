@@ -1,8 +1,8 @@
 {
-  "gitSha": "1f35599821655540c53a00ac89d4e691d7c4d348",
+  "gitSha": "19ceea9b0fbf4788b9e9c3467e81f48998576773",
   "appVersion": "1.0.0",
   "contentVersion": "unknown",
-  "calculatedAt": "2026-09-15T18:59:39.689Z",
+  "calculatedAt": "2026-09-15T19:14:21.486Z",
   "research": {
     "events": 485,
     "baseEndings": 91,
@@ -46,30 +46,30 @@
     "visibleEventRange": 179
   },
   "venture": {
-    "events": 455,
-    "baseEndings": 74,
-    "meaningfulDecisions": 93,
-    "delayedConsequences": 21,
-    "npcInteractions": 75,
-    "hiddenEvents": 6,
-    "ngPlusEvents": 5,
-    "hiddenBaseEndings": 6,
-    "ngPlusBaseEndings": 6,
+    "events": 482,
+    "baseEndings": 87,
+    "meaningfulDecisions": 101,
+    "delayedConsequences": 29,
+    "npcInteractions": 81,
+    "hiddenEvents": 10,
+    "ngPlusEvents": 7,
+    "hiddenBaseEndings": 8,
+    "ngPlusBaseEndings": 8,
     "ultraRareBaseEndings": 1,
-    "displayVariantCount": 495,
+    "displayVariantCount": 573,
     "endingTones": {
-      "positive": 20,
-      "negative": 9,
-      "mixed": 16,
+      "positive": 29,
+      "negative": 12,
+      "mixed": 17,
       "ambiguous": 0,
       "unset": 29
     },
-    "visibleEventRange": 115
+    "visibleEventRange": 127
   },
   "totals": {
-    "events": 1398,
-    "baseEndings": 284,
-    "meaningfulDecisions": 344,
-    "delayedConsequences": 143
+    "events": 1425,
+    "baseEndings": 297,
+    "meaningfulDecisions": 352,
+    "delayedConsequences": 151
   }
 }

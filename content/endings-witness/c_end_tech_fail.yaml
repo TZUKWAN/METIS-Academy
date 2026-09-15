@@ -1,0 +1,763 @@
+endingId: c_end_tech_fail
+campaign: competition
+description: Auto-solved witness (greedy solver over real reducer)
+steps:
+  - do: startMission
+    missionId: cm1
+  - do: advance
+    expectEvent: c_d01_notice
+  - do: choose
+    choiceId: read_all_self
+    expectEvent: c_d01_extract
+  - do: advance
+    expectEvent: c_d01_checklist
+  - do: advance
+    expectEvent: c_xe1_track_overview
+  - do: advance
+    expectEvent: c_xe1_notice_group
+  - do: choose
+    choiceId: track_algo
+    expectEvent: c_xe1_track_choice
+  - do: endDay
+    expectDay: 2
+  - do: choose
+    choiceId: reverse_plan
+    expectEvent: c_d02_deadline
+  - do: choose
+    choiceId: ip_shared
+    expectEvent: c_xe1_ip_clause
+  - do: choose
+    choiceId: weight_based
+    expectEvent: c_xe1_score_weights
+  - do: advance
+    expectEvent: c_v2_h_micro_user
+  - do: advance
+    expectEvent: c_v2_h_live_data
+  - do: advance
+    expectEvent: c_v2_h_repro_pack
+  - do: advance
+    expectEvent: c_v2_h_jury_special
+  - do: advance
+    expectEvent: c_v2_h_oss
+  - do: advance
+    expectEvent: c_v2_h_paper
+  - do: advance
+    expectEvent: c_v2_h_goldarchive
+  - do: choose
+    choiceId: contribution_list
+    expectEvent: c_xe8_credit_dispute
+  - do: startMission
+    missionId: cm2
+  - do: choose
+    choiceId: boundary_charter
+    expectEvent: c_d03_team
+  - do: startMission
+    missionId: cm3
+  - do: advance
+    expectEvent: c_d04_topics
+  - do: choose
+    choiceId: quick_desk_check
+    expectEvent: c_d04_verify
+  - do: choose
+    choiceId: pick_fancy
+    expectEvent: c_d04_pick
+  - do: advance
+    expectEvent: c_d04_brief
+  - do: startMission
+    missionId: cm4
+  - do: choose
+    choiceId: rewrite_past_behavior
+    expectEvent: c_d06_interview
+  - do: advance
+    expectEvent: c_d06_notes
+  - do: advance
+    expectEvent: c_xe1_rule_qa_group
+  - do: choose
+    choiceId: quiz_skip
+    expectEvent: c_xe1_rule_teamquiz
+  - do: choose
+    choiceId: skip_history
+    expectEvent: c_xe1_past_winners
+  - do: advance
+    expectEvent: c_xe1_signup_form
+  - do: choose
+    choiceId: pace_reassure
+    expectEvent: c_xe2_mood_check
+  - do: advance
+    expectEvent: c_xe2_pledge
+  - do: advance
+    expectEvent: c_xe2_timeline_board
+  - do: choose
+    choiceId: funny_name
+    expectEvent: c_x_d2_groupname
+  - do: choose
+    choiceId: front_loose
+    expectEvent: c_v2_d02_energy
+  - do: choose
+    choiceId: double_check
+    expectEvent: c_xe1_signup_check
+  - do: endDay
+    expectDay: 3
+  - do: choose
+    choiceId: strict_redline
+    expectEvent: c_xe1_ai_clause_team
+  - do: choose
+    choiceId: recruit_lin
+    expectEvent: c_xe1_third_member
+  - do: choose
+    choiceId: small_first_task
+    expectEvent: c_xe1_lin_intro
+  - do: choose
+    choiceId: oral_agree
+    expectEvent: c_v2_d03_split
+  - do: advance
+    expectEvent: c_v2_h_cross_example
+  - do: advance
+    expectEvent: c_xe8_certificate_wall
+  - do: advance
+    expectEvent: c_xe1_winner_pattern
+  - do: advance
+    expectEvent: c_xe1_signup_receipt
+  - do: choose
+    choiceId: ask_vague
+    expectEvent: c_xe1_advisor_ask
+  - do: choose
+    choiceId: budget_sheet
+    expectEvent: c_xe1_budget_plan
+  - do: choose
+    choiceId: name_guanjia
+    expectEvent: c_xe3_project_name
+  - do: advance
+    expectEvent: c_xe3_slogan
+  - do: advance
+    expectEvent: c_xe3_conflict_seed
+  - do: choose
+    choiceId: deliver_checklist
+    expectEvent: c_xe2_deliverable_list
+  - do: choose
+    choiceId: probe_back
+    expectEvent: c_xe3_rival_probe
+  - do: choose
+    choiceId: free_tier
+    expectEvent: c_x_d3_money
+  - do: choose
+    choiceId: sign_charter
+    expectEvent: c_xe3_role_confirm
+  - do: choose
+    choiceId: judge_by_user
+    expectEvent: c_xe3_conflict_choice
+  - do: advance
+    expectEvent: c_xe3_kickoff
+  - do: endDay
+    expectDay: 4
+  - do: advance
+    expectEvent: c_xe2_sel_meeting
+  - do: advance
+    expectEvent: c_v2_h_judge_scout
+  - do: choose
+    choiceId: wait_for_ai
+    expectEvent: c_xe7_random_ai_downtime
+  - do: choose
+    choiceId: from_gripe_pool
+    expectEvent: c_xe2_sel_brainstorm
+  - do: choose
+    choiceId: desk_check_all
+    expectEvent: c_xe2_sel_check
+  - do: choose
+    choiceId: depth_over_breadth
+    expectEvent: c_xe2_sel_debate
+  - do: choose
+    choiceId: smoke_shaken2
+    expectEvent: c_xe2_sel_flag_smoke
+  - do: advance
+    expectEvent: c_x_d4_naming
+  - do: choose
+    choiceId: algo_hype
+    expectEvent: c_v2_d04_track
+  - do: endDay
+    expectDay: 5
+  - do: advance
+    expectEvent: c_v2_dly_energy_debt
+  - do: choose
+    choiceId: convenient_list
+    expectEvent: c_xe4_interview_plan
+  - do: choose
+    choiceId: new_api
+    expectEvent: c_v2_d05_stack
+  - do: advance
+    expectEvent: c_v2_h_rival_smoke
+  - do: choose
+    choiceId: keep_claims
+    expectEvent: c_v2_h_overclaim
+  - do: advance
+    expectEvent: c_v2_h_club
+  - do: advance
+    expectEvent: c_x_d17_self_doubt
+  - do: choose
+    choiceId: get_shaken
+    expectEvent: c_d05_rival
+  - do: choose
+    choiceId: record_verbatim
+    expectEvent: c_xe4_interview_elderK
+  - do: advance
+    expectEvent: c_xe4_interview_quotes
+  - do: choose
+    choiceId: backup_interview
+    expectEvent: c_xe4_interview_sorry
+  - do: advance
+    expectEvent: c_xe4_question_rewrite
+  - do: choose
+    choiceId: big_ai_survey
+    expectEvent: c_xe4_survey_trap
+  - do: choose
+    choiceId: skip_it
+    expectEvent: c_x_d5_knowledge_debt
+  - do: choose
+    choiceId: each_own
+    expectEvent: c_v2_d05_datacal
+  - do: endDay
+    expectDay: 6
+  - do: choose
+    choiceId: privacy_by_design
+    expectEvent: c_xe4_policy_check
+  - do: advance
+    expectEvent: c_xe4_survey_follow
+  - do: choose
+    choiceId: quota_sample
+    expectEvent: c_v2_d06_sample
+  - do: choose
+    choiceId: let_it_go
+    expectEvent: c_v2_h_agent_leak
+  - do: choose
+    choiceId: contribution_list
+    expectEvent: c_xe8_credit_dispute
+  - do: advance
+    expectEvent: c_xe4_data_breach_story
+  - do: choose
+    choiceId: scan_free
+    expectEvent: c_xe4_competitor_scan
+  - do: choose
+    choiceId: paper_comparison
+    expectEvent: c_xe4_competitor_trial
+  - do: choose
+    choiceId: verify_skip
+    expectEvent: c_v2_d06_verify
+  - do: endDay
+    expectDay: 7
+  - do: choose
+    choiceId: structured_scan
+    expectEvent: c_d07_competitors
+  - do: advance
+    expectEvent: c_xe4_competitor_gap
+  - do: choose
+    choiceId: persona_vibes
+    expectEvent: c_xe4_user_persona
+  - do: choose
+    choiceId: no_backup
+    expectEvent: c_v2_d07_risk
+  - do: choose
+    choiceId: refuse_refactor
+    expectEvent: c_random_late_night
+  - do: advance
+    expectEvent: c_d07_matrix
+  - do: startMission
+    missionId: cm5
+  - do: choose
+    choiceId: buzzword_card
+    expectEvent: c_d08_psf
+  - do: advance
+    expectEvent: c_d08_card
+  - do: choose
+    choiceId: acknowledge_both
+    expectEvent: c_xe4_conflict_cool
+  - do: advance
+    expectEvent: c_xe4_journey_map
+  - do: choose
+    choiceId: rank_by_demo
+    expectEvent: c_xe4_pain_rank
+  - do: advance
+    expectEvent: c_xe4_research_retro
+  - do: advance
+    expectEvent: c_xe4_sel_finalize
+  - do: advance
+    expectEvent: c_x_d7_divider
+  - do: choose
+    choiceId: accept_all
+    expectEvent: c_v2_d07_advisor
+  - do: endDay
+    expectDay: 8
+  - do: choose
+    choiceId: both_halves
+    expectEvent: c_v2_dly_boom
+  - do: choose
+    choiceId: confront_now
+    expectEvent: c_v2_h_tech_secret
+  - do: choose
+    choiceId: claim_desk
+    expectEvent: c_xe1_workplace
+  - do: choose
+    choiceId: mediate_test
+    expectEvent: c_v2_d08_conflict
+  - do: endDay
+    expectDay: 9
+  - do: advance
+    expectEvent: c_v2_dly_track_regret
+  - do: advance
+    expectEvent: c_xe5_sprint_start
+  - do: choose
+    choiceId: cloud_stack
+    expectEvent: c_v2_d09_arch
+  - do: choose
+    choiceId: dig_score
+    expectEvent: c_xe8_score_envy
+  - do: choose
+    choiceId: double_line
+    expectEvent: c_v2_d09_switch
+  - do: choose
+    choiceId: lock_env
+    expectEvent: c_xe5_env_setup
+  - do: advance
+    expectEvent: c_d09_sim_note
+  - do: choose
+    choiceId: code_first
+    expectEvent: c_xe5_mock_ui
+  - do: choose
+    choiceId: keep_zip
+    expectEvent: c_x_d9_git
+  - do: choose
+    choiceId: gray_push
+    expectEvent: c_v2_d09_rulegray
+  - do: endDay
+    expectDay: 10
+  - do: advance
+    expectEvent: c_v2_dly_api_break
+  - do: choose
+    choiceId: write_repo_rules
+    expectEvent: c_d10_rules
+  - do: choose
+    choiceId: schema_later
+    expectEvent: c_xe5_api_first
+  - do: choose
+    choiceId: deep_dig
+    expectEvent: c_v2_h_judge_pref
+  - do: advance
+    expectEvent: c_v2_h_double_track
+  - do: choose
+    choiceId: user_leader
+    expectEvent: c_v2_d10_user_focus
+  - do: choose
+    choiceId: solo_path
+    expectEvent: c_xe8_rival_cooperation
+  - do: choose
+    choiceId: accept_partially
+    expectEvent: c_xe5_requirement_change
+  - do: choose
+    choiceId: private_talk
+    expectEvent: c_v2_d10_copycat
+  - do: endDay
+    expectDay: 11
+  - do: choose
+    choiceId: let_them_fight
+    expectEvent: c_d11_contract
+  - do: choose
+    choiceId: full_coverage
+    expectEvent: c_xe5_test_basics
+  - do: choose
+    choiceId: scope_flip
+    expectEvent: c_v2_d11_scope_demo
+  - do: choose
+    choiceId: rival_refuse
+    expectEvent: c_v2_h_rival_ally
+  - do: choose
+    choiceId: ignore_showoff
+    expectEvent: c_d11_rival_leak
+  - do: choose
+    choiceId: trust_it
+    expectEvent: c_xe5_ai_hallucinate_api
+  - do: choose
+    choiceId: keep_buzz
+    expectEvent: c_v2_d11_buzz
+  - do: endDay
+    expectDay: 12
+  - do: advance
+    expectEvent: c_v2_dly_pseudo_bite
+  - do: advance
+    expectEvent: c_v2_dly_advisor_drift
+  - do: advance
+    expectEvent: c_v2_dly_rival_talk
+  - do: choose
+    choiceId: mvp_goal
+    expectEvent: c_d12_goal
+  - do: advance
+    expectEvent: c_xe5_dup_work
+  - do: choose
+    choiceId: overtrust_report
+    expectEvent: c_v2_d12_aireport
+  - do: advance
+    expectEvent: c_v2_h_advisor_worried
+  - do: choose
+    choiceId: just_thanks
+    expectEvent: c_xe1_senior_template
+  - do: choose
+    choiceId: honest_talk
+    expectEvent: c_v2_d12_advisor_talk
+  - do: choose
+    choiceId: retry_and_pray
+    expectEvent: c_xe5_context_handoff
+  - do: advance
+    expectEvent: c_d12_advisor_check
+  - do: choose
+    choiceId: wish_list_again
+    expectEvent: c_xe5_scope_push
+  - do: endDay
+    expectDay: 13
+  - do: advance
+    expectEvent: c_v2_dly_crash_risk
+  - do: advance
+    expectEvent: c_v2_dly_cloud_bill
+  - do: choose
+    choiceId: strict_loop
+    expectEvent: c_d13_loop
+  - do: advance
+    expectEvent: c_xe5_login_done
+  - do: choose
+    choiceId: side_design
+    expectEvent: c_xe4_conflict_scope
+  - do: choose
+    choiceId: raise_limit
+    expectEvent: c_xe5_file_upload
+  - do: choose
+    choiceId: oral_enough2
+    expectEvent: c_xe5_permission_issue
+  - do: choose
+    choiceId: switch_ai_mode
+    expectEvent: c_v2_d13_aiwash
+  - do: choose
+    choiceId: route_stable
+    expectEvent: c_v2_d13_techroute
+  - do: endDay
+    expectDay: 14
+  - do: advance
+    expectEvent: c_d14_zip_loss
+  - do: advance
+    expectEvent: c_d14_regression
+  - do: advance
+    expectEvent: c_xe5_bug_bash
+  - do: choose
+    choiceId: hide_use
+    expectEvent: c_v2_d14_ai_disclose
+  - do: choose
+    choiceId: judge_focus
+    expectEvent: c_v2_d14_judgestrategy
+  - do: choose
+    choiceId: give_ownership
+    expectEvent: c_xe5_lin_grows
+  - do: choose
+    choiceId: hotfix_only
+    expectEvent: c_d14_fix
+  - do: advance
+    expectEvent: c_xe5_bug_list
+  - do: choose
+    choiceId: refactor_first
+    expectEvent: c_xe5_priority_fight
+  - do: advance
+    expectEvent: c_xe5_crash_first
+  - do: choose
+    choiceId: script_v1_enough
+    expectEvent: c_xe5_demo_script_v2
+  - do: advance
+    expectEvent: c_xe5_retro_mid
+  - do: advance
+    expectEvent: c_xe7_backup_day
+  - do: advance
+    expectEvent: c_x_d14_family
+  - do: endDay
+    expectDay: 15
+  - do: advance
+    expectEvent: c_v2_dly_data_mismatch
+  - do: advance
+    expectEvent: c_v2_dly_split_rework
+  - do: advance
+    expectEvent: c_v2_dly_flip_panic
+  - do: advance
+    expectEvent: c_xe6_materials_kickoff
+  - do: choose
+    choiceId: product_first
+    expectEvent: c_v2_d15_narrative
+  - do: choose
+    choiceId: hard_mode
+    expectEvent: c_v2_h_qa_camp
+  - do: choose
+    choiceId: wait_for_ai
+    expectEvent: c_xe7_random_ai_downtime
+  - do: choose
+    choiceId: follow_template
+    expectEvent: c_xe6_report_structure
+  - do: choose
+    choiceId: ad_hoc_numbers
+    expectEvent: c_xe6_data_table
+  - do: advance
+    expectEvent: c_xe6_data_footnote
+  - do: choose
+    choiceId: polish_limited
+    expectEvent: c_xe8_ai_polish_tempt
+  - do: advance
+    expectEvent: c_xe7_assessment_day
+  - do: choose
+    choiceId: agent_check
+    expectEvent: c_v2_d15b_submit
+  - do: choose
+    choiceId: outlier_rerun
+    expectEvent: c_v2_d15_outlier
+  - do: endDay
+    expectDay: 16
+  - do: advance
+    expectEvent: c_xe7_dly_survey_bias
+  - do: advance
+    expectEvent: c_v2_dly_report_check
+  - do: choose
+    choiceId: script_first
+    expectEvent: c_d16_video
+  - do: choose
+    choiceId: story_structure
+    expectEvent: c_xe6_ppt_storyline
+  - do: choose
+    choiceId: qa_own
+    expectEvent: c_v2_d16_qapolicy
+  - do: advance
+    expectEvent: c_d10_night_debug
+  - do: choose
+    choiceId: annotate_now
+    expectEvent: c_d16_missed_rule
+  - do: choose
+    choiceId: mix_screenshots
+    expectEvent: c_xe6_screenshot_fresh
+  - do: choose
+    choiceId: storyboard_first
+    expectEvent: c_xe6_video_script
+  - do: choose
+    choiceId: trust_deadline
+    expectEvent: c_xe6_deadline_check
+  - do: choose
+    choiceId: vague_disclosure
+    expectEvent: c_xe6_declare_ai
+  - do: choose
+    choiceId: sync_slogan
+    expectEvent: c_xe6_slogan_sync
+  - do: advance
+    expectEvent: c_x_d16_backup
+  - do: choose
+    choiceId: rehearse_none
+    expectEvent: c_v2_d16_rehearsal
+  - do: choose
+    choiceId: submit_lastmin
+    expectEvent: c_v2_d16_deadline
+  - do: endDay
+    expectDay: 17
+  - do: advance
+    expectEvent: c_v2_dly_format_error
+  - do: advance
+    expectEvent: c_v2_dly_server_crowd
+  - do: choose
+    choiceId: wait_her_voice
+    expectEvent: c_xe6_video_voice
+  - do: choose
+    choiceId: backup_works
+    expectEvent: c_xe7_random_lost_usb
+  - do: advance
+    expectEvent: c_xe6_fake_logo
+  - do: advance
+    expectEvent: c_xe6_teacher_review
+  - do: choose
+    choiceId: self_review
+    expectEvent: c_xe6_cross_review
+  - do: choose
+    choiceId: shrink_font
+    expectEvent: c_xe6_word_limit
+  - do: advance
+    expectEvent: c_xe6_night_before_sub
+  - do: advance
+    expectEvent: c_xe6_commit_pledge
+  - do: choose
+    choiceId: defense_extra
+    expectEvent: c_v2_d17_mock
+  - do: endDay
+    expectDay: 18
+  - do: advance
+    expectEvent: c_xe7_dly_ghost_product
+  - do: advance
+    expectEvent: c_xe7_dly_deadline_squeeze
+  - do: choose
+    choiceId: skip_mock
+    expectEvent: c_d18_qa_prep
+  - do: choose
+    choiceId: four_min_test
+    expectEvent: c_xe6_judge_eye_test
+  - do: choose
+    choiceId: backup_video
+    expectEvent: c_v2_d18_backupvid
+  - do: choose
+    choiceId: split_difference
+    expectEvent: c_xe4_conflict_scope
+  - do: advance
+    expectEvent: c_d18_rest
+  - do: advance
+    expectEvent: c_xe6_eligibility_selfcheck
+  - do: choose
+    choiceId: rename_later
+    expectEvent: c_xe6_file_naming
+  - do: choose
+    choiceId: dry_run_submit
+    expectEvent: c_xe6_submit_dry_run
+  - do: advance
+    expectEvent: c_xe6_submitted
+  - do: advance
+    expectEvent: c_xe6_material_archive
+  - do: advance
+    expectEvent: c_xe6_judge_profile
+  - do: choose
+    choiceId: rough_note
+    expectEvent: c_x_d18_ai_note
+  - do: choose
+    choiceId: viral_ignore
+    expectEvent: c_v2_d18_viral
+  - do: advance
+    expectEvent: c_xe6_night_off
+  - do: endDay
+    expectDay: 19
+  - do: advance
+    expectEvent: c_v2_dly_ai_audit
+  - do: advance
+    expectEvent: c_d19_rework_night
+  - do: advance
+    expectEvent: c_xe7_dly_number_drift
+  - do: advance
+    expectEvent: c_xe7_dly_format_bounce
+  - do: advance
+    expectEvent: c_d19_prelim
+  - do: advance
+    expectEvent: c_xe7_prelim_morning
+  - do: choose
+    choiceId: open_none
+    expectEvent: c_v2_d19_open
+  - do: choose
+    choiceId: fix_subtitles
+    expectEvent: c_xe6_subtitle_check
+  - do: choose
+    choiceId: pace_nervously
+    expectEvent: c_d19_wait
+  - do: choose
+    choiceId: spy_on_rival
+    expectEvent: c_xe7_prelim_wait_room
+  - do: choose
+    choiceId: answer_vague
+    expectEvent: c_xe7_prelim_qa_data
+  - do: advance
+    expectEvent: c_d19_rival_gg
+  - do: advance
+    expectEvent: c_x_d19_morning
+  - do: choose
+    choiceId: review_peer
+    expectEvent: c_v2_d19_finalreview
+  - do: endDay
+    expectDay: 20
+  - do: advance
+    expectEvent: c_v2_dly_blackout
+  - do: advance
+    expectEvent: c_v2_dly_backup_v
+  - do: choose
+    choiceId: fix_crash
+    expectEvent: c_d20_semifinal_polish
+  - do: advance
+    expectEvent: c_xe7_semifinal_notice
+  - do: choose
+    choiceId: side_tech
+    expectEvent: c_xe4_conflict_scope
+  - do: choose
+    choiceId: skip_semifinal_effort
+    expectEvent: c_xe7_semifinal_plan
+  - do: choose
+    choiceId: use_verbatim
+    expectEvent: c_xe7_semifinal_user_quote
+  - do: choose
+    choiceId: trust_agent_summary
+    expectEvent: c_xe7_judge_style_study
+  - do: choose
+    choiceId: skip_recon
+    expectEvent: c_xe7_final_venue_check
+  - do: choose
+    choiceId: one_more_run
+    expectEvent: c_xe7_sleep_decision
+  - do: advance
+    expectEvent: c_xe7_semifinal_wait
+  - do: choose
+    choiceId: sleep_now
+    expectEvent: c_x_d20_sleep
+  - do: choose
+    choiceId: pass_silo
+    expectEvent: c_v2_d20_pass
+  - do: endDay
+    expectDay: 21
+  - do: advance
+    expectEvent: c_d21_final
+  - do: advance
+    expectEvent: c_xe7_final_morning
+  - do: choose
+    choiceId: rushed_bye
+    expectEvent: c_xe8_mom_call_final
+  - do: choose
+    choiceId: grudge_stash
+    expectEvent: c_v2_d21_after
+  - do: choose
+    choiceId: claim_desk
+    expectEvent: c_xe1_workplace
+  - do: choose
+    choiceId: answer_boast
+    expectEvent: c_d21_qa
+  - do: choose
+    choiceId: ignore_banter
+    expectEvent: c_xe7_final_draw_order
+  - do: choose
+    choiceId: panic_wait
+    expectEvent: c_xe7_final_tech_fail
+  - do: advance
+    expectEvent: c_d21_grade_night
+  - do: choose
+    choiceId: read_feedback
+    expectEvent: c_xe7_feedback_request
+  - do: advance
+    expectEvent: c_xe7_confetti_night
+  - do: advance
+    expectEvent: c_xe8_after_emptiness
+  - do: choose
+    choiceId: private_repo
+    expectEvent: c_xe8_repo_opensource
+  - do: choose
+    choiceId: write_yourself
+    expectEvent: c_xe8_experience_post
+  - do: advance
+    expectEvent: c_xe8_resume_update
+  - do: advance
+    expectEvent: c_xe8_thank_you_round
+  - do: choose
+    choiceId: share_honest
+    expectEvent: c_xe8_pass_torch
+  - do: advance
+    expectEvent: c_xe8_what_matters_reread
+  - do: choose
+    choiceId: promise_all
+    expectEvent: c_xe8_elder_k_ni_new
+  - do: advance
+    expectEvent: c_xe8_ending_note
+  - do: advance
+    expectEvent: c_xe7_end_all_clean
+  - do: advance
+    expectEvent: c_x_d21_win_or_lose
+  - do: choose
+    choiceId: method_file
+    expectEvent: c_v2_d21_method
+  - do: choose
+    choiceId: reply_next_gen
+    expectEvent: c_xe8_after_dir_choose
+  - do: endDay
+    expectDay: 22
