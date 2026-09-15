@@ -1,8 +1,8 @@
 {
-  "gitSha": "48ebc8f23459da9a278379e863dbc5e7389fc30b",
+  "gitSha": "1f35599821655540c53a00ac89d4e691d7c4d348",
   "appVersion": "1.0.0",
   "contentVersion": "unknown",
-  "calculatedAt": "2026-09-15T18:42:01.932Z",
+  "calculatedAt": "2026-09-15T18:59:39.689Z",
   "research": {
     "events": 485,
     "baseEndings": 91,
@@ -25,51 +25,51 @@
     "visibleEventRange": 209
   },
   "competition": {
-    "events": 419,
-    "baseEndings": 102,
-    "meaningfulDecisions": 88,
-    "delayedConsequences": 39,
-    "npcInteractions": 181,
-    "hiddenEvents": 17,
-    "ngPlusEvents": 11,
-    "hiddenBaseEndings": 10,
-    "ngPlusBaseEndings": 7,
-    "ultraRareBaseEndings": 1,
-    "displayVariantCount": 698,
+    "events": 458,
+    "baseEndings": 119,
+    "meaningfulDecisions": 110,
+    "delayedConsequences": 51,
+    "npcInteractions": 217,
+    "hiddenEvents": 24,
+    "ngPlusEvents": 15,
+    "hiddenBaseEndings": 15,
+    "ngPlusBaseEndings": 9,
+    "ultraRareBaseEndings": 3,
+    "displayVariantCount": 812,
     "endingTones": {
-      "positive": 26,
-      "negative": 21,
-      "mixed": 25,
-      "ambiguous": 8,
+      "positive": 31,
+      "negative": 23,
+      "mixed": 31,
+      "ambiguous": 12,
       "unset": 22
     },
-    "visibleEventRange": 162
+    "visibleEventRange": 179
   },
   "venture": {
-    "events": 413,
-    "baseEndings": 41,
-    "meaningfulDecisions": 77,
-    "delayedConsequences": 7,
-    "npcInteractions": 64,
-    "hiddenEvents": 0,
-    "ngPlusEvents": 0,
-    "hiddenBaseEndings": 1,
-    "ngPlusBaseEndings": 0,
-    "ultraRareBaseEndings": 0,
-    "displayVariantCount": 297,
+    "events": 455,
+    "baseEndings": 74,
+    "meaningfulDecisions": 93,
+    "delayedConsequences": 21,
+    "npcInteractions": 75,
+    "hiddenEvents": 6,
+    "ngPlusEvents": 5,
+    "hiddenBaseEndings": 6,
+    "ngPlusBaseEndings": 6,
+    "ultraRareBaseEndings": 1,
+    "displayVariantCount": 495,
     "endingTones": {
-      "positive": 0,
-      "negative": 2,
-      "mixed": 10,
+      "positive": 20,
+      "negative": 9,
+      "mixed": 16,
       "ambiguous": 0,
       "unset": 29
     },
-    "visibleEventRange": 102
+    "visibleEventRange": 115
   },
   "totals": {
-    "events": 1317,
-    "baseEndings": 234,
-    "meaningfulDecisions": 306,
-    "delayedConsequences": 117
+    "events": 1398,
+    "baseEndings": 284,
+    "meaningfulDecisions": 344,
+    "delayedConsequences": 143
   }
 }

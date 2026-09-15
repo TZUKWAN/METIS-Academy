@@ -1,0 +1,1063 @@
+# 竞赛线 V2 扩展包03：补齐决策密度 + 隐藏事件 + NG+ 收束 + 长线传承
+events:
+  # ===== 选题验证三路 =====
+  - id: c_v2_d06_verify
+    campaign: competition
+    day: 6
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 6, phase: end }
+    purpose: { narrative: 选题验证深度, learning: 验证是选题的保险丝 }
+    scene: { location: lab, characters: [c_design, c_ai_agent] }
+    setup: ["选题已定：社团交接工具。Agent问：是否执行需求验证？雨桐说感觉已经验证过了——用感觉。"]
+    dialogue:
+      - { speaker: Agent, text: "建议：验证「交接之痛」的真实性与频率。备选：跳过验证，节省1.5天。风险自担。" }
+      - { speaker: 江雨桐, text: "1.5天啊。材料周能多磨一版PPT。……但万一这个痛是我想出来的呢？", mood: serious }
+    choices:
+      - id: verify_deep
+        text: 深验证：找10个刚经历交接的社长逐个聊
+        visibleResponse: 10个社长，9个说了同一个词「一团糟」。你还意外拿到了3份交接Excel的截图——痛点长出了样子。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_pain_verified }
+          - { kind: add, key: userUnderstanding, value: 8 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: subtract, key: energy, value: 5 }
+        delayed:
+          - { eventId: c_v2_dly_pain_compound, onDay: 14 }
+      - id: verify_skip
+        text: 跳过验证：痛点这么明显，不用证明
+        visibleResponse: 省下的一天半花在了界面打磨上。Demo好看极了——如果它解决的问题真的存在的话。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_pseudo_need }
+          - { kind: add, key: execution, value: 3 }
+        delayed:
+          - { eventId: c_v2_dly_pseudo_bite, onDay: 12 }
+      - id: verify_quick
+        text: 快验证：只发50份问卷，一晚出结果
+        visibleResponse: 问卷回来了，74%的人选「有这困扰」。可74%对「有没有」的证明力，你心里没底。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_verify_skipped }
+          - { kind: add, key: userUnderstanding, value: 3 }
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 选题验证省下的时间都是负债
+    terminal: true
+
+  - id: c_v2_dly_pseudo_bite
+    campaign: competition
+    day: 12
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——伪需求现形, learning: 未验证的痛点在追问日爆雷 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["何老师看完Demo问了个问题：「交接之痛——你说给三个社长听过吗？」实验室安静得能喝出回声。"]
+    dialogue:
+      - { speaker: 何老师, text: "Demo很漂亮。可「痛点」两个字，你们只能靠猜。猜的东西，我签不了字。", mood: serious }
+      - { speaker: 系统, text: "延迟后果：第6天省下的1.5天，今天变成方案地基上的一道裂缝。" }
+    automaticEffects:
+      - { kind: setFlag, key: key_c_pseudo_exposed }
+      - { kind: subtract, key: credibility, value: 6 }
+    terminal: true
+
+  - id: c_v2_dly_pain_compound
+    campaign: competition
+    day: 14
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——验证复利, learning: 验证素材会在材料周自动升值 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["材料周。雨桐把10个社长的原话做成了PPT第5页——一页全是引语，没有一句形容词。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（翻到第5页）不用我写什么修辞了。他们的话，比我会说。", mood: pleased }
+      - { speaker: 系统, text: "延迟后果：第6天的10杯茶，变成了今天最锋利的一页材料。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 6 }
+    terminal: true
+
+  # ===== 用户聚焦三选 =====
+  - id: c_v2_d10_user_focus
+    campaign: competition
+    day: 10
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 10, phase: start }
+    purpose: { narrative: 目标用户收敛, learning: 用户画像越准，方案越利 }
+    scene: { location: classroom, characters: [c_design, c_tech] }
+    setup: ["「所有社团」太大。白板三个圈：大一新生干事、卸任老社长、社联指导老师。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "新生是数量，老社长是痛点，老师是资源。选一个，就不要贪。", mood: serious }
+      - { speaker: 方远, text: "选谁我就按谁的习惯做交互。三个都做=三个都做一半。", mood: neutral }
+    choices:
+      - id: user_fresh
+        text: 主打新生干事：量最大，痛点最急
+        visibleResponse: 方远把操作步骤压到三步——「新生没有耐心，第三步必须出结果」。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_user_fresh }
+          - { kind: add, key: userUnderstanding, value: 5 }
+        delayed:
+          - { eventId: c_v2_dly_fresh_noise, onDay: 14 }
+      - id: user_leader
+        text: 主打卸任社长：痛最深，故事最真
+        visibleResponse: 雨桐连夜约了两位老社长。「交接一周」的故事让Demo第一次有了体温。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_user_leader }
+          - { kind: add, key: userUnderstanding, value: 4 }
+      - id: user_both
+        text: 两个都做：新生管量，社长管深
+        visibleResponse: 两套交互逻辑，双倍的工作量。方远在白板上写了两个字：完了。然后开始干。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_user_both }
+          - { kind: add, key: technicalDebt, value: 5 }
+    learningPoint: 用户选择决定方案的刀口
+    terminal: true
+
+  - id: c_v2_dly_fresh_noise
+    campaign: competition
+    day: 14
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——新生用户噪声, learning: 低龄用户的数据需要过滤 }
+    scene: { location: lab, characters: [c_design, c_ai_agent] }
+    setup: ["新生测试场：20个大一试用，反馈涌进来112条。一半在夸表情包，没人提核心流程。"]
+    dialogue:
+      - { speaker: Agent, text: "分析：积极反馈中68%与核心功能无关。结论：新生用户数据噪声比高，需加权提取。" }
+      - { speaker: 江雨桐, text: "（划掉一堆「可爱」）他们喜欢表情包，不代表他们会用。数据也要洗脸。", mood: serious }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 2 }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    terminal: true
+
+  # ===== 团队冲突 =====
+  - id: c_v2_d08_conflict
+    campaign: competition
+    day: 8
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 8, phase: end }
+    purpose: { narrative: 风格冲突仲裁, learning: 冲突仲裁的目标是产出不是面子 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["方案页大吵：方远要「功能列表一页流」，雨桐要「故事版三页递进」。两人都在等你表态。"]
+    dialogue:
+      - { speaker: 方远, text: "评委扫材料平均90秒。三页故事？第二页就划走了。", mood: angry }
+      - { speaker: 江雨桐, text: "90秒读不懂列表，但看得懂故事。你那是给机器排的版！", mood: angry }
+    choices:
+      - id: mediate_test
+        text: 停吵：拿两个版本各找人测5分钟
+        visibleResponse: 测试结果意外：故事版留人，列表版易懂。你们把两者杂交成「故事开场+一页总览」，双双闭嘴，双双服气。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_conflict_mediated }
+          - { kind: add, key: teamTrust, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+      - id: pick_side
+        text: 直接拍板：听一边的，另一边执行
+        visibleResponse: 你选了故事版。方远闷头执行，嘟囔着「反正代码是我的」。裂缝用效率伪装着。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_conflict_picked }
+          - { kind: relationship, characterId: c_tech, delta: -4 }
+        delayed:
+          - { eventId: c_v2_dly_conflict_echo, onDay: 13 }
+      - id: delay_conflict
+        text: 缓一缓：先各自做，最后拼一版
+        visibleResponse: 「都做」的决定花了两倍工时，拼版那晚两人谁也不想改对方的半页。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_conflict_delayed }
+          - { kind: add, key: academicDebt, value: 4 }
+          - { kind: subtract, key: energy, value: 5 }
+    learningPoint: 冲突用证据仲裁，不用权力站队
+    terminal: true
+
+  - id: c_v2_dly_conflict_echo
+    campaign: competition
+    day: 13
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——站队余震, learning: 未化解的冲突会在压力期复发 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["材料周高压期，同一个火药桶复燃：方远又把一页故事版改回了列表。这次连招呼都没打。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（盯着被改掉的页面，很平静）上次的架白吵了。原来你从来没服过。", mood: serious }
+      - { speaker: 系统, text: "延迟后果：第8天用权力盖住的分歧，今天用默契的裂缝收利息。" }
+    automaticEffects:
+      - { kind: subtract, key: teamTrust, value: 5 }
+      - { kind: add, key: academicDebt, value: 2 }
+    terminal: true
+
+  # ===== Demo范围二次决策 =====
+  - id: c_v2_d11_scope_demo
+    campaign: competition
+    day: 11
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 11, phase: start }
+    purpose: { narrative: Demo范围收口, learning: 演示范围要有明确的门禁 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["Demo冲刺过半。方远的功能清单又长出4个「顺手就能加」的小功能。加不加？"]
+    dialogue:
+      - { speaker: 方远, text: "都是小活。导出Excel半天，消息通知半天……加起来也就两天。", mood: pleased }
+      - { speaker: 系统, text: "「顺手」是Demo冲刺期最贵的两个字。每个顺手背后都藏着一个测试和一次联调。" }
+    choices:
+      - id: scope_core
+        text: 冻结：只保核心三功能，其他进 backlog
+        visibleResponse: 白板划出一条红线，红线外全部贴上「下学期」。方远盯着红线看了会儿，说了句「行，稳了」。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_demo_core }
+          - { kind: add, key: technicalDebt, value: -3 }
+          - { kind: add, key: execution, value: 3 }
+      - id: scope_all
+        text: 都加：反正每个都不大
+        visibleResponse: 四个「小活」花了三天半，还引出两个隐藏bug。Demo更丰满了——丰满得像要难产。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_demo_full }
+          - { kind: add, key: technicalDebt, value: 6 }
+          - { kind: subtract, key: energy, value: 6 }
+      - id: scope_flip
+        text: 押宝：放下一切，先做一个惊艳的演示特效
+        visibleResponse: 那个交互动画确实惊艳。代价是核心功能第13天还在裸奔。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_demo_flip }
+          - { kind: add, key: riskTolerance, value: 4 }
+        delayed:
+          - { eventId: c_v2_dly_flip_panic, onDay: 15 }
+    learningPoint: 范围门禁是冲刺期的刹车
+    terminal: true
+
+  - id: c_v2_dly_flip_panic
+    campaign: competition
+    day: 15
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——特效裸奔, learning: 炫技的债由核心功能偿还 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["材料周第一天，核心功能的导出还在报错。惊艳特效在角落里闪着光，像一座没人上得去的桥。"]
+    dialogue:
+      - { speaker: 方远, text: "（盯着报错栈）特效那天要是拿来修导出……好了不说了，说多了都是泪。", mood: angry }
+      - { speaker: 江雨桐, text: "（关掉特效页面）决赛放稳的，不放闪的。都收心。", mood: serious }
+    automaticEffects:
+      - { kind: setFlag, key: key_c_flip_cost }
+      - { kind: add, key: academicDebt, value: 4 }
+      - { kind: subtract, key: energy, value: 5 }
+    terminal: true
+
+  # ===== 技术路线中期复评 =====
+  - id: c_v2_d13_techroute
+    campaign: competition
+    day: 13
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 13, phase: end }
+    purpose: { narrative: 技术路线复评, learning: 中期复评比一开始选对更重要 }
+    scene: { location: lab, characters: [c_tech, c_ai_agent] }
+    setup: ["Demo雏形体检：响应2.8秒，偶发内存泄漏，代码结构能撑但不能养。方远提出三条路线。"]
+    dialogue:
+      - { speaker: 方远, text: "A：就这样，能跑；B：停两天重构；C：加一层包装把慢藏起来。说实话我想选A。", mood: serious }
+      - { speaker: Agent, text: "数据：往届决赛演示中，响应超过3秒的项目评委互动率下降41%。" }
+    choices:
+      - id: route_stable
+        text: A：不动，把时间全给材料和彩排
+        visibleResponse: 你们用省下的两天磨了路演。2.8秒的响应在彩排里被开场白自然带过——没人计较。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_route_stable }
+          - { kind: add, key: execution, value: 3 }
+      - id: route_rewrite
+        text: B：停两天，把泄漏修了结构顺了
+        visibleResponse: 两天后响应1.4秒，内存曲线平了。方远说「睡了个技术觉」。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_route_rewrite }
+          - { kind: add, key: technicalDebt, value: -6 }
+          - { kind: subtract, key: energy, value: 6 }
+      - id: route_wrap
+        text: C：加加载动画，把慢藏起来
+        visibleResponse: 转圈动画做得极精致，精致得像在道歉。2.8秒变成了「看起来在思考」的2.8秒。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_route_wrap }
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 中期复评选的是风险去向
+    terminal: true
+
+  # ===== 评审策略 =====
+  - id: c_v2_d14_judgestrategy
+    campaign: competition
+    day: 14
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 14, phase: start }
+    purpose: { narrative: 评审注意力策略, learning: 评委的注意力是需要设计的 }
+    scene: { location: lab, characters: [c_design, c_ai_agent] }
+    setup: ["路演策略会：8分钟、5位评委、平均90秒一页的阅读速度。注意力是预算，怎么花？"]
+    dialogue:
+      - { speaker: Agent, text: "往届数据：评委提问集中在技术实现与数据来源两区，占比63%。建议针对性加固。" }
+      - { speaker: 江雨桐, text: "我的直觉相反：让评委记住一个画面，比答对所有问题更值钱。", mood: serious }
+    choices:
+      - id: judge_focus
+        text: 单点爆破：把最大的亮点讲到极致
+        visibleResponse: 你们把8分钟的60%压在「交接清单自动生成」上。讲到底，讲到评委点头为止。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_judge_focus }
+          - { kind: add, key: execution, value: 3 }
+      - id: judge_spread
+        text: 面面俱到：每个评委的关注点都照顾到
+        visibleResponse: 材料加了数据附录、技术附录、用户附录——什么都有一点，什么都只有一点。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_judge_spread }
+          - { kind: add, key: academicDebt, value: 3 }
+      - id: judge_defense
+        text: 防守优先：先补数据漏洞，再谈亮点
+        visibleResponse: 两天补齐三处口径与样本问题。路演变保守了，但哪里都咬不动。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_judge_defense }
+          - { kind: add, key: credibility, value: 3 }
+          - { kind: subtract, key: progress, value: 2 }
+    learningPoint: 评审策略是注意力的预算学
+    terminal: true
+
+  # ===== 数据离群值（风险处理） =====
+  - id: c_v2_d15_outlier
+    campaign: competition
+    day: 15
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 15, phase: end }
+    purpose: { narrative: 离群值处置, learning: 数据的诚实从处理异常开始 }
+    scene: { location: lab, characters: [c_tech, c_ai_agent] }
+    setup: ["统计日：30个社团的试用数据里有3个异常值——两个好得离谱，一个差得离谱。怎么处理？"]
+    dialogue:
+      - { speaker: 方远, text: "删掉异常值，曲线立刻漂亮20%。业界都这么干—— normalization 嘛。", mood: serious }
+      - { speaker: Agent, text: "提示：两个高值来自同一社团的重复提交。低值社团反馈与功能无关，与网络环境相关。" }
+    choices:
+      - id: outlier_report
+        text: 如实报告：剔除原因写进附录
+        visibleResponse: 附录多了一节《数据清洗说明》：三条异常、剔除理由、敏感性分析。评委看不懂没关系——看得出你们诚实就行。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_outlier_report }
+          - { kind: add, key: credibility, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+      - id: outlier_hide
+        text: 静默剔除：不解释，直接删
+        visibleResponse: 曲线漂亮了20%，没人知道代价。你在提交前多看了一眼那个消失的低值，然后关掉了文件。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_outlier_hide }
+          - { kind: add, key: academicDebt, value: 4 }
+        delayed:
+          - { eventId: c_v2_dly_outlier_ghost, onDay: 19 }
+      - id: outlier_rerun
+        text: 重测：低值社团换环境再测一次
+        visibleResponse: 第二次测试证明了你的猜想：低值是校园网背锅。真实数据反而更好看了——因为它是真的。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_outlier_rerun }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: subtract, key: energy, value: 5 }
+    learningPoint: 异常值是数据的诚实度测试题
+    terminal: true
+
+  - id: c_v2_dly_outlier_ghost
+    campaign: competition
+    day: 19
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——静默剔除回响, learning: 未说明的清洗会被当作操纵 }
+    scene: { location: defense_hall, characters: [c_judge_final] }
+    setup: ["决赛答辩。孙教授看着曲线问：「这个样本量，30——原始数据就是30吗？」你的心跳漏了半拍。"]
+    dialogue:
+      - { speaker: 孙教授, text: "（温和地）不着急回答。我只是见过太多「恰好干净」的数据了。", mood: serious }
+      - { speaker: 系统, text: "延迟后果：第15天删掉的那三条，今天在评委的 question 里借尸还魂。" }
+    automaticEffects:
+      - { kind: setFlag, key: key_c_outlier_questioned }
+      - { kind: subtract, key: credibility, value: 6 }
+    terminal: true
+
+  # ===== 规则灰区 =====
+  - id: c_v2_d09_rulegray
+    campaign: competition
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 9, phase: end }
+    purpose: { narrative: 规则灰区抉择, learning: 灰区里走出的是你自己的边界 }
+    scene: { location: lab, characters: [c_tech, c_advisor] }
+    setup: ["方远想爬取学校公开数据增强Demo。章程没禁止，也没允许。第14条只禁了「未授权API」。"]
+    dialogue:
+      - { speaker: 方远, text: "公开信息，手动能查的，脚本为什么不能查？又没破解。", mood: serious }
+      - { speaker: 何老师, text: "（想了三秒）章程没说，正是最考验的地方。你可以问组委会——问，不丢人。", mood: neutral }
+    choices:
+      - id: gray_ask
+        text: 发邮件问组委会，白纸黑字留档
+        visibleResponse: 组委会回复：「公开数据抓取如遵守频率限制，可接受。」一封邮件，把灰区变成了白区，还留了证据。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_rule_gray_safe }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: relationship, characterId: c_advisor, delta: 3 }
+        delayed:
+          - { eventId: c_v2_dly_gray_verdict, onDay: 13 }
+      - id: gray_push
+        text: 直接干：没禁止就是允许
+        visibleResponse: 数据到手，Demo强了一截。「没禁止就是允许」这句话你说得很大声，心里却小声。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_rule_gray_push }
+          - { kind: add, key: technicalDebt, value: 2 }
+          - { kind: add, key: academicDebt, value: 3 }
+      - id: gray_drop
+        text: 放弃爬取：手动录入公开信息
+        visibleResponse: 两天手动录入，数据量小了一半，但每一行都睡得着觉。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_rule_gray_drop }
+          - { kind: subtract, key: energy, value: 5 }
+          - { kind: add, key: credibility, value: 2 }
+    learningPoint: 灰区的正确用法是把它问成白区
+    terminal: true
+
+  - id: c_v2_dly_gray_verdict
+    campaign: competition
+    day: 13
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——合规红利, learning: 提前问过的规则会成为护身符 }
+    scene: { location: lab, characters: [c_rival] }
+    setup: ["邱一鸣的队被组委会通报「数据来源涉嫌违规」。而你们的邮箱里，静静躺着那封「可接受」的回复。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "（在群里发）凭什么他们能爬我们不能？！——哦，他们问了啊。……行，是我没问。", mood: angry }
+      - { speaker: 系统, text: "延迟后果：第9天那封邮件，今天变成了别人的通报和你们的护身符。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 4 }
+      - { kind: relationship, characterId: c_rival, delta: -2 }
+    terminal: true
+
+  # ===== Agent报告信任度 =====
+  - id: c_v2_d12_aireport
+    campaign: competition
+    day: 12
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 12, phase: start }
+    purpose: { narrative: Agent产出验收策略, learning: 信任要有抽检率 }
+    scene: { location: lab, characters: [c_ai_agent, c_tech] }
+    setup: ["Agent交出50页竞品分析报告，结论漂亮、结构清晰、数据详实。方远说看着挺靠谱。"]
+    dialogue:
+      - { speaker: Agent, text: "报告完成。数据来源：公开网络信息汇总。置信度：高。备注：本报告生成耗时11分钟。" }
+      - { speaker: 方远, text: "11分钟干完我们三天的活。信它？还是……查它？", mood: serious }
+    choices:
+      - id: overtrust_report
+        text: 直接用：结构这么全，不会错
+        visibleResponse: 报告直接进了申报书。省下的时间变成了两次彩排——你们没有注意到第14页有个不存在的公司。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_agent_overtrust }
+          - { kind: add, key: aiDependence, value: 7 }
+        delayed:
+          - { eventId: c_v2_dly_report_check, onDay: 16 }
+      - id: spot_check
+        text: 抽查10%：随机抽5条数据逐个溯源
+        visibleResponse: 抽查5条，4真1假。假的那条删掉，顺手给Agent立了条新规：数据必须带链接。耗时40分钟，睡得踏实。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_verify_habit }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: aiDependence, value: 2 }
+      - id: manual_redo
+        text: 弃用重做：关键章节全部人工重写
+        visibleResponse: 两天，人工重写了三个关键章节。Agent的版本留在旁边当参考——参考价值约40%。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_agent_solo }
+          - { kind: subtract, key: aiDependence, value: 6 }
+          - { kind: subtract, key: energy, value: 6 }
+    learningPoint: 对Agent的信任要配一个抽检率
+    terminal: true
+
+  - id: c_v2_dly_report_check
+    campaign: competition
+    day: 16
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——报告幻觉入场, learning: 未抽查的内容会在决赛场上曝光 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["材料终审。雨桐查证时发现：报告第14页的「竞品校务通」查无此公司——它是Agent「根据市场常见模式」生成的。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（把搜索结果转过来）没有官网，没有注册信息，没有新闻。它在我们的申报书里活了四天。", mood: worried }
+      - { speaker: 方远, text: "（拔网线般冷静）删页，重查全报告。今晚。", mood: serious }
+    automaticEffects:
+      - { kind: setFlag, key: key_c_hallu_entered }
+      - { kind: subtract, key: credibility, value: 6 }
+      - { kind: subtract, key: energy, value: 5 }
+    terminal: true
+
+  # ===== 传帮带 =====
+  - id: c_v2_d20_pass
+    campaign: competition
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { narrative: 经验传承决策, learning: 比赛结束才是传承开始 }
+    scene: { location: lab, characters: [c_design, c_tech] }
+    setup: ["赛后第2天。实验室里堆着三周的家当：文档、代码、台账、台本。下一届的招新海报已经贴出来了。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "学妹问我「有什么秘诀」。我说有——但有价：得花时间整理。", mood: serious }
+      - { speaker: 方远, text: "整理？我三周的代码自己都懒得翻。……但翻开的时候还挺想留点什么。", mood: serious }
+    choices:
+      - id: pass_full
+        text: 完整传承：文档+复盘会+带一届
+        visibleResponse: 复盘会开了三小时，文档写了十一页。学妹们记了八页笔记。明年的赛场上会有一支「站在你们肩上」的队伍。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_next_team }
+          - { kind: add, key: teamTrust, value: 4 }
+          - { kind: subtract, key: energy, value: 4 }
+        delayed:
+          - { eventId: c_v2_dly_handover_glow, onDay: 21 }
+      - id: pass_docs
+        text: 只留文档：整理归档，人就不带了
+        visibleResponse: 归档花了两天。仓库和文档齐齐整整——像一座没人讲解的博物馆。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_docs_over }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+      - id: pass_silo
+        text: 各回各家：经验留各自脑子里
+        visibleResponse: 收拾东西那天，谁也没提「传承」两个字。有些东西散了，就真的散了。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_knowledge_silo }
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 传承是把个人经验变成组织资产
+    terminal: true
+
+  - id: c_v2_dly_handover_glow
+    campaign: competition
+    day: 21
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——传承回声, learning: 教是最好的学 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["赛后第3天，学妹按你们的文档跑通了Demo，发来一句：「原来清单要这么用。」雨桐截图发进了老队群。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（发完截图）你看，她说「原来如此」的样子，像极了21天前的我们。", mood: pleased }
+      - { speaker: 系统, text: "延迟后果：你们整理的那些「废话文档」，今天在新队伍身上复利了。" }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 3 }
+      - { kind: add, key: independence, value: 2 }
+    terminal: true
+
+  # ===== 数据公开 =====
+  - id: c_v2_d19_open
+    campaign: competition
+    day: 19
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 19, phase: start }
+    purpose: { narrative: 调研数据公开度, learning: 数据公开是贡献也是暴露 }
+    scene: { location: lab, characters: [c_design, c_advisor] }
+    setup: ["决赛材料定稿。访谈数据、竞品矩阵、口径表——要不要公开？何老师提出了这个问题。"]
+    dialogue:
+      - { speaker: 何老师, text: "公开调研数据，是给整个赛事做贡献。也可能给下一届对手递刀。你们定。", mood: neutral }
+      - { speaker: 江雨桐, text: "（翻着访谈纪要）这些社长的时间，不该只属于我们一家。……但刀也是真的。", mood: serious }
+    choices:
+      - id: open_full
+        text: 全公开：脱敏后附在复现包里
+        visibleResponse: 数据包挂进了公开仓库，README写着「愿它能帮到下一支队伍」。何老师转发了这条链接，配了句「格局」。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_open_data }
+          - { kind: add, key: credibility, value: 5 }
+          - { kind: add, key: independence, value: 3 }
+        delayed:
+          - { eventId: c_v2_dly_open_value, onDay: 21 }
+      - id: open_partial
+        text: 半公开：公开方法，数据保密
+        visibleResponse: 公开了访谈提纲和口径设计，数据本身保留。方法无罪，数据有情。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_data_partial }
+          - { kind: add, key: credibility, value: 2 }
+      - id: open_none
+        text: 不公开：这是我们的护城河
+        visibleResponse: 数据上了锁。你们守住了优势，也错过了一句「谢谢」。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_data_priv }
+    learningPoint: 数据的公开度是格局与风险的平衡
+    terminal: true
+
+  - id: c_v2_dly_open_value
+    campaign: competition
+    day: 21
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——开放的回报, learning: 公开的资产会带回意想不到的人脉 }
+    scene: { location: lab, characters: [] }
+    setup: ["赛后第4天，隔壁校一支队伍按你们的数据包做了预调研，专门发来邮件致谢——还约了明年联合校赛。"]
+    dialogue:
+      - { speaker: 系统, text: "邮件末尾：你们的「复现包+数据包」已被三支队伍引用。开放从来不是单向的给予。" }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 2 }
+      - { kind: add, key: userUnderstanding, value: 3 }
+    terminal: true
+
+  # ===== 视频传播 =====
+  - id: c_v2_d18_viral
+    campaign: competition
+    day: 18
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { narrative: 传播选择, learning: 流量是放大器，放大一切包括裂缝 }
+    scene: { location: dorm, characters: [c_design, c_tech] }
+    setup: ["你们的三分钟演示视频被某校园号转载，一夜5000播放。评论区有人问「哪里能用到」，也有人挑了个bug。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（刷着评论区）火了。可热门第一条在问那个bug——「这就是决赛水平？」", mood: worried }
+      - { speaker: 方远, text: "bug我今晚能修。问题是：趁热追流量，还是装死保决赛？", mood: serious }
+    choices:
+      - id: viral_ride
+        text: 追流量：连夜修bug+发更新说明，热度接住
+        visibleResponse: 修到凌晨三点，更新说明写成小作文。评论区风向反转：「这才是比赛该有的样子。」热度变成了关注度。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_video_viral }
+          - { kind: subtract, key: energy, value: 6 }
+          - { kind: add, key: credibility, value: 3 }
+        delayed:
+          - { eventId: c_v2_dly_viral_wave, onDay: 20 }
+      - id: viral_ignore
+        text: 装死：决赛前不发声，专心备战
+        visibleResponse: 你们没有回复任何评论。热度三天自然消退——连同那条bug截图，和那些「哪里能用」的潜在用户。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_video_quiet }
+          - { kind: add, key: execution, value: 2 }
+    learningPoint: 流量的馈赠暗中标好了价格
+    terminal: true
+
+  - id: c_v2_dly_viral_wave
+    campaign: competition
+    day: 20
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——流量复利, learning: 处理得当的舆情会变成资产 }
+    scene: { location: dorm, characters: [c_design] }
+    setup: ["决赛前夜，那条更新说明被校级公众号二次转载，标题是《这支学生队伍的危机公关，满分》。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（举着手机）明天评委席上要是有人看过这篇——我们就赢在进场之前了。", mood: pleased }
+      - { speaker: 系统, text: "延迟后果：第18夜修的那个bug，今天变成了品牌的信用背书。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 4 }
+    terminal: true
+
+  # ===== 答辩分工 =====
+  - id: c_v2_d16_qapolicy
+    campaign: competition
+    day: 16
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 16, phase: start }
+    purpose: { narrative: 答辩分工策略, learning: 追问环节的分工决定失误的传染性 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["决赛答辩三个人都能答，但谁主答？全答？还是按领域切分？台本是死的，人是活的。"]
+    dialogue:
+      - { speaker: 方远, text: "技术我兜底。但我口才一般——别让我讲开场。", mood: serious }
+      - { speaker: 江雨桐, text: "那数据类问题呢？我答口径，方远答实现，你兜所有「为什么」。", mood: serious }
+    choices:
+      - id: qa_split
+        text: 按域切分：各答各的，交叉补位
+        visibleResponse: 分工表最后一栏写着「补位规则」：谁的领域被追问，谁先答，相邻者三秒内补。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_qa_split }
+          - { kind: add, key: teamTrust, value: 3 }
+          - { kind: add, key: execution, value: 2 }
+      - id: qa_own
+        text: 一人主答：队长全接，队伍压阵
+        visibleResponse: 你把所有问题都揽了下来。练到第二晚嗓子哑了——但所有答案终于长在了一个脑子里。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_qa_own }
+          - { kind: subtract, key: energy, value: 5 }
+          - { kind: add, key: independence, value: 3 }
+      - id: qa_bounce
+        text: 弹性应答：谁有状态谁上，允许互相递话
+        visibleResponse: 没有固定分工，只有一句约定：「答不了就说『这个他更懂』，不硬撑。」
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_qa_bounce }
+          - { kind: add, key: riskTolerance, value: 3 }
+    learningPoint: 答辩分工是团队信任的终极测试
+    terminal: true
+
+  # ===== 备用演示视频 =====
+  - id: c_v2_d18_backupvid
+    campaign: competition
+    day: 18
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 18, phase: start }
+    purpose: { narrative: 演示兜底方案, learning: 现场演示永远需要第二形态 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["雨桐提议：录一版演示视频当决赛备胎。方远嫌「像不自信」。录，还是不录？"]
+    dialogue:
+      - { speaker: 江雨桐, text: "视频三分半，剪得漂漂亮亮。现场崩了它顶上，现场稳了它就是废片。", mood: serious }
+      - { speaker: 方远, text: "录备份感觉像给系统判死刑。……可是彩排那次白屏，我也没忘。", mood: serious }
+    choices:
+      - id: backup_video
+        text: 录：一晚拍完，剪好存U盘+云端双备份
+        visibleResponse: 三分半的演示视频出炉，雨桐配的旁白比现场讲解还顺。它躺在U盘里，谁都不希望它被用到。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_backup_video }
+          - { kind: add, key: execution, value: 3 }
+          - { kind: subtract, key: energy, value: 4 }
+        delayed:
+          - { eventId: c_v2_dly_backup_v, onDay: 20 }
+      - id: backup_none
+        text: 不录：相信现场，也相信方远
+        visibleResponse: 你们把录视频的时间用来又做了一轮压测。现场演示的信仰，靠的是把现场风险全部拆完。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_backup_none }
+          - { kind: add, key: technicalDebt, value: -3 }
+    learningPoint: 兜底方案的价值在「不需要它」时最大
+    terminal: true
+
+  - id: c_v2_dly_backup_v
+    campaign: competition
+    day: 20
+    type: delayed
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——备胎上位, learning: 兜底方案的成败在于切换的无缝 }
+    scene: { location: defense_hall, characters: [c_tech, c_design] }
+    setup: ["决赛现场网络抖动，在线Demo第3步加载超时。雨桐按下切换键——演示视频无缝接上，旁白一字不差。"]
+    dialogue:
+      - { speaker: 方远, text: "（在技术台小声）我准备的所有说辞都没用上——视频比我冷静。", mood: surprised }
+      - { speaker: 江雨桐, text: "（面不改色翻页）现在你们知道，我为什么坚持录它了。", mood: pleased }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 4 }
+      - { kind: add, key: teamTrust, value: 3 }
+    terminal: true
+
+  # ===== 材料终审 =====
+  - id: c_v2_d19_finalreview
+    campaign: competition
+    day: 19
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 19, phase: end }
+    purpose: { narrative: 终审策略, learning: 最后一遍要换一双眼睛看 }
+    scene: { location: lab, characters: [c_design, c_ai_agent] }
+    setup: ["决赛材料定稿。所有页面「看起来都对」——「看起来」三个字，是材料事故最喜欢的朋友。"]
+    dialogue:
+      - { speaker: Agent, text: "建议：终审采用「陌生人测试」——由未参与制作者通读并复述要点。预期发现3-5处理解偏差。" }
+      - { speaker: 江雨桐, text: "我看这份材料已经看了二十遍，字都认识我了。需要一双新眼睛。", mood: serious }
+    choices:
+      - id: review_stranger
+        text: 陌生人测试：拉隔壁队和新队员各通读一遍
+        visibleResponse: 新队员问了七个「这页什么意思」——三个是真问题。你们连夜改了三处表述，材料终于能被陌生人读懂了。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_final_review }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+          - { kind: add, key: teamTrust, value: 2 }
+      - id: review_skip
+        text: 跳过：我们都看了二十遍了，不会错
+        visibleResponse: 「不会错」三个字说出口的瞬间，材料在某处松了口气——它知道自己安全了，连同它藏着的那处笔误。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_final_skip }
+          - { kind: add, key: academicDebt, value: 3 }
+      - id: review_peer
+        text: 互换终审：和邱一鸣的队互查格式
+        visibleResponse: 疯狂的想法，但他们的队长答应了。互查发现了彼此三处硬伤——比赛是对手，标准是盟友。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_final_peer }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: relationship, characterId: c_rival, delta: 4 }
+    learningPoint: 终审的本质是换眼睛
+    terminal: true
+
+  # ===== 方法论沉淀 =====
+  - id: c_v2_d21_method
+    campaign: competition
+    day: 21
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 21, phase: end }
+    purpose: { narrative: 方法论沉淀, learning: 经验不结晶就是蒸发 }
+    scene: { location: dorm, characters: [] }
+    setup: ["比赛最后一天。21天的便签、文档、聊天记录散落在五六个工具里。它们会变成方法，还是蒸发？"]
+    dialogue:
+      - { speaker: 系统, text: "你面前有21天的全部痕迹。结晶成方法论，还是让它们随风而去——这是比赛留给你的最后一题。" }
+    choices:
+      - id: method_write
+        text: 结晶：写一份《第一次参赛方法论》
+        visibleResponse: 六千字，三个小时，从「读规则」写到「赛后复盘」。写完你才发现：原来你们真的形成了一套打法。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_skill_spark }
+          - { kind: add, key: independence, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+      - id: method_file
+        text: 归档了事：全存进文件夹，以后再看
+        visibleResponse: 「以后再看」的文件夹又大了一圈。你们的经验进入休眠——等待一个可能不会来的唤醒。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_method_filed }
+          - { kind: add, key: academicDebt, value: 2 }
+      - id: method_muse
+        text: 不整理：讲给学弟听，说完就算
+        visibleResponse: 烧烤摊上讲了两个小时，学弟听得眼睛发亮。可惜烧烤没有存档功能——剩下的只有他的记性。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_method_muse }
+          - { kind: add, key: teamTrust, value: 2 }
+    learningPoint: 方法论的保质期取决于结晶的速度
+    terminal: true
+
+  # ===== 赛后收束 =====
+  - id: c_v2_d21_after
+    campaign: competition
+    day: 21
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 21, phase: start }
+    purpose: { narrative: 赛后姿态, learning: 如何结束一场比赛，定义下一段开始 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["成绩公布的日子。无论结果如何，今天都要做一件事：给这三周画一个句号。怎么画？"]
+    dialogue:
+      - { speaker: 江雨桐, text: "我想认认真真收个尾。这21天值得一场像样的告别。", mood: serious }
+      - { speaker: 方远, text: "告别……行吧。但别让我哭。我哭起来很丑。", mood: pleased }
+    choices:
+      - id: quiet_exit
+        text: 安静谢幕：收拾好实验室，各自道别
+        visibleResponse: 你们把实验室恢复成三周前的样子，白板擦干净前拍照留了底。没有仪式，但每个人走的时候都回了下头。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_quiet_exit }
+          - { kind: add, key: teamTrust, value: 3 }
+      - id: loud_wrap
+        text: 仪式收尾：拍纪念照+全员复盘大会
+        visibleResponse: 复盘会开到深夜，吵过笑过。合照里三个人举着白板的照片——那张照片后来被翻出来很多次。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_loud_wrap }
+          - { kind: add, key: teamTrust, value: 4 }
+          - { kind: add, key: independence, value: 2 }
+      - id: grudge_stash
+        text: 直接散伙：有怨气的留着，先走吧
+        visibleResponse: 有人走得很快。三周攒下的怨气没有清零，只是被各自打包带走了——以后会以别的形式回来的吧。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_grudge_stash }
+          - { kind: subtract, key: teamTrust, value: 3 }
+    learningPoint: 结束的姿态是下一场开始的预演
+    terminal: true
+
+  # ===== 隐藏事件（本批） =====
+  - id: c_v2_h_rival_ally
+    campaign: competition
+    day: 16
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: state, condition: { kind: and, conditions: [ { kind: flag, key: key_c_copy_talk }, { kind: relationship, characterId: c_rival, op: gte, value: 50 } ] } }
+    purpose: { narrative: 隐藏——对手结盟, learning: 竞争的最高形态是选择战场 }
+    scene: { location: playground, characters: [c_rival] }
+    setup: ["邱一鸣在操场等你，递过来一页纸：两校联合赛的邀请函，他推荐的是你们队。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "联合赛要两支校队。我推荐了你们——别误会，我是想赢真正的对手，不是赢一场没有对手的比赛。", mood: serious }
+      - { speaker: 系统, text: "对手递来的不是橄榄枝，是一份「承认」。" }
+    choices:
+      - id: rival_ally
+        text: 接下来：联合赛前互相当陪练
+        visibleResponse: 一句「成交」。此后每周三晚上，两支队伍在同一个教室互相拷问——决赛上你们发挥最好的那场，陪练占了三成。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_rival_ally }
+          - { kind: add, key: teamTrust, value: 3 }
+          - { kind: relationship, characterId: c_rival, delta: 6 }
+      - id: rival_refuse
+        text: 婉拒：赛场上见，赛前免谈
+        visibleResponse: 邱一鸣点点头收回了纸：「也对，猛兽不该同笼。」他走的时候背影有点落寞——你们错过的不只是陪练。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_rival_refused }
+          - { kind: add, key: independence, value: 3 }
+          - { kind: relationship, characterId: c_rival, delta: -3 }
+    learningPoint: 对手关系是可以经营的资产
+    terminal: true
+
+  - id: c_v2_h_method_new
+    campaign: competition
+    day: 14
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: state, condition: { kind: relationship, characterId: c_ai_agent, op: gte, value: 60 } }
+    purpose: { narrative: 隐藏——独门工作流, learning: 人机协作的新范式往往诞生于具体约束 }
+    scene: { location: lab, characters: [c_ai_agent] }
+    setup: ["Agent突然提出：「这三周我们形成的『提取-抽查-台账-复用』四步法，在公开资料中无先例。是否整理发布？」"]
+    dialogue:
+      - { speaker: Agent, text: "对比公开方法论：你们的流程在「人工抽查率」与「复用率」两项上显著优于通用实践。命名为《四步协约法》如何？" }
+      - { speaker: 系统, text: "一个诞生于21天压力下的人机协作范式——它可能比奖杯更稀有。" }
+    choices:
+      - id: method_publish
+        text: 整理发布：写成长文，赛后公开
+        visibleResponse: 你们花一晚把《四步协约法》写成六千字长文。发布第二天，一位业界博主转发了它：「学生队比很多团队更懂人机分工。」
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_method_innov }
+          - { kind: add, key: independence, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+      - id: method_keep
+        text: 留着自用：方法论是竞争优势
+        visibleResponse: 方法留在了队内。它继续高效地运转——只是世界不知道它的存在。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_method_private }
+          - { kind: add, key: execution, value: 3 }
+    learningPoint: 独门方法公开发布才能获得检验与声望
+    terminal: true
+
+  - id: c_v2_h_advisor_worried
+    campaign: competition
+    day: 12
+    type: story
+    hidden: true
+    trigger: { kind: state, condition: { kind: state, key: day, op: gte, value: 12 } }
+    purpose: { narrative: 隐藏——老师的另一面, learning: 指导者也是需要被看见的人 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["你送材料去办公室，撞见何老师对着电话低声说「妈的检查结果出来了告诉我」——他挂电话后久久没回头。"]
+    dialogue:
+      - { speaker: 何老师, text: "（转过身，恢复了平常的语气）材料放那儿。……项目这两天你们自己盯着，我家里有点事。", mood: worried }
+      - { speaker: 系统, text: "那个永远快准少的何老师，今天慢了。" }
+    automaticEffects:
+      - { kind: setFlag, key: key_c_advisor_absent }
+      - { kind: relationship, characterId: c_advisor, delta: 4 }
+    terminal: true
+
+  - id: c_v2_h_burnout
+    campaign: competition
+    day: 15
+    type: story
+    hidden: true
+    trigger: { kind: state, condition: { kind: state, key: energy, op: lte, value: 32 } }
+    purpose: { narrative: 隐藏——燃尽预警, learning: 队伍的电量是队长的责任 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["凌晨的实验室，方远对着屏幕发呆已经二十分钟——光标闪着，代码没动。你第一次看见他对着代码发呆。"]
+    dialogue:
+      - { speaker: 方远, text: "（没有回头）别问我进度。我不知道。我盯着这段代码看了二十分钟，一个字没看进去。", mood: worried }
+      - { speaker: 系统, text: "全队电量见底。今晚的决定会写进每个人的身体里。" }
+    automaticEffects:
+      - { kind: setFlag, key: key_c_burnout_spotted }
+      - { kind: subtract, key: energy, value: 3 }
+    terminal: true
+
+  - id: c_v2_h_judge_scout
+    campaign: competition
+    day: 18
+    type: story
+    hidden: true
+    trigger: { kind: state, condition: { kind: state, key: credibility, op: gte, value: 60 } }
+    purpose: { narrative: 隐藏——评委探营, learning: 被提前研究既是压力也是机会 }
+    scene: { location: lab, characters: [c_judge_final] }
+    setup: ["决赛前一天，孙教授出现在实验室门口：「路过。你们的复现包，我昨晚在家跑了一遍。」"]
+    dialogue:
+      - { speaker: 孙教授, text: "（微笑）跑通了。90秒。明天我不会问数据的问题了——我准备了点别的。", mood: pleased }
+      - { speaker: 系统, text: "评委提前研究了你们——这说明你们的材料被认真对待过。也说明明天的追问不会客气。" }
+    automaticEffects:
+      - { kind: setFlag, key: key_c_judge_scout }
+      - { kind: add, key: credibility, value: 3 }
+    terminal: true
+
+  - id: c_v2_h_goldarchive
+    campaign: competition
+    day: 8
+    type: story
+    hidden: true
+    trigger: { kind: state, condition: { kind: state, key: evidenceDiscipline, op: gte, value: 30 } }
+    purpose: { narrative: 隐藏——往届宝库, learning: 历届获奖作品是被低估的教材 }
+    scene: { location: library, characters: [] }
+    setup: ["图书馆五楼角落，你找到一排往届获奖作品的实体归档——十二份申报书、答辩记录、甚至评委的批注复印件。"]
+    dialogue:
+      - { speaker: 系统, text: "获得资产：往届金奖作品档案×12。其中3份的评委批注写着当时扣分的真实原因。" }
+    automaticEffects:
+      - { kind: setFlag, key: key_c_gold_archive }
+      - { kind: addAsset, assetType: research_brief, name: 往届金奖档案摘要, description: 12份申报书+评委批注, content: "扣分点TOP5：口径打架/样本缺陷/超时/格式违规/伪需求" }
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+    terminal: true
+
+  # ===== NG+ 事件（本批） =====
+  - id: c_v2_ng_energy
+    campaign: competition
+    day: 8
+    type: story
+    ngPlus: true
+    trigger: { kind: state, condition: { kind: ngPlus } }
+    purpose: { narrative: NG+——燃尽记忆, learning: 记得累的感觉，才能提前睡觉 }
+    scene: { location: dorm, characters: [c_tech] }
+    setup: ["23:40，方远的屏幕还亮着。前周目里第15天那个对代码发呆的身影在你脑内一闪而过。你站起来，拍了拍他的椅背。"]
+    dialogue:
+      - { speaker: 你, text: "（拍椅背）睡。这个 bug 明天的你会比现在的你快四倍。", mood: serious }
+      - { speaker: 方远, text: "（回头，黑眼圈）……你哪来的这种精确判断？行吧，睡就睡。", mood: surprised }
+    automaticEffects:
+      - { kind: setFlag, key: key_c_ng_energy }
+      - { kind: add, key: energy, value: 8 }
+      - { kind: relationship, characterId: c_tech, delta: 2 }
+    terminal: true
+
+  - id: c_v2_ng_material
+    campaign: competition
+    day: 14
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger: { kind: state, condition: { kind: ngPlus } }
+    purpose: { narrative: NG+——材料周记忆, learning: 前周目的返工清单就是这次的排期表 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["材料周启动。你拿出一张前周目从来没敢给人看的清单：返工记录——哪页重做过、为什么、花了多久。"]
+    dialogue:
+      - { speaker: 你, text: "（把清单拍在桌上）材料周的雷都在这上面：视频旧版、口径打架、缺附件说明。这次我们绕着走。", mood: serious }
+      - { speaker: 江雨桐, text: "（逐行看完，抬头）你列的这个清单……像亲身踩过一遍。我们按这个来。", mood: surprised }
+    choices:
+      - id: material_precheck
+        text: 按雷区清单预检：每条雷设置检查点
+        visibleResponse: 三个雷区三个检查点。材料周结束时，返工为零——雨桐说这是她经历过最平静的一周。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_ng_material }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: execution, value: 4 }
+      - id: material_memory_only
+        text: 记在脑子里就行，不用搞形式主义
+        visibleResponse: 第16天，口径打架的雷还是响了。熟悉的爆炸声——原来记忆不设检查点，就只是看过的烟花。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_ng_material_skip }
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 记忆要变成检查点才能防雷
+    terminal: true
+
+  - id: c_v2_ng_ally
+    campaign: competition
+    day: 17
+    type: decision
+    keyDecision: true
+    hidden: true
+    ngPlus: true
+    trigger: { kind: state, condition: { kind: ngPlus } }
+    purpose: { narrative: NG+——结盟记忆, learning: 前周目没接住的那只手，这次接住 }
+    scene: { location: playground, characters: [c_rival] }
+    setup: ["操场的路灯下，邱一鸣欲言又止——前周目里也有过这一幕，那时你转身走了。这次你没有。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "那个……联合赛的事，我推荐了你们队。你要是有顾虑——", mood: worried }
+      - { speaker: 你, text: "（伸手打断）没有顾虑。周三晚，实验室，互相拷问。敢来吗？", mood: pleased }
+    choices:
+      - id: ally_this_time
+        text: 这次接住：联合陪练+信息互通
+        visibleResponse: 邱一鸣愣了两秒，然后笑了——你第一次见他笑得不挑衅。周三晚的实验室从此多了一支队伍的灯。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_ng_ally }
+          - { kind: add, key: teamTrust, value: 3 }
+          - { kind: relationship, characterId: c_rival, delta: 6 }
+      - id: ally_deny
+        text: 还是拒绝：有些路必须自己走
+        visibleResponse: 邱一鸣耸耸肩走了。路灯把你的影子拉得很长——前周目和这一周目，你做了同一个选择。也许这就是你的路。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_ng_ally_denied }
+          - { kind: add, key: independence, value: 4 }
+    learningPoint: 周目的意义之一是修正一次曾经的错过
+    terminal: true
+
+  - id: c_v2_ng_perfect
+    campaign: competition
+    day: 20
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger: { kind: state, condition: { kind: ngPlus } }
+    purpose: { narrative: NG+——完美周目收束, learning: 所有坑都填过之后，路是什么样子 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["决赛前夜。分工表在墙上，口径表在桌角，压测图在PPT第9页，备机在包里，复现包在云端。一切就位——像被谁安排好的完美。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（环视实验室）你不觉得吗？这一路顺得不真实。像……提前彩排过一遍。", mood: pleased }
+      - { speaker: 方远, text: "（合上电脑）管它呢。明天上台，把这份「不真实」变成真的。", mood: pleased }
+    choices:
+      - id: perfect_close
+        text: 收束周目：把所有经验写成给下一届的信
+        visibleResponse: 你写了一封三页的信：《给下一个周目》。信的结尾是：「这些坑我们都替你们踩过了。现在，去踩你们自己的。」
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_ng_perfect }
+          - { kind: add, key: independence, value: 4 }
+          - { kind: add, key: teamTrust, value: 3 }
+      - id: perfect_savor
+        text: 不写了，把最后一夜留给安静
+        visibleResponse: 你们谁都没说话，各自忙着手里的活。窗外是校园的灯，桌上是21天的痕迹。这一夜本身就是那封信。
+        hiddenEffects:
+          - { kind: setFlag, key: key_c_ng_perfect_silent }
+          - { kind: add, key: energy, value: 5 }
+    learningPoint: 完美周目的终点是把经验交出去
+    terminal: true

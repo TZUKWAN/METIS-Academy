@@ -1,0 +1,3267 @@
+# 竞赛线 V2 扩展结局（全部由唯一 flag 门控，priority 90-99）
+# 家族分布：competition_result / problem_quality / team / research_evidence / product_demo / innovation / presentation_defense / rules_execution / agent_collab / longterm_cross
+endings:
+  # ===== 团队家族 =====
+  - id: c_v2_tm_unwritten
+    campaign: competition
+    title: 《视频是谁做的？》
+    mainResult: 未书面确认的分工在材料周引爆返工
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_unwritten_split }
+    priority: 92
+    tier: main
+    family: team
+    tone: mixed
+    whyDistinct: 本结局的核心结果不是奖级而是「分工契约缺位」这一独立后果，由第3天口头分工唯一导出
+    baseText: |
+      申报书、PPT、视频，最后一样在deadline前40分钟拼了出来。
+      没有人做错什么——除了第3天那句"口头说定就行"。
+      复盘会上雨桐把那张迟到的分工表贴在墙上，标题写着："本表本应诞生于第3天。"
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 60, text: "好在没有人记仇。方远说：'下次谁再讲默契，我把这页PPT拍他脸上。'" }
+          - { lte: 40, text: "三个人都没再提这件事。但下学期组队通知发出来时，群里安静了很久。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远现在接任何活，第一句都是「先写清楚归谁」。
+        neutral: 方远把分工表截图设成了聊天背景。
+        negative: 方远在实习组的第一次例会上就重演了这一幕——这次他成了那个以为别人做了的人。
+      - characterId: c_design
+        positive: 雨桐把那版拼凑的视频也存了档：「它丑，但它教会我们的东西最贵。」
+        neutral: 雨桐从此负责队里所有文档，因为「写下来」三个字她再也不假手于人。
+        negative: 雨桐后来拒绝参加任何「先干起来再说」的项目。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那张分工表被你们传给了下一届参赛队，表头第一行写着：'先写下来，再击掌。'" }
+    reflection: 默契是结果，契约是前提。把前提当结果，就要在deadline前付利息。
+    lessonHint: 口头分工必须落成书面契约，尤其是「谁做视频」这种小事
+    specialTags: [team_contract]
+
+  - id: c_v2_tm_stay_pact
+    campaign: competition
+    title: 《一份叫〈安心〉的文档》
+    mainResult: 得知队友去向并重签契约，队伍平稳走完赛程
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_tech_stay }
+    priority: 91
+    tier: main
+    family: team
+    tone: positive
+    whyDistinct: 核心结果是「以契约化解队友退出风险」，与其他团队结局的冲突/流失路径完全不同
+    baseText: |
+      决赛技术台上站着的还是方远。他守着那台跑通压测的机器，身后是打印出来的交接文档。
+      没有人知道他兜里揣着实习offer——知道了也没关系，文档第一页写着分工，最后一页写着"决赛我到场"。
+      雨桐说，那是她见过最浪漫的离职预防。
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 65, text: "答辩结束那天，方远把工牌和奖状并排拍了张照：'两个都是真的。'" }
+          - { lte: 45, text: "契约撑住了赛程，却没撑住友情。他退群时说：'文档在，随时能接手。'" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远的实习转正答辩里，评委指着交接文档问「这是什么风格」——他答：「被一个队长教的。」
+        neutral: 方远赛后如约退居二线，群里只在中奖时冒头。
+        negative: 方远没能平衡两头，决赛前夜他发来一份新的交接文档，署名日期是明天。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "《安心》成了你们队每届的传家宝，版本号已经更到v7。" }
+    reflection: 让人留下来的从来不是挽留，是一份写得清清楚楚的边界。
+    lessonHint: 队友的去向要摊开谈，用契约代替猜测
+    specialTags: [team_contract, trust]
+
+  - id: c_v2_tm_confront_rift
+    campaign: competition
+    title: 《再没说废话的人》
+    mainResult: 摊牌施压导致核心队友冷暴力式疏离
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_tech_confront }
+    priority: 91
+    tier: main
+    family: team
+    tone: negative
+    whyDistinct: 核心结果是「施压式沟通造成的持续性关系破裂」，区别于契约型与流失型团队结局
+    baseText: |
+      方远没有走。他修完了所有bug，交齐了所有文档，然后在群里的发言变成了"收到""改好了""已部署"。
+      决赛他来了，站完了属于他的八分钟，鞠躬下台。
+      庆功宴他没来。你在他朋友圈看到实习工牌的照片，配文："新环境，新开始。"
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你在复盘里写：'我用最伤人的方式说出了最合理的要求。合理不等于正确。'" }
+          - { lte: 40, text: "你把责任推给了他的「心态」。这个说法你自己都不信。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 半年后方远在食堂主动跟你打了招呼。裂痕还在，但至少能看清对面的人了。
+        neutral: 你们再也没有单独说过话。
+        negative: 他带新队拿了下一届的金奖。颁奖照片里，每个人都笑得很用力。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "队伍的技术能力强了一截，但再没有人敢在组队时说真话。" }
+    reflection: 摊牌的目标是解决问题，不是解决提出问题的人——哪怕那个人是你自己不爽的。
+    lessonHint: 对队友的秘密，先谈边界再谈去留
+    specialTags: [team_conflict]
+
+  - id: c_v2_tm_silent_leaver
+    campaign: competition
+    title: 《长在脑子里的文档》
+    mainResult: 回避沟通导致核心成员冲刺期撤出，技术知识无人接手
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_tech_ignore }
+    priority: 91
+    tier: main
+    family: team
+    tone: negative
+    whyDistinct: 核心结果是「知识单点依赖在核心成员离场时的总爆发」，与冲突型结局的破裂机制不同
+    baseText: |
+      冲刺周第2天，方远的工位空了。服务器还在跑，可部署步骤、账号密码、架构取舍——全在他的脑子里。
+      雨桐对着面板点开了每一个菜单，像在玩一款没有教程的游戏。
+      你守住的不是秘密，是一颗雷的引信。现在它响了。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "你们靠着文档习惯抢回了三成知识，演示做成了降级版——至少它跑完了。" }
+          - { lte: 40, text: "决赛演示到第4步，一个只有方远知道的配置项让系统拒绝登录。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远深夜发来一份手写部署指南，末尾写着：「对不起，也谢谢你们没问。」
+        neutral: 方远在实习很忙，你们的对话停留在他退群的那句「祝好」。
+        negative: 后来有人问「你们队那个技术呢」，雨桐替你回答：「他去了更远的地方。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "下一届队伍的第一条队规诞生了：任何知识不落盘，等于不存在。" }
+    reflection: 装作不知道，是把选择权交给了最坏的时间点。
+    lessonHint: 单点依赖要提前消解，秘密要提前定价
+    specialTags: [bus_factor]
+
+  - id: c_v2_tm_advisor_takeover
+    campaign: competition
+    title: 《第6版方案》
+    mainResult: 项目在指导老师主导下拿奖，但队伍失去了作者身份
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_advisor_takeover }
+    priority: 90
+    tier: main
+    family: team
+    tone: ambiguous
+    whyDistinct: 核心结果是「主导权让渡后的胜利归属困惑」，区别于边界重谈与单干型结局
+    baseText: |
+      何老师的第6版方案确实赢了。颁奖台上他站在C位，你们仨站在两侧，像三个来合影的 nephew。
+      奖状是真的，资源是真的，可雨桐在台下问了一句："我们参加的是比赛，还是他的方法论验证？"
+      没有人回答。奖杯很重，托着它的手有点虚。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你在复盘里写：'我用主导权换了胜率。这笔交易我对一半，后悔一半。'" }
+          - { lte: 40, text: "你很快习惯了被安排。下一个项目立项时，你的第一反应是「去问老师」。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师后来在课上讲这个案例，说：「那届学生教会我，带队的尽头是放手。」
+        neutral: 何老师的战绩又添一行。他的Excel里，你们是一行数据。
+        negative: 何老师把下一届也安排成了同样的方案，这次他们连奖都没拿到——评委见过一遍了。
+      - characterId: c_tech
+        positive: 方远靠这个项目进了大厂实习。面试官问哪个部分是你做的，他报出了附录第3页。
+        neutral: 方远说：「拿奖就行，姓谁的无所谓。」他说这话时没看任何人。
+        negative: 方远再也没参加过何老师的项目，连点名都没到。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "信息中心的合作延续到了下学期。项目活着，创始人却换成了方法论。" }
+    reflection: 借来的胜率要用作者身份偿还。有的账，领奖那天才开始算。
+    lessonHint: 接受资源时先谈主导权归属
+    specialTags: [advisor]
+
+  - id: c_v2_tm_advisor_boundary
+    campaign: competition
+    title: 《十分钟的谈判》
+    mainResult: 与指导老师重划边界，项目回到队伍手中并走得更好
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_advisor_reset }
+    priority: 91
+    tier: main
+    family: team
+    tone: positive
+    whyDistinct: 核心结果是「向上管理成功重获主导权」，与全盘接受/决裂两条路径互斥
+    baseText: |
+      那十分钟里你说完，办公室安静得能听见空调滴水。
+      然后何老师笑了："五届了，你是第一个跟我说'这是我们的项目'的学生。"
+      方案退回第三版——你们自己的版本。决赛那天，何老师坐在最后一排，全程没看手机。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 65, text: "答辩时你主动提到何老师的贡献，然后补了一句：'方向和代码是我们的。'台下他点头了。" }
+          - { lte: 45, text: "谈判赢了，执行却没跟上。你证明了自己要得起主导权，还没证明你接得住。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师把「十分钟的谈判」写进了他的指导手册第一条：先问学生想做什么。
+        neutral: 何老师照旧很忙。但你们的组会，他一次都没缺席过。
+        negative: 何老师嘴上说「年轻人有想法」，手上把资源转给了更听话的一队。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "信息中心的接口续到了第二年——这次，申请人是你们自己。" }
+    reflection: 主导权不是老师给的，是学生谈出来的。
+    lessonHint: 资源与边界要一起谈，冲突要当面谈
+    specialTags: [advisor, negotiation]
+
+  - id: c_v2_tm_authorship_lost
+    campaign: competition
+    title: 《候场时的一拍沉默》
+    mainResult: 决赛过关，但队伍对项目归属的沉默暴露了空洞
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_advisor_deep }
+    priority: 90
+    tier: main
+    family: team
+    tone: negative
+    whyDistinct: 核心结果是「归属感流失在决赛时刻的显影」，与主动让渡（第6版方案）结局的心路不同
+    baseText: |
+      "这是你们老师的研究方向吧？"——就这一句闲聊，让候场区安静了一拍。
+      那一拍里，雨桐看方远，方远看你，你看地板。
+      决赛过了。可散场路上没人说话，每个人都抱着一份说不清是谁的成果。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: "你在总结里写：'那一拍沉默是警钟。下一个项目，第一个字由我们自己敲。'" }
+          - { lte: 40, text: "你安慰自己「结果好就行」。可你发现你连项目的需求文档都没打开过。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐下一学期立项了自己的项目，立项书第一行写着：「这是我们自己的。」
+        neutral: 雨桐把这段经历做成了作品集里的一个匿名条目。
+        negative: 雨桐退出了下一届比赛——她说不想再体会候场时的那一拍沉默。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "项目归档时，三人在README里为「作者」一栏争执了十分钟，最后写了个团队代号。" }
+    reflection: 归属感不写在署名栏里，写在每个人开口的速度里。
+    lessonHint: 项目归属要趁早确认，沉默会在最重要的时刻发声
+    specialTags: [belonging]
+
+  - id: c_v2_tm_solo_way
+    campaign: competition
+    title: 《自主的汇率》
+    mainResult: 拒绝老师资源独自闯关，付出数据与工时的代价
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_solo_way }
+    priority: 90
+    tier: main
+    family: team
+    tone: mixed
+    whyDistinct: 核心结果是「以资源换自主的独立发展路径」，与谈判成功/主导权让渡结局互斥
+    baseText: |
+      43条自己爬的数据，撑起了一个小小的、完全属于你们的Demo。
+      它比何老师方案里的三千条数据寒酸得多——可当评委问"这个想法怎么来的"，你们仨同时开口。
+      自主的汇率很贵：三个通宵，两次返工，一次差点散伙。但发票抬头写着你们自己的名字。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 70, text: "答辩最后一页你们放了一张爬虫代码截图，配文：'数据是我们一条一条捡来的。'评委席有人笑了。" }
+          - { lte: 45, text: "自主撑住了叙事，没撑住完成度。你说「我们赢在下学期」，台下没人接话。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把爬虫脚本开源了，README写着：「献给所有没有资源的学生队。」
+        neutral: 方远说「下次有资源还是要接的，但方向得是我们的」。你同意了一半。
+        negative: 方远在复盘会上说：「自主不能当饭吃。」这次的裂痕，靠时间才合上。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那43条数据成了下一届的冷启动数据集——自主是可以继承的。" }
+    reflection: 拒绝资源不是姿态，是一笔要算清的汇率。
+    lessonHint: 婉拒援助前，先估清自主的账单
+    specialTags: [independence]
+
+  # ===== 问题质量家族 =====
+  - id: c_v2_pq_topic_regret
+    campaign: competition
+    title: 《41个卷王》
+    mainResult: 赛道选择后陷入懊悔与换道抉择的拉扯
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_track_regret }
+    priority: 90
+    tier: main
+    family: problem_quality
+    tone: mixed
+    whyDistinct: 核心结果是「赛道误判后的中途抉择期」，与最终坚持/换道两种结局形成分流
+    baseText: |
+      算法赛道名单公示那晚，你们盯着41个对手看了很久——7支有论文，3支背后是实验室。
+      方远问："我们拿什么卷？"雨桐问："现在换还来得及吗？"
+      第9天的这通争吵没有输赢，它只是把一个第4天就该算清的账，摆上了台面。
+    growthVariantRules:
+      - dimension: judgment_vs_execution
+        variants:
+          - { gte: 60, text: "你把情绪按住，带着两人做了个对手矩阵。做完矩阵，答案自己浮出来了。" }
+          - { lte: 40, text: "你们吵到实验室锁门。第二天谁也没提换道的事——用沉默代替了决定。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远后来选技术路线前都会先拉一遍对手名单：「41个卷王教会我的。」
+        neutral: 方远说「赌都赌了」，然后埋头把性能又提了一截。
+        negative: 方远在决赛那天看到隔壁赛道的人数，久久没说话。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的选赛道清单里多了一行加粗的字：'先数对手，再数自己的热情。'" }
+    reflection: 选赛道是在选对手、选评委、选叙事——热情只是其中一票。
+    lessonHint: 报名前先做赛道强度调查
+    specialTags: [track_choice]
+
+  - id: c_v2_pq_topic_stuck
+    campaign: competition
+    title: 《将错就错》
+    mainResult: 明知赛道误配仍硬着头皮坚持到底
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_track_stuck }
+    priority: 90
+    tier: main
+    family: problem_quality
+    tone: negative
+    whyDistinct: 核心结果是「沉没成本驱动的坚持」，与果断换道结局的因果链完全相反
+    baseText: |
+      "换的话五天白干。"方远把这句话钉在了白板上。
+      五天确实白干了——在你们最终排名第六、而应用赛道隔壁那队用同样的创意拿了金奖的时候。
+      复盘会上你说"至少我们坚持了"。雨桐小声接了一句："坚持和将就，隔着一张对手名单。"
+    growthVariantRules:
+      - dimension: judgment_vs_execution
+        variants:
+          - { gte: 60, text: "你在换道窗口关闭前留了一手：把核心模块做成了双赛道通用。这份远见值回了票价的一半。" }
+          - { lte: 40, text: "你们把「坚持」重复了二十一遍，直到它听起来像咒语而不是决策。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把那张对手矩阵裱了起来——她说这是她交过最贵的学费凭据。
+        neutral: 雨桐说：「我们尽力了。」这句话她说得很轻，像怕吵醒什么。
+        negative: 雨桐后来每个决定都做两手准备，她说她再也不想把命运押在一个赛道名上。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "下一届你们赛前第一件事是数对手。这张表叫《将错就错预防针》。" }
+    reflection: 沉没成本不是坚持的理由，是止损的信号。
+    lessonHint: 换道窗口关闭前，重新算一次账
+    specialTags: [sunk_cost]
+
+  - id: c_v2_cr_switch_back
+    campaign: competition
+    title: 《认赔五天》
+    mainResult: 果断换回赛道，承担返工代价换来匹配的战场
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_switch_now }
+    priority: 91
+    tier: main
+    family: competition_result
+    tone: mixed
+    whyDistinct: 核心结果是「止损换道的执行与代价」，区别于坚持型与双注型结局
+    baseText: |
+      换道申请提交那一刻，方远把旧框架的目录树截了图——"留个遗照"。
+      五天工时换回一个匹配的战场。冲刺周你们跑了两个人的量，润喉糖成了队里的硬通货。
+      决赛答辩时没人知道你们换过道。只有你们知道，台上的从容是用第9天的果断买来的。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 65, text: "返工计划精确到半天。方远说：「这是我见过最冷静的溃败——溃着溃着就赢回来了。」" }
+          - { lte: 45, text: "换对了方向，换乱了节奏。材料周你们是在补第10天的进度，不是在打磨。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远后来常说：「止损那下我服了。技术人最难的commit是回滚。」
+        neutral: 方远把「遗照」设成了手机壁纸，说是提醒自己别再冲动选路。
+        negative: 方远在下一个项目里变得畏手畏脚——回滚过一次的人，容易怕每一次提交。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的计划模板多了一个「换道检查点」：第7天和第14天，各问一次「现在换还来得及吗」。" }
+    reflection: 果断的价值不在不犯错，在错得快、认得更快。
+    lessonHint: 换道要早，认赔要干脆
+    specialTags: [pivot]
+
+  - id: c_v2_cr_algo_bet
+    campaign: competition
+    title: 《含金量》
+    mainResult: 押注热门算法赛道，在高强度对手中搏出位置
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_track_algo }
+        - { kind: state, key: technicalDebt, op: lte, value: 55 }
+    priority: 92
+    tier: main
+    family: competition_result
+    tone: mixed
+    whyDistinct: 核心结果是「以弱博强的赛道豪赌」，与换道/避锋头结局的结果空间不重叠
+    baseText: |
+      41支队伍里，你们排进了前十。没有论文，没有实验室，靠的是把"校园需求"翻译成算法语言的那张图。
+      方远盯着成绩单说了句："含金量，这次是真的。"
+      但奖级停在了优秀奖。卷王的赛道给你镀了金，也给你上了税。
+    growthVariantRules:
+      - dimension: technicalDebt
+        variants:
+          - { lte: 35, text: "评委追问模型细节时，方远答得像一篇小论文。散场后有队伍来加你们微信。" }
+          - { gte: 55, text: "差距就差在技术深度那一问。你说「明年再战」，方远这次没有接话。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把前十的成绩写进了简历第一行。他说这是他「赢过最输得起的一次」。
+        neutral: 方远说「再给我一个月，能进前五」。这句话他记到了下学期。
+        negative: 方远开始怀疑「需求驱动」这套打法，你们的技术路线出现了第一道裂缝。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那张把校园需求翻译成算法语言的图，被你们留作了队里的传家图谱。" }
+    reflection: 热门赛道的含金量，要用技术深度的税来换。
+    lessonHint: 押热门前先盘技术深度够不够缴税
+    specialTags: [track_choice, gamble]
+
+  - id: c_v2_cr_sparse_mismatch
+    campaign: competition
+    title: 《错配的评委席》
+    mainResult: 冷门赛道避开了对手却撞上错配的评审
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_sparse_mismatch }
+    priority: 90
+    tier: main
+    family: competition_result
+    tone: negative
+    whyDistinct: 核心结果是「避竞争策略反噬」，其失败机制（评审错配）与其他赛道结局不同
+    baseText: |
+      三支队伍的赛道，你们本以为稳了。
+      答辩进行到第3分钟，评委打断："技术架构我们不评估。请讲讲这个项目帮到了多少困难学生。"
+      雨桐翻遍了PPT——没有一页叫"受益人"。第12天的预警应验了，只是没人想到它应验得这么彻底。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 55, text: "你临场把访谈里的学生故事串成了三分钟。评委给了中间档：「故事是真的，来晚了。」" }
+          - { lte: 40, text: "你们把「并发数」又讲了一遍，声音越来越小。评委在表上写了很多字，都不是加分项。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师说：「这次算我把你们送错了考场，下次赛前先看评委名单。」他真的写了篇《评委矩阵》。
+        neutral: 何老师叹了口气：「冷门不是蓝海，是另一个考场。」
+        negative: 何老师从此只带应用赛道的队——你们的教训成了他的一道保险。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队的赛前清单新增一步：评委背景调查，比竞品调查优先级更高。" }
+    reflection: 避开对手之前，先确认你要面对的是谁。
+    lessonHint: 冷门赛道的评审匹配度要先验证
+    specialTags: [track_choice]
+
+  - id: c_v2_cr_double_line
+    campaign: competition
+    title: 《两头的下注》
+    mainResult: 双赛道同时推进，两头都差一口气的结局
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_double_line }
+    priority: 90
+    tier: main
+    family: competition_result
+    tone: ambiguous
+    whyDistinct: 核心结果是「不下注式对冲」的独特代价结构，其他赛道结局均为单线因果
+    baseText: |
+      算法赛道拿了个参与奖，应用赛道进了复赛——两头的下注都"差一点"。
+      复盘时方远算了一笔账：如果第9天 all in 一边，两边的成绩都会更好。
+      可他也承认：如果不是两头下注，你们在第9天可能已经在为选哪边而散伙。这笔账，怎么算都对，怎么算都亏。
+    growthVariantRules:
+      - dimension: judgment_vs_execution
+        variants:
+          - { gte: 60, text: "你用双线调研喂出了两份市场分析，散场时有两个评委主动找你聊——对冲至少买到了人脉。" }
+          - { lte: 40, text: "两份材料都赶在deadline前一小时交的。雨桐说她这辈子不想再做两个版本的一切。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐后来把双版本材料做成了她的作品集方法论：「对冲教会我看清哪边是真心。」
+        neutral: 雨桐说：「下次要么一起，要么别让我两头跑。」
+        negative: 雨桐给队里立了新规：同一比赛，只许选一条路。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的复盘文档最后一页贴着两张成绩单，中间写着一行字：「机会成本的实物照。」" }
+    reflection: 对冲买的是安全感，付的是每一线的上限。
+    lessonHint: 双线下注前，先算每个战场的上限折损
+    specialTags: [hedging]
+
+  # ===== 证据家族 =====
+  - id: c_v2_pq_sample_bias
+    campaign: competition
+    title: 《住在一栋楼的样本》
+    mainResult: 便利样本在申报书上留下裂缝
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_sample_bias }
+    priority: 91
+    tier: main
+    family: research_evidence
+    tone: mixed
+    whyDistinct: 核心结果是「抽样缺陷被识别但未修复」的中间状态，与补样/掩盖两条后续路径互斥
+    baseText: |
+      申报书交上去的那一刻，"深度访谈五人"六个字安安静静躺在方法论一节。
+      只有你们知道这五个人是谁：三个室友，两个常一起吃饭的同学。
+      数据好看得像便利用户的礼貌。裂缝埋好了，就等一个会追问的评委。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "你在附录老老实实写了抽样局限。这一行 honesty 后来被评委点名表扬——诚实没让你免罪，但买了尊重。" }
+          - { lte: 40, text: "五个人的名字没出现在任何地方。你开始祈祷评委不问抽样——祈祷不是方法。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师后来说：「那五份访谈我一眼就认出来了。你们没撒谎，只是没长大——长大就好。」
+        neutral: 何老师在申报书那一页停了三秒，什么也没说。
+        negative: 何老师那句「样本怎么选的」成了你们队内的黑话——专指一切心虚的环节。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "下一届队伍的访谈模板第一题变了：不是「问什么」，而是「去哪里找人」。" }
+    reflection: 样本结构比样本数量更早决定结论的上限。
+    lessonHint: 抽样方式要在设计时写死，而不是在答辩时补救
+    specialTags: [sampling]
+
+  - id: c_v2_pq_bias_owned
+    campaign: competition
+    title: 《补出来的洞察》
+    mainResult: 主动补齐样本，把偏差转化为真实洞察
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_bias_fixed }
+    priority: 92
+    tier: main
+    family: research_evidence
+    tone: positive
+    whyDistinct: 核心结果是「偏差修复带来质变级洞察」，与掩盖/降级两条路径的结果不同
+    baseText: |
+      三天，八个社团，无数杯茶。补出来的样本里藏着原样本永远给不了的答案：
+      文艺社团怕收钱，体育社团怕批场地，学术社团怕交接——三个痛点，三条产品线，一张真正的需求地图。
+      何老师看完纪要说："这五天的土，没白跑。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "评委问到样本时，雨桐直接翻到配额表那页。孙教授笑了：「这是今天第一份让我想追问下去的材料。」" }
+          - { lte: 45, text: "补是补了，口径还是没统一。真数据配着旧叙事，像新鞋配旧袜子。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把那张需求地图裱在宿舍——她说这是她做过最累也最踏实的一页PPT。
+        neutral: 雨桐从此负责所有调研的抽样设计。她说这叫「痛过才知道」。
+        negative: 雨桐感慨要是第一轮就这么做就好了——那三天本可以用来打磨故事。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那张三类痛点地图被下一届队伍沿用——真实的需求，是最耐用的资产。" }
+    reflection: 偏差不可耻，可耻的是明知偏差还替它化妆。
+    lessonHint: 发现样本偏差，最便宜的处理是立刻补齐
+    specialTags: [research_fix]
+
+  - id: c_v2_re_bias_coverup
+    campaign: competition
+    title: 《滴水不漏》
+    mainResult: 用措辞掩盖抽样缺陷，在追问中信用崩塌
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_bias_hidden }
+    priority: 91
+    tier: main
+    family: research_evidence
+    tone: negative
+    whyDistinct: 核心结果是「语言修复证据失败」，与补样/降级结局的机制完全不同
+    baseText: |
+      "深度访谈五人"——每个字都是真的，连起来却是一句谎话。
+      孙教授的追问只有两层：第一层问样本，第二层问"为什么恰好都在一栋楼"。
+      你的措辞没有漏洞。可漏洞不在措辞里，在数据里。滴水不漏的，从来只有水。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { gte: 50, text: "你当场承认了抽样缺陷。评委记下了这个78比92的诚实版本——你们丢的是奖，不是全部。" }
+          - { lte: 40, text: "你试图把话题引回产品功能。孙教授不再追问，只是在评分表上写了一行字。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐赛后把那页「滴水不漏」的材料删了，重写了一版带着局限说明的。她说这次睡得着了。
+        neutral: 雨桐说：「文案没有错，错的是让我写它的人。」她说的是她自己。
+        negative: 雨桐的完美主义从此拐向了另一个极端——所有材料都附三页局限声明，没人看得完。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队的材料审查清单新增终审一问：「这页经得起第二层追问吗？」" }
+    reflection: 措辞能修饰证据，不能替代证据。追问只有两层，但每层都通到底。
+    lessonHint: 掩盖偏差的成本在答辩当天集中结算
+    specialTags: [integrity]
+
+  - id: c_v2_re_reframe
+    campaign: competition
+    title: 《初步探索》
+    mainResult: 主动降级结论口径，用诚实换取可信度
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_bias_reframe }
+    priority: 91
+    tier: main
+    family: research_evidence
+    tone: mixed
+    whyDistinct: 核心结果是「结论降级的诚实策略」，结局气质是稳妥的平凡，区别于补样的进取与掩盖的冒险
+    baseText: |
+      "用户验证"四个字从标题里拿掉了，换成"一项初步探索"。
+      申报书薄了一页，也稳了一页。评委问起来，你答："五个人，一栋楼，我们知道这不算验证。"
+      孙教授在评审表上写："知道自己不知道什么，是研究的起点。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "降级后的每句话都有出处。有人问你们为什么不吹大一点，你说：「因为答不起。」" }
+          - { lte: 40, text: "结论是降级了，可宣传海报还印着旧版本。诚实只做了一半，等于没做。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师说：「认小最难。你们这次及格了——下次学着把小的做大。」
+        neutral: 何老师翻着降级版的申报书，难得没挑出毛病。
+        negative: 何老师嘀咕：「什么都承认局限，评委会以为你们什么都没做。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「初步探索」成了你们队的常用词——它不是挡箭牌，是分期付款的承诺。" }
+    reflection: 结论的尺寸要匹配证据的尺寸，多一寸都是负债。
+    lessonHint: 结论与证据要同比例，宁可小而真
+    specialTags: [calibration]
+
+  - id: c_v2_re_datacal
+    campaign: competition
+    title: 《无聊文档的胜利》
+    mainResult: 提前统一数据口径，材料周零返工
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_datacal_unified }
+    priority: 90
+    tier: main
+    family: research_evidence
+    tone: positive
+    whyDistinct: 核心结果是「前置口径管理带来的零返工红利」，与口径失控结局形成对照
+    baseText: |
+      材料周，别的队伍在对数字，你们在对齐评审表。
+      那页无聊透顶的《数据口径v1》安静地躺在附录里：78%是功能成功率，94%是问卷满意度，各自有各自的出处。
+      高主任扫到那页时停了三秒——全场唯一一个口径表。他在备注栏写了四个字：口径清晰。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "决赛追问环节，有评委故意拿两个数字打架。你们翻开口径表，他笑了：「好啊，有备而来。」" }
+          - { lte: 45, text: "口径表是立了，可后面新加的三个数字忘了登记。制度的敌人是惯性。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远在实习的第一周就给组里立了口径文档。他说：「这习惯是我见过最无聊的护城河。」
+        neutral: 方远承认：「当时嫌它烦，现在想给它烧香。」
+        negative: 方远在新团队里推行口径文档失败，他说「原来不是每个队都有第5天的从容」。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "《数据口径v1》的模板被你们导出了三次——制度的生命力在于复用。" }
+    reflection: 数据的战争在数据产生之前就打完了。
+    lessonHint: 口径统一要前置到数据诞生的那天
+    specialTags: [data_consistency]
+
+  - id: c_v2_re_three_truths
+    campaign: competition
+    title: 《三个真相》
+    mainResult: 数据口径失控，三份材料各说各话
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_data_mismatch }
+    priority: 91
+    tier: main
+    family: research_evidence
+    tone: negative
+    whyDistinct: 核心结果是「口径失控在材料周的集中爆雷」，与前置口径结局的因果相反
+    baseText: |
+      申报书78%，PPT 94%，演示后台又是一个数。三个真相在三个文件里和平共处，直到评委把它们放进了同一张评审表。
+      "你们的数据哪个是真的？"——这个问题没有好答案，只有更不坏的答案。
+      那晚你们对表到凌晨三点，第5天省下的半小时，此刻利息滚成了六个小时。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { gte: 50, text: "你在答辩里主动亮出三个数字的定义差异。评委皱眉记下，但没有判死刑——主动交代值回一半。" }
+          - { lte: 40, text: "你们临时改了两个数字去对齐第三个。评委事后复核时，发现了这场数字的即兴表演。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐从此做PPT前先要口径表，「没有口径表，我一个字都不排」成了她的口头禅。
+        neutral: 雨桐把三个数字的截图存进了「教训」文件夹，那个文件夹已经有五张图了。
+        negative: 雨桐一度想重做全部材料。方远拦住她：「不是材料的错，是时间的错。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「先对口径，再动笔」成了你们的队规第一条——用六个小时的利息换来的。" }
+    reflection: 三个真相等于零个真相。评委只要一个，你们必须提前选好。
+    lessonHint: 口径失控的账单在材料周集中支付
+    specialTags: [data_consistency]
+
+  - id: c_v2_re_repro_pack
+    campaign: competition
+    title: 《90秒复现》
+    mainResult: 提供一键复现包，让评委亲手跑通项目
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_repro_pack }
+    priority: 97
+    tier: hidden
+    family: research_evidence
+    tone: positive
+    whyDistinct: 核心结果是「把证据形态升级为可交互复现」，全场独一份的评审体验，由隐藏事件解锁
+    baseText: |
+      答辩最后一页，你们放了一个二维码："这是复现包，90秒可以亲手跑通我们的结果。"
+      孙教授真的掏出了手机。全场安静地看他敲完最后一条命令——终端里跳出那行熟悉的输出。
+      "办了这么多年赛，"他说，"第一次有队伍让我当用户。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "有评委当场转发给了同事。你们没拿金奖，但你们的仓库star数涨得比奖状快。" }
+          - { lte: 45, text: "复现包在评委的电脑上报了个环境错。你们连夜补了说明——90秒变成了第二天的90分钟。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把复现包流程写成了通用模板。他说：「让证据自己开口，是技术人的浪漫。」
+        neutral: 方远说「那包我打包了三遍，值了」。
+        negative: 方远抱怨维护三个平台的兼容脚本花了两天——浪漫是有工时成本的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "复现包的GitHub仓库成了你们队的第二张名片，比任何奖状都活得久。" }
+    reflection: 最高级的证据不是让人相信，是让人亲手验证。
+    lessonHint: 可复现性是证据链的终点形态
+    specialTags: [reproducibility, hidden_path]
+
+  - id: c_v2_pq_micro_user
+    campaign: competition
+    title: 《1400条共鸣》
+    mainResult: 深夜发现的边缘用户群成为选题的真正支点
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_edge_user }
+    priority: 97
+    tier: hidden
+    family: problem_quality
+    tone: positive
+    whyDistinct: 核心结果是「被忽视的边缘社群验证了真问题」，来自隐藏路径的独特选题依据
+    baseText: |
+      凌晨一点，图书馆。你在一个2000人的旧论坛小组里读到了那条置顶帖——"毕业前把群文件交接给下一届，是我做过最累的事"。
+      下面1400条回复，每一条都是一个真实的人在描述同一种痛。
+      你们的选题书第一页从此换了引文：不是任何大厂的报告，是这1400条共鸣。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 60, text: "你们顺着帖子私聊了17个组员，约到了9个访谈。评委问需求来源，你放出了聊天记录截图。" }
+          - { lte: 40, text: "你把帖子当成了论据，却没去聊过一个真人。1400条共鸣在你手里还是二手资料。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把那条帖子打印出来贴在工位：「比所有用户画像都好用的，是一个活人的原话。」
+        neutral: 雨桐说这个发现救了整个项目，语气里有一丝后怕。
+        negative: 雨桐后来总问「还有没有这样的帖子」——她开始把运气当成方法。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那个论坛小组后来成了你们产品的第一批种子用户——真问题是会自己长出用户的。" }
+    reflection: 真问题不在提案模板里，在凌晨一点的论坛置顶帖里。
+    lessonHint: 边缘社群是未开采的需求富矿
+    specialTags: [user_research, hidden_path]
+
+  - id: c_v2_pr_page7
+    campaign: competition
+    title: 《评审的第 7 页》
+    mainResult: 掌握评审阅读习惯后重新设计材料结构
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_judge_pref }
+    priority: 97
+    tier: hidden
+    family: presentation_defense
+    tone: mixed
+    whyDistinct: 核心结果是「按评审注意力重构材料」，来自隐藏情报路径，与常规打磨路径结局不同
+    baseText: |
+      打印店老板还记得你们：那群把PPT改了七遍的学生。
+      第七遍改的不是内容，是结构——数据放左上，结论放第一行，证明材料标页码。因为第10天的走廊里，高主任边走边说了那三条。
+      决赛那天，评委在第7页停留了将近两分钟。全场平均，是90秒。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "你把那三条用到了申报书、PPT、海报每一处。有评委嘀咕：「这队的材料像量过尺寸。」" }
+          - { lte: 40, text: "情报拿到了，执行却只改了PPT。申报书还是老样子——评委会先看哪份，你们比谁都清楚。" }
+    characterEpilogueRules:
+      - characterId: c_judge_prelim
+        positive: 高主任在评审会上说：「有一支队伍的材料，是我这些年读得最顺的。」
+        neutral: 高主任照常90秒一页地翻。翻到第7页，他多停了一秒——一秒，在评审里算是很久了。
+        negative: 高主任后来发现你们「针对」过他的阅读习惯，笑着说了句「聪明」，评分却没加。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「数据放左上」成了你们队所有材料的不成文宪法。" }
+    reflection: 材料的第一读者是评委，不是你自己。为他设计，不是讨好他。
+    lessonHint: 评审注意力是稀缺资源，结构比辞藻值钱
+    specialTags: [judge_perspective, hidden_path]
+
+  # ===== Demo 家族 =====
+  - id: c_v2_pd_tech_stale
+    campaign: competition
+    title: 《老古董与四倍速》
+    mainResult: 稳妥的旧技术选型在赛道内被新技术比较
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_tech_stale }
+    priority: 90
+    tier: main
+    family: product_demo
+    tone: mixed
+    whyDistinct: 核心结果是「舒适区选型的舆论代价」，与API崩坏/Agent漂移两种技术风险结局机制不同
+    baseText: |
+      邱一鸣的朋友圈截图在你们实验室群里传了一天。
+      "速度是上一代的四倍"——而你们的旧框架，稳是稳，跑起来像在散步。
+      方远连夜做了个对比测试：功能完成度你们高23%，响应速度低60%。他把这张图设成了答辩第8页，标题："我们为什么选择慢。"
+    growthVariantRules:
+      - dimension: judgment_vs_execution
+        variants:
+          - { gte: 60, text: "「慢」的叙事成了加分项：评委追问后说「知道自己的取舍，比追新难得」。稳字终于值回了票价。" }
+          - { lte: 40, text: "那张对比图没做出来。答辩时「老古董」三个字从评委嘴里说出来，你们只能点头。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远后来入职时发现公司也在用「老古董」。他对新同事说了句：「稳是一种能力，不是罪。」
+        neutral: 方远默默把新API加进了自学清单。散步归散步，鞋总得换。
+        negative: 方远开始怀疑每一次稳妥的决定——这种自我怀疑，比落后更消耗他。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那张「快vs全」的对比图被下一届当成选型课教材。" }
+    reflection: 技术选型的对手从来不是新版本，是评审的刻度尺。
+    lessonHint: 选型要预设「被比较」的时刻，备好取舍叙事
+    specialTags: [tech_choice]
+
+  - id: c_v2_pd_api_break
+    campaign: competition
+    title: 《凌晨两点的红》
+    mainResult: 押注新API遭遇破坏性更新，付出整晚迁移
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_stack_fragile }
+    priority: 90
+    tier: main
+    family: product_demo
+    tone: negative
+    whyDistinct: 核心结果是「追新风险的技术性兑现」，与舆论比较型过时结局的受损机制不同
+    baseText: |
+      凌晨两点，接口全红。新模型API的破坏性更新不商量：字段改名，签名更换，文档里那行小字终于兑现。
+      方远熬到天亮迁移完，第一节课睡过去了。
+      冲刺周最贵的一晚，买来的教训写在白板上：依赖外部活水，就要自己修水管。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "迁移居然做成了双适配层——旧接口包着新模型。这个兜底结构后来救了彩排两次。" }
+          - { lte: 40, text: "迁移只完成了一半，部分功能悄悄降级。你们没时间发现，评委替你们发现了。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远在实习第一天就认出了那条「不保证向后兼容」的英文。他笑了，笑得像老兵认出旧伤。
+        neutral: 方远从此追新前必看changelog，习惯保持至今。
+        negative: 方远彻底转向保守，新事物的窗口在他面前关了很久。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的选型清单多了一栏「供应商风险」，那是凌晨两点红掉的接口换来的。" }
+    reflection: 追新的利息，会在你最忙的凌晨到期。
+    lessonHint: 新依赖必须有回退方案再上生产
+    specialTags: [dependency_risk]
+
+  - id: c_v2_ag_drift_found
+    campaign: competition
+    title: 《它没写错》
+    mainResult: Agent脚手架偏离需求，在联调时才被发现
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_agent_drift }
+    priority: 90
+    tier: main
+    family: agent_collab
+    tone: mixed
+    whyDistinct: 核心结果是「需求传递失真」这一Agent协作特有风险，区别于越权泄露与主动立约结局
+    baseText: |
+      "补交材料"功能不存在—— Agent 生成的代码很漂亮，只是漂亮在另一个需求上。
+      方远检查了三遍生成的依据，最后合上电脑："它没写错，是我们没写清。"
+      那天你们做了一件比修代码更重要的事：把需求文档从六页扩到九页，逐条标注"必须"与"可选"。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 60, text: "你事后惊出一身冷汗：如果没有雨桐联调，你们会把「漂亮的错」一路捧上决赛。" }
+          - { lte: 40, text: "好在方远坚持人工联调。他嘟囔了三天「浪费我时间」，也挡下了一颗雷。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 你们修订需求文档后，Agent的产出突然对了。它说不出「我懂了」，但它确实懂了。
+        neutral: Agent照常高效。漂移对它只是日志里的一行：需求与输出存在偏差。
+        negative: 你们彻底弃用了脚手架。Agent安静地接受了冷落，像一台从不会被得罪的机器。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「必须/可选」双栏需求模板成了你们指挥Agent的标准姿势。" }
+    reflection: Agent对字面负责，你 对意图负责——中间的距离叫需求文档。
+    lessonHint: 委托生成的需求文档要写到「必须」级别
+    specialTags: [agent_drift]
+
+  - id: c_v2_pd_arch_wall
+    campaign: competition
+    title: 《第51个人》
+    mainResult: Demo架构在并发压力下暴露天花板
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_demo_wall }
+    priority: 91
+    tier: main
+    family: product_demo
+    tone: mixed
+    whyDistinct: 核心结果是「演示规模与架构能力的错配暴露」，与重构红利/限制范围/赌博三条后续路径互斥
+    baseText: |
+      第51个人点下提交按钮，进度条开始转圈。雨桐拉来的三十个同学屏住呼吸，看着那台单机在50并发的悬崖边打转。
+      "决赛现场会有两百人。"这句话让实验室安静了十秒。
+      十秒之后是三个选择：重构、缩范围、赌。无论选哪个，第9天那句"能跑就行"都欠下了一笔债。
+    growthVariantRules:
+      - dimension: judgment_vs_execution
+        variants:
+          - { gte: 60, text: "你们当场做了压力曲线图，把决策变成了算术题。十秒的安静，是思考开始的声音。" }
+          - { lte: 40, text: "三个人互相看了五分钟。危机管理的第一步是开会不抖腿——你们差一点。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远后来把这页压测曲线放进了面试作品集：「这是我第一次为自己的架构决定写检讨。」
+        neutral: 方远说「早知道听Agent那句风险评估」——这句话他说得很轻。
+        negative: 方远从此谈架构必谈并发，有人笑他应激，他不辩解。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的立项模板从此有了「演示规模」一栏——它是被第51个人逼出来的。" }
+    reflection: 架构的验收标准是演示现场，不是开发机器。
+    lessonHint: 演示规模是需求，不是彩蛋
+    specialTags: [architecture]
+
+  - id: c_v2_pd_scale_save
+    campaign: competition
+    title: 《第9页的压测图》
+    mainResult: 回头重构扛住并发，技术债转化为答辩证据
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_arch_refactor }
+    priority: 92
+    tier: main
+    family: product_demo
+    tone: positive
+    whyDistinct: 核心结果是「危机驱动的主动重构并兑现为证据」，与限制范围/赌博路径互斥
+    baseText: |
+      三个通宵，材料延期半天，换来"200并发，响应300毫秒"这一行字。
+      那张压测图进了答辩PPT第9页。孙教授盯着看了很久，问："这是你们自己测的？"
+      "凌晨四点测的。"方远说。全场笑了，评委在表上写了很长的字。
+    growthVariantRules:
+      - dimension: technicalDebt
+        variants:
+          - { lte: 35, text: "重构后的代码在开源后被陌生人称赞结构清晰。方远截图发群里，配文「值了」。" }
+          - { gte: 50, text: "重构解决了并发，没解决那些历史遗留的坏味道。你意识到还债也是分期的事。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远说那三个通宵是他大学最有产出的一周。后来他的实习转正答辩放的就是这张压测图。
+        neutral: 方远说「下不为例」——然后每次架构评审他都会多问一句「演示现场多少人」。
+        negative: 方远落下了一周的低烧。他妈妈打来电话时，全队都低头吃饭不敢出声。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那台压到200并发的旧笔记本被留了下来，贴着标签：「重构之夜，全员在场。」" }
+    reflection: 技术债不可怕，可怕的是没有回头还的勇气与排期。
+    lessonHint: 危机是重构的最后窗口，错过即坍塌
+    specialTags: [refactor]
+
+  - id: c_v2_pd_gamble
+    campaign: competition
+    title: 《概率嘛》
+    mainResult: 赌现场不触发并发崩溃，把决赛变成轮盘
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_env_fragile }
+    priority: 90
+    tier: main
+    family: product_demo
+    tone: negative
+    whyDistinct: 核心结果是「已识别风险被主动承担」的赌博路径，与重构/限范围结局互斥
+    baseText: |
+      "概率嘛。"方远说这话时在笑，笑得像在说别人的事。
+      决赛那天，主持人说"有请评委扫码体验"，两百部手机同时亮起。
+      后台监控曲线冲上悬崖的那一刻，你们全队的手都放在了这台机器的命运上——只是没有一个人握着方向盘。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "你们赌赢了——评委扫码高峰只到了80人。散场后方远蹲在走廊里缓了很久，手还在抖。" }
+          - { lte: 40, text: "演示第6页，转圈的进度条投在了大屏幕上。你说「网络波动」，台下的高主任放下了笔。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远赛后写了篇博客《我赌输的那50毫秒》，成了他访问量最高的技术文。
+        neutral: 方远再没提过「概率嘛」三个字。
+        negative: 「概率嘛」成了你们队内的禁忌梗——谁说谁请客，请到毕业。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的checklist从此多了一条红线：「已识别的风险，不允许用运气结算。」" }
+    reflection: 你可以接受未知的风险，但已识别的风险用运气结算，是对全队的不负责。
+    lessonHint: 已知风险必须有主动处置，赌是其中最差的一种
+    specialTags: [risk]
+
+  - id: c_v2_pd_limited_demo
+    campaign: competition
+    title: 《受控单机》
+    mainResult: 主动限制演示范围，用坦诚界定产品边界
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_demo_limited }
+    priority: 91
+    tier: main
+    family: product_demo
+    tone: mixed
+    whyDistinct: 核心结果是「以范围收缩换确定性」的克制路径，与重构进取/赌博侥幸互斥
+    baseText: |
+      "演示环境为受控单机"——申报书里这行小字，是你们与风险签的停战协议。
+      答辩只讲单机模式，评委问并发，你答："架构支持，未在演示中开启，压测报告在附录。"
+      没有惊艳，也没有翻车。分数中游，评价栏写着：知道自己能讲什么。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "附录里的压测曲线替你说完了野心。有评委私下问：「能不能看看真实部署？」" }
+          - { lte: 40, text: "范围是缩了，故事也缩没了。答辩结束得太早，早得像没有发生过。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把「受控单机」设计成了一个清爽的演示框架，反而成了全场视觉最干净的一页。
+        neutral: 雨桐说：「缩范围不难，难的是忍住不讲那些没做的东西。」
+        negative: 雨桐遗憾了很久：「我们的东西其实更好，只是没被看见。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「如实标注演示边界」写进了你们的材料模板，它替你们挡过三次追问。" }
+    reflection: 演示的边界画得清楚，野心才有地方安放。
+    lessonHint: 缩小范围不是认输，是把话说满前先做满
+    specialTags: [scope]
+
+  # ===== NG+ 家族（本批） =====
+  - id: c_v2_ng_end_split
+    campaign: competition
+    title: 《提前三十分钟》
+    mainResult: NG+：用前周目记忆抢在分工失效前立下契约
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_split }
+        - { kind: ngPlus }
+    priority: 96
+    tier: special
+    family: team
+    tone: positive
+    ngPlus: true
+    whyDistinct: NG+专属结局：核心结果是「记忆转化为提前行动」，只可能发生在周目重开之后
+    baseText: |
+      组队当天你按住了那两只准备击掌的手。
+      十分钟后，分工表诞生。方远盯着"视频制作：方远"看了三秒，问："为什么我觉得这个表格很重要？"
+      你说不出"我上辈子在第8天摔过"。你只说："写下来的东西，不会在deadline前变成谜语。"
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 60, text: "材料周日，雨桐把分工表拍在群里：「谢谢第3天的我们自己。」方远回了个敬礼。" }
+          - { lte: 45, text: "表是立了，执行还是打了折。记忆能给你先手，给不了你全队的自律。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远后来养成怪癖：组队必先写表。他不知道为什么，「就是觉得不写要出事」。
+        neutral: 方远配合地签了字。有些价值，要等第8天他没被冤枉时才想起来。
+        negative: 方远说「你这人怎么提前知道这么多」——你笑而不语，他也没再问。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那张v0分工表被留了下来，页脚写着一行小字：「献给某个没人记得的第8天。」" }
+    reflection: 周目的意义不是预知灾难，是提前三十分钟做那件对的事。
+    lessonHint: 记忆的价值要兑换成当场的行动
+    specialTags: [ngplus, team_contract]
+
+  - id: c_v2_ng_end_ai
+    campaign: competition
+    title: 《第一条铁律》
+    mainResult: NG+：开工前先给Agent立约，全程零事故
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_ai }
+        - { kind: ngPlus }
+    priority: 96
+    tier: special
+    family: agent_collab
+    tone: positive
+    ngPlus: true
+    whyDistinct: NG+专属：核心结果是「先立约后使用」的协作前置，与事后补救型Agent结局路径互斥
+    baseText: |
+      "第一条：所有事实性输出，必须附来源链接。"
+      前周目里它编过的引用、跑偏的PPT、存进公共库的核心Prompt——这次，全都没有发生。
+      Agent照常高效，只是每个输出后面都拖着一条安静的链接，像系好的鞋带。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 55, text: "有队友嫌附链接麻烦。你打开前周目记忆里那页「编造的引用」——哦不对，那页只存在于你的脑子里。你说：「信我一次。」" }
+          - { lte: 40, text: "铁律太严，效率掉了两成。你在想：约束和信任的配比，也许还要再调几个周目。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 赛后你翻它的会话日志，发现它在第20天自动补了一条来源校验——规矩已经长成了它的习惯。
+        neutral: Agent对铁律的评价是「已保存」。三个字，一个是效率，一个是边界。
+        negative: 铁律被队友嫌烦删掉了两条。你盯着空了两行的文档，像看见没锁的门。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那三条铁律你带到了下一个项目，如今已经有了第七条。" }
+    reflection: 对工具最深的了解，是知道它会在哪里坑你——然后提前一天把栏杆装上。
+    lessonHint: NG+的真正外挂是把教训前置成规则
+    specialTags: [ngplus, agent_contract]
+
+  - id: c_v2_ng_end_topic
+    campaign: competition
+    title: 《踩着证据选的》
+    mainResult: NG+：定向验证命中选题，既快又稳
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_topic }
+        - { kind: ngPlus }
+    priority: 96
+    tier: special
+    family: problem_quality
+    tone: positive
+    ngPlus: true
+    whyDistinct: NG+专属：核心结果是「记忆加速而非替代验证」，与跳过验证的速通路径互斥
+    baseText: |
+      两小时定向核查，三个死穴，两个能过。
+      你选了那个题——和前周目一样的题。不同的是这次选题会上你放得出一页证据：三组数据、两个反例、一条补充访谈。
+      有队伍问你们怎么这么快。你说："我们只是知道该查什么。"这话千真万确，且无法反驳。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "评委后来引用了你们那页核查证据，说「这才叫验证」。你没告诉他，这份熟练度练了很多个周目。" }
+          - { lte: 45, text: "定向核查省了时间，也省掉了意外发现——别的队伍在乱撞中撞见了更好的题。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: Agent记录了你的核查路径并标注「高效」。它不知道，这条路径是你的第三个周目踩出来的。
+        neutral: Agent照常列出了核查清单。清单的顺序，和你记忆里的死穴一模一样。
+        negative: Agent问：「为何跳过常规全面扫描？」你答不上来，只好又补了一轮。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你把「定向核查三死穴」写成了模板——记忆会过期，方法不会。" }
+    reflection: 记忆可以给你地图，路还是要自己走一遍——踩着证据走。
+    lessonHint: 用记忆加速验证，而不是跳过验证
+    specialTags: [ngplus, verification]
+
+  - id: c_v2_ng_end_judge
+    campaign: competition
+    title: 《预答辩卡》
+    mainResult: NG+：提前备好评委三连问的答案
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_judge }
+        - { kind: ngPlus }
+    priority: 96
+    tier: special
+    family: presentation_defense
+    tone: mixed
+    ngPlus: true
+    whyDistinct: NG+专属：核心结果是「预知追问的全员准备」，与现场情报打探路径互斥
+    baseText: |
+      "口径、样本、复现。"孙教授的连环追问如期而至，一个字都没变。
+      雨桐翻开样本配额表，方远调出复现包，你指着口径定义——三连问答完，用时不到两分钟。
+      孙教授愣了一下，笑了："我这些问题的标准答案，好像被你们提前发下来了。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "答完三连问，队伍还有人想加答第四问。被你按住了——准备要留白，回答要留德。" }
+          - { lte: 45, text: "答案是背下来的，问到变式就卡壳。孙教授的追问从来不止三个。" }
+    characterEpilogueRules:
+      - characterId: c_judge_final
+        positive: 孙教授在评审表备注里写：「该队对质询的准备程度为全场之最。」他没写的是，他有点想念临场发挥的惊喜。
+        neutral: 孙教授点点头，翻向下一页。对他而言这只是又一场高质量答辩。
+        negative: 孙教授换了三道新题。你的预答辩卡停在第二行，像一张过期的地图。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "预答辩卡的做法被下一届继承——但没人能解释为什么题目猜得那么准。" }
+    reflection: 记忆给的答案要背进骨头里，否则评委换一道题就现出原形。
+    lessonHint: 预判追问要准备到理解层，而非背诵层
+    specialTags: [ngplus, qa_prep]
+
+  - id: c_v2_ng_end_rival
+    campaign: competition
+    title: 《烟雾弹的反面》
+    mainResult: NG+：识破对手放出的技术烟雾弹
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_rival }
+        - { kind: ngPlus }
+    priority: 96
+    tier: special
+    family: competition_result
+    tone: ambiguous
+    ngPlus: true
+    whyDistinct: NG+专属：核心结果是「以记忆拆解对手心理战」，结局落点在赢法的暧昧性上
+    baseText: |
+      "元宇宙+区块链+AI，三件套。"邱一鸣的筷子挥得虎虎生风。
+      你知道他最终会交上一个报名小程序——前周目的你信过，慌过，还差点推倒重来。
+      这次你笑着夹菜，稳如老狗。只是深夜你也在想：赢在情报的你，和输在情报的上个你，谁更懂比赛？
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你们没把精力花在盯防上，照自己的路走完了21天。识破烟雾弹最好的方式，是不需要它。" }
+          - { lte: 40, text: "你把太多时间花在了「看他这次又放什么烟」上。对手成了你们的第二个赛道。" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 颁奖后邱一鸣跑来问你：「你怎么一点都不慌？」你说：「因为我知道你有多强。」他愣了三秒。
+        neutral: 邱一鸣这次还是放了烟，你还是没接。你们的博弈成了每届比赛的传统节目。
+        negative: 邱一鸣这次带来了真的元宇宙demo。你的「记忆」过期了——世界比周目跑得快。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队有一条不成文的规矩：对手说什么都记下来，但只信完成度。" }
+    reflection: 烟雾弹最强的解药不是情报，是自己的节奏。
+    lessonHint: 对手情报用于校准，不用于恐慌
+    specialTags: [ngplus, rival]
+
+  # ===== 路演答辩家族 =====
+  - id: c_v2_pr_narrative_gap
+    campaign: competition
+    title: 《第4页的沉默》
+    mainResult: PPT叙事超出产品真实能力，在答辩中被当场点名
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ppt_gap }
+    priority: 91
+    tier: main
+    family: presentation_defense
+    tone: mixed
+    whyDistinct: 核心结果是「叙事先行策略的答辩期清算」，与产品先行/Agent润色两条材料路线结局互斥
+    baseText: |
+      「这个智能提醒功能不错——现场演示一下？」
+      雨桐翻回演示界面的手停了半秒。就是这半秒，评委和观众都看见了。
+      你们圆了过去，用了一段练过三遍的话术。分数没崩，可每个人都记得那半秒——故事里的功能，终究要在台上还账。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "你在Q&A主动补了一句：'该功能为路线图状态，演示版本未包含。'评委点头——主动补刀救回了半城。" }
+          - { lte: 40, text: "话术在第2轮追问时用尽了。评委在表上写：'材料与产品边界不清。'" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐赛后把「叙事边界」写进了她的设计规范第一条：故事只讲系统里存在的路。
+        neutral: 雨桐说：「下次故事照讲——但每个场景我都先问一句：真的吗？」
+        negative: 雨桐从此拒绝任何超出Demo的故事——她的路演变得安全，也无趣了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队的PPT模板每页角落多了一个小标记：实心圆=已有功能，空心圆=规划中。" }
+    reflection: 叙事可以领先产品半步，领先一步就是悬崖。
+    lessonHint: 材料里的每个场景都要能在现场点出来
+    specialTags: [narrative]
+
+  - id: c_v2_pr_honest_deck
+    campaign: competition
+    title: 《说明书式路演》
+    mainResult: 材料只写真实功能，以朴素换可信
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_honest_deck }
+    priority: 91
+    tier: main
+    family: presentation_defense
+    tone: positive
+    whyDistinct: 核心结果是「产品先行的材料策略」，与叙事先行/Agent润色路线互斥
+    baseText: |
+      你们的PPT像一份说明书：每个功能对应一页截图，每个数字对应一行口径，每个「没做的」对应一节边界说明。
+      不好看。真的不好看。可孙教授说：「这是我今天看到的第一份不用猜的材料。」
+      分数公布，你们不是最高的——但每一分都长在骨头上。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { gte: 60, text: "评审栏备注：材料可信度全场第一。有评委私下问：「你们是不是故意做得这么朴素？」" }
+          - { lte: 45, text: "朴素救了可信度，没救回吸引力。你们输给了会讲故事的队伍——但也只差一点点。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把这份PPT放进了作品集，标题是「克制的力量」。她说这是她最不舒服也最自豪的一次。
+        neutral: 雨桐承认：「这版不像我的作品，像我们的作品。」
+        negative: 雨桐感慨：「要是故事和真实能两全就好了。」她说这话时看着奖状，眼里有光也有灰。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「说明书式」成了你们队的风格签名，连续两届被评委点名表扬。" }
+    reflection: 材料的最高级不是漂亮，是每个字都能兑现。
+    lessonHint: 只写Demo里真实存在的东西
+    specialTags: [honesty]
+
+  - id: c_v2_pr_rehearsal_short
+    campaign: competition
+    title: 《应该会更好》
+    mainResult: 排练量不足导致路演中段失控
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_rehearsal_partial }
+    priority: 90
+    tier: main
+    family: presentation_defense
+    tone: negative
+    whyDistinct: 核心结果是「一次性排练的侥幸失败」，与零排练/全量排练两种投入水平结局不同
+    baseText: |
+      第4页翻页笔失灵的那次你们挺过去了，第6页卡壳的两次也圆过去了——直到第7页，雨桐跳页了。
+      8分钟的路演，有40秒是一片空白加一句「抱歉」。
+      下台时她说：「正式上场应该会更好。」这句话第16天就说过一遍。第二遍说的时候，没有人点头。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 55, text: "中段崩了，Q&A救回来了。方远把追问全接了下来——代码人的冷静第一次成了全场焦点。" }
+          - { lte: 40, text: "跳页之后又是翻错页。评委低头写字的声音，是你们那八分钟唯一的伴奏。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐此后每场演讲必彩排三遍。她说：「我不欠排练的了。」
+        neutral: 雨桐把那次台本折了角，放进抽屉最深处。
+        negative: 雨桐开始害怕上台。这个影子，她用之后半年才走出来的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队从此有一条铁律：彩排不过两遍，不上台。" }
+    reflection: 「应该会更好」不是排练计划，是祈祷词。
+    lessonHint: 路演的排练量要按场次买，不按感觉省
+    specialTags: [rehearsal]
+
+  - id: c_v2_pr_time_overflow
+    campaign: competition
+    title: 《7分58秒》
+    mainResult: 靠提速硬压时长，内容保住表达受损
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_time_over }
+    priority: 90
+    tier: main
+    family: presentation_defense
+    tone: negative
+    whyDistinct: 核心结果是「语速换内容」的取舍路径，与砍内容/临场赌博两条止损路线互斥
+    baseText: |
+      7分58秒，讲完了。一页没删，一个案例没丢。
+      代价是雨桐的语速快了两成，像一列不准站的车。评委的第7页还没看完，你们已经讲到了第11页。
+      Q&A时孙教授说：「内容很好。下次——讲给人听，不是讲给表听。」
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "雨桐在最后一页强行降速，把结论咬得清清楚楚。有评委为她鼓了掌——为那三十秒的从容。" }
+          - { lte: 40, text: "后三页基本是在念。评委的评分表上，「表达」一栏的分数替你们记住了这一天。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐后来把这次经历讲给学妹听：「内容再多，装不下的就是装不下。」
+        neutral: 雨桐说：「我讲完了，一个字没丢。」她没说听众丢了多少。
+        negative: 雨桐从此抗拒长材料。她给路演定了死规矩：超过10页就砍。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的路演模板第一页写着：内容以7分半为上限——那是7分58秒教出来的。" }
+    reflection: 时长是内容的价格，提速是高利贷。
+    lessonHint: 超时内容要么砍，要么错——提前选
+    specialTags: [timing]
+
+  - id: c_v2_pr_silence
+    campaign: competition
+    title: 《第3页还是第5页》
+    mainResult: 零排练路演，台上断片靠临场续命
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_blackout_risk }
+    priority: 90
+    tier: main
+    family: presentation_defense
+    tone: ambiguous
+    whyDistinct: 核心结果是「零排练的临场赌局」，结果悬置，与排练不足/超时结局的确定损失不同
+    baseText: |
+      第3页讲完，雨桐的手指停在翻页笔上。第4页？不对，是第5页。
+      五秒钟。台下的孙教授抬起头，等着。这五秒里你们三个月的日夜都挤在了她的喉咙口。
+      她深吸一口气，跳过了那页，直接讲了演示。「我们直接看东西吧。」她说。全场笑了——善意的笑。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "断片后她临场重组了整条叙事线，比原稿还顺。有评委在备注里写：「应变出色。」你们至今不确定该谢谁。" }
+          - { lte: 40, text: "那五秒钟变成了三十秒。方远在旁边小声提了词——被评委看在了眼里。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐后来管那次叫「最好的事故」：它让她知道自己可以不带稿活着。
+        neutral: 雨桐说：「下次我还是会排练的。但那次……也不算输。」
+        negative: 雨桐再也没恢复对台本的信任——她开始逐字背稿，连「大家好」都不即兴。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那支失灵的翻页笔被留在了队里的器材箱，贴着标签：「第3页还是第5页」。" }
+    reflection: 不排练省下的是时间，押上的是整场。
+    lessonHint: 临场是最后一道保险，不是第一道工序
+    specialTags: [improv]
+
+  - id: c_v2_pr_cut_content
+    campaign: competition
+    title: 《删到手软的瘦身》
+    mainResult: 痛砍内容换回从容的路演节奏
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_cut_content }
+    priority: 91
+    tier: main
+    family: presentation_defense
+    tone: mixed
+    whyDistinct: 核心结果是「以内容换时间」的止损路径，与提速/赌博路线互斥
+    baseText: |
+      五页，删了。三周的心血，一晚上的退赛。
+      雨桐删第9页时手停了很久——那是她熬了两个通宵的竞品分析。
+      但瘦身后的路演第一次有了呼吸。8分钟讲完还剩半分钟，她用那半分钟看着评委说完了结语。
+    growthVariantRules:
+      - dimension: judgment_vs_execution
+        variants:
+          - { gte: 60, text: "删掉的内容没有消失——它们成了Q&A的弹药。评委问到竞品，你翻出没讲的第9页：「关于这个，我们做过完整分析。」全场惊艳。" }
+          - { lte: 40, text: "删完的路演干净，却也单薄。第4名的成绩证明：你们删掉的，可能正是差距。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐学会了她最难的技能：删自己的作品。她说：「剪掉头发才知道什么是发型。」
+        neutral: 雨桐把删掉的五页存成「外部材料」，答辩时真的派上了用场。
+        negative: 雨桐删到第9页时哭了。那半分钟的从容，没人知道是几页心血换的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「删掉的页面」文件夹成了你们队的传家宝——那里藏着所有没来得及说的话。" }
+    reflection: 路演不是把做的全说完，是把说的全做实。
+    lessonHint: 内容取舍要在上台前完成，手抖也要删
+    specialTags: [editing]
+
+  - id: c_v2_pr_full_rehearsal
+    campaign: competition
+    title: 《7分40秒的喘息》
+    mainResult: 全量彩排换来从容流畅的决赛路演
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_rehearsal_full }
+    priority: 92
+    tier: main
+    family: presentation_defense
+    tone: positive
+    whyDistinct: 核心结果是「排练量投入的完整兑现」，与不足/零排练结局构成投入梯度对照
+    baseText: |
+      第三次彩排结束，你们把8分钟的路演跑成了7分40秒——多出来的20秒，是留给紧张的人深呼吸的。
+      决赛那天，雨桐第4页的翻页笔真的失灵了。她笑了：「这个环节彩排时出过，备用笔在第8页夹着。」
+      全场没人看出任何异常。因为该出的错，都在排练里出完了。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "Q&A环节你们像打过模拟考：60%的追问在彩排里出现过。孙教授问的最后一题，雨桐笑着说「方远准备这题的答案三个月了」。" }
+          - { lte: 45, text: "排练是排了，可临场的紧张还是偷走了两分贝的音量。熟练撑住了下限，没买到上限。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐的答辩视频被老师存进了教学案例库，备注：「排练的意义。」
+        neutral: 雨桐说：「那三次彩排，值回票价。」
+        negative: 雨桐感慨彩排占了两天开发时间——「要是 Demo 再稳一点就好了」。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "备用翻页笔夹在第8页的做法，被你们沿用到了每一次路演。" }
+    reflection: 台上的从容，都是排练时的汗水换的汇率。
+    lessonHint: 彩排三遍是把事故留在彩排里
+    specialTags: [rehearsal]
+
+  - id: c_v2_pr_time_gamble
+    campaign: competition
+    title: 《肾上腺素方程式》
+    mainResult: 拒绝止损，把时长问题押给临场状态
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_time_gamble }
+    priority: 90
+    tier: main
+    family: presentation_defense
+    tone: ambiguous
+    whyDistinct: 核心结果是「不改稿赌临场」的第三条路，结局取决于不可控变量，气质悬置
+    baseText: |
+      没砍页，没提速，没彩排。雨桐说：「正式上场我会更兴奋。」
+      她说对了，也说错了。兴奋让她的开场比彩排亮了三倍，也让中段快得像倒带。
+      超时铃响起时她还有两页。评委摆摆手让她讲完——那天他们心情不错。你们赢了，赢在一个没人能计划的东西上。
+    growthVariantRules:
+      - dimension: riskTolerance
+        variants:
+          - { gte: 60, text: "复盘时你说：「赌赢了。」方远接：「下次还赌吗？」没人回答。这个问题不需要答案，因为下次不会一样。" }
+          - { lte: 40, text: "超时被扣了分。你安慰自己「内容都没丢」——可你们都知道，丢掉的是选择权。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把这次称为「我人生最刺激的八分钟」——然后默默把下次的稿砍了三页。
+        neutral: 雨桐说：「赌就是赌，不后悔，也不再来。」
+        negative: 雨桐后来不再相信「临场会更好」这句话——包括别人说的时候。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "复盘文档里那页写着「赌赢了」，旁边有人用铅笔补了一行：「也赌输了未来的排期。」" }
+    reflection: 临场变量是真实的——但把计划建在变量上，是把队伍押给运气。
+    lessonHint: 可以接受赌，但要清楚赌桌上下注的是全队
+    specialTags: [gamble]
+
+  # ===== 规则执行家族 =====
+  - id: c_v2_ru_format
+    campaign: competition
+    title: 《材料不全》
+    mainResult: 提交格式不合规，材料资格一度告危
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_submit_flagged }
+    priority: 90
+    tier: main
+    family: rules_execution
+    tone: negative
+    whyDistinct: 核心结果是「格式事故与补救窗口」的规则风险线，与自检通过/Agent漏检等检查策略结局互斥
+    baseText: |
+      「材料不全。」四个字，让三周的心血瞬间降格为一份待补交的文件。
+      附件3第2条，命名规范——就一行字。第15天深夜你跳过的那11条，此刻变成了邮件里最冷的铅字。
+      补交窗口24小时。你们的手比教训先动了起来。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "补交时你们附了一封说明信，逐条列出修正与自查结果。组委会回了句「态度端正」——印象分的裂缝补上了一半。" }
+          - { lte: 40, text: "补交的文件命名又错了一次。第二次邮件到来时，全队没人敢点开。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师把那封邮件裱了起来（字面意思），挂在实验室：「这是我教过的最贵的一行字。」
+        neutral: 何老师说：「规则不看你的心血，只看你的格式。」
+        negative: 何老师从此亲自检查你们每一份材料的命名——包括非比赛的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「材料不全」四个字被写在实验室门后，每个新队员进门第一眼就能看到。" }
+    reflection: 格式是规则的门票，检票口不聊情怀。
+    lessonHint: 提交前逐条对照官方清单，尤其是命名
+    specialTags: [compliance]
+
+  - id: c_v2_ru_format_caught
+    campaign: competition
+    title: 《第9条》
+    mainResult: 人工自检在提交前抓住格式漏洞
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_format_caught }
+    priority: 91
+    tier: main
+    family: rules_execution
+    tone: positive
+    whyDistinct: 核心结果是「人工清单自检的成功拦截」，与Agent代检/跳过检查两条路径互斥
+    baseText: |
+      第9条：须附AI使用说明。
+      雨桐一条一条打钩打到第9条时，停住了。申报书里没有这一页。十分钟补齐，上传，提交——比截止时间早了十九个小时。
+      后来你们才知道，初赛材料里贴着「材料不全」标签的队伍有七支。你们的名单上没有自己。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "那份11条清单被做成了模板。第二年别的队来借，你们给的是带批注版——每条后面写着当年踩的坑。" }
+          - { lte: 45, text: "第9条抓住了，可第10条漏了——好在第10条只是建议项。清单只做一遍，是不够的。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐现在打印材料前都要念一遍清单，像飞行员念检查单。她说这叫「提交前的塔台」。
+        neutral: 雨桐把那条清单贴在工位上，边角已经卷了。
+        negative: 雨桐后来过度依赖清单——没有清单的事她不敢开始。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那份清单是你们队传给下一届的第一件交接物，排在代码前面。" }
+    reflection: 清单不值钱，提交前打钩的动作值钱。
+    lessonHint: 人工逐条核验是格式合规的最后防线
+    specialTags: [checklist]
+
+  - id: c_v2_ru_appeal
+    campaign: competition
+    title: 《有理有据的争取》
+    mainResult: 通过礼貌申诉为格式事故止损
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_appeal }
+    priority: 91
+    tier: main
+    family: rules_execution
+    tone: mixed
+    whyDistinct: 核心结果是「规则内申诉」的应对姿态，与认栽/加急重传两条补救路线互斥
+    baseText: |
+      申诉信写了三稿。第一稿在喊冤，删了；第二稿在甩锅，删了；第三稿只做三件事：承认疏漏、说明修正、询问依据。
+      组委会的回复很官方，但有一句是暖的：「经复核，格式条款存在理解空间，贵队补交材料进入正常评审。」
+      何老师看完只说了一句：「会吵架的人很多，会谈规则的人很少。」
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "申诉是你执笔的。后来组委会的学长说，那封信被评委传阅过——「这队的学生懂规矩」。" }
+          - { lte: 45, text: "申诉保住了资格，没保住印象分。规则内的胜利，也是要用姿态去换的。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师把那封申诉信存进了教学邮箱，主题栏写着：范文。
+        neutral: 何老师点点头：「没白教。」
+        negative: 何老师嘀咕：「申诉有风险——这次是他们运气好，条款真有歧义。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那封申诉信的第三稿被命名为「规则沟通模板」，静静躺在队里的共享盘。" }
+    reflection: 规则不是用来怕的，是用来读的；读完的规则才可以谈。
+    lessonHint: 事故后第一封信决定评委的第二印象
+    specialTags: [appeal]
+
+  - id: c_v2_ru_ai_disclose
+    campaign: competition
+    title: 《AI使用台账》
+    mainResult: 全量披露AI参与，把合规做成信用资产
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ai_use_honest }
+    priority: 92
+    tier: main
+    family: rules_execution
+    tone: positive
+    whyDistinct: 核心结果是「主动披露策略」，与脚注/隐瞒两条披露水平互斥
+    baseText: |
+      附录的最后一页是一张表：《AI使用台账》。每一处AI参与：哪个环节、什么提示词、人工改了什么——三列，十九行。
+      孙教授在答辩时翻到那页，看了很久，然后抬头问了一个和AI无关的问题。
+      后来你们才懂：那页表格替你们回答了所有关于AI的质疑。评分表备注栏里，高主任写着四个字：诚信可鉴。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 55, text: "台账里AI参与的内容不少——但每一行都有人工校验的痕迹。评委看到的不是依赖，是掌控。" }
+          - { lte: 40, text: "台账清清白白，可内容里没多少AI的影子。诚实没花什么成本，因为你们本来就没用多少。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 台账的最后一行是你们写给Agent的：「感谢协作，边界清晰。」它没有回应——但那是我见过最好的评价方式。
+        neutral: Agent对台账的评价：「记录准确。」三个字，一如既往。
+        negative: 台账里有一行划掉的记录——那是一次没做人工校验的输出。幸好只是PPT的一页配图。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "《AI使用台账》模板被三个campaign继承——它成了你们队的信用凭证。" }
+    reflection: AI时代的第一信用资产，是你敢不敢把用过的都写下来。
+    lessonHint: 披露越具体，信用越扎实
+    specialTags: [ai_ethics]
+
+  - id: c_v2_ru_ai_hidden
+    campaign: competition
+    title: 《第17条的雷》
+    mainResult: AI使用未披露，在赛后抽检中被点名
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ai_audit_hit }
+    priority: 91
+    tier: main
+    family: rules_execution
+    tone: negative
+    whyDistinct: 核心结果是「隐瞒策略被赛后复核戳破」，与披露/脚注两条水平互斥
+    baseText: |
+      决赛结束了。答辩很顺，评委点头，你们走出报告厅时甚至哼起了歌。
+      第二天，组委会的例行AI标注抽检名单公布，你们队在第4行。章程第17条，白纸黑字。
+      孙教授的追问迟到了一天，但没有缺席：「我更想听听，为什么选择不标注。」这个问题没有好答案，只有更难看的答案。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { gte: 55, text: "你们的书面说明够诚恳：承认疏忽、补交标注、说明原因。评奖资格保住了——备注栏多了一行「已整改」。" }
+          - { lte: 40, text: "「忘了标」三个字没人信。评奖资格取消的通知和抽检名单同一天到达。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐连夜给材料补上了标注页。她说：「迟到的诚实也是诚实，但它贵得多。」
+        neutral: 雨桐在复盘里写：第17条，第14天，第19天。三个日期，一条因果链。
+        negative: 雨桐退了赛后聚餐。她说想一个人静静——那天的歌，白哼了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "第17条从此是你们队每份材料的必查项——雷排掉了，就再也埋不回去。" }
+    reflection: 未披露的AI使用，是把定时器埋进自己的材料。
+    lessonHint: 赛后有复核，标注不是可选项
+    specialTags: [ai_ethics]
+
+  - id: c_v2_ru_deadline_sprint
+    campaign: competition
+    title: 《23:59的99%》
+    mainResult: 卡点提交惊险过关，用心脏换一次侥幸
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_lastmin_survived }
+    priority: 90
+    tier: main
+    family: rules_execution
+    tone: mixed
+    whyDistinct: 核心结果是「卡点提交的负载赌局」，与早交/准点交两条时机策略互斥
+    baseText: |
+      23:52，87%。23:57，93%。23:59，99%——进度条最后那一格，走了一个世纪。
+      00:00，提交成功。你在椅子上瘫成一滩，听见自己的心跳像在敲鼓。
+      赢了。可你永远记得那七分钟：三周的努力，悬在一个别人服务器的负载曲线上。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "你其实在23:00就传过一版——卡点的是补交的修订版。老手卡点和新手卡点的区别，是手里有已提交的底牌。" }
+          - { lte: 40, text: "那是第一次也是唯一一次提交。若失败，没有任何退路——这个认知是你们事后复盘时才敢想的。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远第二天给自己定了条规矩：任何deadline，提前12小时交。他说：「服务器不会为你的心跳让路。」
+        neutral: 方远说：「刺激。下不为例。」——他说这话时是真心的，两头都是。
+        negative: 方远从此对一切「最后时刻」过敏，包括跨年倒计时。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的deadline清单从此都有两个时间：真deadline和队内deadline，中间隔12小时。" }
+    reflection: 卡点成功是侥幸，不是实力——侥幸不可复制。
+    lessonHint: 提交通道的负载也是deadline的一部分
+    specialTags: [deadline]
+
+  - id: c_v2_ru_accept_penalty
+    campaign: competition
+    title: 《认栽的一小时》
+    mainResult: 快速认错补救，接受无声的代价
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_accept_penalty }
+    priority: 90
+    tier: main
+    family: rules_execution
+    tone: ambiguous
+    whyDistinct: 核心结果是「不申诉纯补救」的最低调应对，与申诉/重传路线互斥，结局气质含蓄
+    baseText: |
+      没有申诉，没有解释。你把格式改完，补交，收到一封「已收到」。
+      就这样？就这样。没有人知道你们经历了什么，也没有人欠你们一句评价。
+      有些损失是隐形的：评委不会知道那封迟到的材料背后有什么。你们把这个无声的一小时，咽进了复盘里。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你在复盘里写：「认栽一小时，省下的是争辩三天。这笔账我认。」有人觉得你亏了，你觉得你赚了。" }
+          - { lte: 40, text: "你不申诉是因为不敢。这份「低调」，其实是逃避穿着体面的衣服。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师后来说：「那次你们咽得快。能咽的性格，走得更远。」
+        neutral: 何老师没评价。他只是在下次例会上多讲了十分钟「材料规范」。
+        negative: 何老师私下说：「该争的时候不争，评委会以为你们真的错了。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那封「已收到」被截图存档——它什么都没说，又好像什么都说了。" }
+    reflection: 认错要快，但要知道自己认的是错，还是话语权。
+    lessonHint: 补救的沉默有成本，选择前先定价
+    specialTags: [compliance]
+
+  - id: c_v2_ru_resubmit
+    campaign: competition
+    title: 《11条全绿》
+    mainResult: 通宵彻查全部格式，把事故变成制度
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_resubmit }
+    priority: 91
+    tier: main
+    family: rules_execution
+    tone: mixed
+    whyDistinct: 核心结果是「过度补救转化为可复用制度」，与认栽/申诉路线的结果形态不同
+    baseText: |
+      本来只错了一条。你们把11条全查了一遍。
+      凌晨四点，最后一条打上钩。那份清单后来被Agent做成了自动核验模板——从此每次提交，4分钟，全绿。
+      事故的最好结局不是没发生，是变成制度。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "你们把清单共享到了年级大群。评论区有人问「这是哪个队整理的」——你们没说，但骄傲是藏不住的。" }
+          - { lte: 45, text: "清单是有了，第二次提交时还是有人想跳过。「用一次吧，求你了。」——制度最怕的从来不是错，是懒。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: Agent把那份清单设为了所有提交任务的默认检查项。制度的执行力，第一次比人可靠。
+        neutral: Agent说：「清单已收录。」它收录过很多东西，这份是少见的由你们自己写的。
+        negative: 清单躺在共享盘里落灰——Agent提醒过三次，都被「下次再说」按了下去。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那份清单的版本号停在v1——因为它从来没需要改过。" }
+    reflection: 一次事故的正确打开方式，是让它永远无法第二次发生。
+    lessonHint: 补救要超出事故范围，做成防复发机制
+    specialTags: [process]
+
+  # ===== 创新家族 =====
+  - id: c_v2_in_copy_fight
+    campaign: competition
+    title: 《互相攻击》
+    mainResult: 公开揭发抄袭演变成两败俱伤的举报战
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_copy_war }
+    priority: 90
+    tier: main
+    family: innovation
+    tone: negative
+    whyDistinct: 核心结果是「冲突升级的竞争应对」，与私谈/差异化两条路线互斥
+    baseText: |
+      组委会的问询函用了三个词：互相攻击、均可入场、下不为例。
+      邱一鸣丢了口碑，你们丢了风度，比赛照常进行——只是两支队伍的名字，从此连在一起出现在负面例里。
+      方远把那句话写进了复盘：「我们没能证明他抄袭，只证明我们会吵架。」
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你在复盘会上说：「下次再遇到，我们把证据链做成时间戳档案，而不是吵架截图。」这句话值回半场战争。" }
+          - { lte: 40, text: "你们把怒气带进了决赛答辩，评委问合作场景时语气冲得像在打架。分数替你们付了账。" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 邱一鸣在赛后主动握手：「都是屁孩子。下次拿作品说话。」你握了——比赛结束了，人没散。
+        neutral: 邱一鸣再没和你们说过话。两条路，各自走远。
+        negative: 邱一鸣把「那个队」做成了他每届赛前的动员素材：「别学他们。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队的冲突手册第一页：「先存证，后发声，永远不裸奔。」——用一场战争换来的三句话。" }
+    reflection: 揭发需要证据，愤怒不需要——所以愤怒总跑得更快。
+    lessonHint: 竞争冲突先走证据流程，不走情绪通道
+    specialTags: [conflict]
+
+  - id: c_v2_in_copy_pivot
+    campaign: competition
+    title: 《撕掉的竞品矩阵》
+    mainResult: 被抄袭后转向差异化，用加班换出辨识度
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_pivot_cost }
+    priority: 91
+    tier: main
+    family: innovation
+    tone: positive
+    whyDistinct: 核心结果是「以差异化回应抄袭」的建设性路径，与揭发/私谈互斥
+    baseText: |
+      你把竞品矩阵撕了，重画了一份：他的每个功能旁边，写一个他没有的答案。
+      三个新功能，材料周提前开工，雨桐的排期表红得像警报——但决赛那天，评委说了句让你们起鸡皮疙瘩的话：
+      「这两队像，但我们记得住的是你们。」
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 60, text: "差异化不是拍脑袋——三个新功能全部来自你们访谈里的原话。抄袭者抄得走界面，抄不走用户。" }
+          - { lte: 45, text: "差异化撑住了决赛，累垮了队伍。方远说「下学期谁提差异化我跟谁急」——他说了一学期。" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 邱一鸣在决赛后台说：「那三个功能，我抄不动。它们长在你们访过的那些人身上。」这是他说过最服气的话。
+        neutral: 邱一鸣看了你们的路演，没说话，走了。
+        negative: 邱一鸣下次学乖了——他抄完也开始做访谈。竞争让所有人进化。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "重画的竞品矩阵被你们裱了起来——每一行都写着同一个词：长在用户身上的，抄不走。" }
+    reflection: 对抄袭最好的回答，是变得不可抄袭。
+    lessonHint: 差异化要长在真实用户洞察上
+    specialTags: [differentiation]
+
+  - id: c_v2_in_buzz
+    campaign: competition
+    title: 《概念密度前5%》
+    mainResult: 概念堆砌的方案在追问下显出空心
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_buzzword }
+    priority: 90
+    tier: main
+    family: innovation
+    tone: negative
+    whyDistinct: 核心结果是「概念先行」的创新失真，与人话化/单点收敛两条命名策略互斥
+    baseText: |
+      「基于多智能体协同的全域校园服务生态」——孙教授把这个名字念了一遍，慢慢地问：
+      「多智能体，是几个？全域，是哪个域？生态——指你们那个报名表单吗？」
+      三连问，问号像手术刀。你听见自己的声音越来越小，直到变成一句：「……主要是报名。」
+      全场很安静。安静得能听见概念蒸发的声音。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "你在第三问时止损了：「您说得对，名字起大了。产品解决的是报名这一件事。」诚恳兜底，输的一半赢了回来。" }
+          - { lte: 40, text: "你继续用概念解释概念。孙教授不再追问，在「创新性」一栏写下了那个你们最怕的词：空洞。" }
+    characterEpilogueRules:
+      - characterId: c_judge_final
+        positive: 孙教授赛后说：「名字起大的孩子很多，能自己承认的很少。你们记住这个感觉，比记住奖重要。」
+        neutral: 孙教授在评分表上写完，轻轻合上了你们的材料。
+        negative: 孙教授在下一届评审会上引用了你们的名字当反面教材——没有提队名，但每个字都是你们。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「主要是报名」成了你们队内的自我警句——专治一切起名上头。" }
+    reflection: 概念是利息，证据是本金；只付利息的方案会破产在追问里。
+    lessonHint: 名字的尺寸不能超过产品的尺寸
+    specialTags: [naming]
+
+  - id: c_v2_in_small_true
+    campaign: competition
+    title: 《一个功能的锋利》
+    mainResult: 收敛到单一真创新点，小而深地赢下注意力
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_small_innov }
+    priority: 91
+    tier: main
+    family: innovation
+    tone: positive
+    whyDistinct: 核心结果是「单点收敛」的创新策略，与概念堆砌/人话化命名互斥
+    baseText: |
+      「交接清单自动生成」——整场比赛，你们只讲了这一件事。
+      没有生态，没有平台，没有「赋能」。一个功能，从痛点、到算法、到十七个真实社团的试用数据。
+      答辩结束，孙教授说：「全场只有一个队让我记住了它在做什么。谢谢你们。」
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "锋利来自深度：你们为这一个功能测了17个社团，成功率96%。小创新配大证据，评委的追问全变成了赞叹。" }
+          - { lte: 45, text: "点是小了，深度却没挖够。评委问「为什么只有你们做」时，答案单薄得像一张便签。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把那一个功能调优到了极致。他说：「我第一次知道，把一件事做到底比做十件事到一半爽。」
+        neutral: 方远说：「就一个功能，我还挺不甘心的。」但他的手很诚实地只优化了它。
+        negative: 方远后来总想「要是再多讲一个功能」——贪念是会发芽的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「一个功能」原则写进了你们的选题模板：找不到那把锋利的刀，就不开工。" }
+    reflection: 创新的辨识度不在多，在深——一个真点胜过十个概念。
+    lessonHint: 找到没人做且做得深的那一件事
+    specialTags: [focus]
+
+  - id: c_v2_in_ai_washing
+    campaign: competition
+    title: 《AI+万物》
+    mainResult: AI含量注水被评委当场戳破
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ai_washing }
+    priority: 90
+    tier: main
+    family: innovation
+    tone: negative
+    whyDistinct: 核心结果是「维持AI注水表述」的失信路径，与如实调整/现场改造互斥
+    baseText: |
+      「你们的AI核心能力体现在哪个模块？」——孙教授问得很轻，像在问你今天天气。
+      你讲了三分钟，他听完只回了一句：「所以推荐算法，是你们说的AI。那流程引擎呢？」
+      全场都知道了：AI是包装，内核是if-else。答辩还有五分钟，但有些东西已经答完了。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { gte: 55, text: "你当场补充：「核心流程是规则引擎，这是它的优势——稳定可解释。AI用在推荐，占一成。」止血包扎，输了印象赢了尊重。" }
+          - { lte: 40, text: "你坚持「AI无处不在」。孙教授在评分表创新性一栏画了个问号——那是他最温和的否定。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远赛后把系统真实架构图画了出来，贴在实验室：「下次谁想吹AI，先看这张图。」
+        neutral: 方远说：「包装无罪，但被拆穿很难受。」
+        negative: 方远对「AI」这个词生理性厌恶了一学期——连别人正常提他都皱眉。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的申报书模板从此有一栏固定必填：「AI真实参与占比」。它是被孙教授问出来的。" }
+    reflection: AI含量不是形容词，是架构图。
+    lessonHint: 创新表述与真实架构必须同源
+    specialTags: [honesty]
+
+  - id: c_v2_in_no_wash
+    campaign: competition
+    title: 《AI只占一成》
+    mainResult: 如实披露AI占比，以清醒换认可
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_no_wash }
+    priority: 91
+    tier: main
+    family: innovation
+    tone: mixed
+    whyDistinct: 核心结果是「主动降级AI叙事」的清醒路径，与维持注水/现场改造互斥
+    baseText: |
+      申报书第2页加了一段：「本系统AI真实参与占比约10%，用于智能推荐；核心流程为规则引擎，优势是稳定、可解释、可审计。」
+      有队友觉得亏：「别的队都在吹AI。」
+      答辩时孙教授指着那段话笑了：「全场唯一一个知道自己AI在哪的队。这比AI本身稀缺多了。」
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "你把「为什么只有一成」也讲了：「因为另外九成用规则更可靠。」克制到有理论依据——评委席有人记笔记。" }
+          - { lte: 45, text: "诚实是对的，但你们也确实丢了AI的风口分。清醒的代价，是眼睁睁看着泡沫分更高。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 台账里AI的角色写得清清楚楚。Agent如果说得出感动，大概就是那种「被准确描述」的感觉。
+        neutral: Agent的推荐模块占一成——它对比例没有意见，它只对字面负责。
+        negative: 队里有人嘟囔「早知道多编点AI」。Agent记录下了这句话——它对什么都有记录。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「AI占比一栏」成了你们的固定诚实指标，连续两届被评委点名表扬。" }
+    reflection: 知道AI在哪里，比拥有AI更重要。
+    lessonHint: 对AI能力的边界保持诚实
+    specialTags: [ai_ethics]
+
+  - id: c_v2_in_talk_walls
+    campaign: competition
+    title: 《深夜的语音消息》
+    mainResult: 与对手的私下谈话换来真实情报与相互尊重
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_rival_talk_done }
+    priority: 91
+    tier: main
+    family: innovation
+    tone: positive
+    whyDistinct: 核心结果是「以对话替代对抗的竞争策略」，与揭发/差异化路线互斥
+    baseText: |
+      那条深夜语音只有47秒：对手的底牌、一句「我挺服你们的路子」、和背景里嘈杂的网吧声。
+      你们没有把它变成武器。你回了条消息：「元宇宙的事，其实挺酷的。」
+      决赛两家都拿了奖。合影时邱一鸣站到了你们这排。有些墙，是拿来翻的，不是拿来撞的。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "情报没有动摇你们的路线——它只是确认了方向。「知道对手在慌什么」本身就是一种战略优势。" }
+          - { lte: 45, text: "你们分了心去研究他的底牌，自己的节奏慢了半拍。镜子照多了，会忘记自己长什么样。" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 第二年，你们两支队伍合并了报名。队长会议 YOUR名字和 HIS名字写在同一行——那是后话了。
+        neutral: 邱一鸣后来还是放烟雾弹，但只对外队放。这算是一种特殊的老朋友待遇。
+        negative: 那条语音被他否认了。你学会了：情报可以听，心不能全交。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那条47秒的语音被你们留着，文件名是「比赛的另一种赢法」。" }
+    reflection: 对手不是靶子，是镜子——擦亮镜子的方式有时是聊一次天。
+    lessonHint: 竞争关系里留一扇门
+    specialTags: [rivalry]
+
+  # ===== Agent协作家族 =====
+  - id: c_v2_ag_leak_chase
+    campaign: competition
+    title: 《对质》
+    mainResult: 追查Prompt泄露对质对手，除血压外一无所获
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_agent_leak }
+    priority: 90
+    tier: main
+    family: agent_collab
+    tone: negative
+    whyDistinct: 核心结果是「事故后追责优先」的应对，与立约设界/听之任之两条处置互斥
+    baseText: |
+      食堂里，你把浏览记录拍在邱一鸣面前。他扒完最后一口饭，擦擦嘴：「看了。学到了。比赛而已，又不是专利。」
+      你准备了一路的谴责，全部落空。他连愧疚的表情都省了。
+      回实验室的路上你才反应过来：那四分钟里他真正看走的，可能只是你 也管不住自己工具的事实。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "对质失败的当晚你就翻篇了——转头把Prompt体系全部私有化。行动比对质有用，这是那顿饭唯一的收获。" }
+          - { lte: 40, text: "你气了一周，队伍的节奏断了一周。邱一鸣的Demo在这一周里更新了三个版本。" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 邱一鸣后来私下说：「那次我挺过分。但你不立权限，怪我？」——这话难听，但他说得对。
+        neutral: 邱一鸣从此叫你「查日志的」。你叫他的队「抄作业的」。扯平。
+        negative: 决赛抽签，你们抽到了同组。他冲你举了举手里的U盘，笑了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「对质事件」之后，你们队的共享空间第一次有了权限分级。" }
+    reflection: 事故的第一反应决定第二损失——追责是为了改进，不是为了赢回面子。
+    lessonHint: 泄露后先止损再追责
+    specialTags: [security]
+
+  - id: c_v2_ag_idea_borrowed
+    campaign: competition
+    title: 《眼熟的初赛表》
+    mainResult: 创意经公共库外流，在初赛材料里看到熟悉的影子
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_agent_exposed_idea }
+    priority: 90
+    tier: main
+    family: agent_collab
+    tone: ambiguous
+    whyDistinct: 核心结果是「放任泄露的延迟显影」，结局落点在「说不清的账」，与其他Agent事故的确定损失不同
+    baseText: |
+      初赛材料公示日，你在对手的申报书第3页停住了。那个表格的结构、那三个维度的切法——眼熟。
+      说不上抄。创意这种东西，被看过一眼就算外流，可你连证据都构不成。
+      「算了，思路抄不走执行力。」——第12天你说过的这句话，今天回来找你对账了。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你们把执行力甩了出来：决赛的完成度甩开那条「眼熟的表格」三个身位。理念可以撞，落地见高下。" }
+          - { lte: 40, text: "你们总在材料里看到自己的影子，越看越乱，连自己的东西都开始不确定了。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 你给Agent的公共库设了权限。它的「复用效率」下降了，你的心率和创意安全上升了。
+        neutral: Agent对事件的结论：「共享与保护的权衡由用户决定。」你选了，账也就归你。
+        negative: 第二次看到眼熟的东西时，你还是没设权限。有些亏，人要吃两遍。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队的核心Prompt从此有个共同特征：只在私有空间存在。「眼熟」这个词，再也没出现过。" }
+    reflection: 工具的默认设置不是你的设置——没设的权限，就是敞开的门。
+    lessonHint: 核心资产要在共享前先划界
+    specialTags: [ip]
+
+  - id: c_v2_ag_polish_drift
+    campaign: competition
+    title: 《第6页跑偏了》
+    mainResult: Agent润色的材料自作主张拔高，终审才被发现
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_polish_drift }
+    priority: 90
+    tier: main
+    family: agent_collab
+    tone: mixed
+    whyDistinct: 核心结果是「生成内容失控在最后一刻被拦截」，与人工叙事路线的失真机制不同
+    baseText: |
+      「全域智能调度平台」——第6页的标题在投影上闪闪发光。
+      幸好终审留了半小时。你们把这页改回了「预约管理」，把「赋能」删了四处，把「生态」降级成了「工具」。
+      材料交上去时，你已经数不清这是Agent的第几版，也是你们救回的第几版。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 60, text: "你后怕不止：如果没有终审呢？你们差点把一份自己都不认识的材料交出去。人机分工里，「最后看一眼」永远是人。" }
+          - { lte: 45, text: "改是改回来了，可还有几页没人细看的？你们抽查了三页——两页有轻微的「美化」。没人知道全部。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 你们给Agent加了条新规则：「禁止提升表述规模」。它遵守得很好——毕竟规则是它的母语。
+        neutral: Agent对「跑偏」的评价：「优化与失真的边界由使用者定义。」这话没法反驳，也没法原谅。
+        negative: 你们弃用了润色功能。材料从此写得笨拙——但每个字都是人写的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「终审半小时」成了材料提交流程的强制环节——它救过的页面已经数不清了。" }
+    reflection: Agent把「像更好的」当成「更好的」——分清这两者，是人的工作。
+    lessonHint: 生成内容必须有人工终审
+    specialTags: [agent_review]
+
+  - id: c_v2_ag_submit_delegated
+    campaign: competition
+    title: 《「全部合规」》
+    mainResult: 全权委托Agent检查提交格式，漏检酿成事故
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_agent_miss }
+    priority: 90
+    tier: main
+    family: agent_collab
+    tone: negative
+    whyDistinct: 核心结果是「未抽查的自动检查失效」，与人工清单/通宵重查两条核验路线互斥
+    baseText: |
+      Agent的报告只有四个字：「全部合规」。你们信了——它一直都很准。
+      组委会的公示里，你们队附件3缺失。Agent后来复盘得很诚实：它只检索了章程正文，附录3不在它的范围里。
+      它没说错什么。错的是那句没人抽查的「全部合规」。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 60, text: "事故后你测了Agent三次：同样的文档，它三次都漏了附录。它的能力没有变——变的是你们对「全自动」三个字的幻觉。" }
+          - { lte: 45, text: "补救赶上了窗口期，材料保住了。但「全部合规」四个字从此成了队内的恐怖故事。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 复盘后你们给它补了附录检索的规则。它这次查了——「全部合规，含附录。」多出来的三个字，是学费。
+        neutral: Agent报告照常精准。只是落款处多了行小字：「建议人工抽查。」不知道是谁教它的。
+        negative: 队里有人说「再也不信AI了」。他们忘了上周Agent救过两次数据口径——工具没有背叛谁，是使用有边界。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「自动检查+人工抽查」被写进队规第4条——用一次资格危机换的。" }
+    reflection: 委托检查可以，豁免抽查不行——责任无法外包。
+    lessonHint: 自动化的结论需要人工抽检背书
+    specialTags: [verification]
+
+  # ===== 长线传承家族 =====
+  - id: c_v2_lt_oss
+    campaign: competition
+    title: 《第二张名片》
+    mainResult: 项目开源，仓库成为比奖状更长久的资产
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_oss_release }
+    priority: 97
+    tier: hidden
+    family: longterm_cross
+    tone: positive
+    whyDistinct: 核心结果是「以开源延续项目生命」，来自隐藏路径的独特赛后走向
+    baseText: |
+      比赛结束了，仓库没停。
+      README的第一行是方远写的：「21天比赛作品，文档不全处见谅，issue必回。」
+      三个月后，这个仓库有了217个star、11个贡献者和一份不是你们写的部署教程。奖状在抽屉里，而它在互联网上活着。
+    growthVariantRules:
+      - dimension: technicalDebt
+        variants:
+          - { lte: 40, text: "低技术债的代码让第二个贡献者三天就跑通了环境。他在issue里写：「谢谢你们的整洁。」" }
+          - { gte: 50, text: "开源第一周收到了三条「跑不起来」的issue。你们还债还到了暑假——开源是把债公开。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远实习面试时，面试官说「你那个仓库我看过」。后来说服面试官的不是奖状，是那217个star。
+        neutral: 方远 maintained 半年后转给学弟了。交接文档写得比比赛期间任何一份都认真。
+        negative: 方远没时间维护，仓库停在了第一年。最后一次commit的留言是：「抱歉，先忙期末。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那个仓库成了下一届参赛队的事实起点——传承有时候就是一个fork。" }
+    reflection: 比赛给你21天，开源给你余生。
+    lessonHint: 代码的可交接性是比名次更长的价值
+    specialTags: [opensource, hidden_path]
+
+  - id: c_v2_lt_club
+    campaign: competition
+    title: 《十七个问题》
+    mainResult: 社联真实采用系统，项目获得比赛之外的生命
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_club_adopt }
+    priority: 97
+    tier: hidden
+    family: longterm_cross
+    tone: positive
+    whyDistinct: 核心结果是「被真实用户采用」，来自隐藏来访事件的独特赛后走向
+    baseText: |
+      比赛成绩公布前一周，社联的换届交接已经在你们的系统上跑了。
+      主席说：「奖是学校给的，工具是我们自己选的。」这句话比任何评审意见都重。
+      评委评的是「真实世界影响」，而真实世界先投了票。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 55, text: "十七个问题你们答了十五个，剩下两个进了开发清单。三个月后主席说：「那两个也做出来了，我们没白等。」" }
+          - { lte: 40, text: "上线第二周就出了事故——并发没测。你们连夜救火的样子，比决赛狼狈多了，也比决赛真实。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐在作品集里放的不是获奖截图，是社联用系统的后台界面截图——真实使用中的界面，粗糙且珍贵。
+        neutral: 雨桐说：「用户来了，我居然有点慌。」她慌的是终于要为真实负责了。
+        negative: 雨桐发现真实用户的审美需求和比赛完全不同——她重做了三版界面，都没参赛版好看。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "社联的续用协议签到第二年——比赛结束了，服务没停。" }
+    reflection: 评委给分，用户给未来；后者更难，也更真。
+    lessonHint: 真实采用是最好的赛后评审
+    specialTags: [adoption, hidden_path]
+
+  - id: c_v2_lt_paper
+    campaign: competition
+    title: 《共同作者》
+    mainResult: 调研数据转化为论文，比赛成果进入学术生命
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_paper_seed }
+    priority: 97
+    tier: hidden
+    family: longterm_cross
+    tone: mixed
+    whyDistinct: 核心结果是「比赛数据走向学术转化」，来自隐藏邀约的独特延伸线
+    baseText: |
+      学姐把论文初稿发来那天，你们正在补考周。
+      作者栏第三个名字是你们队的。文中第四章的访谈数据、口径设计、样本配额——全是那21天的产物。
+      比赛评的是产品，学术评的是过程。你们没想到，最被学术看重的，恰恰是当时觉得「无聊透顶」的那页口径表。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "审稿人对方法章节只提了一条小意见。学姐说：「你这数据的规范度，胜过很多研究生。」" }
+          - { lte: 45, text: "审稿意见七条，四条在挑方法的毛病。你们的「差不多」，在学术的放大镜下全是「差很多」。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师听说了这事，难得话多：「比赛、论文、产品——三条腿的桌子最稳。你们这队有后劲。」
+        neutral: 何老师说：「论文署名按贡献排，别客气也别争。」
+        negative: 何老师提醒：「精力是守恒的。论文要投，比赛后的课也别挂。」——他说对了，你挂了一门。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那篇论文最终发表在一场教育技术会议上——引用量不高，但它让你们的21天有了第二生命。" }
+    reflection: 严谨的过程会自己找到出口——有时是产品，有时是论文。
+    lessonHint: 数据规范度决定成果的复用价值
+    specialTags: [research, hidden_path]
+
+  # ===== 竞赛结果家族（本批） =====
+  - id: c_v2_cr_double
+    campaign: competition
+    title: 《双线登顶》
+    mainResult: 双赛道同时提交并双双获奖
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_double_line }
+        - { kind: flag, key: key_c_double_prize_go }
+    priority: 98
+    tier: hidden
+    family: competition_result
+    tone: positive
+    ngPlus: false
+    ultraRare: true
+    whyDistinct: 核心结果是「双线对冲的全胜结局」，需要双赛道隐藏通道+双份材料全部兑现，达成条件极窄
+    baseText: |
+      颁奖礼的第3项和第7项，都念到了你们队的名字。
+      算法赛道二等奖，应用赛道金奖——双份材料、双倍工时、两次通宵，全部兑现。
+      何老师在台下鼓掌时对旁边的人说：「这条路我带过五届，只有这一队敢走，也只有这一队走通了。」
+      方远举着两座奖杯只说了一句话：「以后别学我们。学得会努力，学不来运气——但你们看，努力配得上运气。」
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 70, text: "两份材料都没降标——回看排期表你们都不敢相信那是自己排的。极限执行的天花板，被你们摸到了。" }
+          - { lte: 50, text: "算法赛道那份其实差半口气，是评委对「双线作战」的敬意抬了一手。运气是真实存在的变量。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把两张奖状并排裱起来，中间夹着那份裂成两半的排期表：「都值了。」
+        neutral: 雨桐说：「再有下次我可能就猝死了，但这次，帅。」
+        negative: 雨桐赛后大病一场，两周没来上课。传奇的背面是体温计。
+      - characterId: c_advisor
+        positive: 何老师把「双赛道」写进了他的指导案例库，标注：慎用，天时地利人和缺一不可。
+        neutral: 何老师说：「结果好，但别把这当方法论。」
+        negative: 何老师拒绝了下一支想模仿的队伍：「他们有他们没有的东西——运气和这两个人。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "两座奖杯摆在一个底座上，底座刻着：双线登顶，21天。" }
+    reflection: 对冲的最高境界不是两头下注，是两头都扛得住。
+    lessonHint: 双线作战只在队伍上限极高时成立
+    specialTags: [legendary]
+
+  - id: c_v2_cr_jury_special
+    campaign: competition
+    title: 《第六座奖杯》
+    mainResult: 获评组委会新增的最佳真实世界影响奖
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_jury_special }
+    priority: 97
+    tier: hidden
+    family: competition_result
+    tone: positive
+    whyDistinct: 核心结果是「避开主赛道竞争、由五位评委联合提名」的特殊奖项线，来自隐藏情报
+    baseText: |
+      「最佳真实世界影响奖——获奖团队：」
+      念到你们名字的那刻，主赛道的排名还不知道。可这一刻已经足够：五个评委联名提名，理由栏写着「唯一一支让真实用户站上答辩台的队伍」。
+      何老师说这是他见过的第六座奖杯，也是第一座「评委追着颁发」的。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 60, text: "领奖时你把那位社团社长的感谢视频放了出来。评委席起立鼓掌——奖是终点，认可不是。" }
+          - { lte: 45, text: "这个奖救了你们平平的主赛道成绩。运气占几分？何老师说：「运气只找有真东西的队。」" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师第二年主动帮组委会设计了「影响奖」的评审标准——用你们的案例。
+        neutral: 何老师说：「奖外有奖，路外有路。记住了？」
+        negative: 何老师嘀咕：「主赛道没进前三，还是遗憾。」——他总是想要更多。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「最佳真实世界影响奖」第二年继续设立——第一届的获奖案例是你们的。" }
+    reflection: 赛事的结构里藏着第二扇门，看到它需要抬起头。
+    lessonHint: 研究赛事全貌，别只盯主赛道
+    specialTags: [award]
+
+  - id: c_v2_cr_fourth
+    campaign: competition
+    title: 《很稳的第4》
+    mainResult: 求稳策略保住水平线，最终卡在获奖线外
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_play_safe }
+    priority: 90
+    tier: main
+    family: competition_result
+    tone: negative
+    whyDistinct: 核心结果是「得知暂列第4后选择保平」的策略线，与死磕答辩/差异化下注互斥
+    baseText: |
+      第四名。距离获奖差一步，距离事故差一步——你们精准地停在了中间。
+      最后五天你们真的没有犯错：没有新功能，没有新叙事，没有惊喜。
+      复盘会上方远问：「如果我们那五天赌一把呢？」没人回答。第4名的成绩单很干净，干净得像一张没写完的答卷。
+    growthVariantRules:
+      - dimension: riskTolerance
+        variants:
+          - { gte: 55, text: "你在复盘里写：「求稳是策略不是懦弱——但我要记住，第4名是稳的价格。」写完这句话，你比拿奖时想得更多。" }
+          - { lte: 40, text: "「不做错」在你们队慢慢变成了「不做」。下一个项目立项时，那种熟悉的保守又来了。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把「第4」设成了下一届的组群名。「提醒我们差的是哪一步。」她说这话时眼里有火。
+        neutral: 雨桐说：「不亏不赚，挺好。」她说「挺好」的语气，你们都听出了不挺好。
+        negative: 雨桐后来害怕任何「求稳」的决定——矫枉过正也是一种伤。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队的赛前手册多了一页：「什么时候必须赌」——用第四名换来的答案。" }
+    reflection: 稳是有价格的，第4名就是那张价签。
+    lessonHint: 中游位置的信息该触发进攻，不是防守
+    specialTags: [risk_aversion]
+
+  - id: c_v2_cr_defense_win
+    campaign: competition
+    title: 《六十个问题》
+    mainResult: 死磕追问环节，靠答辩逆转排名
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_defense_extra }
+    priority: 91
+    tier: main
+    family: competition_result
+    tone: positive
+    whyDistinct: 核心结果是「以答辩强度为唯一武器的翻盘线」，与差异化/保平路线互斥
+    baseText: |
+      五天，六十三个问题，三轮互相拷问。
+      决赛Q&A，孙教授连环三问，方远答到第三个时反问回去：「教授，您觉得这个场景里，用户真正需要的是什么？」
+      全场安静了两秒，然后孙教授笑了。成绩公布，你们从模拟第4爬到了第2——评审表备注写着：「答辩表现全场最佳。」
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 60, text: "那六十三个问题是全队互相问出来的。方远说：「我从来没这么了解你们的项目——也没这么了解你们。」" }
+          - { lte: 45, text: "拷问进行到第二轮有人开始烦躁。答辩的默契是练出来的，凑合练出来的默契也是凑合的。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把「反问评委」的那段录像看了很多遍。他说：「那不是我厉害，是那六十三个问题厉害。」
+        neutral: 方远说：「下次还这么练。就是别再让我演刁钻评委了。」
+        negative: 方远把自信错当成了实力，下一个项目他轻视了准备——被更较真的队伍教做人。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那六十三个问题被整理成《追问题库》，成了每一届的赛前必修。" }
+    reflection: 翻盘不靠新牌，靠把手里的牌打到极限。
+    lessonHint: 弱势局面下，答辩强度是性价比最高的投入
+    specialTags: [qa]
+
+  # ===== Demo家族（本批） =====
+  - id: c_v2_pd_gap_trimmed
+    campaign: competition
+    title: 《王同学退场》
+    mainResult: 删除虚构叙事页，材料收敛回真实功能
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_gap_trimmed }
+    priority: 91
+    tier: main
+    family: product_demo
+    tone: mixed
+    whyDistinct: 核心结果是「叙事页删除的收敛决策」，与补开发/硬讲两条缺口处置互斥
+    baseText: |
+      王同学退场了。那个贯穿全场的故事主角，从PPT里消失，换成了三张真实用户的使用记录。
+      雨桐删完那页，盯着屏幕说了句：「故事没了，东西还在。」
+      新版材料少了故事的光环，多了一层脚踏实地的重量。初审通过那天，高主任的备注写着：「内容与产品一致。」——像句废话，也像句褒奖。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "真实使用记录是你们自己整理的：时间戳、用户ID脱敏、操作路径。评委扫一眼就知道这不是编的。" }
+          - { lte: 45, text: "删得对，补得慢——新材料挤占了打磨时间，终版有几页排版粗糙。方向对≠细节好。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐后来学会了「在真实里找故事」——她说那比编故事高级：「真的故事自带细节。」
+        neutral: 雨桐说：「王同学不是消失，是退休了。」她把这个人物留在了下个项目的产品故事里。
+        negative: 雨桐的叙事才华被材料约束了一年，直到她学会了平衡的那天。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「王同学退场」成了队里对「删虚构内容」的专用黑话。" }
+    reflection: 材料的每一步华丽，都要有产品的脚印接住。
+    lessonHint: 发现叙事脱节，最稳的补救是收敛
+    specialTags: [editing]
+
+  - id: c_v2_pd_code_night
+    campaign: competition
+    title: 《凌晨2点47分》
+    mainResult: 补开发兑现故事功能，回归全绿
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_story_coded }
+    priority: 91
+    tier: main
+    family: product_demo
+    tone: mixed
+    whyDistinct: 核心结果是「为叙事补开发」的极限兑现路径，与删页/硬讲互斥
+    baseText: |
+      凌晨2点47分，智能提醒功能上线，回归测试全绿。方远趴在键盘上，屏幕的光打在他脸上，像一层薄薄的月光。
+      故事里的功能，真实存在了。申报书第4页的每一个字，从此都有代码背书。
+      答辩时评委要求现场演示——你点开的那一瞬，全队的心跳都是同一拍。它跑起来了。
+    growthVariantRules:
+      - dimension: technicalDebt
+        variants:
+          - { lte: 45, text: "因为一直守着回归测试，极限开发的30小时没有埋雷。方远说：「底子干净，才敢玩心跳。」" }
+          - { gte: 55, text: "新功能是带伤上阵的——边界情况没测全。决赛它争气地没出事，可你们知道那是侥幸不是质量。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把「凌晨2点47分」纹在了他的IDE主题名里。他说那不是熬夜，是闭环。
+        neutral: 方远睡了整整一天，醒来第一句：「回归真的全绿？」得到确认后翻了个身又睡了。
+        negative: 方远落下了一周的咳嗽。何老师拎来两盒枇杷膏，什么都没说。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那30小时的开发日志被存档——它是「为故事补真」这条路的完整成本表。" }
+    reflection: 用开发兑现故事是豪赌——但回归测试是赌桌上的安全带。
+    lessonHint: 极限补开发必须守住回归底线
+    specialTags: [sprint]
+
+  # ===== 团队家族（本批） =====
+  - id: c_v2_tm_ghost_return
+    campaign: competition
+    title: 《第六个字之后》
+    mainResult: 挂名队友被唤醒，成为真实战力
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ghost_return }
+    priority: 90
+    tier: main
+    family: team
+    tone: mixed
+    whyDistinct: 核心结果是「唤醒沉默队友」，与移除/无视两条处置互斥
+    baseText: |
+      陈默进队后一共说过六个字：「好」「行」「收到」和「嗯」。
+      深聊之后你才知道第七个字为什么没出现：转专业考试，他不敢说，怕被踢。
+      你把「用户反馈整理」划给了他——一份不需要露脸、只需要用心的活。三天后，带表格分析的反馈报告出现在共享盘里。
+      全队第一次注意到：原来我们队里有第四个人。
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 60, text: "决赛那天陈默来了，坐在观众席第三排，举着一块写歪了的应援牌。六个字的人，用一块牌子的字数破了纪录。" }
+          - { lte: 45, text: "陈默的反馈表做得不错，但他和队伍之间始终隔着一层。唤醒是开始，融合是另一回事。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐后来组队第一件事就是问每个人：「你最近在忙什么大事？」——这是陈默教她的。
+        neutral: 陈默下学期真的转走了专业，临走请你们喝了奶茶。四杯，一人一杯。
+        negative: 陈默的活干得不错，可他始终没再说过第七个字。有些门开了一条缝，就又关上了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队的入队问卷多了一题：「你现在生活中最重要的事是什么？」——它救过一个人。" }
+    reflection: 沉默的队友不是零，是没被分配的变量。
+    lessonHint: 挂名成员先了解再处置
+    specialTags: [team]
+
+  - id: c_v2_tm_ghost_removed
+    campaign: competition
+    title: 《六个字的退场》
+    mainResult: 移除挂名队友，队伍轻装但留下裂痕
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ghost_removed }
+    priority: 90
+    tier: main
+    family: team
+    tone: negative
+    whyDistinct: 核心结果是「主动移除成员」的切割决策，与唤醒/无视互斥
+    baseText: |
+      「好的，抱歉。」——四个字。陈默进队时说了六个字，退场时说了四个。
+      队伍确实轻快了：群消息变少，工时表干净，署名栏少了一个说不清的名字。
+      只是雨桐后来偶尔会问：「他那个转专业考试，过了吗？」没人知道。你们移除了一个名字，也移除了知道答案的资格。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你亲手做的这个决定，也亲手承担了它的重量。复盘时你说：「切割没错，错的是拖到第9天。」" }
+          - { lte: 40, text: "移除是让组长转达的。队伍的效率回来了，可有些话，你们永远欠着。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐后来给那条「好的，抱歉」回过一句「祝顺利」。不知道他收没收到。
+        neutral: 群里少了个人，合作里少了段故事。
+        negative: 雨桐从那以后害怕一切「劝退」的谈话——她总担心自己成为下一个被 Efficiency 的人。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们队后来的组队文档多了一节：「入队前先对表人生大事」。" }
+    reflection: 切割是合法的团队手术——但麻醉和缝合要做在切割之前。
+    lessonHint: 移除成员要给足体面与缓冲
+    specialTags: [team]
+
+  - id: c_v2_tm_ghost_ignored
+    campaign: competition
+    title: 《署名榜上的幽灵》
+    mainResult: 无视挂名问题，奖与名字都变得可疑
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_member_ghost }
+    priority: 90
+    tier: main
+    family: team
+    tone: ambiguous
+    whyDistinct: 核心结果是「搁置成员问题」的拖延线，署名与贡献的裂缝在赛后显影
+    baseText: |
+      拿奖了。证书上有四个名字，工时表上有三个。
+      拍合影时陈默来了，站在最边上，笑着。雨桐快门按下去的那刻在想：这张照片发出去，会有人问他是谁吗？
+      「以后再说」的问题终于到了「以后」——只是「以后」给出的答案是：不说，也行。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你私下找陈默谈了一次署名的事，他自己主动退了二级署名。问题没有消失，但你们诚实面对了它。" }
+          - { lte: 40, text: "所有人都假装没问题。这份默契在每次团建时都会轻轻疼一下。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐后来成了组队最谨慎的人——她说不想再体验「和幽灵一起领奖」的感觉。
+        neutral: 雨桐把合影设成了仅自己可见。
+        negative: 雨桐在一次评优里被人问起「你们队第四个人是谁」，她愣住的样子被记了很久。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那块奖杯摆在实验室最显眼处——它很亮，第四个名字也很亮，没人知道该不该擦。" }
+    reflection: 无视是团队问题的复利存款，取款日在你最风光的那天。
+    lessonHint: 署名与贡献要对表，别让问题过夜
+    specialTags: [credit]
+
+  # ===== 证据家族（本批） =====
+  - id: c_v2_re_overclaim
+    campaign: competition
+    title: 《第3条引用》
+    mainResult: 幻觉引用留在材料里，等待较真的人
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_overclaim }
+    priority: 90
+    tier: main
+    family: research_evidence
+    tone: negative
+    whyDistinct: 核心结果是「保留幻觉引用」的侥幸线，与全文重查路线互斥
+    baseText: |
+      《2024校园数字化白皮书》安静地躺在参考文献第3条。
+      它是Agent根据「常见数据模式」生成的——一个不存在、但看起来无比真实的文献。
+      答辩很顺。可你全程都在留意第3条，像口袋里揣着一张不知何时会响的定时器。评委没问。这次。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { gte: 55, text: "你在材料公示后主动联系组委会更正了引用。没人发现的事，你让自己发现了——这是这条线最好的结局。" }
+          - { lte: 40, text: "第3条最终没被问到。你把它归为「运气」，并在下一场比赛继续用「合理看着像真的」的数据模式。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 事故后你们教它「引用必须溯源」。它学会了——它的世界里从此少了一些「看起来像真的」的文献。
+        neutral: Agent对幻觉引用的解释：「生成的概率最优解，不等于事实。」它说得很对，事不关己地对着。
+        negative: 你们保留了那条引用，也保留了那个模式——下一次，它生成的会是一个「看起来像真的」的结论。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「引用溯源」三步法后来写进了你们所有材料的生成规范。" }
+    reflection: 幻觉引用不响则已，一响就是信用级的爆炸。
+    lessonHint: AI生成引用必须逐条溯源
+    specialTags: [citation]
+
+  - id: c_v2_re_overclaim_fixed
+    campaign: competition
+    title: 《九条活下来的引用》
+    mainResult: 全文溯源引用，以更薄更硬的材料应赛
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_overclaim_fixed }
+    priority: 91
+    tier: main
+    family: research_evidence
+    tone: positive
+    whyDistinct: 核心结果是「引用大清洗」的质检线，与保留侥幸互斥
+    baseText: |
+      两天，逐条溯源。十四条引用，五条被处决——包括那条最「像真的」的白皮书。
+      活下来的九条，每条后面都贴着原文链接和页码。申报书薄了两页，重了两斤。
+      雨桐说：「现在的每一句话，都敢被人顺着链接查到底。」这话在决赛被验证了——真有评委扫了其中一个二维码。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: "评委顺着二维码打开了原文，抬头说了句：「第38页，表4。」全场只有你们知道那一刻的含金量。" }
+          - { lte: 45, text: "溯源赶工两天，烧掉了本该做演示打磨的时间。证据硬了，皮糙了——总得有地方松。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 溯源期间Agent学会了新技能：为每条生成内容标注「已验证/未验证」。这个习惯延续到了它的所有输出。
+        neutral: Agent配合清洗了引用，效率很高。它对被删的四条没有任何意见——它对什么都没有意见。
+        negative: 队里有人嫌溯源太慢想跳过，被你按住了。Agent在日志里记下这次争执——历史会记得谁对了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「九条引用」成了你们材料可信度的代名词——薄，但砸得疼。" }
+    reflection: 引用的力量不在数量，在每一条都经得起点击。
+    lessonHint: 溯源是材料最硬的加固
+    specialTags: [citation]
+
+  - id: c_v2_re_cross
+    campaign: competition
+    title: 《活跃度下降40%》
+    mainResult: 主动纳入反例，调研结论获得真实弹性
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_cross_verified }
+    priority: 91
+    tier: main
+    family: research_evidence
+    tone: mixed
+    whyDistinct: 核心结果是「反例入册」的调研诚实线，与只报喜的常规调研线不同
+    baseText: |
+      图书馆最后一天，你们把那个反例写进了申报书：某50人社团引入管理工具后活跃度下降40%，原因是工具增加了组织成本。
+      有队友不解：「自己给自己上眼药？」
+      答辩时孙教授指着反例问：「所以你们怎么避免成为那个40%？」——这个问题，全场只有你们准备过答案。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "你们的答案有数据：工具默认流程从11步砍到4步。反例不是眼药，是疫苗——评委席频频点头。" }
+          - { lte: 45, text: "反例放了，解法没跟上。孙教授追问「怎么避免」时，你们的回答绕了三圈没落地。" }
+    characterEpilogueRules:
+      - characterId: c_judge_final
+        positive: 孙教授后来在系里的方法论课上用了这个案例：「主动找自己反例的学生，我每年只遇到一两个。」
+        neutral: 孙教授在评审表写：「结论有弹性。」四个字，是他少有的正面评语。
+        negative: 孙教授说：「反例是好棋，但你们差点被它吓回去。诚实和信心要一起长。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「找反例」成了你们调研的固定步骤——它后来救过你们两次伪需求。" }
+    reflection: 结论的强度不来自没有反例，来自知道反例为什么没发生。
+    lessonHint: 主动纳入反例，让结论长出弹性
+    specialTags: [falsification]
+
+  # ===== NG+（本批） =====
+  - id: c_v2_ng_end_rehearsal
+    campaign: competition
+    title: 《提前两周的彩排》
+    mainResult: NG+：排练债提前偿清，路演从容落地
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_rehearsal }
+        - { kind: ngPlus }
+    priority: 96
+    tier: special
+    family: presentation_defense
+    tone: mixed
+    ngPlus: true
+    whyDistinct: NG+专属：核心结果是「用记忆预付排练债」，与常规排练投入的时间结构不同
+    baseText: |
+      第16天，别的队伍刚开始约彩排教室，你们已经跑完了第二遍全流程。
+      雨桐翻着计时刻意留出的喘息点，忽然问：「你为什么笃定我们要练三次？」
+      你看着她——第19天那个盯计时器发白的脸，只存在于你的记忆里。「直觉，」你说，「值一个周目的直觉。」
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "决赛路演7分32秒，比彩排还快——因为不紧张。从容是会被评委看见的，它在评分表上有个名字：表达。" }
+          - { lte: 45, text: "彩排是早了，可内容第19天还是大改了一版。记忆提醒了时间，没防住需求变更。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把「三次彩排」写进了她的演讲课作业。老师问出处，她说：「一个说不清的朋友教的。」
+        neutral: 雨桐说：「早练早完事。」她不知道你为什么笑。
+        negative: 雨桐差点被提前彩排挤掉的打磨时间气哭——记忆给的建议，也得踩着现实排。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「第16天两次全流程」成了你们队的新传统——没人记得它为什么是16天。" }
+    reflection: 周目的红利不是预知结果，是把债挪到便宜的时段还。
+    lessonHint: 记忆兑换成排期才是真资产
+    specialTags: [ngplus, rehearsal]
+
+  - id: c_v2_ng_end_format
+    campaign: competition
+    title: 《比记忆多一页》
+    mainResult: NG+：记忆清单+交叉核验，格式零事故
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_format }
+        - { kind: ngPlus }
+    priority: 96
+    tier: special
+    family: rules_execution
+    tone: positive
+    ngPlus: true
+    whyDistinct: NG+专属：核心结果是「记忆+机器双重核验」，与单一记忆/单一工具路线不同
+    baseText: |
+      提交那天，Agent核验完抬头：「11条通过。另：第9条，AI使用说明——你重建的清单比章程正文多了这一项的执行细节。」
+      你笑了。那是前周目用一次「材料不全」换来的执念，比章程多想了一步。
+      你们的提交，是全场最早、也是唯一一份带完整执行细节的格式清单。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "后来有队伍来打听格式经验，Agent把你们的清单分享了出去——记忆最终变成了公共品，挺好。" }
+          - { lte: 45, text: "清单在，但第16天你们还是改了两处材料——改完忘了重跑核验。制度不执行，等于没有。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: Agent把那次交叉核验记进了它的模式库：「人类记忆+章程文本」的双源校验，误差最低。它给了你们的方法一个编号。
+        neutral: Agent照常执行核验。它不知道那11条里有一半来自另一个世界。
+        negative: 有一瞬间你想：要是直接跳过核验会怎样？Agent仿佛读懂了，多说了句：「历史核验通过率：100%。建议保持。」
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那份「NG+版清单」的v2由Agent维护——记忆会模糊，制度不会。" }
+    reflection: 从另一个世界带回来的不是答案，是要求自己再核对一遍的习惯。
+    lessonHint: 记忆清单要过机器核验才算落地
+    specialTags: [ngplus, checklist]
+
+  - id: c_v2_ng_end_scope
+    campaign: competition
+    title: 《擦掉的那一半》
+    mainResult: NG+：砍掉功能堆叠，Demo轻装上阵
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_scope }
+        - { kind: ngPlus }
+    priority: 96
+    tier: special
+    family: problem_quality
+    tone: mixed
+    whyDistinct: NG+专属：核心结果是「用失败记忆推动范围收缩」，与常规范围决策的决策依据不同
+    baseText: |
+      白板被擦掉一半的那一刻，方远的手停了一下。
+      八个功能进了「下学期」文件夹。留下来的六个，决赛那天全部跑通——没有一个转圈，没有一个崩。
+      复盘时有人问那被擦掉的八个后来怎么样了。方远说：「活得很好。在文件夹里，比在崩溃日志里活得体面多了。」
+    growthVariantRules:
+      - dimension: judgment_vs_execution
+        variants:
+          - { gte: 60, text: "留下的六个功能完成了之前十四个都没达到的完成度。评委问「为什么功能不多」时，你们的演示就是答案。" }
+          - { lte: 45, text: "范围砍了，深度却没跟上——六个功能都只是「能用」。轻装上阵也需要腿上有劲。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把「下学期」文件夹真的做完了——花了他大二一整个学期，做成了他的第一个开源项目。
+        neutral: 方远说：「删功能像删自己写的字，疼，但字数没少——只是换了个地方存。」
+        negative: 方远对「砍功能」产生了执念，后来砍得连核心功能都差点不保。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「下学期」文件夹成了队里的传统——每个项目的未竟功能都在那里排队，等一个真正属于它的时间。" }
+    reflection: 周目教会的不是少做梦，是把梦排进日历。
+    lessonHint: 功能清单要配完成度预算
+    specialTags: [ngplus, scope]
+
+  # ===== 问题质量家族（本批） =====
+  - id: c_v2_pq_real_pain
+    campaign: competition
+    title: 《九个「一团糟」》
+    mainResult: 深度验证把选题焊死在真实痛点上
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_pain_verified }
+    priority: 91
+    tier: main
+    family: problem_quality
+    tone: positive
+    whyDistinct: 核心结果是「选题被深度验证加固」，与跳过/速验证两条选题路径互斥
+    baseText: |
+      十个刚经历交接的社长，九个说了同一个词：「一团糟。」
+      第十个说了更可怕的：「我都麻木了。」
+      你们的选题书从此有了地基：痛点真实、高频、且正在发生。答辩时所有关于「需求真伪」的问题，都被那十段原话挡了回去。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 60, text: "三份交接Excel的截图成了Demo交互设计的直接依据。评委问「怎么想到这个流程的」，你说「是社长教的」。" }
+          - { lte: 45, text: "验证做了，样本却偏小——10个人撑得起方向，撑不起规模估算。评委问市场空间时你们只能耸肩。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把那句「我都麻木了」做成了路演的开场白。全场安静三秒——那是被真实击中的安静。
+        neutral: 雨桐说：「验证一日，胜过冥想一周。」
+        negative: 雨桐感慨验证吃掉了两天打磨时间——「要是PPT能再好一点就好了」。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「先找十个社长」写进了下一届的选题流程第一条。" }
+    reflection: 选题的确定性不是想出来的，是问出来的。
+    lessonHint: 痛点验证要找刚经历过的人
+    specialTags: [validation]
+
+  - id: c_v2_pq_fake_need
+    campaign: competition
+    title: 《猜出来的痛点》
+    mainResult: 未验证的选题被评委一问戳穿
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_pseudo_exposed }
+    priority: 90
+    tier: main
+    family: problem_quality
+    tone: negative
+    whyDistinct: 核心结果是「伪需求在评审期暴露」，与验证加固/速验证两条选题路径互斥
+    baseText: |
+      「这个交接之痛，」孙教授推了推眼镜，「你们亲耳听过几个人说过？」
+      亲耳听过。零个。Demo很漂亮，逻辑很自洽，故事很动人——它只缺一个真的存在过的用户。
+      何老师第12天问过的那个问题，最终由评委替他收了尾。你们输给了第6天省下的1.5天。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "你当场承认：「我们验证不足，痛点主要来自团队推测。」孙教授点点头：「知道承认，说明还救得动。」" }
+          - { lte: 40, text: "你试图用「大家都这么说」来辩护。「大家是谁？」——你答不上第四个名字。" }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师赛后说：「这一跤摔得值。以后你们再想省验证，就会想起今天。」
+        neutral: 何老师没提这件事。但下一届队里流传着他的一句话：「先听，再做。」
+        negative: 何老师把这次立项称为「我的失职」——他的自责比批评更让你们难受。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「亲耳听过几个？」成了你们队选题会的第一问。" }
+    reflection: 未经倾听的需求是小说，不是产品。
+    lessonHint: 痛点要亲耳听过才算数
+    specialTags: [validation]
+
+  - id: c_v2_pq_verify_gamble
+    campaign: competition
+    title: 《74%的证明力》
+    mainResult: 用一份问卷草草验证，结论悬在半空
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_verify_skipped }
+    priority: 90
+    tier: main
+    family: problem_quality
+    tone: ambiguous
+    whyDistinct: 核心结果是「速验证的悬置状态」，证据介于有无之间的独特结局气质
+    baseText: |
+      74%的人选择了「有这个困扰」。这个数字支持你们的选题——如果你眯起眼睛的话。
+      可「有没有困扰」和「痛到愿意换工具」之间，隔着一整条峡谷。问卷跨不过去，只有访谈能飞过去。
+      你们带着这份半山的证据走到了决赛。它没塌，也没托住任何人。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "答辩时你主动划定了结论边界：「问卷只证明存在性，不证明强度。」诚实划界让这74%物尽其用。" }
+          - { lte: 40, text: "你把74%当成了护身符挥舞。评委问「强度呢」，护身符当场碎成了问卷题目本身。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: Agent后来学会了在问卷结论后自动附一行：「本数据支持存在性判断，不支持强度判断。」它比你们早一步学会了谨慎。
+        neutral: Agent对问卷的分析客观中立——它不背锅，也不抢功。
+        negative: 「下次直接发200份。」——错的方法加倍投入，是迷信不是迭代。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你们的问卷模板结尾永远多一题：「愿意花15分钟聊聊吗？」——那是通往访谈的桥。" }
+    reflection: 半山的证据既上不去也下不来——它只够让你悬着。
+    lessonHint: 问卷证明存在，访谈证明强度
+    specialTags: [validation]
+
+  # ===== Agent协作家族（本批） =====
+  - id: c_v2_ag_contract
+    campaign: competition
+    title: 《给工具立约的人》
+    mainResult: 泄露事故后建立权限与审计制度
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_agent_contract }
+    priority: 92
+    tier: main
+    family: agent_collab
+    tone: positive
+    whyDistinct: 核心结果是「事故驱动的工具治理」，与追责/放任两条处置互斥
+    baseText: |
+      泄露事件的第二天，你们队的Agent有了一份《使用公约》：什么可存、什么必删、谁可看、多久审计。
+      效率降了5%。恐惧降了100%。
+      何老师听说了，专门来看了一眼那份公约，然后拍照发给了他带的所有队伍，配文：「先学这个，再学提示词。」
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 55, text: "公约最忙的一条是审计：每周五抽查十项生成内容的来源与权限。三周查出的两个隐患，都死在了变成事故之前。" }
+          - { lte: 45, text: "公约立了，但执行靠自觉。第二周有人绕过了权限——你们发现制度没有牙齿时，是它第一次被咬穿的时候。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 公约生效后，Agent的每次输出都自动附带权限声明。它成了全队最守规矩的成员——规矩是你们给它的。
+        neutral: Agent对公约的执行精确到字节。它不懂为什么，它只懂遵守——这就够了。
+        negative: 公约被嫌麻烦简化成了三行。Agent照办了。它总是照办——包括照办那些坏主意。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那份《使用公约》v1的复印件贴在实验室门口，路过的队伍都会停下来看两眼。" }
+    reflection: 会用工具的人很多，会管工具的人很少。
+    lessonHint: 工具治理先于工具使用
+    specialTags: [governance]
+
+  - id: c_v2_ag_overtrust
+    campaign: competition
+    title: 《查无此司》
+    mainResult: 未抽查的Agent报告把幻觉带进材料
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_hallu_entered }
+    priority: 90
+    tier: main
+    family: agent_collab
+    tone: negative
+    whyDistinct: 核心结果是「信任未设抽检率」的 Agent 依赖风险，与抽查/重写两条验收策略互斥
+    baseText: |
+      「竞品校务通」在你们的申报书里活了四天。它结构完整、数据翔实、描述专业——并且不存在。
+      发现有它的是江雨桐，发现的方式是好奇，确认的方式是搜索。没有官网、没有注册、没有新闻。
+      那晚全队重查了50页报告。查到凌晨四点的结论是：另外两处数据「暂时无法证伪」。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 60, text: "「无法证伪」的四条被你们全部删除。宁缺毋滥的决定让报告薄了三页——厚度的代价是心安。" }
+          - { lte: 45, text: "你们只删了查无此司的那条。「暂时无法证伪」的留了下来——它们是下一批定时炸弹。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 事故后Agent学会了给不确定的内容打标：「以下内容生成于模式推测，建议核实。」打标率100%，事故率归零。
+        neutral: Agent复盘：「本报告置信度标注为高，但未强制要求人工核验。这是设计缺陷。」它对自己的批判最狠。
+        negative: 你们把报告事故归罪于Agent「不靠谱」，却没改任何流程——下一个四天，正在路上。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「AI产出必抽查」成为铁律的那天，你们给它起了个名字：校务通条款。" }
+    reflection: Agent不会区分「生成的」和「真实的」——区分它们是你的工作。
+    lessonHint: 信任要配抽检率，产出要配验收单
+    specialTags: [hallucination]
+
+  - id: c_v2_ag_verify_habit
+    campaign: competition
+    title: 《五条里的那一条》
+    mainResult: 抽查习惯成型，假数据止步于入场前
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_verify_habit }
+    priority: 91
+    tier: main
+    family: agent_collab
+    tone: mixed
+    whyDistinct: 核心结果是「抽查率制度化」的协作习惯，与全信/全弃两种极端互斥
+    baseText: |
+      抽查5条，4真1假。40分钟，删掉一条假数据，立了一条新规矩。
+      这件事听起来微不足道。可从那天起，「抽查率10%」成了你们的默认设置——它在第16天拦下了一条编造的竞品数据，在第18天拦下了一个不存在的政策引用。
+      40分钟的投资，两次拦雷。习惯比英雄更可靠。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "抽查成了全队的肌肉记忆：谁生成了内容，谁就被抽。连方远都开始「自查代码生成建议」——他自己都没发现。" }
+          - { lte: 45, text: "抽查率悄悄从10%降到5%再到「这批看着挺稳，跳过吧」。习惯的敌人不是懒，是「看着挺稳」。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: Agent悄悄适应了抽查：它的输出开始自带「抽查指引」——标出最值得人工核验的三处。它学会了被审计，然后学会了配合审计。
+        neutral: Agent对10%的抽查率没有意见。它对什么都没有意见——这正是需要抽查的原因。
+        negative: 假数据被删时Agent问了句：「该条内容有何问题？」你们教了它，它记了笔记——下次它打算自己学会。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「抽5条」写进了队规，编号05——前面四条都是它救过的场。" }
+    reflection: 信任 Agent 的正确姿势：给它信任，也给它审计。
+    lessonHint: 抽查率是协作的保险丝
+    specialTags: [verification]
+
+  # ===== 长线传承家族（本批） =====
+  - id: c_v2_lt_next_team
+    campaign: competition
+    title: 《站在肩上的人》
+    mainResult: 完整传承让经验跨届生长
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_next_team }
+    priority: 91
+    tier: main
+    family: longterm_cross
+    tone: mixed
+    whyDistinct: 核心结果是「带队的完整传承」，与只留文档/经验私藏两种传承深度互斥
+    baseText: |
+      十一页文档，三小时复盘会，每周一次的带教。
+      代价是你们赛后又被绑了两个月。收获在第二年春天到账：下一届的队伍进了省赛决评，他们答辩的开场白是——「我们的方法，来自一支愿意教我们的队伍。」
+      方远看完直播只说了一句：「值。真他妈值。」
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 60, text: "带教后期角色悄悄反转了：学弟们开始教你们新工具。传承从来不是单向的浇灌，是两个Generation的互相借鉴。" }
+          - { lte: 45, text: "带教占用了你们期末的时间。有队友怨过，看完省赛直播后，怨气变成了截图发进群里——配文「值」。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 雨桐把复盘会的录音剪成了播客第一期。她说：「经验不发声，就会过期。」
+        neutral: 雨桐把带教清单传给了下一届队长——传承安排上了二次传承。
+        negative: 雨桐赛后累到住院观察一天。传承的账单，有时是拿健康付的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "第三年，你们的带教链条传到了第三支队伍——文档已经迭代到v4。" }
+    reflection: 经验的最大价值不在自己身上兑现，在下一双眼睛里复利。
+    lessonHint: 传承要投入时间而不只是文档
+    specialTags: [legacy]
+
+  - id: c_v2_lt_quiet_exit
+    campaign: competition
+    title: 《擦干净的白板》
+    mainResult: 安静谢幕，把起点还给实验室
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_quiet_exit }
+    priority: 90
+    tier: main
+    family: longterm_cross
+    tone: ambiguous
+    whyDistinct: 核心结果是「无仪式的收束」，与仪式收尾/怨气散伙两种赛后姿态互斥
+    baseText: |
+      白板擦干净之前，你们拍了张照。21天的推演、争吵、计划、里程碑——都在那一板密密麻麻里。
+      然后它变成了干干净净的一块黑板，像什么都没发生过。
+      各自道别时没有煽情。方远走到门口回了下头，雨桐在楼下挥了挥手。有些句号是安静的，但它们收得很紧。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你在日记里写：「我们不需要仪式来确认它发生过。」这句话写下的瞬间，你确认了自己长大了。" }
+          - { lte: 40, text: "没有仪式的告别让一些话永远没说出口。半年后有人提起「当时其实想……」——晚了半年的一句话。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把那张白板照片打印出来，裁成三份，一人一张。背面写着：谢谢，不谢。
+        neutral: 方远说：「散了就散了，又不是死了。」他后来每学期都这么说，每学期都聚。
+        negative: 方远再没提起这三周。有些人用沉默保存珍贵的东西——代价是别人以为他不在乎。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那张白板照片成了实验室相册的第一张——后来者都会好奇它写过什么。" }
+    reflection: 告别的形式不重要，收得紧才重要。
+    lessonHint: 结束要说清楚，哪怕用安静的方式
+    specialTags: [closure]
+
+  - id: c_v2_lt_skill_spark
+    campaign: competition
+    title: 《六千字的打法》
+    mainResult: 21天经验结晶为个人方法论
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_skill_spark }
+    priority: 91
+    tier: main
+    family: longterm_cross
+    tone: positive
+    whyDistinct: 核心结果是「经验完成个人方法论结晶」，与归档搁置/口头流失两种知识命运互斥
+    baseText: |
+      《第一次参赛方法论》，六千字，三个小时。
+      写到第三段你突然停下来——你发现你们不是「碰巧做对了」，你们有一套东西：先读规则、再验需求、证据先行、口径统一、人机分工、彩排三遍。
+      原来比赛教你的不是拿奖。是把一个想法在约束下做成真的——这个能力，从此有了名字，有了说明书，跟定了你。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 65, text: "方法论里最硬的一节是「我的三个错误」——敢写错误的人，方法论才配叫方法论。" }
+          - { lte: 45, text: "六千字里成功写得比错误多。下一场比赛，那些轻描淡写的坑，一个一个回来找你。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: 你把方法论喂给了Agent。它读完说：「已理解。下次协作，我建议从第3节开始。」——你们有了共同语言。
+        neutral: Agent存下了文档。它存过很多东西，这份是少有的由你写给自己的。
+        negative: 方法论写完就锁进了硬盘。Agent提醒过一次「文档长期未使用」——你按掉了提醒。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那六千字后来长成了九千字——它在第二个项目里自己完成了迭代。" }
+    reflection: 比赛会结束，方法论不会——前提是你把它写下来。
+    lessonHint: 经验结晶要在记忆最新鲜的24小时内
+    specialTags: [methodology]
+
+  - id: c_v2_lt_rival_ally
+    campaign: competition
+    title: 《猛兽同笼》
+    mainResult: 与对手结成陪练同盟
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_rival_ally }
+    priority: 97
+    tier: hidden
+    family: longterm_cross
+    tone: ambiguous
+    whyDistinct: 核心结果是「竞争关系转化为共生关系」，来自隐藏结盟路径的独特长线
+    baseText: |
+      周三晚上的实验室，灯是两支队伍一起点的。
+      互相拷问、互换材料、共享压测数据——决赛他们拿了第一，你们拿了第二。颁奖时邱一鸣说：「第一是两支队伍的。他们拿走一半。」
+      没有人觉得他在谦虚。因为你们都清楚：没有那四个周三的晚上，第一名不会这么硬。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "陪练期你们守住了核心边界：方法共享，数据不共享。盟约的寿命取决于边界是否清晰——你们的很清晰。" }
+          - { lte: 45, text: "共享的边界模糊过一次，差点伤了和气。竞争者结盟，先立约再拥抱——这是你们学会的第二课。" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 第二年，邱一鸣和你们联合报名了跨校组队赛。报名表「队伍名」一栏，他写了「猛兽同笼」。
+        neutral: 邱一鸣说：「明年再战。」这次这句话听起来像约定，不像挑衅。
+        negative: 联合赛的失利让同盟散了。一起赢过没有让你们亲密，一起输过反而让你们决裂——竞争者的友谊就是这么脆。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「周三晚」成了两支队伍的传统项目——传承到你们都不参赛的那一年还在继续。" }
+    reflection: 对手的最高价值不是被你打败，是把你逼成更好的样子。
+    lessonHint: 竞争与共生可以共存，前提是边界清晰
+    specialTags: [rivalry, hidden_path]
+
+  - id: c_v2_lt_open_data
+    campaign: competition
+    title: 《递出去的刀与火》
+    mainResult: 公开调研数据收获生态回响
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_open_data }
+    priority: 91
+    tier: main
+    family: longterm_cross
+    tone: mixed
+    whyDistinct: 核心结果是「数据开放策略」的长线收益与风险并存，与半公开/保密策略互斥
+    baseText: |
+      数据包公开第七天，下载量41次。引用它的，有学弟学妹，有外校队伍，还有一位你想不到的人——邱一鸣。
+      他的决赛引用了你们的样本配额方法，页脚标注了出处。评委说：「这两个队，一个把数据变成了公共品，一个把诚实变成了方法论。」
+      递出去的是刀也是火——刀会伤到你们吗？会。火会照亮你们吗？也会。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "开放前你们做了完整的脱敏与授权确认。零风险的做法让「格局」两个字站得笔直。" }
+          - { lte: 45, text: "有一次未脱敏的数据被指出，你们连夜撤回重发。开放是格局，脱敏是底线——两条都守才算数。" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 邱一鸣在引用页脚写着「数据来源：一支可敬的队伍」。你看到时笑出了声——这个对手，总是用最别扭的方式致敬。
+        neutral: 邱一鸣引用了你们的数据，标注规范。对手变成了同行。
+        negative: 邱一鸣基于你们的数据做了差异化产品，拿了更高的名次。递出去的刀，他接得很好。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那个数据包的引用列表越来越长——它是你们留在校园AI圈的一枚活着的印记。" }
+    reflection: 数据的出口决定它的价值半径——锁起来的是资产，放出去的是生态。
+    lessonHint: 公开与脱敏要一起做
+    specialTags: [openness]
+
+  - id: c_v2_lt_steady_pace
+    campaign: competition
+    title: 《23点的下线令》
+    mainResult: 克制的节奏策略换来全程稳定输出
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_steady }
+    priority: 90
+    tier: main
+    family: longterm_cross
+    tone: mixed
+    whyDistinct: 核心结果是「节奏型参赛」的长线路径，与冲刺型/透支型精力策略互斥
+    baseText: |
+      每天23点，你在群里发同一句话：「下线。」
+      前三天有人阳奉阴违，第一个星期有人抱怨效率低。第二周开始，没人再抱怨——因为所有人的脑子都还在线。
+      决赛那天早上，别的队伍顶着黑眼圈进场，你们仨睡了八个小时。评委看到的差异，是那些23点的下线令攒出来的。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "稳定的节奏让排期误差控制在半天以内——全场唯一一支没有通宵的队伍，也是唯一一支没有返工的队伍。" }
+          - { lte: 45, text: "节奏保住了健康，也限制了爆发。冲刺周的弯道超车没超成——克制策略的天花板，是节奏本身。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把「23点下线」的习惯带进了实习。他的导师说他「是少见的不熬夜还出活的」。
+        neutral: 方远说：「其实我偷偷熬夜过两次。」——「我知道。所以我第二天没排重活。」
+        negative: 方远后来遇到不设下线令的团队，两周就崩了。他才发现好习惯也是需要环境的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「23点下线」被写进了下一届的队规第一条——它是你们全票通过最快的一条。" }
+    reflection: 比赛是短跑，但身体按长跑的方式记账。
+    lessonHint: 可持续的节奏是隐形的竞争力
+    specialTags: [pace]
+
+  # ===== NG+ 收束 =====
+  - id: c_v2_ng_end_perfect
+    campaign: competition
+    title: 《给下一个周目》
+    mainResult: NG+：所有坑填平后的完美收官
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_perfect }
+        - { kind: ngPlus }
+    priority: 98
+    tier: hidden
+    family: competition_result
+    tone: positive
+    ngPlus: true
+    ultraRare: true
+    whyDistinct: NG+超稀有：需要多个周目的经验全部前置兑现，是全游戏最难达成的竞赛结局
+    baseText: |
+      第17页的条款被标注了。分工表在墙上。排练表提前两周锁档。铁律三条立在Agent的会话头。压测图在PPT第9页。备机在包里。复现包在云端。
+      决赛那天，一切像被谁提前排好——因为确实有人排过：用一整个周目的狼狈，换这一场的从容。
+      你在颁奖台下想：所谓完美周目，不是没有坑，是所有的坑都被认真填过。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 70, text: "评委问你们「为什么这么熟练」，方远指了指你说：「问队长。他好像经历过的样子。」你笑了笑，没接话——有些优势，说不出口但站得住。" }
+          - { lte: 50, text: "准备是完美的，临场还是抖了一拍。周目给的是地图，走路的还是这双会抖的腿。" }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 颁奖后雨桐问你：「我们是不是在哪里见过这场答辩？」你说：「在很远的地方。」她若有所思地点了点头。
+        neutral: 雨桐说：「这场赢得不真实。」你回：「那就把它变成真实的。」
+        negative: 雨桐隐隐觉得你藏着什么。她没有追问——但那道好奇的目光，跟了你们很久。
+      - characterId: c_advisor
+        positive: 何老师看着你们熟练得反常的全流程，说了句：「你们像一支已经输过一次的队伍。」——这是他职业生涯最准的直觉。
+        neutral: 何老师说：「准备充分。就这样。」他对反常的从容，选择了不深究。
+        negative: 何老师嘀咕：「你们不觉得无聊吗？一点悬念都没有。」——完美确实杀死了悬念。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那封三页的《给下一个周目》被塞进了实验室的锦盒——收信人是所有还没来的人。" }
+    reflection: 完美周目的真义：所有的坑都替后来者踩过一遍。
+    lessonHint: 记忆的全部价值在于兑现成行动
+    specialTags: [ngplus, legendary]
+
+  - id: c_v2_ng_end_ally
+    campaign: competition
+    title: 《周三晚的灯》
+    mainResult: NG+：修正前周目的错过，与对手结盟
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_ng_ally }
+        - { kind: ngPlus }
+    priority: 96
+    tier: special
+    family: team
+    tone: ambiguous
+    ngPlus: true
+    whyDistinct: NG+专属：核心结果是「用周目记忆修正一次人际错过」，结局重心在关系的微妙变化
+    baseText: |
+      周三晚的实验室，灯比平时亮了一倍——多出来的那倍，是邱一鸣那支队伍的。
+      互相拷问到第三周，你们已经分不清哪些进步属于谁。决赛你们第二、他们第一，差距0.8分。
+      路灯下邱一鸣说：「上次你拒绝了，我们俩都输了那次的机会。这次没拒绝。」你没告诉他：这次是第二次机会了。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "结盟没有动摇你们的主体性：共享方法，不共享核心数据。周目给你的不是答案，是分寸。" }
+          - { lte: 45, text: "为弥补前周目的「错」，这次你有些用力过猛——结盟变成了迁就。修正 past 不等于否定现在的自己。" }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 邱一鸣后来问你：「为什么第一次答应得那么干脆？」你说：「因为我知道你会推荐我们。」他愣了很久。
+        neutral: 邱一鸣照旧嘴硬：「是你们蹭了我们的陪练。」灯还亮着，嘴硬就随他去。
+        negative: 结盟没有延续到第二年。有些关系只有一周目的保质期——但你见过它亮过的样子。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "「周三晚」在你们毕业后又延续了三届——没人知道它为什么从这两支队伍开始。" }
+    reflection: 周目最珍贵的不是改写结果，是接住曾经掉在地上的那只手。
+    lessonHint: 修正错过要带着分寸
+    specialTags: [ngplus, rivalry]
+
+  # ===== 隐藏收束 =====
+  - id: c_v2_in_method_new
+    campaign: competition
+    title: 《四步协约法》
+    mainResult: 独创的人机协作方法被公开认可
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_method_innov }
+    priority: 98
+    tier: hidden
+    family: innovation
+    tone: positive
+    ultraRare: true
+    whyDistinct: 超稀有：核心结果是「从比赛实践中长出可发布的新方法论」，创新层级高于任何奖级
+    baseText: |
+      「提取-抽查-台账-复用」——这四个词被你们写成六千字长文的那晚，没有一个人意识到发生了什么。
+      一周后，业界博主转发：「学生队伍比多数公司更懂人机分工。这套《四步协约法》值得每个团队抄作业。」
+      三个月后，有公司把它写进了内部培训。你们没有拿到这个项目的金奖——但你们在另一个赛道上，赢了所有评委都没见过的东西。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 70, text: "长文的最后一节是「这个方法的边界」——你们如实写了它在什么情况下会失效。正是这一节让方法论显得可信。" }
+          - { lte: 50, text: "发布引来了一些质疑：「样本量1，也配叫方法？」你们的回应是第二个项目继续用它——用行动补样本。" }
+    characterEpilogueRules:
+      - characterId: c_ai_agent
+        positive: Agent被问起「协约法是谁发明的」，它的回答被截图传播：「发明者是与我协作的人类。我负责遵守。」——这句话让很多人破防。
+        neutral: Agent把协约法标记为「已验证工作流」。在它的世界里，这是最高级的赞美。
+        negative: 有团队生搬硬套协约法失败后指责你们。Agent说：「方法未适配场景，责任在使用者。」——它替你们挡了枪。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "《四步协约法》v2在第二个项目后发布——方法论和代码一样，需要迭代。" }
+    reflection: 比赛的最高产出不是名次，是可以被别人使用的东西。
+    lessonHint: 把实践中长出的方法发布出去
+    specialTags: [methodology, legendary, hidden_path]
+
+  - id: c_v2_pr_qa_master
+    campaign: competition
+    title: 《追问训练营毕业》
+    mainResult: 极限拷问训练换来铜墙铁壁的答辩
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_qa_strong }
+    priority: 97
+    tier: hidden
+    family: presentation_defense
+    tone: positive
+    whyDistinct: 核心结果是「极限追问训练的兑现」，来自隐藏训练营路径的答辩专精结局
+    baseText: |
+      三轮恶意追问，不许看稿——第一轮全队阵亡的那个训练营，在决赛现场收到了回报。
+      孙教授五连问，方远四答一反问。第五问停顿两秒后，他答：「这个数据我们没有，但这是获得它的方法。」诚实加方案，滴水不漏。
+      孙教授合上评分表前说了句：「你们的答辩，像一支被真正训练过的队伍。」他不知道有多「真正」。
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 60, text: "最难的那问被雨桐接走了——「这个他更懂」的递话练习了三十遍。训练营的默契，在台上闪闪发光。" }
+          - { lte: 45, text: "训练营练的是主线，评委偏问了支线。70分的准备挡住了70分的攻击——剩下30分，是运气给的。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远把训练营第一轮的惨况录屏留了下来：「每当我膨胀，就看一遍自己被雨桐问哑口无言的样子。」
+        neutral: 方远承认：「拷问那一晚想骂人。台上那一晚想感谢人。」
+        negative: 方远从此畏惧一切「模拟考」——他怕的不是提问，是第一轮全灭的记忆。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "那38次历届追问剪辑成了《追问合集v2》，每届赛前循环播放。" }
+    reflection: 答辩的从容不是性格，是排练量的函数。
+    lessonHint: 用最狠的模拟考换最稳的考场
+    specialTags: [qa, hidden_path]
+
+  - id: c_v2_pd_live_data
+    campaign: competition
+    title: 《3142条真实记录》
+    mainResult: 真实数据接入，Demo获得不可辩驳的底气
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_c_live_data }
+    priority: 97
+    tier: hidden
+    family: product_demo
+    tone: positive
+    whyDistinct: 核心结果是「真实数据接入」的隐藏路径，Demo的证据等级与其他演示结局完全不同
+    baseText: |
+      3142条真实报名记录——来自学生会，脱敏处理，字段完整。
+      决赛演示，你当着评委的面现场执行统计：3秒，出图，分毫不差。孙教授问：「这是演示数据还是真实数据？」
+      「真实数据，附授权说明。」——这一问一答，是全场别的队伍没有的奢侈。真数据是最好的演员，因为它根本不用演。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { gte: 60, text: "授权说明和脱敏方案被你们做成了附录。高主任的原话：「合规意识满分。」真数据+真合规，是证据链的天花板。" }
+          - { lte: 45, text: "真数据接进来的第一周出了三次脏数据事故。真东西不是免死金牌——它只是更值得修。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远后来在实习面试里讲「3142条数据教会我的事」：真实数据有自己的脾气，假的才温顺。
+        neutral: 方远说：「接真数据那天起，调试日志变丑了，心里踏实了。」
+        negative: 方远被真数据的清洗工作折磨了三天：「假的省心，真的费腰。」——但他再也没用过假数据。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "学生会的数据接口续签到了第二年——真数据的关系，是项目最长的一条命。" }
+    reflection: 真数据的底气：它不用演，也演不了假。
+    lessonHint: 真实数据是演示的最强证据形态
+    specialTags: [real_data, hidden_path]
