@@ -1,0 +1,183 @@
+# METIS Academy Venture V2 结局批次八 —— 对应 events_v2_06.yaml 旗标
+endings:
+  - id: v2_security_end
+    campaign: venture
+    title: 《凌晨四点的告警》
+    mainResult: 安全基线挡住两次入侵
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_security_hardened }
+        - { kind: flag, key: kv_security_lazy, expected: false }
+    priority: 93
+    tier: hidden
+    baseText: 一年里两次入侵尝试，两次都死在了你的告警短信里。同行那位“杀进程了事”的朋友，第三次没能幸免：用户数据泄露，道歉信发遍全网。你们的产品在安全审计里拿了高分，标书上那一栏成了加分项。你后来把凌晨两点发现挖矿脚本的那晚称为“创业以来最划算的不睡觉”——两个小时的加固，换了三年的安稳觉。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你把安全清单做成了新服务器上线流程。每台机器从出生起就穿着盔甲。 }
+          - { lte: 40, text: 加固是你亲手做的，但没写成文档。你休假的那周，大家都在祈祷没有攻击。 }
+    characterEpilogueRules:
+      - characterId: v_ai_agent
+        positive: 监控告警的判断阈值你调了五版——Agent 负责盯梢，你负责决定什么值得半夜被叫醒。
+        neutral: Agent 忠实执行监控。它不知道那些短信挡住的是什么。
+        negative: 第三次攻击发生在你关掉告警的当天——因为“太吵了”。你重开了告警，再也没关过。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的手机仍保留着那条告警短信。它是你的“安全纪念日”。 }
+    reflection: 安全是最反直觉的投资——做对了，什么事都不会发生；而“什么都没发生”就是回报。
+    lessonHint: 安全基线（密钥/端口/监控/告警）必须第一天建立。
+    tone: positive
+    family: technology_agent
+    whyDistinct: 核心结果是“安全基线的两次实战检验”，由凌晨挖矿事件解锁，与杀进程侥幸路径在同一链互斥。
+
+  - id: v2_burnout_talked_end
+    campaign: venture
+    title: 《三点钟的对话》
+    mainResult: 合伙人心理危机的主动化解
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_burnout_talked }
+        - { kind: flag, key: kv_burnout_ignored, expected: false }
+    priority: 93
+    tier: hidden
+    baseText: 那晚聊到三点，你们把“如果失败”这四个字第一次摆上了桌面。阿哲说他怕的不是穷，是“对爸妈没法交代”。你说你怕的是“对不起他的信任”。两个恐惧撞在一起，居然撞出了一点勇气。后来每当团队士气低谷，你们都会复刻那晚的仪式——关灯、泡面、把最坏的可能说出来。恐惧被说出口的那一刻，它就从“背景音”变成了“可以讨论的项目”。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了主动制造“深夜对话”的场合——压力会自己找出口，你只是给它修了条渠。 }
+          - { lte: 40, text: 那晚是你创业以来第一次示弱。示弱没有让你失去权威——反而让阿哲觉得你更真实了。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 融资成功那天阿哲说：“谢谢你那天晚上没有假装没看见。”
+        neutral: 阿哲后来也学会了问“你还好吗”。你们的对话工具箱都变厚了。
+        negative: 你最终没有问出口。三个月后阿哲递了辞呈——辞呈的第一行写着“太久没有人问我好不好”。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的日历上有个循环事件叫“三点钟时间”——每两周一次，只聊人，不聊事。 }
+    reflection: 合伙创业最大的风险不是市场，是两个人不再交换脆弱——同舟共济的前提是知道彼此在怕什么。
+    lessonHint: 定期与合伙人进行脆弱性对话，是团队最高级别的风控。
+    tone: positive
+    family: founder_team
+    whyDistinct: 核心结果是“合伙人心理危机的主动干预”，由深夜失眠隐藏事件解锁，与假装没看见路径在同一链互斥。
+
+  - id: v2_data_response_end
+    campaign: venture
+    title: 《战场变考场》
+    mainResult: 用数据公开化解竞争性恶评
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_data_response }
+        - { kind: flag, key: kv_report_delete, expected: false }
+    priority: 92
+    tier: main
+    baseText: 你的两百字回复挂在那条一星差评下面，用户们的自发复核刷了三十楼。第七楼说“我照着你的方法算了，对得上”，第十五楼说“这种团队诬陷不了”。对面删掉了那条差评——但你的回复留了下来，后来成了新用户搜索你们时看到的第一条内容。对手射来的箭，你把它做成了路标。那一夜你没有愤怒地敲键盘，你平静地贴数据——这是你创业以来最帅的一次克制。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了“让数据替你打架”——情绪零消耗，效果满分。 }
+          - { lte: 40, text: 写那两百字你删了五稿。删掉的全是骂人的话——最后一稿只用了十分钟。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲当时想发长文对轰，被你按住了。事后他说：“幸好你没让我发。我这暴脾气，差点替对手完成KPI。”
+        neutral: 阿哲看着三十楼的复核刷屏，只说了两个字：“漂亮。”
+        negative: 那条差评你们始终没删——它是你的战利品，也是对手的耻辱柱。但有时候深夜，你也会想：到底谁先开始的？
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的危机应对手册第一页写着：先贴数据，再想情绪。顺序不能反。 }
+    reflection: 面对抹黑，愤怒是最贵的回应，数据是最便宜的武器——把战场变成考场，旁观者会替你监考。
+    lessonHint: 竞争性恶评以公开数据和复核邀请化解，不删评不对骂。
+    tone: positive
+    family: rules_execution
+    whyDistinct: 核心结果是“恶评危机的数据化解”，与举报删评路径在同一链互斥。
+
+  - id: v2_public_roadmap_end
+    campaign: venture
+    title: 《说话算话的阵营》
+    mainResult: 公开路线图赢得用户共建
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_public_roadmap }
+        - { kind: flag, key: kv_secret_roadmap, expected: false }
+    priority: 92
+    tier: main
+    baseText: 路线图公开第一百天，它成了你们的护城河。竞品模仿了界面、模仿了定价，唯独没敢模仿路线图——因为公开路线图等于把“跳票”的风险摊在阳光下，而他们做不到说话算话。你的用户群发展出了独特的文化：每季度投票前，会有老用户自发整理“上一季度承诺兑现报告”。你看着那份民间的兑现报告，忽然明白：透明一旦开始，就再也回不去了——它成了你的品牌人格。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你把“投票结果照单全收”坚持了四年。中途有三次你不想兑现——三次都忍住了。 }
+          - { lte: 40, text: 投票第一名的功能其实你不想做。你做了——做完才发现，用户的直觉常常比你的判断准。 }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 社团那位用户牵头写了第一份民间兑现报告。他说：“这份报告比你官方的更新日志好看多了。”
+        neutral: 用户们平静地接受了投票制。透明对他们来说是应得的，不是恩赐。
+        negative: 有一季度你调换了两个功能的优先级，群里炸了。你花了三天解释——透明的账户，取钱比存钱难十倍。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 公开路线图你更新了十二个季度。页脚的那行字没变过：“你们投票，我们兑现。” }
+    reflection: 透明是一种不可逆的战略——它逼你说话算话，也逼着竞争对手无话可说。
+    lessonHint: 公开路线图与用户共建投票，是最低成本的品牌信任建设。
+    tone: positive
+    family: user_understanding
+    whyDistinct: 核心结果是“路线图公开的信任阵营”，与保密路径在同一链互斥。
+
+  - id: v2_ng_paid_pilot_end
+    campaign: venture
+    title: 《一家的分量》
+    mainResult: NG+ 付费试点的先验决断
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_paid_pilot }
+        - { kind: flag, key: kv_ng_locked_free, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 三家机构，只有一家付了 990。阿哲盯着账面说“才一家”，你说“这一家的含金量，是上一世十家免费用户都换不来的”。付费机构每周认真填使用反馈、参加产品会、还介绍了同行来参观——因为付了钱，他们把你们当成了自己的投资。上一世的免费用户呢？他们的名言是“反正免费，下次再试”。990 元过滤掉的不是穷，是敷衍。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你给付费试点定了成功指标：使用频次、反馈质量、续约意向。三家变八家的路，是数据铺的。 }
+          - { lte: 40, text: 定价 990 是记忆给的，你没做价格测试。这一世的市场如果不同呢？你又赌了一次先验。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲后来逢人就说“我们第一个客户是 990 卖的”——他说这话时的骄傲，比金额贵多了。
+        neutral: 那家机构续了费，续了第二年。商业关系健康得像教科书。
+        negative: 被价格劝退的两家后来选了免费竞品——那家竞品半年后倒闭了。你听到了消息，没说“我早说过”。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 990 这个定价你用了三年。它的由来你只对阿哲讲过一次——讲的是“另一个世界”的故事。 }
+    reflection: 免费攒的不是口碑，是敷衍——付费过滤掉价格敏感，留下的是真正想要效果的同路人。
+    lessonHint: NG+ 定价先验可直接应用，但需标注为假设并验证。
+    tone: positive
+    family: pricing
+    whyDistinct: 核心结果是“NG+ 付费试点的先验决断”，仅 NG+ 可达，与框架锁定路径在同一链互斥。
+
+  - id: v2_ng_motivation_probe_end
+    campaign: venture
+    title: 《三个为什么》
+    mainResult: NG+ 招聘动机探测体系
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_motivation_probe }
+        - { kind: flag, key: kv_ng_paid_trial, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 你问了三个“为什么”，送走了一个技术最硬的候选人。阿哲不解，你说：“他回答'为什么离开上家'的流畅度，像在背一段准备好的公关稿——真话是磕绊的。”三个月后，当年拒掉的那位“技术第二硬”的候选人在别的公司经历了裁员潮，而你招的这位“动机最硬”的工程师，在最难的版本周主动住进了实验室。招聘的玄学被你拆成了科学：技术可以培养，动机只能探测。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 三个“为什么”后来变成了五问清单，每一问都对着一个上辈子的坑。 }
+          - { lte: 40, text: 你承认“磕绊理论”有点玄。它碰巧对了一次——样本量为 1 的结论，你不该太信。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 被拒的候选人后来创业了，做得不错。他约你喝茶时说：“那天你的问题，我想了一路。”两位创始人相视一笑。
+        neutral: 阿哲把动机五问做成了面试表格。表格没有名字，但大家都知道它来自哪一次“灵光”。
+        negative: 那位“背稿”的候选人其实说的是真话——只是他天生表达流畅。你错过了一个好人。探测，也有误伤率。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的面试守则扉页写着：简历看能力，提问看动机，时间看人品——三者都过的人，才值得一个坑位。 }
+    reflection: 招聘最大的成本不是招错能力，是招错动机——能力缺口可以补，动机裂缝会裂开整个团队。
+    lessonHint: NG+ 招聘教训转化为动机探测结构化问题。
+    tone: positive
+    family: founder_team
+    whyDistinct: 核心结果是“NG+ 动机探测的招聘体系”，仅 NG+ 可达，与付费试用路径在同一链互斥。

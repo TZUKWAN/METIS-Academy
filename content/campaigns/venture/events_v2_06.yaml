@@ -1,0 +1,266 @@
+# METIS Academy Venture V2 事件批次六 —— 隐藏/NG+ 密集冲刺
+events:
+  - id: v2h_d1_night_server
+    campaign: venture
+    day: 3
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 凌晨的挖矿脚本, learning: 安全基线的第一课 }
+    scene: { location: lab, characters: [] }
+    setup: [“凌晨两点检查服务器，你发现一个不认识的进程在跑——有人在用你的免费试验机挖矿。日志显示：已经跑了四天。”]
+    choices:
+      - id: security_sweep
+        text: 全盘安全加固：密钥、端口、防火墙、监控
+        visibleResponse: 你照着安全清单忙到五点：换密钥、关端口、装监控告警。三个月里又有两次入侵尝试——都被凌晨四点的告警短信掐灭在了萌芽里。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_security_hardened }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+        delayed:
+          - { eventId: v2h_d1b_alert_save, onDay: 15 }
+      - id: kill_process_only
+        text: 杀掉进程了事
+        visibleResponse: 你杀掉了进程，回去睡觉。三天后它又出现了——这次你还不知道。挖矿的算力账单在你看不见的地方滚动。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_security_lazy }
+          - { kind: add, key: money, value: -6 }
+    learningPoint: 服务器安全基线（密钥/端口/监控）必须第一天就建立
+
+  - id: v2h_d1b_alert_save
+    campaign: venture
+    day: 15
+    type: story
+    hidden: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 监控的第一次告警, learning: 安全投入的即时回报 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “凌晨四点的告警短信：异常 CPU。你远程一键隔离——入侵者无功而返。你看了一眼时间，翻个身继续睡。安全感的形状，就是”知道了也能睡着“。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    next: v2_d15_wire8
+
+  - id: v2h_d2_burnout_whisper
+    campaign: venture
+    day: 6
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 阿哲的失眠, learning: 创业者的心理负债信号 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: [“凌晨一点，你回实验室拿充电器，发现阿哲一个人坐在黑暗里盯着屏幕——他已经连续一周这样了。屏幕上不是代码，是招聘网站的”其他岗位“。”]
+    choices:
+      - id: honest_talk
+        text: 坐下来，问一句“你还好吗”
+        visibleResponse: 阿哲沉默了很久，说：“我不怕吃苦，我怕的是吃苦没有意义。”你们聊到三点——关于现金流、关于他爸妈的电话、关于“如果失败”。聊完他删掉了招聘网站的标签页。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_burnout_talked }
+          - { kind: add, key: teamTrust, value: 8 }
+        delayed:
+          - { eventId: v2h_d2b_storm_proof, onDay: 19 }
+      - id: pretend_unseen
+        text: 轻手轻脚离开，别尴尬
+        visibleResponse: 你悄悄退了出去。第二天阿哲照常出现，只是话更少了。你告诉自己“他需要空间”——也可能，他需要的是有人问一句。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_burnout_ignored }
+          - { kind: add, key: teamTrust, value: -4 }
+    learningPoint: 合伙人的心理状态是第一风险指标，主动询问是管理动作
+
+  - id: v2h_d2b_storm_proof
+    campaign: venture
+    day: 19
+    type: story
+    hidden: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 聊天的复利, learning: 说出恐惧的关系免疫 }
+    scene: { location: lab, characters: [v_partner] }
+    dialogue:
+      - { speaker: v_partner, text: “昨天我爸又问我要不要回去考编。我说不回——”他顿了顿，“跟那天你聊完之后，我就没再打开过招聘网站。咱们的账再难看，我也看得见意义。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 3 }
+    next: v2_d19_wire8
+
+  - id: v2h_d3_dark_comment
+    campaign: venture
+    day: 10
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 匿名恶评的来源, learning: 竞争性恶评的识别与应对 }
+    scene: { location: dorm, characters: [] }
+    setup: [“应用商店出现一星差评：”数据造假的公司，团队都是混子。“文风熟悉——和某竞品创始人的朋友圈一模一样。你的手悬在回复框上。”]
+    choices:
+      - id: respond_with_data
+        text: 不对骂，只回数据和方法论
+        visibleResponse: 你回复了两百字：附上数据来源、审计截图、和一句“欢迎任何形式复核”。那条一星差评下面，你们的用户自发刷起了“我们查过，是真的”。战争没打起来——因为你把战场变成了考场。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_data_response }
+          - { kind: add, key: credibility, value: 5 }
+      - id: report_delete
+        text: 举报删评，眼不见心不烦
+        visibleResponse: 举报成功了。但你知道删评治标——那个“混子”的标签，会在你看不见的地方继续流传。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: -2 }
+    learningPoint: 竞争性恶评用数据公开复核化解，删评治标不治本
+
+  # ===== NG+ Z 系列 =====
+  - id: v2z1_ng_pricing_memory
+    campaign: venture
+    day: 7
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 7 }
+    purpose: { narrative: NG+ 免费策略的记忆, learning: 上辈子的免费陷阱 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: [“产品尚在原型期，已经有三家机构来问价格。阿哲兴奋地说”先免费攒口碑“。上一世，”免费“这两个字让你烧掉了两万块的 API 账单。”]
+    choices:
+      - id: paid_pilot_only
+        text: 直接推付费试点：990/季度，含服务
+        visibleResponse: 两家被价格劝退，一家签了。阿哲不解：“才一家？”你说：“一家付费的，胜过十家白嫖的——他要的是效果，我们给的是服务。”
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_paid_pilot }
+          - { kind: add, key: revenue, value: 6 }
+          - { kind: add, key: credibility, value: 3 }
+      - id: free_with_contract
+        text: 免费，但签框架协议锁定续费价
+        visibleResponse: 你设计了“免费三个月+锁定续费折扣”的框架。机构们签得痛快——因为锁定价低于市价三成。三个月后转付费率 67%。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_locked_free }
+          - { kind: add, key: revenue, value: 4 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+    learningPoint: NG+ 定价记忆：免费的替代品是“锁定折扣”而非“完全免费”
+
+  - id: v2z2_ng_hire_memory
+    campaign: venture
+    day: 13
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 13 }
+    purpose: { narrative: NG+ 招聘的记忆, learning: 上辈子招错人的代价 }
+    scene: { location: cafe, characters: [v_partner] }
+    setup: [“第一位全职候选人坐到你面前。上一世，你招了能力强的那个——三个月后发现他只是把你们当跳板。这一世，简历上同样的信号又出现了。”]
+    choices:
+      - id: probe_motivation
+        text: 追问动机：上一个项目为什么离开
+        visibleResponse: 你问了三个“为什么”。他的回答很流畅——流畅得像背的。你thank了时间，礼貌送客。阿哲不解：“他技术最硬。”你说：“硬碰硬的团队里，动机不硬的人最先碎。”
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_motivation_probe }
+          - { kind: add, key: teamTrust, value: 3 }
+      - id: test_with_task
+        text: 给一个无报酬的小项目试两周
+        visibleResponse: 你设计了为期两周的付费小任务（照付市价）。两周后他的交付质量说话了——这次你听懂了：真金白银的活儿，比面试的白纸黑字诚实。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_paid_trial }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: add, key: money, value: -3 }
+    learningPoint: NG+ 招聘教训：动机探测与付费试用优于简历判断
+
+  # ===== 延迟链 W4：用户共建（D12 → D22）=====
+  - id: v2w4_co_build
+    campaign: venture
+    day: 12
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 12, phase: start }
+    purpose: { narrative: 路线图公开, learning: 用户共建的透明度 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: [“社团那位用户提议：”把你们的产品路线图公开，让我们投票决定下一个功能。“阿哲反对：”提需求的人多了，怎么做产品？“”]
+    choices:
+      - id: public_roadmap
+        text: 公开路线图，开放投票
+        visibleResponse: 路线图上线的第一周收到 214 票。第一名让你意外——“导出更漂亮”，而不是你以为的“加AI功能”。你顺着票数做，月活涨了 15%。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_public_roadmap }
+          - { kind: add, key: userUnderstanding, value: 6 }
+        delayed:
+          - { eventId: v2w4_roadmap_dividend, onDay: 22 }
+      - id: keep_secret
+        text: 路线图保密，竞争太激烈
+        visibleResponse: 你选择了保密。竞争对手公开了他们的路线图——用户用脚投票，去了那个“说话算话”的阵营。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_secret_roadmap }
+          - { kind: add, key: users, value: -3 }
+        delayed:
+          - { eventId: v2w4_transparency_gap, onDay: 22 }
+    learningPoint: 公开路线图换取用户信任与真实需求排序
+
+  - id: v2w4_roadmap_dividend
+    campaign: venture
+    day: 22
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 透明度的复利, learning: 共建带来的传播 }
+    scene: { location: canteen, characters: [v_user_student] }
+    dialogue:
+      - { speaker: v_user_student, text: “我们社团安利你们的时候都有一套话了：”他们更新什么，是用户投票投出来的。“这话比广告好使。” }
+    automaticEffects:
+      - { kind: add, key: users, value: 4 }
+      - { kind: add, key: credibility, value: 3 }
+    next: v2_d22_wire8
+
+  - id: v2w4_transparency_gap
+    campaign: venture
+    day: 22
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 透明度差距, learning: 沉默的代价 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “有用户在群里问：”下版本有什么？“三小时没人回复。竞品的群里，同样的提问五分钟就有官方回答加路线图链接。你的沉默，被解读成了傲慢。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: -3 }
+    next: v2_d22_wire8
+
+  # ===== 汇流 wire =====
+  - id: v2_d15_wire8
+    campaign: venture
+    day: 15
+    type: story
+    trigger: { kind: day, day: 15, phase: end }
+    purpose: { narrative: D15 夜间复盘, learning: 安全的安心 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “半夜的告警短信又响了一次。你看了一眼，关掉屏幕。两次入侵，零次得手。你给自己那次凌晨五点的加固，打了个满分。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 1 }
+
+  - id: v2_d19_wire8
+    campaign: venture
+    day: 19
+    type: story
+    trigger: { kind: day, day: 19, phase: end }
+    purpose: { narrative: D19 夜间复盘, learning: 意义的补给 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你把”意义“这个词记进了管理笔记。动机管理不是打鸡血，是定期帮队友把钱、累、意义三本账对齐。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 1 }
+
+  - id: v2_d22_wire8
+    campaign: venture
+    day: 22
+    type: story
+    trigger: { kind: day, day: 22, phase: end }
+    purpose: { narrative: D22 夜间复盘, learning: 透明的力量 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “路线图的投票结果你们照单全收——包括那个你们不想做的”导出更漂亮“。说话算话的第一天，用户看见了。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 1 }
