@@ -10,7 +10,7 @@ endings:
         - { kind: state, key: independence, op: gte, value: 78 }
         - { kind: state, key: evidenceDiscipline, op: gte, value: 78 }
         - { kind: state, key: progress, op: gte, value: 70 }
-    priority: 300
+    priority: 89
     tier: hidden
     baseText: |
       答辩结束的那一刻，你意识到某种东西不一样了。

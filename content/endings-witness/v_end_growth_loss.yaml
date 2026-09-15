@@ -1,0 +1,439 @@
+endingId: v_end_growth_loss
+campaign: venture
+description: Auto-solved witness (greedy solver over real reducer)
+steps:
+  - do: startMission
+    missionId: vm1
+  - do: advance
+    expectEvent: v_d01_blank
+  - do: choose
+    choiceId: chase_hype
+    expectEvent: v_d02_signals
+  - do: choose
+    choiceId: dodge
+    expectEvent: v_x_d1_chat
+  - do: advance
+    expectEvent: v_e01_d01_log_habit
+  - do: advance
+    expectEvent: v_e07_d01_daily_three
+  - do: choose
+    choiceId: process_goal
+    expectEvent: v_y_d1_wishlist
+  - do: endDay
+    expectDay: 2
+  - do: choose
+    choiceId: spray_wall
+    expectEvent: v_e02_d10_landing_test
+  - do: advance
+    expectEvent: v_x_d2_more_signals
+  - do: advance
+    expectEvent: v_e01_d02_signals_plus
+  - do: advance
+    expectEvent: v_y_d2_tool_check
+  - do: startMission
+    missionId: vm2
+  - do: choose
+    choiceId: investigate_student
+    expectEvent: v_d04_who
+  - do: endDay
+    expectDay: 3
+  - do: choose
+    choiceId: fall_for_pro
+    expectEvent: v_d03_ai_ideas
+  - do: advance
+    expectEvent: v_e02_d13_dep_hell
+  - do: choose
+    choiceId: keep_all
+    expectEvent: v_e01_d03_log_trim
+  - do: endDay
+    expectDay: 4
+  - do: advance
+    expectEvent: v_e05_d23_mentor_ltv2
+  - do: choose
+    choiceId: no_outline
+    expectEvent: v_e01_d04_outline
+  - do: endDay
+    expectDay: 5
+  - do: choose
+    choiceId: keep_leading
+    expectEvent: v_d05_leading_q
+  - do: choose
+    choiceId: go_verbal
+    expectEvent: v2g1_partner_split
+  - do: advance
+    expectEvent: v_e05_d28_wechat_depend
+  - do: advance
+    expectEvent: v_x_d5_senior_case
+  - do: advance
+    expectEvent: v_y_x_d5_redo
+  - do: endDay
+    expectDay: 6
+  - do: advance
+    expectEvent: v_d06_real_talk
+  - do: choose
+    choiceId: brand_kit
+    expectEvent: v_e07_d29_brand_assets
+  - do: choose
+    choiceId: casual_notes
+    expectEvent: v_d06_notes_choice
+  - do: advance
+    expectEvent: v_e01_d06_teacher_view
+  - do: choose
+    choiceId: proactive_report
+    expectEvent: v_y_d6_senior_warn
+  - do: endDay
+    expectDay: 7
+  - do: choose
+    choiceId: accept_refute
+    expectEvent: v_d07_refuted
+  - do: choose
+    choiceId: all_in_platform
+    expectEvent: v2h1_platform_choice
+  - do: advance
+    expectEvent: v_e06_d23_union_kpi
+  - do: choose
+    choiceId: stay_comfy
+    expectEvent: v_e01_d07_friend_bias
+  - do: advance
+    expectEvent: v_y_d7_free_reward
+  - do: endDay
+    expectDay: 8
+  - do: choose
+    choiceId: segment_users
+    expectEvent: v_d08_segment
+  - do: advance
+    expectEvent: v_e03_d23_mom_share
+  - do: endDay
+    expectDay: 9
+  - do: choose
+    choiceId: ai_auto_reply
+    expectEvent: v2i1_support_setup
+  - do: advance
+    expectEvent: v_e01_d06_wangjie_ledger
+  - do: advance
+    expectEvent: v_x_d9_board_check
+  - do: choose
+    choiceId: draw_quad
+    expectEvent: v_e01_d09_quad
+  - do: choose
+    choiceId: mix_all
+    expectEvent: v_e02_d09_evidence_grade
+  - do: advance
+    expectEvent: v_y_d9_naming
+  - do: endDay
+    expectDay: 10
+  - do: advance
+    expectEvent: v_e05_d23_price_drop
+  - do: advance
+    expectEvent: v_x_d10_concierge_log
+  - do: advance
+    expectEvent: v_e01_d10_grad_handover
+  - do: choose
+    choiceId: evidence_first
+    expectEvent: v_e01_d10_pick_three
+  - do: advance
+    expectEvent: v_e01_d10_k_introduce
+  - do: advance
+    expectEvent: v_e01_d10_weekly_summary
+  - do: choose
+    choiceId: keep_all
+    expectEvent: v_e02_d10_scope_cut
+  - do: choose
+    choiceId: simple_stack
+    expectEvent: v_y_d10_tech_debt_early
+  - do: endDay
+    expectDay: 11
+  - do: advance
+    expectEvent: v_e01_d04_note_copy
+  - do: choose
+    choiceId: track_cost
+    expectEvent: v_x_d11_cost
+  - do: advance
+    expectEvent: v_y_d11_first_error
+  - do: advance
+    expectEvent: v_y_x_d11_git_v
+  - do: advance
+    expectEvent: v2_d11_wire
+  - do: endDay
+    expectDay: 12
+  - do: choose
+    choiceId: chase_both
+    expectEvent: v2j1_route_choice
+  - do: choose
+    choiceId: refactor_now
+    expectEvent: v_e04_d27_refactor
+  - do: advance
+    expectEvent: v_e02_d12_test_first
+  - do: endDay
+    expectDay: 13
+  - do: advance
+    expectEvent: v_d13_init
+  - do: advance
+    expectEvent: v_e02_d11_agent_freestyle
+  - do: choose
+    choiceId: write_rules
+    expectEvent: v_d13_rules
+  - do: endDay
+    expectDay: 14
+  - do: advance
+    expectEvent: v2g2_ghost_tasks
+  - do: choose
+    choiceId: mvp_contract
+    expectEvent: v_d14_contract
+  - do: choose
+    choiceId: invite_only
+    expectEvent: v_e03_d21_invite_code
+  - do: choose
+    choiceId: blame_and_move
+    expectEvent: v2g3_ghost_choice
+  - do: advance
+    expectEvent: v2_d14_wire
+  - do: endDay
+    expectDay: 15
+  - do: choose
+    choiceId: launch_goal
+    expectEvent: v_d15_goal
+  - do: choose
+    choiceId: trust_average
+    expectEvent: v2k1_churn_read
+  - do: choose
+    choiceId: three_docs
+    expectEvent: v_e02_d15_readme_audience
+  - do: advance
+    expectEvent: v_x_d15_test_day
+  - do: advance
+    expectEvent: v_y_d15_demo_video
+  - do: endDay
+    expectDay: 16
+  - do: choose
+    choiceId: loop_with_regress
+    expectEvent: v_d16_loop
+  - do: choose
+    choiceId: no_change
+    expectEvent: v_y_d8_habits
+  - do: endDay
+    expectDay: 17
+  - do: advance
+    expectEvent: v_d17_deploy
+  - do: advance
+    expectEvent: v_e05_d24_exit_clause
+  - do: advance
+    expectEvent: v_x_d17_pre_announce
+  - do: choose
+    choiceId: final_regress
+    expectEvent: v_d17_launch_choice
+  - do: advance
+    expectEvent: v_e03_d17_first_ten
+  - do: advance
+    expectEvent: v2_d17_wire
+  - do: endDay
+    expectDay: 18
+  - do: advance
+    expectEvent: v2h2_platform_clamp
+  - do: advance
+    expectEvent: v_e04_d23_bill_transparent
+  - do: choose
+    choiceId: find_next_platform
+    expectEvent: v2h3_platform_response
+  - do: choose
+    choiceId: read_and_chill
+    expectEvent: v_x_d18_confusion
+  - do: advance
+    expectEvent: v_e03_d18_first_accompany
+  - do: endDay
+    expectDay: 19
+  - do: advance
+    expectEvent: v2i2_ai_reply_incident
+  - do: advance
+    expectEvent: v_x_d3_mentor_first
+  - do: choose
+    choiceId: triage_system
+    expectEvent: v2i3_support_rebuild
+  - do: advance
+    expectEvent: v_e02_d19_backup_habit
+  - do: advance
+    expectEvent: v2_d19_wire
+  - do: endDay
+    expectDay: 20
+  - do: choose
+    choiceId: keep_going
+    expectEvent: v_d20_pollution
+  - do: advance
+    expectEvent: v_e04_d26_churn_list
+  - do: advance
+    expectEvent: v_x_d20_moon
+  - do: advance
+    expectEvent: v_e02_d20_agents_update
+  - do: choose
+    choiceId: bleed_first
+    expectEvent: v_e02_d20_bug_grade
+  - do: advance
+    expectEvent: v_e03_d20_group_rules
+  - do: advance
+    expectEvent: v_e03_d20_word_of_mouth
+  - do: choose
+    choiceId: cut_hard
+    expectEvent: v_e03_d20_kill_channel
+  - do: advance
+    expectEvent: v_y_d20_churn_call
+  - do: endDay
+    expectDay: 21
+  - do: advance
+    expectEvent: v2j2_both_burn
+  - do: choose
+    choiceId: write_ad
+    expectEvent: v_e03_d19_tutorial_post
+  - do: choose
+    choiceId: double_down_b2c
+    expectEvent: v2j3_route_verdict
+  - do: advance
+    expectEvent: v_d21_churn
+  - do: advance
+    expectEvent: v_x_d21_pricing_page
+  - do: choose
+    choiceId: promise_refund
+    expectEvent: v_y_d21_price_page
+  - do: advance
+    expectEvent: v2_d21_wire
+  - do: endDay
+    expectDay: 22
+  - do: advance
+    expectEvent: v_d22_no_pay
+  - do: choose
+    choiceId: cold_process
+    expectEvent: v_d22_first_paid
+  - do: advance
+    expectEvent: v_e01_d06_wangjie_ledger
+  - do: endDay
+    expectDay: 23
+  - do: choose
+    choiceId: deny_refund
+    expectEvent: v_d23_refund
+  - do: choose
+    choiceId: deal
+    expectEvent: v_x_d26_referral
+  - do: advance
+    expectEvent: v_e04_d23_big_order
+  - do: endDay
+    expectDay: 24
+  - do: advance
+    expectEvent: v2g4_collapse_day
+  - do: choose
+    choiceId: feed_all
+    expectEvent: v_y_d12_privacy_think
+  - do: advance
+    expectEvent: v2_d24_wire
+  - do: choose
+    choiceId: take_side_job
+    expectEvent: v_x_d24_invoice
+  - do: advance
+    expectEvent: v_e03_d24_content_calendar
+  - do: advance
+    expectEvent: v_e03_d24_hundred_users
+  - do: endDay
+    expectDay: 25
+  - do: choose
+    choiceId: keep_quiet
+    expectEvent: v2k2_averaged_trap
+  - do: choose
+    choiceId: creative_accounting
+    expectEvent: v_d25_unit_econ
+  - do: choose
+    choiceId: no_note
+    expectEvent: v_e07_d29_shutdown_note
+  - do: advance
+    expectEvent: v_e04_d25_price_result
+  - do: advance
+    expectEvent: v_e05_d25_db_backup2
+  - do: advance
+    expectEvent: v_e07_d25_burn_sign
+  - do: choose
+    choiceId: research_legal
+    expectEvent: v_y_d25_tax_think
+  - do: endDay
+    expectDay: 26
+  - do: choose
+    choiceId: more_ads
+    expectEvent: v_d26_channels_cost
+  - do: choose
+    choiceId: hybrid
+    expectEvent: v_e04_d21_per_use_vs_sub
+  - do: advance
+    expectEvent: v_e05_d26_money_discipline
+  - do: endDay
+    expectDay: 27
+  - do: choose
+    choiceId: blame_users
+    expectEvent: v_d27_retention
+  - do: advance
+    expectEvent: v_x_d4_bin_talk
+  - do: choose
+    choiceId: send_mail
+    expectEvent: v_x_d27_churn_email
+  - do: advance
+    expectEvent: v_e04_d27_creep_check
+  - do: choose
+    choiceId: systematize
+    expectEvent: v_e04_d27_support_budget
+  - do: choose
+    choiceId: total_only
+    expectEvent: v_e05_d27_cac_table
+  - do: choose
+    choiceId: all_metrics
+    expectEvent: v_y_d27_metrics_review
+  - do: advance
+    expectEvent: v2_d27_wire
+  - do: endDay
+    expectDay: 28
+  - do: choose
+    choiceId: monthly_only
+    expectEvent: v_e06_d29_saas_page
+  - do: advance
+    expectEvent: v_e05_d28_ratio_review
+  - do: advance
+    expectEvent: v_e05_d28_margin_up
+  - do: endDay
+    expectDay: 29
+  - do: choose
+    choiceId: invest_users
+    expectEvent: v_d29_allocate
+  - do: advance
+    expectEvent: v_e06_d28_consult_referral
+  - do: advance
+    expectEvent: v_d30_final
+  - do: advance
+    expectEvent: v_x_d29_final_check
+  - do: advance
+    expectEvent: v_e06_d29_saas_churn_day
+  - do: choose
+    choiceId: hybrid_road
+    expectEvent: v_e06_d29_studio_or_product
+  - do: choose
+    choiceId: skip_bmc
+    expectEvent: v_e06_d29_bmc
+  - do: advance
+    expectEvent: v_y_d29_backup_data
+  - do: endDay
+    expectDay: 30
+  - do: choose
+    choiceId: confidence_users
+    expectEvent: v2_final_pitch_day
+  - do: choose
+    choiceId: full_grind
+    expectEvent: v_e02_d12_weekend_burn
+  - do: advance
+    expectEvent: v_x_d30_letter
+  - do: advance
+    expectEvent: v_e07_d30_second_act
+  - do: advance
+    expectEvent: v_e07_d30_legacy
+  - do: choose
+    choiceId: keep_in_head
+    expectEvent: v_e07_d30_handoff_doc
+  - do: advance
+    expectEvent: v_e07_d30_letter_next
+  - do: choose
+    choiceId: send_letter
+    expectEvent: v_y_d30_letter_to_users
+  - do: endDay
+    expectDay: 31

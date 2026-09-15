@@ -157,7 +157,7 @@ endings:
         - { kind: state, key: mentorTrust, op: gte, value: 80 }
         - { kind: state, key: credibility, op: gte, value: 70 }
         - { kind: flag, key: c_final_done }
-    priority: 130
+    priority: 89
     tier: hidden
     baseText: 颁奖典礼后，一位你从未见过的中年人走到你面前。"我是XX孵化器的。你答辩时提到的那个用户调研方法很扎实。有兴趣聊聊吗？"这次对话持续了三个小时，开启了你意想不到的大门。
     growthVariantRules:
