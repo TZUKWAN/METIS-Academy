@@ -147,7 +147,7 @@ endings:
     title: 《工具的形状》
     mainResult: AI依赖过高——完成了开题，但研究能力空转
     requirements: { kind: state, key: aiDependence, op: gte, value: 75 }
-    priority: 230
+    priority: 88
     tier: main
     baseText: |
       开题通过了。平心而论，报告写得很顺——顺得像一条流水线。
@@ -323,7 +323,7 @@ endings:
       conditions:
         - { kind: state, key: progress, op: lte, value: 42 }
         - { kind: flag, key: defense_done }
-    priority: 100
+    priority: 88
     tier: main
     baseText: |
       "准备不充分，开题暂不通过。"
@@ -458,7 +458,7 @@ endings:
         - { kind: state, key: progress, op: gte, value: 74 }
         - { kind: state, key: academicDebt, op: lte, value: 45 }
         - { kind: flag, key: defense_done }
-    priority: 90
+    priority: 88
     tier: main
     baseText: |
       答辩室里，你合上最后一页幻灯片。
@@ -550,7 +550,7 @@ endings:
         - { kind: state, key: mentorTrust, op: gte, value: 78 }
         - { kind: state, key: progress, op: gte, value: 58 }
         - { kind: flag, key: defense_done }
-    priority: 95
+    priority: 88
     tier: special
     baseText: |
       答辩第二天，陈教授的邮件只有一行："明天上午十点，来我办公室。带上你的文献矩阵。"
@@ -591,7 +591,7 @@ endings:
         - { kind: state, key: independence, op: gte, value: 82 }
         - { kind: state, key: progress, op: gte, value: 55 }
         - { kind: flag, key: defense_done }
-    priority: 92
+    priority: 88
     tier: special
     baseText: |
       答辩的最后，郑老师问了那个惯例问题："未来研究计划？"

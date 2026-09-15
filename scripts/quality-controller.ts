@@ -141,7 +141,8 @@ async function sync(): Promise<void> {
       const need = req[reqKey];
       if (need === undefined) continue;
       const cur = m[metric] ?? 0;
-      const gapId = `GAP-${reqKey.toUpperCase().replace(/([A-Z])/g, "_$1").slice(1)}-${short}`;
+      const ABBR = { baseEndings: "BE", events: "EV", meaningfulDecisions: "DEC", delayedConsequences: "DLY", npcInteractions: "NPC", hiddenEvents: "HID", ngPlusEvents: "NGP", hiddenBaseEndings: "HBE", ngPlusBaseEndings: "NGE", ultraRareBaseEndings: "URE" };
+      const gapId = `GAP-${ABBR[reqKey] ?? reqKey.slice(0, 3).toUpperCase()}-${short}`;
       const existing = items.find((it) => it.id === gapId);
       if (cur < need) {
         if (!existing) {

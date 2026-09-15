@@ -120,7 +120,7 @@ endings:
       conditions:
         - { kind: state, key: energy, op: lte, value: 15 }
         - { kind: state, key: day, op: gte, value: 20 }
-    priority: 92
+    priority: 88
     tier: main
     baseText: 连续三周每天工作 14 小时之后，你在凌晨三点醒来，发现自己无法起床。不是 Lazy——是身体在罢工。医生说你需要至少休息一个月。项目被迫暂停。
     growthVariantRules:
@@ -145,7 +145,7 @@ endings:
       conditions:
         - { kind: flag, key: v_final_done }
         - { kind: state, key: independence, op: gte, value: 75 }
-    priority: 105
+    priority: 88
     tier: special
     baseText: 你做出了一个出人意料的决定：将产品完全开源，用社区和服务模式盈利。你的导师说你疯了，你的合伙人说你是天才。三个月后，GitHub 上有 500 个 star 和 3 个外部贡献者。
     growthVariantRules:

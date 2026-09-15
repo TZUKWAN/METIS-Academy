@@ -663,7 +663,7 @@ endings:
         - { kind: state, key: users, op: lte, value: 4 }
         - { kind: state, key: execution, op: gte, value: 55 }
         - { kind: flag, key: v_final_done }
-    priority: 108
+    priority: 88
     tier: main
     baseText: |
       最憋屈的结局：东西确实好用（用过的人都说好），但"用过的人"只有4个。

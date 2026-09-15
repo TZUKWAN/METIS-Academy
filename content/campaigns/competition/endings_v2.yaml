@@ -1918,7 +1918,7 @@ endings:
       kind: and
       conditions:
         - { kind: flag, key: key_c_rival_talk_done }
-    priority: 91
+    priority: 88
     tier: main
     family: innovation
     tone: positive

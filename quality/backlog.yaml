@@ -4,7 +4,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research base endings 27/160 — 缺 133 个独立基础结局（Ending Matrix 按家族扩展）
+    description: Research base endings 91/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: pnpm quality:metrics 显示 research.baseEndings >= 160
     status: open
@@ -16,7 +16,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition base endings 22/160 — 缺 138 个
+    description: Competition base endings 119/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: competition.baseEndings >= 160
     status: open
@@ -28,7 +28,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture base endings 29/160 — 缺 131 个
+    description: Venture base endings 74/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: venture.baseEndings >= 160
     status: open
@@ -40,8 +40,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research meaningful decisions 78/150（严格定义：type=decision +
-      keyDecision + choices>=2）
+    description: Research meaningful decisions 141/150
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: research.meaningfulDecisions >= 150
     status: open
@@ -53,7 +52,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition meaningful decisions 49/140
+    description: Competition meaningful decisions 110/140
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: competition.meaningfulDecisions >= 140
     status: open
@@ -65,7 +64,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture meaningful decisions 65/160
+    description: Venture meaningful decisions 93/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: venture.meaningfulDecisions >= 160
     status: open
@@ -77,7 +76,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research delayed consequences 25/80
+    description: Research delayed consequences 71/80
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: research.delayedConsequences >= 80
     status: open
@@ -89,7 +88,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition delayed consequences 1/70 — 几乎为零，最高优先内容缺口之一
+    description: Competition delayed consequences 51/70
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: competition.delayedConsequences >= 70
     status: open
@@ -101,7 +100,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture delayed consequences 1/90 — 几乎为零，最高优先内容缺口之一
+    description: Venture delayed consequences 21/90
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: venture.delayedConsequences >= 90
     status: open
@@ -116,16 +115,16 @@ backlog:
     description: Competition NPC interactions 97/110
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: competition.npcInteractions >= 110
-    status: open
+    status: fixed
     dependencies: []
     gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
+    gitShaFixed: 450457efb2375cd0b86829a0b523f068d842f0c4
   - id: GAP-NPC-VEN
     requirementId: venture.npcInteractions
     priority: P1
     severity: S2
     category: content
-    description: Venture NPC interactions 46/130 — 最大 NPC 缺口
+    description: Venture NPC interactions 75/130
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: venture.npcInteractions >= 130
     status: open
@@ -225,315 +224,183 @@ backlog:
     dependencies: []
     gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
     gitShaFixed: ""
-  - id: GAP-B_A_S_E_E_N_D_I_N_G_S-RES
-    requirementId: research.baseEndings
-    priority: P0
-    severity: S1
-    category: content
-    description: Research base endings 27/160
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: research.baseEndings >= 160
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-M_E_A_N_I_N_G_F_U_L_D_E_C_I_S_I_O_N_S-RES
-    requirementId: research.meaningfulDecisions
-    priority: P0
-    severity: S1
-    category: content
-    description: Research meaningful decisions 78/150
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: research.meaningfulDecisions >= 150
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-D_E_L_A_Y_E_D_C_O_N_S_E_Q_U_E_N_C_E_S-RES
-    requirementId: research.delayedConsequences
-    priority: P0
-    severity: S1
-    category: content
-    description: Research delayed consequences 25/80
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: research.delayedConsequences >= 80
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-H_I_D_D_E_N_E_V_E_N_T_S-RES
+  - id: GAP-HID-RES
     requirementId: research.hiddenEvents
     priority: P0
     severity: S1
     category: content
-    description: Research hidden events 0/40
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Research hidden events 15/40
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.hiddenEvents >= 40
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-N_G_P_L_U_S_E_V_E_N_T_S-RES
+  - id: GAP-NGP-RES
     requirementId: research.ngPlusEvents
     priority: P0
     severity: S1
     category: content
-    description: Research NG+ events 0/30
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Research NG+ events 11/30
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.ngPlusEvents >= 30
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-H_I_D_D_E_N_B_A_S_E_E_N_D_I_N_G_S-RES
+  - id: GAP-HBE-RES
     requirementId: research.hiddenBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Research hidden base endings 1/20
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Research hidden base endings 12/20
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.hiddenBaseEndings >= 20
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-N_G_P_L_U_S_B_A_S_E_E_N_D_I_N_G_S-RES
+  - id: GAP-NGE-RES
     requirementId: research.ngPlusBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Research NG+ base endings 0/16
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Research NG+ base endings 8/16
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.ngPlusBaseEndings >= 16
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-U_L_T_R_A_R_A_R_E_B_A_S_E_E_N_D_I_N_G_S-RES
+  - id: GAP-URE-RES
     requirementId: research.ultraRareBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Research ultra rare base endings 0/5
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Research ultra rare base endings 3/5
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.ultraRareBaseEndings >= 5
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-B_A_S_E_E_N_D_I_N_G_S-COM
-    requirementId: competition.baseEndings
-    priority: P0
-    severity: S1
-    category: content
-    description: Competition base endings 22/160
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: competition.baseEndings >= 160
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-M_E_A_N_I_N_G_F_U_L_D_E_C_I_S_I_O_N_S-COM
-    requirementId: competition.meaningfulDecisions
-    priority: P0
-    severity: S1
-    category: content
-    description: Competition meaningful decisions 49/140
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: competition.meaningfulDecisions >= 140
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-D_E_L_A_Y_E_D_C_O_N_S_E_Q_U_E_N_C_E_S-COM
-    requirementId: competition.delayedConsequences
-    priority: P0
-    severity: S1
-    category: content
-    description: Competition delayed consequences 1/70
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: competition.delayedConsequences >= 70
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-N_P_C_I_N_T_E_R_A_C_T_I_O_N_S-COM
-    requirementId: competition.npcInteractions
-    priority: P0
-    severity: S1
-    category: content
-    description: Competition NPC interactions 97/110
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: competition.npcInteractions >= 110
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-H_I_D_D_E_N_E_V_E_N_T_S-COM
+  - id: GAP-HID-COM
     requirementId: competition.hiddenEvents
     priority: P0
     severity: S1
     category: content
-    description: Competition hidden events 0/35
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Competition hidden events 24/35
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: competition.hiddenEvents >= 35
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-N_G_P_L_U_S_E_V_E_N_T_S-COM
+  - id: GAP-NGP-COM
     requirementId: competition.ngPlusEvents
     priority: P0
     severity: S1
     category: content
-    description: Competition NG+ events 0/25
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Competition NG+ events 15/25
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: competition.ngPlusEvents >= 25
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-H_I_D_D_E_N_B_A_S_E_E_N_D_I_N_G_S-COM
+  - id: GAP-HBE-COM
     requirementId: competition.hiddenBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Competition hidden base endings 2/20
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Competition hidden base endings 15/20
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: competition.hiddenBaseEndings >= 20
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-N_G_P_L_U_S_B_A_S_E_E_N_D_I_N_G_S-COM
+  - id: GAP-NGE-COM
     requirementId: competition.ngPlusBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Competition NG+ base endings 0/16
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Competition NG+ base endings 9/16
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: competition.ngPlusBaseEndings >= 16
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-U_L_T_R_A_R_A_R_E_B_A_S_E_E_N_D_I_N_G_S-COM
+  - id: GAP-URE-COM
     requirementId: competition.ultraRareBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Competition ultra rare base endings 0/5
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Competition ultra rare base endings 3/5
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: competition.ultraRareBaseEndings >= 5
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-B_A_S_E_E_N_D_I_N_G_S-VEN
-    requirementId: venture.baseEndings
-    priority: P0
-    severity: S1
-    category: content
-    description: Venture base endings 29/160
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: venture.baseEndings >= 160
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-M_E_A_N_I_N_G_F_U_L_D_E_C_I_S_I_O_N_S-VEN
-    requirementId: venture.meaningfulDecisions
-    priority: P0
-    severity: S1
-    category: content
-    description: Venture meaningful decisions 65/160
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: venture.meaningfulDecisions >= 160
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-D_E_L_A_Y_E_D_C_O_N_S_E_Q_U_E_N_C_E_S-VEN
-    requirementId: venture.delayedConsequences
-    priority: P0
-    severity: S1
-    category: content
-    description: Venture delayed consequences 1/90
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: venture.delayedConsequences >= 90
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-N_P_C_I_N_T_E_R_A_C_T_I_O_N_S-VEN
-    requirementId: venture.npcInteractions
-    priority: P0
-    severity: S1
-    category: content
-    description: Venture NPC interactions 46/130
-    evidence: quality/metrics/latest.json @ b449c267
-    acceptance: venture.npcInteractions >= 130
-    status: open
-    dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
-  - id: GAP-H_I_D_D_E_N_E_V_E_N_T_S-VEN
+  - id: GAP-HID-VEN
     requirementId: venture.hiddenEvents
     priority: P0
     severity: S1
     category: content
-    description: Venture hidden events 0/45
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Venture hidden events 6/45
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: venture.hiddenEvents >= 45
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-N_G_P_L_U_S_E_V_E_N_T_S-VEN
+  - id: GAP-NGP-VEN
     requirementId: venture.ngPlusEvents
     priority: P0
     severity: S1
     category: content
-    description: Venture NG+ events 0/30
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Venture NG+ events 5/30
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: venture.ngPlusEvents >= 30
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-H_I_D_D_E_N_B_A_S_E_E_N_D_I_N_G_S-VEN
+  - id: GAP-HBE-VEN
     requirementId: venture.hiddenBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Venture hidden base endings 1/20
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Venture hidden base endings 6/20
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: venture.hiddenBaseEndings >= 20
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-N_G_P_L_U_S_B_A_S_E_E_N_D_I_N_G_S-VEN
+  - id: GAP-NGE-VEN
     requirementId: venture.ngPlusBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Venture NG+ base endings 0/16
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Venture NG+ base endings 6/16
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: venture.ngPlusBaseEndings >= 16
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""
-  - id: GAP-U_L_T_R_A_R_A_R_E_B_A_S_E_E_N_D_I_N_G_S-VEN
+  - id: GAP-URE-VEN
     requirementId: venture.ultraRareBaseEndings
     priority: P0
     severity: S1
     category: content
-    description: Venture ultra rare base endings 0/5
-    evidence: quality/metrics/latest.json @ b449c267
+    description: Venture ultra rare base endings 1/5
+    evidence: quality/metrics/latest.json @ 450457ef
     acceptance: venture.ultraRareBaseEndings >= 5
     status: open
     dependencies: []
-    gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
+    gitShaFound: 450457efb2375cd0b86829a0b523f068d842f0c4
     gitShaFixed: ""

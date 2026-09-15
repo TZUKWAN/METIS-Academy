@@ -10,7 +10,7 @@ endings:
         - { kind: state, key: progress, op: gte, value: 70 }
         - { kind: state, key: credibility, op: gte, value: 70 }
         - { kind: flag, key: c_final_done }
-    priority: 200
+    priority: 89
     tier: hidden
     baseText: |
       "金奖——社团管家，XX大学。"
@@ -102,7 +102,7 @@ endings:
         - { kind: state, key: progress, op: gte, value: 65 }
         - { kind: state, key: credibility, op: gte, value: 55 }
         - { kind: flag, key: c_final_done }
-    priority: 150
+    priority: 88
     tier: main
     baseText: |
       省赛金奖，国赛二等奖。领奖台上你举着证书，想起21天前的那个40页PDF。
@@ -274,7 +274,7 @@ endings:
         - { kind: state, key: competitionRank, op: gte, value: 1 }
         - { kind: state, key: userUnderstanding, op: lte, value: 40 }
         - { kind: flag, key: c_final_done }
-    priority: 105
+    priority: 88
     tier: special
     baseText: |
       证书到手，热闹散场。两周后有社团想真的用你们的工具——打开仓库，没人敢动：代码没人说得清，数据是造的，文档没有。
@@ -523,7 +523,7 @@ endings:
         - { kind: flag, key: mock_defense_done }
         - { kind: state, key: energy, op: lte, value: 30 }
         - { kind: flag, key: c_final_done }
-    priority: 95
+    priority: 88
     tier: special
     baseText: |
       评审表上，"答辩表现"拿了全场第二高——评委说你们的应答"像打磨过一百遍"。

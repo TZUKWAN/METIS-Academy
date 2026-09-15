@@ -204,7 +204,7 @@ endings:
       conditions:
         - { kind: state, key: users, op: gte, value: 15 }
         - { kind: flag, key: v_final_done }
-    priority: 115
+    priority: 88
     tier: main
     baseText: 社团联合会的管理员突然发通知：所有第三方工具必须通过安全审核，否则下个月全部禁用。你的产品有 30 个活跃社团在用。
     growthVariantRules:
@@ -230,7 +230,7 @@ endings:
         - { kind: state, key: users, op: gte, value: 10 }
         - { kind: state, key: execution, op: gte, value: 70 }
         - { kind: flag, key: v_final_done }
-    priority: 120
+    priority: 88
     tier: special
     baseText: 一个拥有 5 万粉丝的校园博主发了一条 15 秒的视频——"这个工具让我社团的报名效率提升了 10 倍"。24 小时内，你的注册用户从 30 涨到了 800。
     growthVariantRules:
@@ -310,7 +310,7 @@ endings:
         - { kind: state, key: users, op: gte, value: 8 }
         - { kind: state, key: credibility, op: gte, value: 70 }
         - { kind: flag, key: v_final_done }
-    priority: 95
+    priority: 88
     tier: special
     baseText: 没有投放广告，没有找大V。三个社团的社长自发在新生群里推荐你的工具——"这是真的好用，不是广告"。你看着后台的注册曲线，第一次感受到"口碑"两个字的重量。
     growthVariantRules:
