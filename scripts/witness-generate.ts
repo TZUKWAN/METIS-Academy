@@ -198,14 +198,20 @@ function attemptSolve(target: Ending, campaignId: string, seed: number): { steps
         // 评估每个选择
         let bestChoice: string | null = null;
         let bestScore = -Infinity;
+        const targetIsGeneric = specScore(target) === 0;
         for (const ch of event.choices) {
           const clone = structuredClone(state);
           const r = reducer(clone, { type: "choose", choiceId: ch.id }, index);
           if (r.error) continue;
-          const score = conditionProgress(target.requirements as Condition, r.state, index)
+          let score = conditionProgress(target.requirements as Condition, r.state, index)
             - 1.5 * competitorPenalty(target, r.state)
             + (r.state.ended && r.state.endingId === target.id ? 100 : 0)
             + rng() * 0.01;
+          if (targetIsGeneric) {
+            // 通用结局：避免任何设置旗标的选择，保住"无旗标"区域
+            const setsFlag = (ch.hiddenEffects ?? []).some((e) => e.kind === "setFlag");
+            if (setsFlag) score -= 3;
+          }
           if (score > bestScore) {
             bestScore = score;
             bestChoice = ch.id;

@@ -2,68 +2,68 @@ version: 1
 releaseStatus: NOT_RELEASE_READY
 git:
   branch: v2-rebuild
-  sha: 450457efb2375cd0b86829a0b523f068d842f0c4
+  sha: 7821d281955205aef07194a1e78905dd678ccf9c
 round:
   current: 1
   cleanConsecutive: 0
 metrics:
   research:
-    events: 485
-    baseEndings: 91
-    meaningfulDecisions: 141
+    events: 508
+    baseEndings: 119
+    meaningfulDecisions: 154
     delayedConsequences: 71
-    npcInteractions: 200
-    hiddenEvents: 15
-    ngPlusEvents: 11
-    hiddenBaseEndings: 12
-    ngPlusBaseEndings: 8
+    npcInteractions: 201
+    hiddenEvents: 24
+    ngPlusEvents: 16
+    hiddenBaseEndings: 18
+    ngPlusBaseEndings: 13
     ultraRareBaseEndings: 3
-    displayVariantCount: 948
+    displayVariantCount: 1116
     endingTones:
-      positive: 30
-      negative: 17
-      mixed: 17
+      positive: 45
+      negative: 25
+      mixed: 22
       ambiguous: 0
       unset: 27
-    visibleEventRange: 209
+    visibleEventRange: 218
   competition:
-    events: 458
-    baseEndings: 119
-    meaningfulDecisions: 110
-    delayedConsequences: 51
-    npcInteractions: 217
-    hiddenEvents: 24
-    ngPlusEvents: 15
-    hiddenBaseEndings: 15
-    ngPlusBaseEndings: 9
+    events: 481
+    baseEndings: 130
+    meaningfulDecisions: 118
+    delayedConsequences: 57
+    npcInteractions: 224
+    hiddenEvents: 30
+    ngPlusEvents: 17
+    hiddenBaseEndings: 18
+    ngPlusBaseEndings: 11
     ultraRareBaseEndings: 3
-    displayVariantCount: 812
+    displayVariantCount: 878
     endingTones:
-      positive: 31
-      negative: 23
+      positive: 39
+      negative: 26
       mixed: 31
       ambiguous: 12
       unset: 22
-    visibleEventRange: 179
+    visibleEventRange: 188
   venture:
-    events: 455
-    baseEndings: 74
-    meaningfulDecisions: 93
-    delayedConsequences: 21
-    npcInteractions: 75
-    hiddenEvents: 6
-    ngPlusEvents: 5
-    hiddenBaseEndings: 6
-    ngPlusBaseEndings: 6
+    events: 531
+    baseEndings: 110
+    meaningfulDecisions: 123
+    delayedConsequences: 42
+    npcInteractions: 85
+    hiddenEvents: 23
+    ngPlusEvents: 14
+    hiddenBaseEndings: 15
+    ngPlusBaseEndings: 15
     ultraRareBaseEndings: 1
-    displayVariantCount: 495
+    displayVariantCount: 711
     endingTones:
-      positive: 20
-      negative: 9
-      mixed: 16
+      positive: 51
+      negative: 13
+      mixed: 17
       ambiguous: 0
       unset: 29
-    visibleEventRange: 115
+    visibleEventRange: 145
 gates:
   requirements: FAIL
   machine: FAIL
@@ -83,4 +83,4 @@ issues:
   S3: 0
   S4: 0
 nextWorkItem: WP-002 FULL GAP INVENTORY
-lastUpdated: 2026-09-15T19:00:43.446Z
+lastUpdated: 2026-09-15T20:17:27.750Z

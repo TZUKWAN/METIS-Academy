@@ -4,7 +4,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research base endings 91/160
+    description: Research base endings 119/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: pnpm quality:metrics 显示 research.baseEndings >= 160
     status: open
@@ -16,7 +16,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition base endings 119/160
+    description: Competition base endings 130/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: competition.baseEndings >= 160
     status: open
@@ -28,7 +28,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture base endings 74/160
+    description: Venture base endings 110/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: venture.baseEndings >= 160
     status: open
@@ -43,16 +43,16 @@ backlog:
     description: Research meaningful decisions 141/150
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: research.meaningfulDecisions >= 150
-    status: open
+    status: fixed
     dependencies: []
     gitShaFound: b449c2677610fdf7d993889b8101dcbbae4ad283
-    gitShaFixed: ""
+    gitShaFixed: ea53e0b8a2698a93fd6f6a4e05ea2fc1250749f4
   - id: GAP-DEC-COM
     requirementId: competition.meaningfulDecisions
     priority: P0
     severity: S1
     category: content
-    description: Competition meaningful decisions 110/140
+    description: Competition meaningful decisions 118/140
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: competition.meaningfulDecisions >= 140
     status: open
@@ -64,7 +64,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture meaningful decisions 93/160
+    description: Venture meaningful decisions 123/160
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: venture.meaningfulDecisions >= 160
     status: open
@@ -88,7 +88,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition delayed consequences 51/70
+    description: Competition delayed consequences 57/70
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: competition.delayedConsequences >= 70
     status: open
@@ -100,7 +100,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture delayed consequences 21/90
+    description: Venture delayed consequences 42/90
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: venture.delayedConsequences >= 90
     status: open
@@ -124,7 +124,7 @@ backlog:
     priority: P1
     severity: S2
     category: content
-    description: Venture NPC interactions 75/130
+    description: Venture NPC interactions 85/130
     evidence: quality/metrics/latest.json @ b449c26
     acceptance: venture.npcInteractions >= 130
     status: open
@@ -229,7 +229,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research hidden events 15/40
+    description: Research hidden events 24/40
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.hiddenEvents >= 40
     status: open
@@ -241,7 +241,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research NG+ events 11/30
+    description: Research NG+ events 16/30
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.ngPlusEvents >= 30
     status: open
@@ -253,7 +253,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research hidden base endings 12/20
+    description: Research hidden base endings 18/20
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.hiddenBaseEndings >= 20
     status: open
@@ -265,7 +265,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Research NG+ base endings 8/16
+    description: Research NG+ base endings 13/16
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: research.ngPlusBaseEndings >= 16
     status: open
@@ -289,7 +289,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition hidden events 24/35
+    description: Competition hidden events 30/35
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: competition.hiddenEvents >= 35
     status: open
@@ -301,7 +301,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition NG+ events 15/25
+    description: Competition NG+ events 17/25
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: competition.ngPlusEvents >= 25
     status: open
@@ -313,7 +313,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition hidden base endings 15/20
+    description: Competition hidden base endings 18/20
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: competition.hiddenBaseEndings >= 20
     status: open
@@ -325,7 +325,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Competition NG+ base endings 9/16
+    description: Competition NG+ base endings 11/16
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: competition.ngPlusBaseEndings >= 16
     status: open
@@ -349,7 +349,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture hidden events 6/45
+    description: Venture hidden events 23/45
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: venture.hiddenEvents >= 45
     status: open
@@ -361,7 +361,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture NG+ events 5/30
+    description: Venture NG+ events 14/30
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: venture.ngPlusEvents >= 30
     status: open
@@ -373,7 +373,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture hidden base endings 6/20
+    description: Venture hidden base endings 15/20
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: venture.hiddenBaseEndings >= 20
     status: open
@@ -385,7 +385,7 @@ backlog:
     priority: P0
     severity: S1
     category: content
-    description: Venture NG+ base endings 6/16
+    description: Venture NG+ base endings 15/16
     evidence: quality/metrics/latest.json @ 450457ef
     acceptance: venture.ngPlusBaseEndings >= 16
     status: open
