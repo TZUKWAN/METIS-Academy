@@ -15,7 +15,7 @@ endings:
     growthVariantRules:
       - dimension: evidenceDiscipline
         variants:
-          - { gte: 55, text: 你从此养成了"重要文档打印精读"的习惯——屏幕扫读和纸笔精读是两种理解。 }
+          - { gte: 55, text: 你从此养成了“重要文档打印精读”的习惯——屏幕扫读和纸笔精读是两种理解。 }
           - { lte: 40, text: 红笔是赵老师的，你只是跟着走。下次没有红笔的细则，你还敢扫读吗？ }
     characterEpilogueRules:
       - characterId: c_advisor
@@ -45,14 +45,14 @@ endings:
       - dimension: evidenceDiscipline
         variants:
           - { gte: 55, text: 你把搜索关键词的方法教给了学弟。负向条款，永远先查。 }
-          - { lte: 40, text: 你的教训只有一句话："下次看全。"但"看全"是个没有方法的愿望。 }
+          - { lte: 40, text: 你的教训只有一句话：“下次看全。”但“看全”是个没有方法的愿望。 }
     characterEpilogueRules:
       - characterId: c_advisor
         positive: 赵老师说：“吃一次亏记一辈子，也行。就怕吃三次。”
         neutral: 赵老师没提这事。她见过太多不看细则的孩子。
         negative: 队友后来私下说“队长连规则都不看”。信任的裂缝比扣分更疼。
     projectFutureRules:
-      - { key: a, condition: { kind: always }, text: 你的浏览器书签里永远有一个文件夹，名叫"读过的规则"。 }
+      - { key: a, condition: { kind: always }, text: 你的浏览器书签里永远有一个文件夹，名叫“读过的规则”。 }
     reflection: 规则文档的第 14 页和第 1 页一样重要——灰犀牛从来都写在明处。
     lessonHint: 规则文档的禁止性条款优先核查。
     tone: negative
@@ -74,7 +74,7 @@ endings:
     growthVariantRules:
       - dimension: independence
         variants:
-          - { gte: 55, text: 你把"今天问了没"写进了每天的任务清单第一条——问队友，不是问进度，是问状态。 }
+          - { gte: 55, text: 你把“今天问了没”写进了每天的任务清单第一条——问队友，不是问进度，是问状态。 }
           - { lte: 40, text: 那次倾听是你创业式管理的第一课。没有它，后来的团队散得会更早。 }
     characterEpilogueRules:
       - characterId: c_design
@@ -104,14 +104,14 @@ endings:
       - dimension: independence
         variants:
           - { gte: 55, text: 你立了新规矩：任何功能开工前，三个人各自用一句话描述它——不一致就不开工。 }
-          - { lte: 40, text: 你把它归因为"沟通成本太高"。下次你还是选择了不沟通——成本更高的一种。 }
+          - { lte: 40, text: 你把它归因为“沟通成本太高”。下次你还是选择了不沟通——成本更高的一种。 }
     characterEpilogueRules:
       - characterId: c_tech
         positive: tech 后来养成了开工前发“一句话确认”的习惯，说是从那次教训里长的。
         neutral: tech 说“返工就返工呗”，心大的背后是不记仇。
         negative: 半成品返工消耗的那三天，正好错过了你们准备最充分的一次模拟答辩。
     projectFutureRules:
-      - { key: a, condition: { kind: always }, text: 你们的协作文档永远有第一页："我们说的 X 是指什么。" }
+      - { key: a, condition: { kind: always }, text: 你们的协作文档永远有第一页：“我们说的 X 是指什么。” }
     reflection: 对齐的成本是十分钟，错位的成本是三天——团队协作的复利公式，藏在方向一致里。
     lessonHint: 多人协作必须开工前对齐理解，书面一句话确认。
     tone: negative
@@ -133,7 +133,7 @@ endings:
     growthVariantRules:
       - dimension: evidenceDiscipline
         variants:
-          - { gte: 55, text: "经得起现在放"成了你们所有素材的制作标准。这个标准后来救了你们三次。 }
+          - { gte: 55, text: “经得起现在放”成了你们所有素材的制作标准。这个标准后来救了你们三次。 }
           - { lte: 40, text: 那天你其实手心冒汗——真话的底气是真的，紧张也是真的。 }
     characterEpilogueRules:
       - characterId: c_judge_final
@@ -141,7 +141,7 @@ endings:
         neutral: 评委在评分表的“材料真实性”一栏打了满分。他没告诉你，但他记得。
         negative: 如果评委追问了呢？你不敢想。真话的成本是排练，谎言的成本是暴露。
     projectFutureRules:
-      - { key: a, condition: { kind: always }, text: 你们的所有产品演示视频片尾都有一行字："真实录制，无摆拍。"——它成了品牌的一部分。 }
+      - { key: a, condition: { kind: always }, text: 你们的所有产品演示视频片尾都有一行字：“真实录制，无摆拍。”——它成了品牌的一部分。 }
     reflection: 真实素材的弱是画面朴素，强是经得起任何追问——答辩现场，追问才是终审。
     lessonHint: 演示素材坚持真实来源，摆拍是答辩现场的定时炸弹。
     tone: positive
@@ -164,14 +164,14 @@ endings:
       - dimension: independence
         variants:
           - { gte: 55, text: 拿奖第二周，你主动在公众号发了一篇《那条课堂场景是演示》，把钩子亲手摘了下来。 }
-          - { lte: 40, text: 你安慰自己"大家都这样"。这个"都"字，你用了很久，越来越心虚。 }
+          - { lte: 40, text: 你安慰自己“大家都这样”。这个“都”字，你用了很久，越来越心虚。 }
     characterEpilogueRules:
       - characterId: c_design
         positive: 小林看完你的坦白文章说：“早说啊，我可以帮你拍真的——真的也没那么难看。”
         neutral: 没人发现，没人问。钩子锈在了没人看见的地方。
         negative: 一年后有竞争对手扒出了那段摆拍。奖没被收回，但“真实”这个标签永远离你而去了。
     projectFutureRules:
-      - { key: a, condition: { kind: always }, text: 你的视频素材库从此分两个文件夹："能公开的"和"不敢追问的"——后来第二个文件夹再也没有新素材。 }
+      - { key: a, condition: { kind: always }, text: 你的视频素材库从此分两个文件夹：“能公开的”和“不敢追问的”——后来第二个文件夹再也没有新素材。 }
     reflection: 侥幸不是安全，是暂缓执行的安全——它的利息叫“悬着”。
     lessonHint: 包装素材的心理与声誉成本会在赛后长期存在。
     tone: negative
@@ -192,7 +192,7 @@ endings:
     growthVariantRules:
       - dimension: independence
         variants:
-          - { gte: 55, text: 你学会了在自我怀疑时寻找"没有利益关系的确认源"——他们的话最便宜也最贵。 }
+          - { gte: 55, text: 你学会了在自我怀疑时寻找“没有利益关系的确认源”——他们的话最便宜也最贵。 }
           - { lte: 40, text: 那句话是你的止痛药。药效过了的时候，你还是会怀疑——但至少能撑到下一次。 }
     characterEpilogueRules:
       - characterId: c_rival
@@ -200,7 +200,7 @@ endings:
         neutral: 你再没见过那个人。你的方案第一页换了排版，但那句话一直在。
         negative: 有评委质疑你们的选题价值时，你想引用那句话，又觉得不够权威——最后只能靠自己的答辩硬扛。
     projectFutureRules:
-      - { key: a, condition: { kind: always }, text: 你后来也养成了给对手提意见的习惯——因为你记得那句"真问题"对你意味着什么。 }
+      - { key: a, condition: { kind: always }, text: 你后来也养成了给对手提意见的习惯——因为你记得那句“真问题”对你意味着什么。 }
     reflection: 竞争对手的认可没有利益滤镜——它是世界上最便宜也最贵的市场验证。
     lessonHint: 主动从竞争格局变化中获取情报与确认。
     tone: positive
@@ -231,7 +231,7 @@ endings:
         neutral: 评委点了点头就翻了页。他不知道那九十秒背后有三十天。
         negative: 另一位评委问了供应链的问题——你没提前补。你的“预知”，只买了一张考场的单科保险。
     projectFutureRules:
-      - { key: a, condition: { kind: always }, text: 你后来管理项目时总问一个问题："如果评委/客户明天问 X，我们答得上来吗？"——那个 X 每次都不一样。 }
+      - { key: a, condition: { kind: always }, text: 你后来管理项目时总问一个问题：“如果评委/客户明天问 X，我们答得上来吗？”——那个 X 每次都不一样。 }
     reflection: NG+ 的正确打开方式：把已知的风险点，变成提前交付的工程。
     lessonHint: NG+ 记忆应转化为结构性补强而非表面话术。
     tone: positive
