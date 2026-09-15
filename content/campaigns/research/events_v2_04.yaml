@@ -1,0 +1,224 @@
+# METIS Academy Research V2 事件批次五 —— 隐藏/NG+ 密集补完
+events:
+  # ===== 隐藏 Z 系列 =====
+  - id: r_v2_h30_secret_book
+    campaign: research
+    day: 5
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 旧书店的方法论孤本, learning: 非正规渠道的知识 }
+    scene: { location: library, characters: [] }
+    setup: [“校门口旧书店的三块钱特价堆里，你翻出一本 1998 年的《社会科学研究方法》，页边写满批注——批注者显然读过大量后续文献，因为每条批注都在”纠正“这本书。”]
+    choices:
+      - id: buy_and_study
+        text: 买下它，把批注当第二条注释读
+        visibleResponse: 三块钱买了一本“双人对话录”。批注者显然是这个领域的过来人——他纠错的方式，让你三天就读完了别人一学期的方法论史。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_method_dialogue }
+          - { kind: add, key: independence, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+      - id: put_back
+        text: 太旧了，放回去
+        visibleResponse: 你把书放回堆里。三个月后书店关张，那本书和它沉默的批注者一起消失在了回收站的方向。
+    learningPoint: 旧书批注是已消失的“ peer review”，值得认真对待
+
+  - id: r_v2_h31_office_hour
+    campaign: research
+    day: 7
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 导师的 office hour, learning: 主动求教的结构化价值 }
+    scene: { location: lab, characters: [r_mentor] }
+    setup: [“门口贴着一张泛黄的纸：”陈教授 Office Hour：每周四 15:00-16:00“。你在系里读了一年，第一次注意到它。此刻是周三 21:00。”]
+    choices:
+      - id: prepare_and_go
+        text: 准备三个具体问题，明天准时去
+        requirements:
+          kind: and
+          conditions:
+            - { kind: state, key: mentorTrust, op: gte, value: 45 }
+        requirementHint: 带着具体问题去，导师才会认真接待
+        visibleResponse: 你是唯一一个来的。陈教授看了你的三个问题，讲了四十分钟，最后说：“下周再来，把今天说的做成一页纸给我。”
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_office_hour }
+          - { kind: relationship, characterId: r_mentor, delta: 6 }
+          - { kind: add, key: independence, value: 3 }
+      - id: skip_scared
+        text: 太正式了，还是微信问吧
+        visibleResponse: 你在微信上打了三版问题，最后只发了一个“老师，开题有什么要注意的吗”。导师回了四个字：“认真准备。”对话结束。
+    learningPoint: Office hour 是最被低估的学术资源——带具体问题去
+
+  # ===== 隐藏 Z2：数据的思想实验 =====
+  - id: r_v2_h32_thought_experiment
+    campaign: research
+    day: 12
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 一个反事实思想实验, learning: 反事实推理检验因果链 }
+    scene: { location: dorm, characters: [] }
+    setup: [“睡前你忽然想到一个刁钻的问题：”如果三年前就有了生成式AI，我的研究问题还存在吗？“这个问题半夜爬回你的脑子，逼你坐了起来。”]
+    choices:
+      - id: seriously_think
+        text: 开灯，认真推演这个反事实
+        visibleResponse: 你推演了四十分钟，写下两页纸。结论吓出你一身冷汗：如果AI早三年存在，你的“影响差异”会消失一半——因为人们的行为会被AI改变。你的研究问题有保质期。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_counterfactual }
+          - { kind: add, key: independence, value: 6 }
+        next: r_v2_h32_after_cf
+      - id: dismiss_as_insomnia
+        text: 睡觉，胡思乱想没有产出
+        visibleResponse: 你睡了。那个问题在梦里又来了一次，第二天早上忘得一干二净。
+    learningPoint: 反事实思想实验能暴露研究问题的隐含前提
+
+  - id: r_v2_h32_after_cf
+    campaign: research
+    day: 12
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 保质期声明, learning: 把思想实验写进局限性 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你把那两页纸压缩成一段话，加进了开题报告的”研究边界“一节：”本研究的结论受AI普及进程影响，有效期估计为18个月。“没有一个评委要求过你写这个。但你预感会有一位评委为此记住你。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+    next: r_v2_d13_wire6
+
+  # ===== 隐藏 Z3：家人的三个问题 =====
+  - id: r_v2_h33_family_questions
+    campaign: research
+    day: 14
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 给家人讲研究, learning: 外行提问暴露理解盲区 }
+    scene: { location: dorm, characters: [v_family] }
+    setup: [“视频通话时妈妈问：”你研究的到底是啥？“你讲了五分钟，她听完问：”所以……AI是好的还是坏的？“你卡住了。”]
+    choices:
+      - id: re_explain_simply
+        text: 重新组织语言，用生活例子再讲一遍
+        visibleResponse: 你用了“外卖平台改了骑手路线”的例子。妈妈说：“哦！那你们是不是得问问骑手们累不累？”——这句话让你在笔记本上写了半页纸。外行的问题，有时直击内行的盲区。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_family_explain }
+          - { kind: add, key: userUnderstanding, value: 5 }
+          - { kind: add, key: independence, value: 2 }
+      - id: deflect
+        text: "说了你也不懂，总之挺复杂的"
+        visibleResponse: 妈妈哦了一声，转而问你吃得好不好。那次通话之后，你再也没有向任何人解释过你的研究——包括答辩评委。
+    learningPoint: 能向外行讲清的研究才是理解透彻的研究
+
+  # ===== NG+ W 系列 =====
+  - id: r_v2_ng_w1_literature_shortcut
+    campaign: research
+    day: 6
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 6 }
+    purpose: { narrative: NG+ 文献检索的记忆捷径, learning: 上辈子的检索式直接复用 }
+    scene: { location: library, characters: [] }
+    setup: [“上一世你花了一周摸索出的检索式组合——那串精确到令人发指的关键词布尔式——此刻躺在你的记忆里。”]
+    choices:
+      - id: reuse_search_string
+        text: 直接复用那串检索式
+        visibleResponse: 一小时，47 篇高度相关的文献躺在你的文件夹里。上一世的一周，这一世的一小时。省下的六天，你全部投给了真正需要时间的事情：读。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_ng_search_string }
+          - { kind: add, key: progress, value: 8 }
+      - id: relearn_slowly
+        text: 故意不用，重新练一遍检索
+        visibleResponse: 你慢慢摸了六天。检索式自己长出来的那一刻，你确认了一件事：上一世的直觉还在，只是需要重新走一遍流程唤醒它。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_ng_search_relearn }
+          - { kind: add, key: independence, value: 4 }
+    learningPoint: NG+ 技能记忆的两种用法：直接复用或刻意重练
+
+  - id: r_v2_ng_w2_ending_preview
+    campaign: research
+    day: 19
+    type: story
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 19 }
+    purpose: { narrative: 结局预览的重量, learning: 知道结局不等于理解路径 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “上一世的结局你记得。所以今晚，当那份熟悉的挫败感袭来时，你知道它之后是什么：是第 20 天的转机。你深吸一口气，把挫败感标记为”流程的一部分“，然后继续排你的数据。” }
+      - { speaker: 系统, text: “知道结局不会让过程变短。但它会让过程变得可以忍受。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+    next: r_v2_d19_wire6
+
+  - id: r_v2_ng_w3_senior_farewell
+    campaign: research
+    day: 28
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 28 }
+    purpose: { narrative: NG+ 的告别, learning: 两个周目的情感合并 }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“答辩前夜，师姐来道别——她明天去外地入职。上一世，你们的告别在忙乱中潦草结束。这一世，你知道要说些什么。”]
+    choices:
+      - id: proper_farewell
+        text: 提前准备：一封手写信和一杯她最爱的奶茶
+        visibleResponse: 师姐读完信，奶茶喝了半杯才说话：“上一世……上一周我们太忙了。”她纠正得很快，但你听见了那个口误。她说：“信我带走了。数据记得，我也记得。”
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_ng_proper_farewell }
+          - { kind: relationship, characterId: r_senior_data, delta: 6 }
+      - id: keep_it_light
+        text: 轻松道别，别搞得太煽情
+        visibleResponse: 你们笑着说了再见，像两个成年人。她走后你在实验室坐了很久——有些话，“以后再说”就等于永远不说。你上一世就知道这一点。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_ng_light_farewell }
+          - { kind: add, key: independence, value: 2 }
+    learningPoint: NG+ 的情感功课：把上一世没说出口的话说出来
+
+  # ===== 汇流 wire =====
+  - id: r_v2_d13_wire6
+    campaign: research
+    day: 13
+    type: story
+    trigger: { kind: day, day: 13, phase: end }
+    purpose: { narrative: D13 夜间复盘, learning: 反事实的回响 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你把”18个月有效期“那一段又读了一遍。研究问题有保质期不是坏事——知道这件事的人，跑得比保质期快。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }
+
+  - id: r_v2_d19_wire6
+    campaign: research
+    day: 19
+    type: story
+    trigger: { kind: day, day: 19, phase: end }
+    purpose: { narrative: D19 夜间复盘, learning: 挫败的流程化 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你在研究日志里画了一条情绪曲线，把”已知挫败点“标了出来。下个周目的你会感谢这张地图——如果还有下个周目的话。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }

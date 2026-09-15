@@ -1,0 +1,181 @@
+# METIS Academy Research V2 结局批次五 —— 对应 events_v2_04.yaml 旗标
+endings:
+  - id: r_v2_method_dialogue_end
+    campaign: research
+    title: 《三块钱的对话录》
+    mainResult: 旧书批注者的方法论传承
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_method_dialogue }
+        - { kind: flag, key: rv2_oldbook_found, expected: false }
+    priority: 97
+    tier: hidden
+    baseText: 那本 1998 年的方法论你读了三遍：第一遍读正文，第二遍读批注，第三遍读两者的对话。批注者像个站在你肩膀上的老学究——他纠错的方式不是否定，是“1999 年以后的研究是这样看的”。开题答辩上，你引用批注者视角回答了一位评委的方法论质疑，评委惊讶于你“对方法论史的感觉”。你心里默默说：谢谢三块钱，谢谢那位不知名的先生。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你开始在图书馆的旧书区“寻宝”。第二批收获是一两本带划线的英文专著。 }
+          - { lte: 40, text: 你只读了正文两遍。批注者的声音，你其实没有真正听进去。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄听说后专程去了那家旧书店，空手而归。“宝是遇的，不是找的。”他总结道。
+        neutral: 师兄说“三块钱真便宜”，然后继续读他的新版教材。
+        negative: 师兄说“旧方法过时了，看它干嘛”。你没解释批注者纠的恰恰是“新”。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那本书你后来又“还”给了书店老板——附了一页你写的批注，给下一个读者。 }
+    reflection: 知识的传承不总在正式渠道里——三块钱的旧书页边，可能站着一位最好的老师。
+    lessonHint: 非正规知识载体（批注/笔记/信件）常含高价值的隐性学术史。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“旧书批注的隔代对话”，由书店事件链解锁，与地下室档案（机构传承）的来源不同。
+
+  - id: r_v2_office_hour_end
+    campaign: research
+    title: 《每周四的四十分钟》
+    mainResult: 主动求教建立导师深度连接
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_office_hour }
+        - { kind: flag, key: rv2_ng_mentor_mirror, expected: true }
+    priority: 93
+    tier: main
+    baseText: 那张泛黄的 Office Hour 通知，你后来每周四都去。第三次去时，陈教授把椅子转向了你——从“看我办公”变成了“和你讨论”。别的同学私下问你秘诀，你说：“带三个具体问题，一次都别缺席。”他们惊讶于答案的朴素。是的，朴素，且全年无休地有效。你的开题答辩上，陈教授介绍你时说：“这是我 office hour 培养出来的学生。”全场都听懂了这句话的分量。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你的三个问题越来越锋利——从“怎么办”到“为什么这样设计”。导师注意到了这条曲线。 }
+          - { lte: 40, text: 你去了，但问题准备得潦草。四十分钟里，你浪费了三十五分钟。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 毕业典礼上陈教授说：“办公室的门一直开着，但走进来的人不多。你是常客。”
+        neutral: 陈教授照常批你的材料。周四是你们的固定节目，无需多言。
+        negative: 你期中缺了两周。第三次去时，教授说“问题呢？上次的做了吗”——office hour 也是要作业的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你自己带学生后，门上也贴了张 Office Hour 通知——比导师那张厚，因为被雨淋过。 }
+    reflection: 学术资源从不稀缺，稀缺的是走进那扇门的人。
+    lessonHint: 主动利用导师 Office Hour，带具体问题，形成固定节奏。
+    tone: positive
+    family: academic_relationships
+    whyDistinct: 核心结果是“office hour 的制度化求教”，与微信潦草提问路径在同一链互斥。
+
+  - id: r_v2_counterfactual_end
+    campaign: research
+    title: 《十八个月保质期》
+    mainResult: 反事实推演写入研究边界
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_counterfactual }
+    priority: 97
+    tier: hidden
+    baseText: 答辩第 11 分钟，一位评委身体前倾：“你知道你的研究问题有'保质期'这件事，让你和其他人区别开了。”你写进“研究边界”的那段话，他逐字读了。上一届有位学生做了一模一样的题目，答辩时被追问“AI普及后你的结论还有效吗”而哑口无言。而你，主动把刀递给了自己，然后展示了它砍不断的东西。凌晨一点的胡思乱想，值一个答辩。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 反事实推演成了你的思维体操——每个研究设想，你都先问“它什么条件下会失效”。 }
+          - { lte: 40, text: 那晚的推演是灵光乍现。你没把它变成习惯——灵光和习惯之间，隔着一百个深夜。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授把你的“保质期”段落划了线，批注：“这一段，比你的数据贵。”
+        neutral: 陈教授说“边界意识不错”，然后翻到了下一页。
+        negative: 陈教授皱眉：“自己给自己设限？”你解释了三分钟——他听进去了七成。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来的每份研究报告都有固定一节：“本研究结论的有效期与失效条件。” }
+    reflection: 敢于给自己的研究标注保质期的人，才真正拥有它——脆弱性声明是最强的高级感。
+    lessonHint: 反事实思想实验可暴露研究问题的隐含前提与时效。
+    tone: positive
+    family: theory
+    whyDistinct: 核心结果是“研究有效期声明”的思想实验成就，由深夜反事实事件链解锁。
+
+  - id: r_v2_family_explain_end
+    campaign: research
+    title: 《骑手累不累》
+    mainResult: 外行视角暴露的研究盲区
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_family_explain }
+    priority: 93
+    tier: hidden
+    baseText: “你们是不是得问问骑手们累不累？”——妈妈的一个外行问题，让你的研究多了一整个章节：AI 调度对劳动者节奏的影响。那半页纸的笔记后来长成了你开题报告里被评委称赞“最有人味”的部分。你逐渐明白一个道理：研究做深了会盲，而爱你的人用最朴素的好奇心，替你推开了一扇你自己看不见的窗。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你养成了“给妈妈讲一遍”的检验法——讲不清的地方，就是你没懂的地方。 }
+          - { lte: 40, text: 那半页纸的灵感你记了一辈子，但你没有第二次给家人讲研究——遗憾长在了那里。 }
+    characterEpilogueRules:
+      - characterId: v_family
+        positive: 答辩那天妈妈坐在最后一排。散场时她说：“骑手那个，讲得真好。”她记了一年。
+        neutral: 妈妈其实没听懂章节，但她听懂了你的表情——你在台上说那部分时，眼睛是亮的。
+        negative: 你再也没有跟妈妈聊过研究。那扇窗，讲一次就关上了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的论文致谢里有一句：“感谢我的母亲——她的问题比多数审稿人更接近本质。”审稿人没删，因为是真的。 }
+    reflection: 外行的天真提问是研究盲区的探照灯——因为它问的从来不是技术，是常识。
+    lessonHint: 向非专业人士讲解研究是检验理解与发现盲区的利器。
+    tone: positive
+    family: research_identity
+    whyDistinct: 核心结果是“家人提问的研究盲区突破”，由视频通话隐藏事件解锁，情感结构独特。
+
+  - id: r_v2_ng_search_end
+    campaign: research
+    title: 《一小时与一周》
+    mainResult: NG+ 检索记忆的复利兑现
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ng_search_string }
+        - { kind: flag, key: rv2_ng_search_relearn, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 一小时，47 篇。上一世的你看到这个效率会嫉妒到发狂——他为此摸了一周，还走了三次弯路。这一世的你合上电脑，把省下的六天分配给了阅读、思考和第一次真正的预实验。同一串检索式，在两个周目里教会了你两件事：第一世教的是“怎么找”，第二世教的是“找到之后，时间该花在哪”。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你把检索式存成了可复用模板，并标注了每一段的意图——它从记忆变成了方法。 }
+          - { lte: 40, text: 复用很爽，但你说不清为什么这样组合关键词。记忆没有内化成理解，这是个隐患。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐看你一小时的文献清单，沉默半晌：“我当年要是会这样，头发能少掉一半。”
+        neutral: 师姐说“效率不错”，然后照常推荐了你两篇你漏掉的文献——机器和人，各有各的漏。
+        negative: 师姐问“为什么用 OR 不用 AND 连接这两组”，你答不上来——你只是记得答案，不懂原理。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的检索模板集后来传了三届。模板的注释里写着原始作者：一个来自“上一世”的你。 }
+    reflection: NG+ 的复利不在省下的时间，在省下的时间你拿去做了什么。
+    lessonHint: NG+ 技能记忆应显式化为可复用、可解释的方法资产。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 检索记忆的时间套利”，仅 NG+ 可达，与刻意重练路径在同一链互斥。
+
+  - id: r_v2_ng_farewell_end
+    campaign: research
+    title: 《上一周，说漏的嘴》
+    mainResult: NG+ 中完成上一世潦草的告别
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ng_proper_farewell }
+        - { kind: flag, key: rv2_ng_light_farewell, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 师姐说“上一世”三个字时愣了一下，然后笑了：“上一周。我是说上一周。”但你们都知道她原本想说什么。手信她带走了，奶茶喝了一半——剩下半杯她说要留着慢慢喝，“喝完就真的走了”。你后来想，NG+ 给你的最好东西不是信息优势，是这个：一次把告别说完整的机会。上一世的潦草，这一世的两倍郑重。有些话迟了一个周目，但没有缺席。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了“提前告别”——在一切结束之前，把重要的话说出口。这个习惯改了很多段关系。 }
+          - { lte: 40, text: 写信的那晚你撕了三稿。原来把感谢说完整，比做三十页 PPT 还难。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 入职第一周，师姐给你发了张照片：那封信贴在她新工位的隔板上。“新环境，旧提醒。”她写道。
+        neutral: 师姐把信收进了包里。她是个把感动收着走的人。
+        negative: 信里有个错别字，师姐用红笔圈了出来拍照发你——你们的告别，最后还是以互相纠错收尾。很配。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来的每段关系结束前，都会写一封手写信。这个仪式的名字，你们俩心照不宣。 }
+    reflection: NG+ 最深的浪漫，是让你有机会把上一世的遗憾，做成这一世的仪式。
+    lessonHint: NG+ 的情感收益：修复上一世未完成的重要对话。
+    tone: mixed
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 告别仪式的完成”，仅 NG+ 可达，与轻松道别路径在同一链互斥，情感叙事独有。
