@@ -263,7 +263,10 @@ export async function loadContentDir(contentDir: string): Promise<{
     if (!fs.existsSync(dir)) return;
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
       const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) walk(full);
+      if (entry.isDirectory()) {
+        if (entry.name === "endings-witness") continue; // witness 证据文件，不是内容集合
+        walk(full);
+      }
       else if (/\.ya?ml$/.test(entry.name)) {
         const raw = YAML.parse(fs.readFileSync(full, "utf-8"));
         const r = parseContentDoc(path.relative(contentDir, full), raw);

@@ -1,0 +1,955 @@
+# METIS Academy Research V2 结局批次一 —— 与 events_v2_01.yaml 的 rv2_* 旗标链一一对应
+# 每个结局由唯一旗标守卫（requirement regions 互不重叠），优先级 90-96；
+# 隐藏层 97-98，NG+ 层 96-97，超稀有 99。
+endings:
+  # ===== 主链旗标结局（90-95）=====
+  - id: r_v2_skipped_pilot_end
+    campaign: research
+    title: 《第二十三份问卷》
+    mainResult: 跳过预实验的代价在正式数据中显形
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_skipped_pilot }
+        - { kind: flag, key: rv2_pilot_redone, expected: false }
+    priority: 90
+    tier: main
+    baseText: 你最终在正式问卷里发现了那三道措辞有问题的题——比预实验晚了十八天。四百二十七份问卷里，有两百多份对同一道题的理解和你预想的不一样。你花了整整一周重新编码数据，答辩前夜，你在致谢里写了一句没人看懂的话：“感谢第二十三份问卷。”
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: 后来你养成了习惯：任何问卷先找二十个人试读，再谈发放。 }
+          - { lte: 40, text: 你安慰自己这次只是运气差，下次大概还会跳过那两天。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐在你的答辩后说："你终于知道预实验是干什么用的了。"
+        neutral: 师姐听说这事时只点了点头："每届都有一个。"
+        negative: 师姐在组会上提了一句"有人跳过预实验"，没点名。你脸上发烫。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那三道坏题被你贴在工位隔板上，成了一个私人警告标志。 }
+    reflection: 预实验不是拖延，是用两天的成本买下整批数据的保险。
+    lessonHint: 问卷发放前必须小样本试测，措辞问题只有真人才会暴露。
+    tone: mixed
+    family: method
+    whyDistinct: 核心结果是"跳过预实验导致正式数据返工"这一独特方法论后果，由唯一旗标 rv2_skipped_pilot 守卫，与其他数据/理论结局的结果域不重叠。
+
+  - id: r_v2_pilot_redone_end
+    campaign: research
+    title: 《补上的预实验》
+    mainResult: 及时补做预实验挽救了正式数据
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_skipped_pilot }
+        - { kind: flag, key: rv2_pilot_redone }
+    priority: 93
+    tier: main
+    baseText: 你在正式发放前夜突然停下，找了二十个同学重新试读问卷。三道题的歧义被你在最后关头抓住。正式数据回收后干净得像新雪。你在方法部分写下“预实验 N=23”时，手指在回车键上停了一秒——这一行，差一点就不存在。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你在组会上主动讲了这段弯路，师弟师妹的眼睛亮了。 }
+          - { lte: 40, text: 你没提跳过预实验的事，只讲了补做的那部分。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授在页边写："知错即改，善。"
+        neutral: 陈教授没提这件事，只在预注册那行画了条线。
+        negative: 陈教授说："差点酿成的事故，不叫功劳。"
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的问卷模板库里多了一个“预实验流程清单”。 }
+    reflection: 承认自己差点犯错，并把修正流程化，是研究成熟的第一步。
+    lessonHint: 发现方法问题永远不晚，晚的是发现后不肯补。
+    tone: positive
+    family: method
+    whyDistinct: 核心结果是"跳过后主动补救成功"的救赎路径，与不可挽回的 rv2_skipped_pilot_end 结果相反且互斥（expected:false 区分），由双旗标组合守卫。
+
+  - id: r_v2_sample_hack_end
+    campaign: research
+    title: 《恰好两百份》
+    mainResult: 凑数的样本在数据审计中暴露
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_sample_hack }
+        - { kind: flag, key: rv2_retraction_story, expected: false }
+    priority: 90
+    tier: main
+    baseText: 恰好两百。表格完美闭合的那晚你睡得很沉，之后却总在凌晨醒来。答辩时一位评委多问了一句“回收率怎么这么整齐”，你说“刚好收满了”，教室安静了两秒。你通过了答辩，但那两秒在此后很多个夜里反复播放。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: 你毕业后做的每一份研究，样本量都带着刺眼的小数点——那才是真的。 }
+          - { lte: 40, text: 你学会了在报告里写"因故剔除三份"，让数字看起来自然一点。 }
+    characterEpilogueRules:
+      - characterId: r_evaluator_a
+        positive: 评委后来在走廊对你说："研究设计不错。下次，让数字自然一点。"
+        neutral: 评委在评分表上写了个"中"，没有多说什么。
+        negative: 评委在评分表"数据真实性"一栏犹豫了很久，最终落笔。你不知道他写了什么。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你再也没能找回那晚“表格完美闭合”的轻松感。 }
+    reflection: 整齐得不真实的数字，是对读者注意力的盗窃。
+    lessonHint: 数据完整性不是凑够样本量，而是每份数据都经得起追问。
+    tone: negative
+    family: evidence_integrity
+    whyDistinct: 核心结果是"凑样本数的心理与诚信代价"，与撤稿旗标链及预实验链的结果域互斥（expected:false 排除）。
+
+  - id: r_v2_retraction_story_end
+    campaign: research
+    title: 《墙上那页撤稿启事》
+    mainResult: 目睹撤稿案例后守住底线
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_retraction_story }
+        - { kind: flag, key: rv2_sample_hack, expected: false }
+    priority: 92
+    tier: main
+    baseText: 那页从档案里翻出的撤稿启事，你一直钉在软木板上。有人觉得晦气，你却觉得安心——每次数据不够、每次想让数字好看一点的时候，余光都会扫到那页纸上一个小小的“撤回”字样。开题答辩通过那天，你把它取下来，夹进了自己的研究笔记第一页。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你开始给组里师弟师妹讲这个撤稿故事，讲得比任何方法课都生动。 }
+          - { lte: 40, text: 你没跟任何人提起这页纸的来历，它只是你的私人护栏。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄看到那页纸，沉默半晌，说："这比导师的十次组会都管用。"
+        neutral: 师兄瞄了一眼，问"哪来的"，然后继续改自己的模型。
+        negative: 师兄笑你"自己吓自己"，转头继续在他可疑的数据里打转。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那页纸的折痕越来越深，像一道掌纹。 }
+    reflection: 前人的撤稿不是八卦，是免费送给你的护栏。
+    lessonHint: 研究伦理教育最有效的形式是具体案例，不是抽象条文。
+    tone: mixed
+    family: evidence_integrity
+    whyDistinct: 核心结果是"负面案例警示转化为个人底线"的心理机制，与凑样本结局互斥且方向相反。
+
+  - id: r_v2_rabbit_deep_end
+    campaign: research
+    title: 《兔子洞底部》
+    mainResult: 沉迷技术支线拖垮主线研究
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_rabbit_deep }
+        - { kind: flag, key: rv2_rabbit_exited, expected: false }
+    priority: 90
+    tier: main
+    baseText: 你爬出了兔子洞，手里攥着一个精妙绝伦的技术方案——和论文没关系的方案。开题答辩上评委问“你的研究问题是什么”，你讲了二十分钟爬虫框架的架构优化。评委打断你：“这是计算机工程课题，不是你的研究。”你走出教室才想起来，你的研究问题，已经三周没碰过了。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 60, text: 后来你学会在每次"就研究一下"之前，先问它离研究问题隔几步。 }
+          - { lte: 40, text: 你安慰自己技术深度总是有用的，下一个课题说不定用得上。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 苏晓说："其实你搭那套东西的时候挺帅的。可惜。"
+        neutral: 苏晓在工位对面埋头改自己的第三版开题，没抬头。
+        negative: 苏晓用你的技术方案搭了自己的调研管道，比你的开题早两周通过。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那套框架你开源了，star 不少。你盯着 star 数，说不清是安慰还是讽刺。 }
+    reflection: 支线的精进感是主线的止痛药——它用"我在努力"的感觉掩盖"我没在推进"的事实。
+    lessonHint: 技术热情需要与研究问题对表，偏离即止损。
+    tone: negative
+    family: research_identity
+    whyDistinct: 核心结果是"技术支线吞噬主线"的注意力失败，与及时止损结局互斥（expected:false 区分），与选题/数据类结局结果域不重叠。
+
+  - id: r_v2_rabbit_exited_end
+    campaign: research
+    title: 《从兔子洞爬出来的人》
+    mainResult: 识别支线陷阱并及时止损
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_rabbit_exited }
+    priority: 93
+    tier: main
+    baseText: 你把那个精妙的技术仓库归档、关闭、写了一行 README：“暂时用不上，但很有趣。”关掉终端的那一刻像戒断。三周后你用它十分钟解决了正式调研里的一个数据清洗问题——你知道这是奖励，不是巧合。开题答辩上你讲了完整的研究设计，评委点了点头。只有你知道，点头里有一部分属于那次壮士断腕。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你在研究日志里画了一条"支线止损线"，后来救过你三次。 }
+          - { lte: 40, text: 你庆幸这次爬出来了，但不确定下次还有没有这个运气。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授听说后难得笑了："知道不做什么，比知道做什么更难。"
+        neutral: 陈教授翻着你的开题报告，没有评价那段插曲。
+        negative: 陈教授皱眉："三周？你居然浪费了三周才知道回头。"
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那行 README 后来被好几个人引用，他们都说深有同感。 }
+    reflection: 止损不是失败，是把沉没成本兑换成未来的判断力。
+    lessonHint: 支线投入要设定止损点，到期强制评估。
+    tone: positive
+    family: research_identity
+    whyDistinct: 核心结果是"主动止损"的自我管理成功案例，与兔子洞底部结局构成同一情境的正反双结局。
+
+  - id: r_v2_double_commit_end
+    campaign: research
+    title: 《一稿两投》
+    mainResult: 一稿多投的诚信代价爆发
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_double_commit }
+        - { kind: flag, key: rv2_ghost_seen, expected: false }
+    priority: 90
+    tier: main
+    baseText: 两个会议的录用邮件隔了六天先后到达。你盯着两封邮件，第一反应不是高兴，是算时间差还来不来得及“处理”。你最终撤了一篇，流程比想象中麻烦得多——系统、秘书、道歉信、等待确认。导师知道后只说了一句：“幸亏你撤了。”那声“幸亏”在你耳朵里响了很多天。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: 你把两封邮件截图贴在笔记本扉页，提醒自己"机会主义有利息"。 }
+          - { lte: 40, text: 你开始研究哪些领域"查重不严"，随即为这个念头感到害怕。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授把你的道歉信改了两处措辞，说："这次我帮你。下次自己扛。"
+        neutral: 陈教授在组会上不点名地讲了学术规范，你全程不敢抬头。
+        negative: 陈教授把这件事记进了你毕业前的"信用账"。他说信用是复利的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你从此投稿前必查 CALL FOR PAPERS 的重叠条款，一遍不够查两遍。 }
+    reflection: 机会主义最贵的成本不是处罚，是此后每一次被信任时的利息折价。
+    lessonHint: 一稿多投是学术诚信红线，投稿前必须确认排他条款。
+    tone: negative
+    family: evidence_integrity
+    whyDistinct: 核心结果是"投稿机会主义及其代价"，由 unique 旗标守卫，与附录幽灵（ghost）结局互斥。
+
+  - id: r_v2_two_versions_end
+    campaign: research
+    title: 《两版数据》
+    mainResult: 数据出现两个矛盾版本且未及时澄清
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_two_versions }
+    priority: 90
+    tier: main
+    baseText: 两版数字在文件夹里对峙了三周：v_final 和 v_final_final。你一直告诉自己“回头核对一下”，直到答辩 PPT 里出现了 v_final_final 的图、而讲稿引用的是 v_final 的数。评委指着屏幕问“这个 68% 和你摘要里的 63% 是什么关系”，你张了张嘴，第一次发现两个数字背后站着两个都可能不是真的的世界。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: 你当场承认了版本管理失误，评委的态度反而缓和了。 }
+          - { lte: 40, text: 你含糊地把差异归因于"统计口径"，评委的表情你没敢再看。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐后来教你用 Git 管数据，第一课的名字叫"文件夹版本管理是事故前奏"。
+        neutral: 师姐听说了，只发来一个链接：《数据管理规范》，没有留言。
+        negative: 师姐在组里说了这事，从此"两版数据"成了你的代号。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的硬盘里从此只有带日期戳的唯一数据源，其余全是软链。 }
+    reflection: 版本混乱不是技术问题，是你对"哪个是真的"这个问题已经不敢回答。
+    lessonHint: 数据需要单一事实源和版本管理，含糊的命名是诚信风险。
+    tone: negative
+    family: evidence_integrity
+    whyDistinct: 核心结果是"数据版本失控"这一具体事故，与其他诚信链（凑样本/一稿两投）的结果域不同。
+
+  - id: r_v2_seed_fixed_end
+    campaign: research
+    title: 《第四十二号随机种子》
+    mainResult: 固定随机种子使实验可复现
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_seed_fixed }
+    priority: 92
+    tier: main
+    baseText: 你把随机种子写进配置文件的第四十二行，像把闪电封进瓶子。师兄开玩笑说“42 是宇宙的答案”，但你真正的收获是：从那天起，任何一个数字都能被任何人重新跑出来。复现实验的师弟用你的配置一次跑通，在群里发了个惊讶的表情。你回了一句“种子固定了而已”，心里却清楚，这是你和“玄学调参”决裂的日子。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你开始在实验记录里记录一切环境参数，连 CUDA 版本都不放过。 }
+          - { lte: 40, text: 你只固定了种子，其余靠天意——但至少种子是定的。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐把你的配置文件转给了下一届："照这个学。"
+        neutral: 师姐说"早该这样"，语气平淡得像在说天气。
+        negative: 师姐说："就一个种子？环境、数据版本呢？"你哑口无言。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 42 成了你们组的幸运数字和固定模板。 }
+    reflection: 可复现性不是负担，是你留给未来的自己的求生通道。
+    lessonHint: 实验必须固定随机种子并记录环境，否则结果不可信也不可续。
+    tone: positive
+    family: method
+    whyDistinct: 核心结果是"可复现性建设"这一方法论成就，与预实验链、预注册链的结果细节不同。
+
+  - id: r_v2_prompt_paid_end
+    campaign: research
+    title: 《卖掉的提示词》
+    mainResult: 迭代出的提示词资产带来真实回报
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_prompt_paid }
+    priority: 91
+    tier: main
+    baseText: 那份你迭代了十一版的文献筛选提示词，被隔壁课题组用两顿火锅的代价“买”走了。签约仪式是火锅桌上的一句话，但你知道它值更多：十一版迭代记录里，藏着你从“帮我总结”到“按纳入标准打分并给出页码证据”的完整进化史。火锅升腾的热气里，你第一次意识到，提示词也是研究资产。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 60, text: 你开始给每版提示词写变更日志，像维护一份真正的代码。 }
+          - { lte: 40, text: 你把终版给了他们，但迭代过程没留下任何记录，有点后悔。 }
+    characterEpilogueRules:
+      - characterId: r_ai_agent
+        positive: 你的 Agent 在之后的任务里表现稳定得像老伙计——你知道那是提示词的功劳。
+        neutral: Agent 输出了结果，一如既往，不置可否。
+        negative: 新课题组反馈提示词"效果一般"。你意识到离开你的使用方式，它就只是几行字。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的提示词库从文件夹变成了带版本号的索引表。 }
+    reflection: 提示词的价值不在结果，在迭代过程中沉淀的对任务的精确理解。
+    lessonHint: 高质量提示词需要版本化迭代，它是可复用、可迁移的研究资产。
+    tone: positive
+    family: agent_use
+    whyDistinct: 核心结果是"提示词资产化"这一 Agent 使用成就，与工具动物园结局的失控主题相反。
+
+  - id: r_v2_preregistered_end
+    campaign: research
+    title: 《提前写下的答案》
+    mainResult: 预注册锁定研究假设与分析方法
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_preregistered }
+    priority: 92
+    tier: main
+    baseText: 你在数据收集完成前，把假设、样本量和分析方法全部锁进了预注册平台。三个月后，审稿人问“这是不是事后拟合”，你贴出时间戳。那一刻你感谢的不是平台，是三个月前那个顶住“先看看数据再说”诱惑的自己。审稿意见最后写：“预注册增强了本研究的可信度。”你把这句话读了很多遍。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你成了组里的"预注册布道者"，尽管师弟们嫌它麻烦。 }
+          - { lte: 40, text: 你承认锁定的那一刻心慌过——真金白银的样本量，比理想少了两成。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授说："这个习惯，带到博士阶段去。"
+        neutral: 陈教授点头："规范。"便翻到了下一页。
+        negative: 陈教授说："锁得太早，探索性发现就没了。"你们各持己见。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的第二个研究在立项当天就完成了预注册。 }
+    reflection: 预注册是用自由的代价购买可信度——你放弃了"数据挖到哪算哪"的灵活，换来一句无可指摘。
+    lessonHint: 确认性研究应预注册假设与分析，防 p-hacking 于未然。
+    tone: positive
+    family: method
+    whyDistinct: 核心结果是"预注册制度带来的可信度成就"，与种子固定（复现性）结局在方法家族内亦不重叠。
+
+  - id: r_v2_peer_pact_end
+    campaign: research
+    title: 《攻守同盟》
+    mainResult: 与同门建立互助共生关系
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_peer_pact }
+        - { kind: flag, key: rv2_ghost_ignored, expected: true }
+    priority: 91
+    tier: main
+    baseText: 你和苏晓的“情报共享协议”没有纸面合同，只有图书馆四楼靠窗的老位置。你把踩过的坑写成便签塞给她，她把实验室的隐性规则讲给你听。开题答辩前夜，她帮你预演了三遍，指出的问题比导师还狠。你通过了答辩。走出教室时她说“请客”，你说“必须的”。学术圈常有黑暗森林的说法，但你们证明了另一种可能。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 同盟没有变成依赖——你们始终各自工作，只在关键节点互为镜子。 }
+          - { lte: 40, text: 你发现自己开始等她的反馈才敢推进，有点警觉，又有点安心。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 毕业那天苏晓送你一张四楼靠窗的座位预约单，日期是十年后。
+        neutral: 答辩后你们在群里互道了"恭喜"，然后各自忙碌。
+        negative: 苏晓后来去了别的方向，同盟无疾而终。你偶尔会想起那个靠窗的位置。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的便签纸条被苏晓收集成册，名叫《踩坑实录·第一辑》。 }
+    reflection: 同伴不是竞争者的别名——共享情报的共同体里，每个人走得都更远。
+    lessonHint: 同侪互助网络是学术生存的重要基建，但需保持独立判断。
+    tone: positive
+    family: academic_relationships
+    whyDistinct: 核心结果是"同侪情报同盟"的关系成就，与导师/学长线结局的角色域不同（守卫旗标含 ghost_ignored 区分组合）。
+
+  - id: r_v2_tool_zoo_end
+    campaign: research
+    title: 《第十七个标签页》
+    mainResult: 工具囤积症拖累效率后回归极简
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_tool_zoo }
+    priority: 91
+    tier: main
+    baseText: 十七个标签页、九个“效率工具”、四个自动化脚本——研究没推进多少，你的数字动物园倒是初具规模。某天浏览器崩溃，全部标签无预警消失，你盯着空白页面，突然感到轻松。你只重开了三个：文献库、数据表、Agent 对话。动物园变成了三个人一条路径，当周的进度反超了之前一个月。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { gte: 60, text: 你保留了 Agent 对话那一个"动物园核心物种"，其他全靠手。 }
+          - { lte: 40, text: 你发现三个标签里有两个是手动的，也挺好。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄说："工具是抓手不是收藏品。你这觉悟值一周进度。"
+        neutral: 师兄瞥了一眼你的桌面："挺干净。"继续推导他的公式。
+        negative: 师兄说："崩溃是好事，你该早点崩。"你竟无法反驳。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的新标签页规则：超过五个就必须关掉一个。 }
+    reflection: 收集工具的快乐是"准备做事"的多巴胺，它和"做成事"无关。
+    lessonHint: 工具链做减法优于加法，每个工具必须有不可替代的职责。
+    tone: mixed
+    family: agent_use
+    whyDistinct: 核心结果是"工具囤积与极简回归"的效率叙事，与提示词资产化结局构成 Agent 使用的正反两面。
+
+  - id: r_v2_theory_favor_end
+    campaign: research
+    title: 《顺手的理论》
+    mainResult: 选择性引用舒适理论导致框架失衡
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_theory_favor }
+    priority: 90
+    tier: main
+    baseText: 你的文献综述像一场精心安排的合唱：所有被引用的理论都支持你，所有唱反调的都“与本文主题无关”。开题答辩上，第二位评委只问了一个问题：“最反对你框架的理论是什么？”你报出了一个名字——然后发现，自己只在脚注里见过它。教室的空调声突然变得很大。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: 你在开题后补了三周对立理论，综述重写了一半。评委那句话被你贴在墙上。 }
+          - { lte: 40, text: 你把"与主题无关"四个字用得更熟练了——熟练得连自己都骗过了。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄说："你终于开始读你不喜欢的文献了。这叫学术成年。"
+        neutral: 师兄耸耸肩："每个人都要踩一遍这个坑。"
+        negative: 师兄说："我当年也是这么糊弄过去的——然后被盲审打了回来。"
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的文献库从此多了一个分类，名字叫“反对我的”。 }
+    reflection: 只读支持自己的文献，等于把自己的偏见外包给引用格式。
+    lessonHint: 理论选择必须包含竞争性解释，对立文献是防偏见的疫苗。
+    tone: negative
+    family: theory
+    whyDistinct: 核心结果是"理论确认偏误"这一学术思维失败，与数据类诚信链完全不同域。
+
+  - id: r_v2_screenshot_habit_end
+    campaign: research
+    title: 《截图癖》
+    mainResult: 来源存证习惯在关键时刻 rescue
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_screenshot_habit }
+    priority: 92
+    tier: main
+    baseText: 组会查证日，师兄质疑你数据来源页的一句结论“查无此言”。你翻开截图库：日期、网页、原文高亮、存档链接，三秒钟解决战斗。导师看着那张带时间戳的截图，对全组说：“都学学这个习惯。”你不好意思地说这只是随手存的。其实哪有什么随手——那是你从“引用失忆”里死里逃生后养成的肌肉记忆。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你的截图库有命名规范和目录索引，检索只要三秒。 }
+          - { lte: 40, text: 截图三千张，找到那一张花了你十分钟。救了场，也吓出了冷汗。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄就是那次"查无此言"的质疑者。他后来成了你截图习惯的模仿者。
+        neutral: 师兄说"行吧，是我没找到"，翻篇了。
+        negative: 师兄从此质疑你的一切数据前都会先说"你要是拿不出截图呢"。你总能拿出来。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的截图库成了组里的传说，名叫“证据防空洞”。 }
+    reflection: 存证习惯的成本是三秒钟，收益是在被质疑时保住你的全部信用。
+    lessonHint: 关键资料必须留时间戳存证，来源可追溯是论证的生命线。
+    tone: positive
+    family: evidence_integrity
+    whyDistinct: 核心结果是"存证习惯的实战收益"，与两版数据（版本失控）、凑样本（造假）等其他诚信结局的结果机制不同。
+
+  - id: r_v2_plan_copy_end
+    campaign: research
+    title: 《复制来的开题》
+    mainResult: 研究计划过度借鉴模板反噬
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_plan_copy }
+        - { kind: flag, key: rv2_plan_rot, expected: false }
+    priority: 90
+    tier: main
+    baseText: 你东拼西凑的研究计划在格式上无懈可击，直到导师问出那个问题：“第三部分的创新点，和第五部分的局限性，怎么好像是两篇文章？”你愣住了。拼装品的接缝在阳光下现了形。你花了一整夜重写，第一次用自己磕绊的语言讲自己真正想研究的事——磕绊，但完整。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: 重写后的计划像你的口吻。导师说："这才像你写的东西。" }
+          - { lte: 40, text: 你改掉了拼接的痕迹，但没改掉拼接的思维。你自己知道。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授在你重写稿的扉页画了个圈："从拼装到建造，这一夜值一个学分。"
+        neutral: 陈教授说："重写吧。"没有多余的评价。
+        negative: 陈教授在组会上提醒所有人"计划要自己写"，你看向窗外的天。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你把拼装版留在了某个旧文件夹里，提醒自己它曾经差点就是你的开题。 }
+    reflection: 借来的结构装不下自己的问题——研究计划的每个字都得是你的。
+    lessonHint: 研究计划必须回答自己的问题，模板只能借格式不能借思想。
+    tone: negative
+    family: project_management
+    whyDistinct: 核心结果是"计划抄袭/拼装被识破"的项目管理失败，与计划烂尾（plan_rot）结局互斥。
+
+  - id: r_v2_refused_lend_end
+    campaign: research
+    title: 《不外借协议》
+    mainResult: 守住关键设备/数据的使用权
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_refused_lend }
+    priority: 91
+    tier: main
+    baseText: 你把设备留在实验室并贴了张便签：“数据采集期，暂不外借，需要可协调时段。”隔壁组的人来问过三次，你协调出去两次半——关键周一次没借。他们说你小气，你笑笑。答辩前一周，你听着他们抱怨设备排队排到下个月，默默把采集完的数据又备份了一遍。小气救了你的毕业时间表。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: 你学会了"拒绝但给方案"的表达，人情和进度都保住了。 }
+          - { lte: 40, text: 你硬邦邦地拒绝了所有人，包括那个其实只借半天的人。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 苏晓说："幸好你没借我。我那个月真的会把它搞坏。"
+        neutral: 苏晓没借用你的设备，你们的友谊与此无关。
+        negative: 苏晓逢人便说你"设备看得比人重"，你懒得辩解。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那张便签被你做成了模板，实验室里流传开来。 }
+    reflection: 会说"不"的研究者才有研究日程——你的时间表值得被捍卫。
+    lessonHint: 关键资源要设定使用边界，协调式拒绝是科研社交的基本功。
+    tone: mixed
+    family: project_management
+    whyDistinct: 核心结果是"资源边界管理"的日常政治成就，与计划拼装、工具囤积等其他管理类结局不同。
+
+  - id: r_v2_seventh_pick_end
+    campaign: research
+    title: 《第七个选题》
+    mainResult: 七次否决后找到真正的研究问题
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_seventh_pick }
+    priority: 91
+    tier: main
+    baseText: 前六个选题死在便利贴上：太大、太旧、做不动、没数据、像工程、像哲学。第七个选题活了下来——不是因为它完美，而是因为你发现自己在没有任务安排的周六早上也想查它的文献。研究问题原来不是选出来的，是长出来的。你在开题报告的问题陈述里写下它时，手是稳的。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你把六个死掉的选题整理成一页"墓志铭"，常看常新。 }
+          - { lte: 40, text: 你偶尔怀疑第七个只是"最不坏的那个"，这个念头挥之不去。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授说："前六个也不算浪费，它们是第七个的葬礼。"
+        neutral: 陈教授圈出第七个选题："可以，去做。"
+        negative: 陈教授说："别人一周定题，你花了一个月。"你指了指自己的心口。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你在博士申请文书里写了“如何找到研究问题”——素材全是那六个失败的选题。 }
+    reflection: 好的研究问题经得起"没人布置你也会做"测试。
+    lessonHint: 选题要经过多轮自我否决，热情与可行性的交集才是真问题。
+    tone: mixed
+    family: research_identity
+    whyDistinct: 核心结果是"选题七次迭代"的元认知成就，与改题诱惑（外部驱动）结局的动机方向相反。
+
+  - id: r_v2_topic_fork_temp_end
+    campaign: research
+    title: 《为评委改的题》
+    mainResult: 迎合评委口味改题失去研究灵魂
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_topic_fork_temp }
+    priority: 90
+    tier: main
+    baseText: 你把题目改成了评委喜欢的样子。新题目光鲜、时髦、像热搜词的排列组合。答辩很顺利——顺利到你@gap 了一整个问题：你现在研究的这个东西，你在乎吗？通过名单公布那天，你的名字在，快乐不在。你在工位上坐着，看着那个陌生的题目，想起第七个选题被你亲手杀掉的那个下午。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: 你决定在硕士后续阶段把题目掰回自己的方向，哪怕从头再来。 }
+          - { lte: 40, text: 你安慰自己"先毕业再说"，那个下午的画面却越来越清晰。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 苏晓说："你改题那天我就想拦你。现在还来得及吗？"
+        neutral: 苏晓说："过了就好，题目重要吗？"你说不清。
+        negative: 苏晓用你放弃的原选题通过了答辩，评委夸"问题意识鲜明"。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的邮箱里存着那份被否决的原选题草稿，日期和改题日只隔三天。 }
+    reflection: 迎合换来的通过，是用研究身份支付的车票——上车之后，方向不再属于你。
+    lessonHint: 选题可以被建议但不可被裹挟，研究动机的真实性决定研究质量。
+    tone: negative
+    family: research_outcome
+    whyDistinct: 核心结果是"外部迎合式改题"的动机失败，与第七个选题（内生动机）结局互为镜像。
+
+  - id: r_v2_pilot_redone_late_end
+    campaign: research
+    title: 《第十八天的返工》
+    mainResult: 中期发现采样缺陷并大规模返工
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_pilot_redone, expected: false }
+        - { kind: flag, key: rv2_two_versions }
+        - { kind: flag, key: rv2_ghost_seen, expected: false }
+    priority: 89
+    tier: special
+    baseText: 第十八天，两个版本的数字终于逼你停下来核对。追溯结论像考古：问题出在第 4 天的采样口径。返工持续了六天，重采了一百多份问卷，删掉了三个心仪的分析角度。答辩时你的进度落后、但地基扎实。评委问“为什么样本量比计划少”，你说“因为我重做了一遍对的事”。答辩通过了，带着一道疤。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 返工期间你写了一份《错误时间线》，后来成为组里新生的必读。 }
+          - { lte: 40, text: 你删掉了错误数据的同时，也删掉了大部分相关记忆。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐说："敢返工六天的人，比敢编数据的人多。"
+        neutral: 师姐帮你核了一遍新样本的口径，什么也没说。
+        negative: 师姐说："如果你第 4 天听我的，这六天本来是你的论文期。"
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的日历上永远留着第十八天那格——写着“返工开始”。 }
+    reflection: 中期返工是研究给你的第二次机会，价格昂贵但货真价实。
+    lessonHint: 发现口径问题必须立即追溯影响面，宁可返工不可将错就错。
+    tone: mixed
+    family: method
+    whyDistinct: 核心结果是"中期大规模返工"的独特叙事（与预实验提前补救的时间点与代价结构不同），由三旗标组合守卫。
+
+  # ===== 隐藏层结局（97-98）=====
+  - id: r_v2_ghost_end
+    campaign: research
+    title: 《附录幽灵》
+    mainResult: 揪出编造引用的完整链条
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ghost_seen }
+        - { kind: flag, key: rv2_ghost_ignored, expected: false }
+    priority: 97
+    tier: hidden
+    baseText: “私人通信，2024”——你顺着这条幽灵引用查了下去：没有这位通信者，没有这次通信，文献列表里它是孤岛。你把证据链一条条钉进文档：原始出处不存在、转引链条断裂、Agent 生成的格式掩埋了痕迹。汇报那天你没有控诉，只把文档发到了组群。导师看完，把你的文档设为了组内“文献核查示范件”。幽灵被你抓住了——在你变成它之前。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: 你在组里推广"引用溯源三步法"，幽灵引用绝迹了两个学期。 }
+          - { lte: 40, text: 你抓住过一次幽灵，却没有制度化这个检查。你偶尔会想漏网的那些。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授说："你查的不是一条引用，是一种学风。"
+        neutral: 陈教授看完文档，说了两个字："很好。"你知道这两个字的分量。
+        negative: 陈教授说："花三天查一条引用？研究进度呢？"你没回答。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “私人通信，2024”成了你们组对可疑引用的通用代号。 }
+    reflection: AI 可以生成完美的引用格式，但生成不了真实存在过的思想——核查是人与 AI 的最后边界。
+    lessonHint: AI 生成的参考文献必须逐条溯源，格式正确不等于内容真实。
+    tone: mixed
+    family: evidence_integrity
+    whyDistinct: 核心结果是"识破 AI 编造引用"的完整侦探式核查链，是隐藏事件驱动的独特叙事弧，与常规诚信结局的触发机制不同。
+
+  - id: r_v2_basement_end
+    campaign: research
+    title: 《地下室的格式》
+    mainResult: 从往届档案地下室获得传承
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_basement_archive }
+    priority: 97
+    tier: hidden
+    baseText: 地下室的灯管闪了两下才亮。往届论文按年份码在铁架上，最早的一排落着十年的灰。你抽出 2014 届的那本，纸页发脆，格式却和你手里的问题惊人地同构。你坐在楼梯上读了两个小时，出来时手里抄了七页笔记。那个师兄毕业去了哪、后来做了什么，你不知道。但你知道他替你踩过一遍坑。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你把七页笔记整理成《地下室指南》，放回了铁架最显眼处。 }
+          - { lte: 40, text: 笔记锁在你自己的抽屉里。你想过分享，一直没有。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄听说你去了地下室："2014 届那本我也抄过。接力棒到你了。"
+        neutral: 师兄说"哦，地下室啊"，似乎没觉得那有什么特别。
+        negative: 师兄说："都什么年代了还翻纸质档案。"你合上笔记本，没接话。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的研究笔记扉页写着：2014 届，某位不知名师兄，敬上。 }
+    reflection: 学术传承不在期刊里，在地下室落灰的纸页和愿意去翻的人手里。
+    lessonHint: 机构内部档案是被忽视的知识宝库，前辈的失败记录价值连城。
+    tone: positive
+    family: research_identity
+    whyDistinct: 核心结果是"档案室传承"的独特隐藏叙事，通过地下室事件链解锁，与普通文献阅读结局的来源与情感结构完全不同。
+
+  - id: r_v2_countdown_end
+    campaign: research
+    title: 《黑板上的十八》
+    mainResult: 倒计时仪式感驯服拖延
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_blackboard_countdown }
+    priority: 97
+    tier: hidden
+    baseText: 你在实验室黑板角落写下了大大的“18”。第二天擦掉，写“17”。数字每天变小，焦虑每天具体化一点，你的行动也每天多具体一点。有人在数字旁边画了个哭脸，有人画了个加油的拳头，黑板一角渐渐长成全组的公共艺术品。答辩结束那天，你擦掉“1”，写上了“0”，然后退后一步，鞠了一躬。全组鼓掌，虽然他们不知道你在谢什么。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: 你发现了倒计时的副作用：数字小于 5 时你效率高得可怕。后来你主动制造这种压迫感。 }
+          - { lte: 40, text: 你承认自己有几天不敢抬头看黑板。但数字一直在变小，这就够了。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 苏晓在你的"0"旁边补了一行小字："见证了全过程。佩服。"
+        neutral: 苏晓说："黑板每周都要擦的，你那数字挡地方了。"嘴上嫌弃，眼里带笑。
+        negative: 苏晓被你的倒计时焦虑传染，她把你的数字遮住了。你们吵了一架。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 后来每届都会有人在黑板角落写数字——没人知道这个传统从谁开始。 }
+    reflection: 把时间变成可见的数字，是把抽象的焦虑翻译成具体的行动清单。
+    lessonHint: 可视化剩余时间是驯服拖延的第一步，公共承诺强化执行。
+    tone: positive
+    family: project_management
+    whyDistinct: 核心结果是"公共倒计时仪式"的拖延管理叙事，隐藏事件解锁，与时间管理常规结局的仪式性结构不同。
+
+  - id: r_v2_canteen_intel_end
+    campaign: research
+    title: 《食堂情报网》
+    mainResult: 非正式信息网络的关键情报
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_canteen_intel }
+    priority: 97
+    tier: hidden
+    baseText: 食堂二楼靠窗桌，是全校学术情报的中转站。你从一顿顿饭里拼出了完整的地图：哪个课题组的经费快断了、哪位评委今年在推什么方向、隔壁组的 Agent 实验为什么停摆。这些情报没有一条能写进论文，但你避开了两个坑、抓住了一次窗口期。毕业多年后你才明白，那天你在食堂学的，是学术圈的另一门必修课。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了交叉验证情报——食堂的话信三分，验证过再信七分。 }
+          - { lte: 40, text: 你照着情报调整过一次方向，后来发现情报过期了。学费交了。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 苏晓成了你的固定饭搭子和情报交换对象，你们的餐桌笔记攒了一本。
+        neutral: 苏晓觉得食堂八卦浪费时间，你们各吃各的。
+        negative: 你转述的一条情报失实，让苏晓白忙一场。她半个月没和你吃饭。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你保留了“每周至少和不同组的人吃一顿饭”的习惯。 }
+    reflection: 正式渠道给你文献，非正式渠道给你地图——两者合起来才是完整的研究地形。
+    lessonHint: 学术非正式网络承载关键情报，但需要交叉验证。
+    tone: mixed
+    family: academic_relationships
+    whyDistinct: 核心结果是"非正式信息网络"的情报学叙事，隐藏事件驱动，与同门同盟（正式互助）结局的机制与风险不同。
+
+  - id: r_v2_bridge_end
+    campaign: research
+    title: 《被认领的桥》
+    mainResult: 理论空隙被抢先占位的教训
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_bridge_claimed }
+    priority: 98
+    tier: hidden
+    baseText: 那座“桥”——两个理论之间没人搭过的连接——你发现了它，犹豫了它，标注了它，然后搁下了它。三个月后，你在最新一期的期刊上看见它被搭好了：结构和你设想的像了七成，作者署着两个你不认识的名字。你把那页 PDF 打印出来贴在工位上。导师路过看了一眼，说：“下次，别只是标注它。”
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 60, text: 你给自己立了规矩：想法从产生到验证不能超过两周。下座桥，你在搭。 }
+          - { lte: 40, text: 你反复安慰自己"想到了就算拥有过"，但那七成的相似度夜夜硌人。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授后来把一个新方向直接交给了你："这次，搭快点。"
+        neutral: 陈教授说："学术竞争就是这样。往前看。"
+        negative: 陈教授说："想到了不做，等于给世界免费打工。"
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那张打印页的边角卷了，一直没舍得撤下来。 }
+    reflection: 想法不值钱，值钱的是想法落地前那段的孤独施工期。
+    lessonHint: 发现理论空隙后要快速验证占位，犹豫期就是被抢先期。
+    tone: negative
+    family: theory
+    whyDistinct: 核心结果是"理论发现被抢先"的优先权叙事，隐藏事件链驱动，与理论偏好、理论合唱等其他理论家族结局完全不同。
+
+  # ===== NG+ 结局（96-97）=====
+  - id: r_v2_ngplus_guard_end
+    campaign: research
+    title: 《上一世的引用债》
+    mainResult: NG+ 记忆使引用核查习惯提前成型
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ngplus_guard_paid }
+    priority: 97
+    ngPlus: true
+    tier: special
+    baseText: 第 9 天，当 Agent 兴冲冲地递来那份文献综述时，你几乎条件反射地问：“引用都核过了吗？”话出口的瞬间你愣住了——上一世，你为这个问题付了三周的学费。这一次，幽灵引用在第 9 天就被你按在了纸上。你看着自己自然的核查动作，忽然明白：所谓经验，就是把学费变成直觉。
+    growthVariantRules:
+      - dimension: aiDependence
+        variants:
+          - { lte: 40, text: 你甚至开始享受核查——那是你确定"这是真的"的独处时刻。 }
+          - { gte: 60, text: 你核查完仍会交给 Agent 复核一遍。双保险，上一世的债教会的。 }
+    characterEpilogueRules:
+      - characterId: r_ai_agent
+        positive: Agent 在你第三次要求溯源后，主动在输出里附上了来源链接。它"学乖了"。
+        neutral: Agent 照常执行核查指令，速度比上一世快了——因为你的指令更精确。
+        negative: Agent 说"这些引用应该是真实的"。"应该"两个字让你想起了上一世。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的核查清单第一次成形是在第 9 天，比上一世早了整整十二天。 }
+    reflection: NG+ 给的不是天赋，是时间——你比命运早知道一步，就能在它到来前修好栅栏。
+    lessonHint: 前周目失败的教训若能在前中期转化为流程，将彻底改变研究轨迹。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是"跨周目教训内化为早期直觉"，仅在 NG+ 周目可达成，与单周目所有结局的时间结构与主题不同。
+
+  - id: r_v2_ngplus_senior_end
+    campaign: research
+    title: 《她还记得的方法》
+    mainResult: NG+ 中与数据师姐的深度传承
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ngplus_senior_paid }
+    priority: 97
+    ngPlus: true
+    tier: special
+    baseText: 师姐讲“从数据反推问题”时，你接了一句“所以要在第 4 天就做口径校验”。她抬头看了你一眼：“我还没讲到那。”你说“猜的”。她笑了，把接下来两个小时都花在了你身上——原本只打算给十分钟的指点。有些方法课，教材里没有，只存在于某位学姐的记忆里。而你，恰好问对了问题。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你没有依赖师姐的指点，只是用它校准了本就要走的路。 }
+          - { lte: 40, text: 你绕着师姐的时间表安排了自己两周的日程。效率很高，也很危险。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 答辩后师姐说："你是我带过的最像'传人'的人。"
+        neutral: 师姐说："你悟性不错。"然后继续整理她的 departing checklist。
+        negative: 师姐说："不懂装懂最忌讳。'猜的'？研究里没有猜的。"
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 师姐的那套校验流程，你后来教给了下一届——传承不再依赖记忆。 }
+    reflection: NG+ 的真正能力是"问对问题"——你知道宝藏在哪，只需要一个得体的开场白。
+    lessonHint: 前周目知识可加速关系深读，但不可替代独立验证。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是"跨周目关系深读成就"，仅在 NG+ 可达，与单周目同侪/师姐结局的深度与时机不同。
+
+  - id: r_v2_ngplus_method_end
+    campaign: research
+    title: 《提前布好的防线》
+    mainResult: NG+ 预防性方法布局全部生效
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ngplus_method_paid }
+    priority: 97
+    ngPlus: true
+    tier: special
+    baseText: 第 15 天，上一世爆雷的三个雷区，这一次全部安静：口径在第 4 天校验过、种子在第 7 天固定了、样本在第 11 天补采到位。你像一位提前看过剧本的导演，看着雷一个都没炸。没有戏剧性，没有危机，没有英雄时刻——只有一份平静得近乎无聊的进度表。你盯着“无聊”这两个字看了很久，然后笑了：原来上辈子的兵荒马乱，这辈子叫胸有成竹。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: 你把省下的时间投给了那个上辈子被兔子洞吞掉的想法。这次它有了工期。 }
+          - { lte: 40, text: 你发现自己开始怀念"救火"的刺激感，并为此警惕。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授说："你这届做得太顺了。顺，是因为你把功夫用在了看不见的地方。"
+        neutral: 陈教授翻了翻你的进度表："嗯，正常推进。"你珍惜这句"正常"。
+        negative: 陈教授皱眉："进度这么保守？"你没法解释你预防了什么。有些防御是隐形的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的研究日志第一页写着三个日期——三颗雷的“扫雷日”。只有你知道它们的意义。 }
+    reflection: 最好的危机管理是让危机不发生——而它的代价是无人知晓你的功劳。
+    lessonHint: NG+ 的元价值：把上一世的危机清单转化为这一世的预防性流程。
+    tone: mixed
+    family: hidden_longterm
+    whyDistinct: 核心结果是"预防性布局的全胜与无人知晓的孤独"，仅在 NG+ 可达，情绪结构与所有单周目结局不同。
+
+  - id: r_v2_ngplus_memo_end
+    campaign: research
+    title: 《写给下一个自己》
+    mainResult: NG+ 备忘录的跨周目接力
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ngplus_memo }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 你在第 2 天写下了那份备忘录，署名是“给下一次的我”。写到一半你停笔想了想：下一次的我会做到哪一天？会在哪里卡住？会把这份纸当作提醒，还是当作嘲笑？开题答辩通过那晚，你在备忘录末尾补了一行字，合上笔记本——那行字是：“你做到了。别停，下一个坑在方法部分。”无论是否有下一次，你都把接力棒放好了。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 备忘录里没有一句抱怨，全是流程与检查项。你对自己像对队友一样认真。 }
+          - { lte: 40, text: 备忘录一半是提醒一半是忏悔。忏悔的部分你写得很慢。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 苏晓瞥见过笔记本第一页，问"下一个自己是谁"。你说"一个老朋友"。她没懂，你也没解释。
+        neutral: 苏晓没看见过那份备忘录。它是你和自己的私事。
+        negative: 备忘录被你撕掉过一页——那一页写的是你最不愿承认的错误。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那本笔记本你保留了很多年，第一页永远写着同一行字。 }
+    reflection: 对未来的自己负责，是最诚实的长期主义——没人监督，全凭自愿。
+    lessonHint: 结构化复盘与自我承诺是能力迁移的核心机制。
+    tone: mixed
+    family: hidden_longterm
+    whyDistinct: 核心结果是"跨周目自我备忘"的元叙事成就，触发链独特（第 2 天书写行为本身），与知识内化类 NG+ 结局不同。
+
+  - id: r_v2_ngplus_lesson_end
+    campaign: research
+    title: 《补考》
+    mainResult: NG+ 中重修上一世逃避的课
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ngplus_skipped_lesson }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 上一世，你在第 11 天跳过了那节统计咨询课，后来为此在数据面前抓瞎两周。这一世，你坐在了第一排。老师在黑板上写下“交互项”三个字时，你认真得像第一次学——某种意义上，确实是第一次。下课你问了三个问题，最后一个问完，老师看了看你：“你的问题不像零基础。”你说：“我预习过。用了很久。”
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你没有止步于补课，而是把课件整理成了组内共享笔记。 }
+          - { lte: 40, text: 补完课你松了口气，像还清了一笔只有你自己知道的债。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐听说你选了那门课："那节课我逃过。你比我勇敢。"
+        neutral: 师姐说"那课挺难的，加油"，便去赶她的火车了。
+        negative: 师姐说："就为一节课写进日志？"你说"那节课救过我"，她没再问。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的笔记扉页画了两颗星——一颗给讲课的老师，一颗给逼你重来的“上一世”。 }
+    reflection: 补考的意义不在分数，在于向过去的自己证明：这一次，我没有绕开。
+    lessonHint: NG+ 提供补修短板的机会，主动重修弱项是成长最快的路径。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是"跨周目主动重修逃避项"的救赎叙事，由第 11 天补课行为守卫，与其他 NG+ 成就结局的机制不同。
+
+  # ===== 超稀有（99）=====
+  - id: r_v2_oldbook_ghost_end
+    campaign: research
+    title: 《旧书页边的批注者》
+    mainResult: 双隐藏线索交汇——旧书批注与幽灵引用同源
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_oldbook_found }
+        - { kind: flag, key: rv2_ghost_seen }
+    priority: 99
+    tier: hidden
+    ultraRare: true
+    baseText: 旧书店淘来的那本方法书，页边有陌生人的批注。三个月后，当你在附录里追查那条幽灵引用时，比对笔迹的瞬间你愣住了——“此处 2014 版已修订，勿引”——批注者和你的批注者，是同一个人。两个不相干的线索在同一个人的字迹里汇合。你不知道他是谁，只知道他走过你走的路、掉进过你差点掉进的坑、并且留下了一路的记号。你合上书，在扉页写下一行小字：前辈，我接上了。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: 你开始在自己的书上留批注——为某个未来的陌生人。 }
+          - { lte: 40, text: 你把那本书锁进了抽屉最深处，像收起一段私人的缘分。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄看到批注照片，沉默很久："2014 年失踪的那位学长……原来是去了 industry 前留的。"
+        neutral: 师兄说"字挺好看"，你没纠正他的重点。
+        negative: 师兄说"批注能信吗，又不是导师说的"。你为这句话和他疏远了一阵。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来在这本书的第 137 页，补上了属于自己的第一条批注。 }
+    reflection: 学术是一条暗河，每个认真走过的人都留下了水位线——找到它们，你就不孤单。
+    lessonHint: 双线索交汇代表信息素养的最高回报：碎片知识在长期积累后产生涌现式连接。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是"双隐藏线索交汇的涌现叙事"，需同时达成两个独立隐藏事件，是本线最稀有的完整隐藏弧。
+
+  - id: r_v2_floor_countdown_end
+    campaign: research
+    title: 《全楼的倒计时》
+    mainResult: 双隐藏线索交汇——倒计时与食堂情报的合流
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_blackboard_countdown }
+        - { kind: flag, key: rv2_canteen_intel }
+    priority: 99
+    tier: hidden
+    ultraRare: true
+    baseText: 黑板上你的“18”先是全楼的笑话，后来成了全楼的心跳。而食堂的情报网让你提前知道了另一件事：三楼那组人也在倒计时——他们冲同一个 deadline。两条线在最后一周合流：你在黑板角落写下了“3”之后，补了一句“三楼也是”。那天傍晚，三楼的人端着饭盘找到你，两个组的倒计时从此共用一块黑板。最后你们都赶上了。结局不辉煌，但那块黑板后来擦了很久很久才被遗忘。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 是你主动写下了那句话。让看不见的对手变成看得见的同行，需要一点点勇敢。 }
+          - { lte: 40, text: 你写那句话时手心出汗，写完就后悔了。幸好，后悔是短暂的。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 苏晓说："你们两个组现在一起熬到凌晨三点，我该心疼谁？"
+        neutral: 苏晓说："都赶上了，挺好。"她不知道黑板的事全经过。
+        negative: 三楼的人后来投稿比你早一周，你的"3"旁边多了个没人擦掉的问号。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 毕业合影那天，两个组的人在黑板前拍了同一张照片。 }
+    reflection: 竞争信息公开化的那一刻，对手就变成了同行——孤立是焦虑最好的燃料。
+    lessonHint: 公共承诺与情报共享结合可形成良性竞争共同体。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是"倒计时仪式与情报网络合流成的共同体叙事"，需两个独立隐藏事件交汇，情绪与主题在全部结局中独一无二。
