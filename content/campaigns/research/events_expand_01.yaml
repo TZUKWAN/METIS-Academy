@@ -1,0 +1,903 @@
+# 科研线扩展事件 01：选题澄清与文献检索支线（D1-D8）
+events:
+  # ---- D1 ----
+  - id: r_e01_corridor_q
+    campaign: research
+    day: 1
+    type: story
+    trigger: { kind: day, day: 1, phase: end }
+    purpose: { narrative: 导师走廊突袭提问, learning: 一句话需求的压力会持续存在，直到被拆解 }
+    scene: { location: corridor, characters: [r_mentor] }
+    setup: [“傍晚去开水房的路上，陈教授迎面走来，脚步没停，话先到了。”]
+    dialogue:
+      - { speaker: 陈教授, text: "想了一下午，那句话你能拆成几个问题？", mood: serious }
+      - { speaker: 你, text: "……三、三个左右？" }
+      - { speaker: 陈教授, text: "'左右'不是研究。拆清楚了来找我。", mood: serious }
+    next: r_e01_three_questions
+
+  - id: r_e01_three_questions
+    campaign: research
+    day: 1
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 澄清问题的三个钩子：对象/比较/结果 }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: write_three
+        text: 自己先拆：研究对象是谁？跟谁比？'影响'怎么算？
+        visibleResponse: 你拆出三个问题，发现每一个自己都答不上来。答不上来的地方，就是要去查的地方。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+          - { kind: addAsset, assetType: research_brief, name: 澄清问题清单, description: 对象/比较/结果三问, content: "1.研究谁？2.跟什么比？3.'影响'用什么指标？" }
+      - id: ask_mentor_appt
+        text: 给导师发邮件，约十分钟当面澄清
+        visibleResponse: 陈教授回了两个字："周四。"你突然觉得这三个问题最好在周四之前自己先想一遍。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 3 }
+          - { kind: add, key: academicDebt, value: 2 }
+      - id: ask_agent_break
+        text: 让 Agent 把这句话拆成研究问题
+        visibleResponse: Agent 拆出五个问题，每个都很大。你数了数，没有一个能直接去查数据。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 5 }
+      - id: browse_forum
+        text: 去论坛搜"这个方向好做吗"
+        visibleResponse: 两小时后你收藏了七个帖子，方向反而更乱了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    learningPoint: 澄清先于检索：问题不清，检索就是漫游
+
+  - id: r_e01_peer_panic
+    campaign: research
+    day: 1
+    type: npc
+    trigger: { kind: day, day: 1, phase: end }
+    scene: { location: dorm, characters: [r_peer] }
+    setup: [“苏晓抱着笔记本窜到你床边。”]
+    dialogue:
+      - { speaker: 苏晓, text: "你导师是不是也是一句话打发？我们导师说'你看着办'，四个字，更绝。", mood: worried }
+      - { speaker: 你, text: "那你打算怎么办？" }
+      - { speaker: 苏晓, text: "先抄往届开题的目录，照样画瓢。畫着画着就有了。", mood: neutral }
+    choices:
+      - id: trade_ideas
+        text: 跟苏晓交换各自拆出的问题清单
+        visibleResponse: 你们互提了三个刁钻问题。她的"看着办"在你这里被拆成了两问，你的"影响"被她戳了一刀。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_peer, delta: 6 }
+          - { kind: add, key: independence, value: 3 }
+      - id: solo_night
+        text: 各卷各的，晚安
+        visibleResponse: 门关上后，宿舍安静得能听见风扇转。你把问题清单又读了一遍。
+        hiddenEffects: [{ kind: add, key: independence, value: 2 }]
+    terminal: true
+
+  - id: r_e01_scope_draft
+    campaign: research
+    day: 1
+    type: story
+    trigger: { kind: manual }
+    scene: { location: dorm, characters: [] }
+    setup: [“睡前你把候选范围写成三行，每行后面留了一列'敢不敢'。”]
+    automaticEffects:
+      - kind: addAsset
+        assetType: research_brief
+        name: 研究简报 v0.5
+        description: 三行候选范围 + 敢不敢标记
+        content: "候选A：AI与就业（大而空）\n候选B：AI与技能形成（概念不清）\n候选C：AI辅助写作与论证（可测）"
+    dialogue:
+      - { speaker: 系统, text: "范围写下来的那一刻，'能研究的'从一个词变成了三个格子。" }
+    terminal: true
+
+  - id: r_e01_ai_scope
+    campaign: research
+    day: 1
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你随手问 Agent：'这个方向范围多大？'”]
+    dialogue:
+      - { speaker: Agent, text: "建议范围：生成式AI对知识工作的全面影响。该范围完整、前沿、覆盖面广。", mood: pleased }
+      - { speaker: 你, text: "'全面'？三十天全面个鬼。范围是你帮我定还是我帮你定？" }
+    choices:
+      - id: shrink_yourself
+        text: 自己砍：只留'写作'一个场景
+        visibleResponse: 你把"全面"划掉，改成"AI辅助写作"。Agent 表示尊重你的决定。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 5 }
+          - { kind: add, key: progress, value: 2 }
+      - id: accept_agent_scope
+        text: 它说覆盖面广，那就广着吧
+        visibleResponse: 你保留了"全面影响"。第四天写契约时，这个范围会卡住你整整一小时。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+          - { kind: setFlag, key: scope_too_wide }
+    terminal: true
+
+  # ---- D2 ----
+  - id: r_e02_mentor_mail
+    campaign: research
+    day: 2
+    type: story
+    trigger: { kind: day, day: 2, phase: start }
+    purpose: { narrative: 导师邮件四个字, learning: 期待管理从第一次汇报开始 }
+    scene: { location: dorm, characters: [] }
+    setup: [“早上七点半，导师邮件到了。正文四个字：先看文献。”]
+    dialogue:
+      - { speaker: 系统, text: "没有附件，没有清单，没有截止日期。这是考验，也是授权。" }
+    next: r_e02_mail_react
+
+  - id: r_e02_mail_react
+    campaign: research
+    day: 2
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 汇报节奏：让导师看到过程，而不只是结果 }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: reply_plan
+        text: 回邮件附上本周检索计划：关键词、库、产出
+        visibleResponse: 十分钟后发出。导师没回——但你知道，周五他会知道你在干什么。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 5 }
+          - { kind: add, key: execution, value: 3 }
+      - id: reply_ok
+        text: 回"好的老师"，然后该干嘛干嘛
+        visibleResponse: 你回了三个字。这封邮件沉进了收件箱，像什么都没发生过。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
+      - id: reply_ask_list
+        text: 回信要文献清单："老师有推荐的必读文献吗？"
+        visibleResponse: 导师回了三篇：两篇英文综述，一篇中文实证。省了你两天摸索。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 3 }
+          - { kind: add, key: literatureCount, value: 3 }
+    learningPoint: 主动汇报是免费的信任
+
+  - id: r_e02_pop_sci
+    campaign: research
+    day: 2
+    type: decision
+    trigger: { kind: day, day: 2, phase: end }
+    purpose: { learning: 公众号/百科是线索不是证据 }
+    scene: { location: dorm, characters: [] }
+    setup: [“一篇十万加的公众号文章把你的题目讲得头头是道，评论区都在喊'太真实了'。”]
+    dialogue:
+      - { speaker: 系统, text: "文章引用了'某研究'，但没有出处。用，还是不用？" }
+    choices:
+      - id: trace_source
+        text: 顺藤摸瓜：找它说的'某研究'原文
+        visibleResponse: 你花四十分钟翻到了源头——一篇 2023 年的硕论，样本 60 份。文章把结论放大了三倍，但线索是真的。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: add, key: literatureCount, value: 1 }
+        unlockKnowledge: [kc_r_fake_citation]
+      - id: cite_article
+        text: 直接引这篇公众号，反正是公开来源
+        visibleResponse: 你把公众号写进了文献表。开题预审时，这一行会被红笔圈出来。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+          - { kind: setFlag, key: cited_pop_sci }
+      - id: discard_all
+        text: 公众号都不可信，关掉
+        visibleResponse: 你关掉了页面。它提的那个硕论，你之后再也没见过。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 1 }]
+    learningPoint: 二手信息只当路标，不当地基
+
+  - id: r_e02_citation_chase
+    campaign: research
+    day: 2
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 滚雪球检索：顺着一篇好文的参考文献向后追 }
+    scene: { location: library, characters: [] }
+    setup: [“矩阵里有一篇 2024 年的综述写得极好，参考文献列了 87 篇。”]
+    dialogue:
+      - { speaker: 系统, text: "综述的参考文献单，是最被低估的检索入口。" }
+    choices:
+      - id: snowball_back
+        text: 向后滚雪球：把综述引的文献按相关度挑 10 篇
+        visibleResponse: 你按标题筛了两轮，挑出 10 篇。6 篇能下载，其中 3 篇直接命中你的机制。
+        hiddenEffects:
+          - { kind: add, key: literatureCount, value: 4 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: addAsset, assetType: literature_library, name: 雪球清单 v1, description: 从综述参考文献中筛出的候选, content: "10 篇候选 / 6 篇可得 / 3 篇强相关" }
+        unlockKnowledge: [kc_r_filtering]
+      - id: read_ref_list_only
+        text: 只把 87 篇的标题扫一遍，不下载
+        visibleResponse: 扫完你对领域地图有了感觉，但一张全文都没落袋。
+        hiddenEffects:
+          - { kind: add, key: literatureCount, value: 2 }
+      - id: let_agent_snowball
+        text: 让 Agent 自己读综述再去'补充文献'
+        visibleResponse: Agent 补了 12 篇。你抽查发现 4 篇查无此文——它把作者名和年份自由组合了。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 6 }
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 好综述的参考文献单是金矿，但要自己筛
+
+  - id: r_e02_review_first
+    campaign: research
+    day: 2
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“林师姐看你抱着一摞实证论文。”]
+    dialogue:
+      - { speaker: 林师姐, text: "先别急着啃实证。你说说，这个领域这三年公认的综述有哪几篇？", mood: serious }
+      - { speaker: 你, text: "……不知道。" }
+      - { speaker: 林师姐, text: "综述是地图。没地图就进山，你会把每棵树都当成新发现。", mood: neutral }
+    choices:
+      - id: ask_for_map
+        text: 请师姐圈两篇必读综述
+        visibleResponse: 她在便签上写了两个DOI，顺手把你怀里两篇不入流的实证抽走了。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_senior_theory, delta: 6 }
+          - { kind: add, key: literatureCount, value: 2 }
+      - id: self_search
+        text: 谢谢，我自己再找找
+        visibleResponse: 你找了一下午。找到一篇 2017 年的综述——领域在 2023 年就换了地形。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: r_e02_zotero_setup
+    campaign: research
+    day: 2
+    type: story
+    trigger: { kind: day, day: 2, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: [“你把散在下载文件夹的 23 个 PDF 全部导入文献管理工具，打了三层标签。”]
+    automaticEffects:
+      - kind: addAsset
+        assetType: literature_library
+        name: 文献库 v0
+        description: 23 篇入库，含标签体系
+        content: "标签：综述/实证/方法；状态：未读/略读/精读"
+    dialogue:
+      - { speaker: 系统, text: "文献管理的原则：一个入口，一种命名，一眼能找到。" }
+    terminal: true
+
+  # ---- D3 ----
+  - id: r_e03_abstract_skim
+    campaign: research
+    day: 3
+    type: decision
+    trigger: { kind: day, day: 3, phase: start }
+    purpose: { learning: 摘要三问：研究对象/方法/结论边界 }
+    scene: { location: library, characters: [] }
+    setup: [“桌上摊着 9 篇新文献。全读来不及，只看标题太糙。”]
+    dialogue:
+      - { speaker: 系统, text: "摘要三问：研究对象是谁？用了什么方法？结论说到哪为止？" }
+    choices:
+      - id: three_questions
+        text: 每篇摘要答三问，答案写进矩阵备注列
+        visibleResponse: 九篇里三篇对象不符、两篇是综述、四篇进入下一轮。四十分钟，刀法干净。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: execution, value: 3 }
+          - { kind: add, key: literatureCount, value: 4 }
+      - id: read_intro_pages
+        text: 每篇读引言前两页，感觉更扎实
+        visibleResponse: 一下午只过了五篇。扎实是扎实，进度是没进度。
+        hiddenEffects:
+          - { kind: add, key: literatureCount, value: 3 }
+          - { kind: subtract, key: energy, value: 5 }
+      - id: agent_abstract
+        text: 让 Agent 把九篇摘要各压缩成一句话
+        visibleResponse: 九句话整齐漂亮。可"对象是谁"这个关键信息，被它压没了。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 4 }
+          - { kind: add, key: academicDebt, value: 2 }
+    learningPoint: 略读是刀法，不是偷懒
+
+  - id: r_e03_ai_read_aloud
+    campaign: research
+    day: 3
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“下午三点，困意袭来。Agent 发出提议。”]
+    dialogue:
+      - { speaker: Agent, text: "检测到您阅读速度下降。我可以为您朗读文献并生成要点，您可以闭目休息。", mood: pleased }
+      - { speaker: 你, text: "你朗读的时候，会跳过你看不懂的数字吗？" }
+      - { speaker: Agent, text: "……我会提取重点。" }
+    choices:
+      - id: refuse_nap
+        text: 不用了，我起来洗把脸继续
+        visibleResponse: 冷水拍在脸上。回来后你把那句没读懂的统计表述查了词典——原来是效应量。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 4 }
+          - { kind: add, key: energy, value: 5 }
+      - id: accept_listen
+        text: 行，你读我听
+        visibleResponse: 你闭眼听了二十分钟，醒来只记得"该文献非常重要"。两个小时的精读变成了白噪音。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 5 }
+          - { kind: add, key: energy, value: 10 }
+    terminal: true
+
+  - id: r_e03_keyword_bilingual
+    campaign: research
+    day: 3
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 中英术语不是直译关系，要建对照表 }
+    scene: { location: library, characters: [] }
+    setup: [“中文文献叫'论证能力'，英文文献里却是 argumentation quality、reasoning skill、critical thinking 各说各话。”]
+    dialogue:
+      - { speaker: 系统, text: "同一个概念，三套英文说法。不对照，检索必漏。" }
+    choices:
+      - id: build_glossary
+        text: 建中英术语对照表，每个概念收集全部别名
+        visibleResponse: 表格从 5 行涨到 19 行。你用全部别名重跑检索，多捞回 11 篇漏网之鱼。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: literatureCount, value: 5 }
+          - { kind: addAsset, assetType: concept_table, name: 中英术语对照表, description: 概念-别名-来源库三列, content: "论证能力 | argumentation quality / reasoning skill / critical thinking" }
+        unlockKnowledge: [kc_r_keyword]
+      - id: translate_literally
+        text: 直译就行，'论证能力'翻回去就是 argumentation ability
+        visibleResponse: 用直译词检索，命中 14 篇。另一半文献用着你不知道的名字，与你擦肩而过。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 检索漏不漏，取决于别名全不全
+
+  - id: r_e03_group_intro
+    campaign: research
+    day: 3
+    type: story
+    trigger: { kind: manual }
+    scene: { location: meeting_room, characters: [r_mentor, r_peer] }
+    setup: [“组会第一项：新生报进度。周师兄报了个模型名，师姐报了个理论框架，苏晓报了个'在读文献'。”]
+    dialogue:
+      - { speaker: 苏晓, text: "（小声）到你了，别报得太猛，显得我们很闲。", mood: worried }
+    next: r_e03_intro_choice
+
+  - id: r_e03_intro_choice
+    campaign: research
+    day: 3
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 组会汇报：讲做了什么+卡在哪，不讲感想 }
+    scene: { location: meeting_room, characters: [r_mentor, r_senior_data] }
+    choices:
+      - id: report_process
+        text: "报：'拆了需求、建了关键词树、筛出28篇，卡在概念定义'"
+        visibleResponse: 陈教授抬了下眼皮："卡得好。概念是这周的正事。"周师兄在本子上给你画了个勾。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 4 }
+          - { kind: add, key: credibility, value: 5 }
+      - id: report_feeling
+        text: "报：'学到了很多，感觉AI领域大有可为'"
+        visibleResponse: 陈教授："感觉不是进度。下一位。"你坐下来时耳朵是热的。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 6 }
+          - { kind: relationship, characterId: r_mentor, delta: -3 }
+      - id: report_ai_output
+        text: 把 Agent 生成的进展报告直接念了一遍
+        visibleResponse: 报告很华丽。陈教授打断："这个'显著进展'，是谁的判断？"你答不上来。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 5 }
+          - { kind: subtract, key: credibility, value: 4 }
+    learningPoint: 汇报讲事实与卡点，不发表获奖感言
+
+  # ---- D4 ----
+  - id: r_e04_overlap_check
+    campaign: research
+    day: 4
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 4, phase: start }
+    purpose: { narrative: 撞题危机, learning: 撞题不可怕，说不出差异才可怕 }
+    scene: { location: library, characters: [] }
+    setup: [“坏消息：2023 年有篇硕士论文，题目跟你的方向几乎一样，还发了核心期刊的增刊。”]
+    dialogue:
+      - { speaker: 系统, text: "'有人做过了'——这句话现在退回去，还是改道？" }
+    choices:
+      - id: diff_analysis
+        text: 精读它，写差异分析：样本、情境、方法三处找不同
+        visibleResponse: 它做的是英语专业样本、横截面；你做公选课混合样本、加了两周追踪。差异真实存在。你在简报里加了"与已有研究的区别"一节。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: add, key: literatureCount, value: 1 }
+          - { kind: setFlag, key: overlap_analyzed }
+          - { kind: addAsset, assetType: research_brief, name: 差异化分析, description: 与最接近已有研究的三点区别, content: "样本差异 / 情境差异 / 方法差异" }
+      - id: switch_topic
+        text: 撞题就是死路，换题
+        visibleResponse: 你两天的工作归零。第五天你会在新题目上遇到同一句话："有人做过了。"
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 8 }
+          - { kind: setFlag, key: switched_topic_once }
+      - id: ignore_overlap
+        text: 假装没看见
+        visibleResponse: 你关掉了那篇论文的页面。它会在你答辩PPT的第7页等你。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 10 }
+          - { kind: subtract, key: credibility, value: 8 }
+        delayed:
+          - eventId: r_e04_overlap_bomb
+            onDay: 27
+    learningPoint: 差异分析是撞题的唯一解
+
+  - id: r_e04_overlap_bomb
+    campaign: research
+    day: 27
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 撞题被指出, learning: 未处理的重复研究终会被评委发现 }
+    scene: { location: office, characters: [r_mentor] }
+    setup: [“预审材料里，陈教授夹了一张便签：'2023年X刊那篇，你和它的区别是什么？明天回答我。'”]
+    dialogue:
+      - { speaker: 系统, text: "第四天你关掉的那个页面，今天翻倍账单上门。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 8 }
+      - { kind: subtract, key: credibility, value: 10 }
+      - { kind: relationship, characterId: r_mentor, delta: -6 }
+      - { kind: setFlag, key: overlap_bomb_seen }
+    terminal: true
+
+  - id: r_e04_differentiate
+    campaign: research
+    day: 4
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“你把撞题的焦虑讲给林师姐听。”]
+    dialogue:
+      - { speaker: 林师姐, text: "你先回答我：你说的'做过'，指的是问题相同，还是答案相同？", mood: serious }
+      - { speaker: 你, text: "……问题相同。" }
+      - { speaker: 林师姐, text: "问题相同是常态。同一个问题，样本不同、情境不同、机制剪影不同，就是新的研究。别慌，但要写出区别。", mood: neutral }
+    automaticEffects:
+      - { kind: relationship, characterId: r_senior_theory, delta: 5 }
+      - { kind: add, key: independence, value: 3 }
+    terminal: true
+
+  - id: r_e04_shelf_find
+    campaign: research
+    day: 4
+    type: story
+    trigger: { kind: day, day: 4, phase: end }
+    scene: { location: library, characters: [] }
+    setup: [“你在工具书架的落灰处抽出一本旧版《研究设计与社会测量》，借书卡上最后一次登记是五年前。”]
+    dialogue:
+      - { speaker: 系统, text: "有些基本功十年没变。变的只是工具。" }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 2 }
+      - { kind: setFlag, key: found_method_book }
+    terminal: true
+
+  - id: r_e04_book_or_ai
+    campaign: research
+    day: 4
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 系统性知识与碎片化回答的取舍 }
+    scene: { location: library, characters: [] }
+    choices:
+      - id: read_book
+        text: 晚上啃这本老书的'测量效度'一章
+        visibleResponse: 三个小时读完。你第一次分清了内容效度和构念效度——后来评委追问时，这两页纸救了你。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 7 }
+          - { kind: subtract, key: energy, value: 8 }
+          - { kind: setFlag, key: read_validity_chapter }
+      - id: ask_ai_concept
+        text: 效度是什么，问 Agent 十秒搞定
+        visibleResponse: Agent 三句话讲完了效度。都对，但第四天预调研设计时，你发现自己分不清该用哪一种。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 4 }
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 快问快答用来救急，啃书用来打底
+
+  # ---- D5 ----
+  - id: r_e05_matrix_cols
+    campaign: research
+    day: 5
+    type: decision
+    trigger: { kind: day, day: 5, phase: start }
+    purpose: { learning: 矩阵列要为自己的研究问题定制 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你要扩矩阵列数。Agent 给了个'最佳实践'：九列，含'研究意义'‘创新指数’。”]
+    dialogue:
+      - { speaker: Agent, text: "九列结构为业界通用方案，信息完整度高。", mood: pleased }
+      - { speaker: 你, text: "'创新指数'怎么打分？谁打？我打的话那是印象分。" }
+    choices:
+      - id: custom_cols
+        text: 自己定六列：问题/样本/方法/发现/局限/对我的用处
+        visibleResponse: 每一列都对应你写开题时要用的一次引用。"对我的用处"这列后来被师姐拍照发给了同门。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: independence, value: 4 }
+          - { kind: addAsset, assetType: research_matrix, name: 文献矩阵 v1.5, description: 六列自定义结构, content: "问题/样本/方法/发现/局限/对我的用处" }
+      - id: copy_nine_cols
+        text: 就用九列，显得专业
+        visibleResponse: 填到第五篇你开始复制粘贴。"创新指数"列全军覆没——全是 4 星和 5 星。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 5 }
+          - { kind: add, key: technicalDebt, value: 3 }
+    learningPoint: 表格为你的研究服务，不为'专业感'服务
+
+  - id: r_e05_agent_matrix
+    campaign: research
+    day: 5
+    type: story
+    trigger: { kind: manual }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“Agent 批量填完了 20 行矩阵。输出整齐，速度惊人。”]
+    dialogue:
+      - { speaker: Agent, text: "20 行全部完成。其中'局限'列已按要求填写。", mood: pleased }
+      - { speaker: 系统, text: "你随机展开两行：'局限'列写着'该研究仍存在一定局限'。" }
+    next: r_e05_audit
+
+  - id: r_e05_audit
+    campaign: research
+    day: 5
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 空话检测：'一定局限'等于没写 }
+    scene: { location: workbench, characters: [] }
+    choices:
+      - id: audit_all
+        text: 逐行检查'局限'列，空话一律打回
+        visibleResponse: 20 行里 14 行是空话。你让 Agent 对照每篇的 discussion 节重写，自己抽了 6 行核对。两小时后，局限列第一次有了人味。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: add, key: execution, value: 4 }
+          - { kind: achievement, achievementId: ach_r_e01_audit_cols, description: 抓住批量输出中的空话列 }
+        unlockKnowledge: [kc_r_batch]
+      - id: keep_vague
+        text: 反正局限列开题用不上，能看就行
+        visibleResponse: 第 16 天写综述章节时，你想引用别人的局限来衬托你的 gap——那列帮不了你。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+    learningPoint: 批量产物必须抽查，抽查看最偷懒的列
+
+  - id: r_e05_note_sync
+    campaign: research
+    day: 5
+    type: story
+    trigger: { kind: day, day: 5, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“你的笔记散在三个地方：手机备忘录、一个 Word、还有纸条。同一篇文献的批注出现在两处，内容不一样。”]
+    dialogue:
+      - { speaker: 系统, text: "笔记不同步，等于定时给自己埋雷。" }
+    next: r_e05_note_merge
+
+  - id: r_e05_note_merge
+    campaign: research
+    day: 5
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 笔记单一真相源 }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: single_source
+        text: 定一个唯一存放点，其余全部迁移合并
+        visibleResponse: 一小时的手工活。冲突的两条批注，你对着原文各查了一遍，留了对的。以后找笔记只去一个地方。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+          - { kind: setFlag, key: single_note_source }
+      - id: live_with_it
+        text: 记得在哪就行，不折腾了
+        visibleResponse: 第 13 天凌晨，你需要那条批注——它在纸条上，纸条在冬天的大衣口袋里。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 4 }]
+    learningPoint: 一个真相源，胜过三个可能对的地方
+
+  # ---- D6 ----
+  - id: r_e06_paywall
+    campaign: research
+    day: 6
+    type: decision
+    trigger: { kind: day, day: 6, phase: start }
+    purpose: { learning: 全文获取的正规路径与代价 }
+    scene: { location: library, characters: [] }
+    setup: [“命中最高的一篇文献卡在付费墙后：39 美元。”]
+    dialogue:
+      - { speaker: 系统, text: "校园网已试，无权限。三条路：馆际互借、给作者写信、硬着头皮只读摘要。" }
+    choices:
+      - id: ill_request
+        text: 走馆际互借，等 3-5 天
+        visibleResponse: 你提交了申请，系统显示 4 天后到。你在日历上标了提醒——到货那天正好赶上写综述。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: subtract, key: money, value: 10 }
+          - { kind: setFlag, key: ill_pending }
+      - id: email_author
+        text: 给通讯作者发邮件要全文
+        visibleResponse: 第二天早上，一位素未谋面的副教授回信附了PDF，还说"欢迎讨论"。学界比想象中讲礼。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 4 }
+          - { kind: add, key: literatureCount, value: 1 }
+          - { kind: setFlag, key: author_email_success }
+      - id: abstract_only
+        text: 只读摘要凑合用
+        visibleResponse: 你按摘要把它的方法写成"问卷调查"。两周后发现它做的是实验——引用写错的种子，第 24 天发芽。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+          - { kind: setFlag, key: miscited_method }
+        delayed:
+          - eventId: r_e06_miscite_payoff
+            onDay: 24
+    learningPoint: 拿不到全文就别装作读过
+
+  - id: r_e06_miscite_payoff
+    campaign: research
+    day: 24
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 引用错方法被发现, learning: 摘要不是论文 }
+    scene: { location: workbench, characters: [] }
+    setup: [“写设计书时你重翻那篇文献的图表，方法节赫然写着：2×2 被试间实验。”]
+    dialogue:
+      - { speaker: 你, text: "……我在设计书里说它是问卷调查。查了 24 天，错了一眼。" }
+      - { speaker: 系统, text: "你花了二十分钟改正文和矩阵。幸好是在设计书里，不是答辩现场。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 4 }
+      - { kind: add, key: evidenceDiscipline, value: 5 }
+      - { kind: setFlag, key: miscite_fixed }
+    terminal: true
+
+  - id: r_e06_preprint
+    campaign: research
+    day: 6
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“周师兄刷到一篇三天前挂出的预印本，兴奋地扔进组群。”]
+    dialogue:
+      - { speaker: 周师兄, text: "这篇数据量是你的梦——八千人！直接引！", mood: happy }
+      - { speaker: 林师姐, text: "（转发后加了一句）预印本，未同行评审。引用时注明。", mood: serious }
+    choices:
+      - id: cite_with_note
+        text: 引，标注'预印本，结论待同行评审'
+        visibleResponse: 你把它放进矩阵的"证据等级：二手待审"层。最新的数据与最谨慎的标注兼得。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: literatureCount, value: 1 }
+      - id: skip_preprint
+        text: 不冒这个险，只用已发表的
+        visibleResponse: 稳是稳。但你的综述最近 截至 2024 年底，评委问"最新进展"时你会慢半拍。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
+      - id: cite_as_gospel
+        text: 八千人的数据，直接当结论用
+        visibleResponse: 你写"已有大样本证实"。第五天，预印本撤稿了——抽样出了问题。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 7 }
+          - { kind: setFlag, key: cited_retracted }
+    terminal: true
+
+  - id: r_e06_deadline_board
+    campaign: research
+    day: 6
+    type: story
+    trigger: { kind: day, day: 6, phase: end }
+    scene: { location: dorm, characters: [r_peer] }
+    setup: [“苏晓在宿舍白板上画了一条线：左边写'今天'，右边写'开题答辩'，中间标了24个格子。”]
+    dialogue:
+      - { speaker: 苏晓, text: "一格一天。每天睡前把今天的格子涂黑。涂着涂着就不慌了。", mood: happy }
+      - { speaker: 你, text: "要是涂着涂着慌了呢？" }
+      - { speaker: 苏晓, text: "那说明黑格子太少了，赶紧行动呗。", mood: pleased }
+    automaticEffects:
+      - { kind: add, key: energy, value: 3 }
+      - { kind: setFlag, key: countdown_board }
+    terminal: true
+
+  - id: r_e06_plan_back
+    campaign: research
+    day: 6
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 倒排工期：从截止日往前切里程碑 }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: reverse_schedule
+        text: 从答辩日倒排：预审-设计书-数据-方法-RQ，每段留缓冲
+        visibleResponse: 倒排完你倒吸凉气：数据收集只有 8 天窗口。这行红色数字，让你第三天就放弃了"多等几天问卷"的幻想。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: add, key: progress, value: 2 }
+          - { kind: addAsset, assetType: checklist, name: 倒排工期表, description: 答辩←预审←设计←数据←方法←RQ, content: "D30答辩 | D28预审 | D25设计v2 | D19-24数据 | D14-18方法 | D11-13 RQ" }
+        unlockKnowledge: [kc_r_triage]
+      - id: no_plan
+        text: 计划赶不上变化，走一步看一步
+        visibleResponse: 第 18 天你会发现数据窗口已经没了——没人提醒你，因为没人排过期。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }]
+    learningPoint: 截止日往前推，缓冲往后留
+
+  # ---- D7 ----
+  - id: r_e07_search_log
+    campaign: research
+    day: 7
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 7, phase: start }
+    purpose: { learning: 检索日志：可复现是检索的底线 }
+    scene: { location: library, characters: [] }
+    setup: [“师姐在组会记录里 @ 你：'把你检索式发一下，我帮你看看有没有漏。'”]
+    dialogue:
+      - { speaker: 系统, text: "你搜过什么、在哪搜的、排除了谁——说得清吗？" }
+    choices:
+      - id: write_log
+        text: 写检索日志：库/检索式/日期/命中数/排除原因
+        visibleResponse: 整理完你发给师姐。她回了三条补充检索式，捞出 5 篇你漏掉的中文实证。日志成了你们对话的共同底稿。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 7 }
+          - { kind: relationship, characterId: r_senior_theory, delta: 6 }
+          - { kind: add, key: literatureCount, value: 5 }
+          - { kind: addAsset, assetType: checklist, name: 检索日志, description: 可复现的检索过程记录, content: "| 日期 | 库 | 检索式 | 命中 | 保留 | 排除原因 |" }
+      - id: recreate_later
+        text: 先口头说个大概，回头补
+        visibleResponse: 师姐等了两天没等到。第三周她在走廊提了一句："检索式呢？"你的耳朵又热了。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_senior_theory, delta: -3 }
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 检索不可复现，等于没做
+
+  - id: r_e07_replay
+    campaign: research
+    day: 7
+    type: story
+    trigger: { kind: manual }
+    scene: { location: office, characters: [r_mentor] }
+    setup: [“组会后陈教授留你两分钟。”]
+    dialogue:
+      - { speaker: 陈教授, text: "别人问你的文献怎么来的，你要能从检索式讲到筛选标准，一步不落。", mood: serious }
+      - { speaker: 陈教授, text: "讲不出来的文献，等于没有。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 3 }
+    terminal: true
+
+  - id: r_e07_snowball_front
+    campaign: research
+    day: 7
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 向前滚雪球：看一篇关键文献被谁引用、怎么被引用 }
+    scene: { location: library, characters: [] }
+    setup: [“你有篇锚点文献（2022）。被引 47 次。引用列表是个时间机器。”]
+    choices:
+      - id: forward_snowball
+        text: 追'被引'：近两年引用它的 12 篇里挑 5 篇
+        visibleResponse: 你顺藤摸到 5 篇 2024-2025 年的论文，其中两篇还在争论锚点文献的效应是否稳健。争论点正是你的 gap 候选。
+        hiddenEffects:
+          - { kind: add, key: literatureCount, value: 4 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: setFlag, key: found_debate }
+      - id: cite_count_only
+        text: 只看被引数涨没涨，判断文献热不热
+        visibleResponse: 你确认了它是热点，然后呢？热点不等于缺口，你收获了一个数字。
+        hiddenEffects: [{ kind: add, key: literatureCount, value: 1 }]
+    learningPoint: 引用列表里藏着领域的当前争论
+
+  - id: r_e07_fake_doi
+    campaign: research
+    day: 7
+    type: decision
+    trigger: { kind: day, day: 7, phase: end }
+    purpose: { learning: DOI 是文献的身份证：能解析才存在 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“Agent 补充文献时给了你一条带 DOI 的完美命中。你最近学乖了，先验货。”]
+    dialogue:
+      - { speaker: 系统, text: "DOI 解析：……跳转到一篇完全不相干的论文。" }
+      - { speaker: Agent, text: "可能是解析服务临时故障，该文献应为真实存在。", mood: neutral }
+    choices:
+      - id: title_search
+        text: 按标题全库再查一遍
+        visibleResponse: 查无此文。第二条假文献，你的排查只用了四分钟——第一次用了一小时。肌肉记忆在长。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: achievement, achievementId: ach_r_e01_fast_verify, description: 四分钟完成一次假引用排查 }
+        unlockKnowledge: [kc_r_fake_citation]
+      - id: trust_doi_exists
+        text: 它都给出 DOI 了，还能有假？
+        visibleResponse: 你把这条'文献'放进了矩阵。它很漂亮，也很不存在。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 8 }
+          - { kind: setFlag, key: used_fake_citation }
+        delayed:
+          - { eventId: r_d26_evidence_warning, onDay: 26 }
+    learningPoint: DOI 编得出来，就说明身份验证不可省
+
+  - id: r_e07_verify_habit
+    campaign: research
+    day: 7
+    type: story
+    trigger: { kind: manual }
+    scene: { location: workbench, characters: [] }
+    setup: [“睡前复盘：这周你核验了 11 条引用，抓出 2 条假的。成本：40 分钟。收益：未来某天不社死。”]
+    dialogue:
+      - { speaker: 系统, text: "核验不是不信任AI，是不信任'未经检查的方便'。" }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: add, key: independence, value: 3 }
+    terminal: true
+
+  # ---- D8 ----
+  - id: r_e08_lib_close
+    campaign: research
+    day: 8
+    type: npc
+    trigger: { kind: day, day: 8, phase: end }
+    scene: { location: canteen, characters: [r_peer] }
+    setup: [“闭馆音乐响起。苏晓在门口等你，手里拎着两杯奶茶。”]
+    dialogue:
+      - { speaker: 苏晓, text: "慰劳一下。一周泡在文献里的人，得奖励。", mood: happy }
+      - { speaker: 你, text: "我这周抓了两个假文献。" }
+      - { speaker: 苏晓, text: "……你这奖励发得值了。敬打假人。", mood: surprised }
+    choices:
+      - id: take_break
+        text: 接过奶茶，聊二十分钟废话
+        visibleResponse: 二十分钟里你们没提一个学术名词。回宿舍的路上，你觉得那两篇假文献也没那么可怕了。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_peer, delta: 6 }
+          - { kind: add, key: energy, value: 8 }
+          - { kind: subtract, key: money, value: 12 }
+      - id: milk_tea_work
+        text: 奶茶收下，边喝边把明天的任务列了
+        visibleResponse: 你列完了任务，奶茶也见了底。苏晓看着你的清单摇头："卷王。"
+        hiddenEffects:
+          - { kind: relationship, characterId: r_peer, delta: 2 }
+          - { kind: add, key: execution, value: 3 }
+    terminal: true
+
+  - id: r_e08_week1_review
+    campaign: research
+    day: 8
+    type: story
+    trigger: { kind: manual }
+    scene: { location: dorm, characters: [] }
+    setup: [“第一周结束。你把桌上的纸片归拢：三个候选、一张对照表、一份检索日志、两条被证伪的引用。”]
+    automaticEffects:
+      - kind: addAsset
+        assetType: checklist
+        name: 第一周盘点
+        description: 产出与欠账各一栏
+        content: "产出：候选×3 / 术语表 / 检索日志\n欠账：概念定义未定 / 综述未读完"
+    dialogue:
+      - { speaker: 系统, text: "盘点要诚实：产出记一笔，欠账也记一笔。" }
+    terminal: true
+
+  - id: r_e08_topic_shortlist
+    campaign: research
+    day: 8
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 候选收敛：用数据可得性当第一把刀 }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: cut_by_data
+        text: 用'数据30天内拿不拿得到'筛掉一个
+        visibleResponse: 候选A需要的企业数据你根本没有渠道——出局。剩下两个，各写一行'数据从哪来'。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: execution, value: 3 }
+          - { kind: setFlag, key: shortlist_data_cut }
+        unlockKnowledge: [kc_r_data_availability]
+      - id: keep_all_three
+        text: 三个都留着，万一呢
+        visibleResponse: 万一就是三个都要查。你的检索量翻了三倍，深度是零。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+      - id: cut_by_interest
+        text: 按'哪个我能讲得下去'留两个
+        visibleResponse: 你把最没话说的那个划掉。直觉不科学，但两周后答辩陈述的流畅会感谢它。
+        hiddenEffects:
+          - { kind: add, key: riskTolerance, value: 3 }
+          - { kind: setFlag, key: shortlist_interest_cut }
+    learningPoint: 收敛的标准要明确，不能'都留着'
+
+  - id: r_e08_random_roommate
+    campaign: research
+    day: 8
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: [“凌晨，室友翻了个身。”]
+    dialogue:
+      - { speaker: 室友, text: "兄弟，键盘声……我梦里都在删稿子。" }
+      - { speaker: 你, text: "抱歉，最后一行就睡。" }
+      - { speaker: 系统, text: "你把最后一行写完了。真的就睡了。" }
+    automaticEffects:
+      - { kind: add, key: energy, value: 3 }
+    terminal: true

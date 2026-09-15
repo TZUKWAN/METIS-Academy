@@ -1,0 +1,650 @@
+# 创业线扩展事件 01（机会观察/问题日志/访谈/用户行为/用户细分）
+events:
+  - id: v_e01_d01_walk_route
+    campaign: venture
+    day: 1
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 机会观察要选场景：人流处找效率问题，抱怨处找情绪证据 }
+    scene: { location: dorm, characters: [] }
+    setup: ["下午没课，你打算去校园里转一小时，专门看别人的麻烦。三条路线："]
+    choices:
+      - id: canteen_route
+        text: 食堂路线：人流最大，效率问题最密集
+        visibleResponse: 一小时你记了6条：找座位绕圈、错峰排队长、打包保温难。都是高频场景。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 3 }, { kind: setFlag, key: route_canteen }]
+      - id: wall_route
+        text: 表白墙路线：翻半小时帖子，收集抱怨原话
+        visibleResponse: 你截图了9条抱怨，带原话。情绪浓度高，但哪条愿意付钱，还看不出来。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 2 }, { kind: setFlag, key: route_wall }]
+      - id: print_route
+        text: 打印店路线：老板娘嗓门最大的地方，痛点最多
+        visibleResponse: 半小时你听到3次“格式又乱了”。老板娘一边骂一边收钱——一边骂一边收钱，这是个好信号。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 3 }, { kind: setFlag, key: route_print }]
+    learningPoint: 观察不是逛街，是带着问题清单去看
+    terminal: true
+
+  - id: v_e01_d01_log_habit
+    campaign: venture
+    day: 1
+    type: story
+    trigger: { kind: day, day: 1, phase: end }
+    purpose: { learning: 问题日志：每天固定记录，别靠脑子存 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你在备忘录新建了一页，标题三个字：问题日志。规则只有一条——每天至少记3条别人的麻烦，写清谁、在哪、卡在哪一步。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: setFlag, key: pain_log_started }
+    dialogue:
+      - { speaker: 系统, text: "记录工具不重要，重要的是“谁/在哪/卡在哪”这三栏。脑子会骗人，日志不会。" }
+    terminal: true
+
+  - id: v_e01_d02_print_shop
+    campaign: venture
+    day: 2
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 机会观察：付费发生的地方藏着真需求 }
+    scene: { location: shop, characters: [] }
+    setup: ["打印店。一个女生举着U盘：“师兄，这个PDF帮我转Word，论文明天要交。”老板娘头也不抬：“五块。”女生付了五块。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 3 }
+      - { kind: addAsset, assetType: document, name: 问题日志（打印店）, description: 格式转换付费现场, content: "PDF转Word/¥5/明天截止——付费发生在截止日期前" }
+    dialogue:
+      - { speaker: 系统, text: "注意这个瞬间：她没有比价，没有犹豫。截止日期是付费意愿的放大器。" }
+    terminal: true
+
+  - id: v_e01_d02_express_peak
+    campaign: venture
+    day: 2
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: shop, characters: [] }
+    setup: ["傍晚快递站。取件队伍拐了两个弯，有人喊：“能否送到楼下？我加钱！”柜员：“人手不够，加钱也不送。”"]
+    purpose: { learning: 有人愿意加钱但供给接不住，是供需错配信号 }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "“愿意加钱”和“有人接单”之间，隔着一个没人干的活。这就是机会的形状——也可能是运力的墙。" }
+    terminal: true
+
+  - id: v_e01_d03_laundry
+    campaign: venture
+    day: 3
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 观察要区分“麻烦”和“可付费的麻烦” }
+    scene: { location: dorm, characters: [] }
+    setup: ["洗衣房。三台机器，一台坏了半个月没人修。等位的同学刷着手机骂了一句，然后继续等。"]
+    automaticEffects: [{ kind: add, key: userUnderstanding, value: 2 }]
+    dialogue:
+      - { speaker: 你, text: "（记：洗衣房排队40分钟，无人愿组织拼机或预约）" }
+      - { speaker: 系统, text: "骂完继续等=痛但不痛到掏钱。低优先级信号，归档。" }
+    terminal: true
+
+  - id: v_e01_d03_log_trim
+    campaign: venture
+    day: 3
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 3, phase: end }
+    purpose: { learning: 问题日志要定期做减法，删掉不可达和低频 }
+    scene: { location: dorm, characters: [] }
+    setup: ["问题日志记到第11条。你发现有几条当时觉得有戏，现在看着发虚：比如“全校修电脑”，比如“给流浪猫建档案”。"]
+    choices:
+      - id: trim_log
+        text: 砍掉够不着和低频的，留下5条高频且人找得到的
+        visibleResponse: |
+          砍完剩5条：社团收表、考研资料、打印格式、表白墙代做PPT、王姐排班。
+          每条旁边你标了“找谁验证”。日志瘦了，可信度高了。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: add, key: independence, value: 3 }]
+      - id: keep_all
+        text: 都留着，以后说不定有用
+        visibleResponse: 日志变成仓库。三天后你打开它，每条都觉得“也行”，反而一条都定不下来。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    learningPoint: 选项越多，行动越少——日志也要做减法
+    terminal: true
+
+  - id: v_e01_d04_wall_stats
+    campaign: venture
+    day: 4
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 用频次统计代替印象：爬帖计数是穷人的市场调研 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你花40分钟翻了表白墙本月带“代做”的帖子：代做PPT 31条、代抄笔记12条、代排队7条、代写周报5条。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 3 }
+      - { kind: addAsset, assetType: document, name: 表白墙代做帖统计, description: 月度频次计数, content: "PPT31/笔记12/排队7/周报5——PPT代做是显性需求" }
+    dialogue:
+      - { speaker: 系统, text: "31条代做PPT=有人在真金白银地懒。但注意：代做是你的对手，工具要跟人抢这份钱。" }
+    terminal: true
+
+  - id: v_e01_d04_note_copy
+    campaign: venture
+    day: 4
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [v_user_student] }
+    setup: ["午饭。你看见小蔡对着手机拍同学的笔记。"]
+    dialogue:
+      - { speaker: 你, text: "干嘛呢？" }
+      - { speaker: 小蔡, text: "学霸的笔记不外借，只准拍。我回去自己抄……第4遍了这学期。", mood: worried }
+      - { speaker: 你, text: "拍下来不就行了？" }
+      - { speaker: 小蔡, text: "拍下来是图片啊，翻起来费劲，还没法搜。要能变文字还有目录就好了——别推荐我用啥，我不学新软件。", mood: neutral }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·小蔡（笔记）, description: 图片笔记整理需求+不用新软件, content: "手抄4遍/图片难检索/拒绝学习成本" }
+    terminal: true
+
+  - id: v_e01_d05_aunt_phone
+    campaign: venture
+    day: 5
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: home, characters: [v_family] }
+    setup: ["回家。邻居张阿姨正好来串门，拉着你说：“小 AI，你上次说能教我手机挂号？医院那个APP我点不明白。”"]
+    dialogue:
+      - { speaker: 张阿姨, text: "我儿女教我三遍了，转头就忘。你写个纸条一步步来，行不？" }
+      - { speaker: 你, text: "（记：要的不是APP，是带得走的操作纸条；挂号每月1-2次，低频）" }
+      - { speaker: 系统, text: "低频+高怕错=愿意为“别出错”付费。方向和你的学生市场很远，先记下。" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 3 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·张阿姨, description: 低频高怕错场景, content: "手机挂号/怕点错/要纸条化指引" }
+    terminal: true
+
+  - id: v_e01_d05_reject_tactics
+    campaign: venture
+    day: 5
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 拦截式访谈成功率低，预约式质量高 }
+    scene: { location: canteen, characters: [] }
+    setup: ["食堂门口。你鼓起勇气想拦人问问题，前两个直接摆手走了。第三个停下来了，但眼神在找退路。"]
+    choices:
+      - id: short_pitch
+        text: “耽误你90秒，就问一个问题：上次交社团表格折腾了多久？”
+        visibleResponse: 90秒承诺兑现，对方答完反而多聊了两分钟。具体的问题+明确时限=拦截访谈的通行证。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 4 }, { kind: add, key: execution, value: 2 }]
+      - id: buy_snack
+        text: 先请瓶水再开口，缓一缓尴尬
+        visibleResponse: 水花了3元，对方喝着水聊了5分钟。成本高了，但信息密度也高。
+        hiddenEffects: [{ kind: subtract, key: money, value: 3 }, { kind: add, key: userUnderstanding, value: 5 }]
+      - id: give_up_today
+        text: 算了，回宿舍线上发问卷
+        visibleResponse: 问卷发出去了，回收3份，2份全选B。线上问卷躲开了尴尬，也躲开了真话。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e01_d06_wangjie_ledger
+    campaign: venture
+    day: 6
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: shop, characters: [v_user_shop] }
+    setup: ["下午三点，奶茶店空档。王姐在算账，计算器按得飞快。"]
+    dialogue:
+      - { speaker: 你, text: "王姐，现在用的啥记账？" }
+      - { speaker: 王姐, text: "纸上记，晚上输到手机里。一天一百多单，输到眼花。", mood: neutral }
+      - { speaker: 你, text: "为啥不直接用收银系统？" }
+      - { speaker: 王姐, text: "收银系统一年一千八，还要换打印机。我这本子免费，就是费眼睛。小伙子，你能弄个几十块一年的不？", mood: happy }
+      - { speaker: 系统, text: "重要线索：小微商户嫌月费贵，嫌学习难，但“几十块一年”在她们的付费射程内。" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 5 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·王姐（记账）, description: 小微商户价格锚：几十块一年, content: "纸上记+晚间录入/嫌系统贵/可接受几十元一年" }
+    terminal: true
+
+  - id: v_e01_d06_teacher_view
+    campaign: venture
+    day: 6
+    type: story
+    trigger: { kind: day, day: 6, phase: end }
+    purpose: { learning: 侧听旁观者：老师看学生的苦,视角不同于学生 }
+    scene: { location: lab, characters: [] }
+    setup: ["你去问社团指导老师收表的事。老师叹气：“每年9月我邮箱塞满附件，几十个命名乱的压缩包。我让学生主席汇总，他再叹气。”"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·指导老师, description: 旁观者视角：附件地狱, content: "9月附件地狱/层层转包给学生骨干" }
+    terminal: true
+
+  - id: v_e01_d07_past_payment
+    campaign: venture
+    day: 7
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 问过去的付费记录，比问未来意愿可信十倍 }
+    scene: { location: canteen, characters: [v_user_student] }
+    setup: ["访谈小蔡的研友小周。你想验证“考研资料整理有人愿意花钱”。"]
+    choices:
+      - id: ask_past_paid
+        text: “你为考研资料花过钱吗？最近一次买的什么？”
+        visibleResponse: 小周翻出订单：39元买了份押题整理，9.9元买过打印版。“疼就买，不疼不买。”——过去的行为，白纸黑字。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 6 }, { kind: add, key: evidenceDiscipline, value: 4 }]
+      - id: ask_would_pay
+        text: “如果有自动整理工具，你愿意付多少钱？”
+        visibleResponse: “30？50？看做好啥样吧。”——报价随口而出，跟不随口一样不可信。你把这条记成了弱证据。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 付费记录是硬证据，付费意愿是空气
+    terminal: true
+
+  - id: v_e01_d07_friend_bias
+    campaign: venture
+    day: 7
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 7, phase: end }
+    purpose: { learning: 样本偏差：熟人访谈全在舒适区 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你盘了盘访谈记录：8个人里6个是室友、同学和老K的朋友。数据挺好看，可他们都不好意思说你坏话。"]
+    choices:
+      - id: cold_interview
+        text: 补3个纯陌生访谈：隔壁班、贴吧、快递站随机约
+        visibleResponse: |
+          陌生人的嘴不留情：“这功能XX小程序早有了吧？”“免费我就试试。”
+          难听，但这两句比你8场熟人访谈加起来都有用。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 8 }, { kind: add, key: independence, value: 4 }, { kind: achievement, achievementId: ach_v_cold_interview }]
+      - id: stay_comfy
+        text: 熟人成本低，就先聊熟人
+        visibleResponse: 舒适区的数据第17天上线时还了回来：真实用户的第一句反馈，比所有熟人反馈都刻薄。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: setFlag, key: sample_bias }]
+    learningPoint: 熟人是访谈的止疼药，陌生人是检验
+    terminal: true
+
+  - id: v_e01_d08_gym_counter
+    campaign: venture
+    day: 8
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 行为数据>口头抱怨：计数是最便宜的观察 }
+    scene: { location: canteen, characters: [] }
+    setup: ["健身房门口。你站着数了20分钟：进来41人，其中17人到前台问“今天团课几点”，前台把同一句回答重复了17遍。"]
+    automaticEffects: [{ kind: add, key: userUnderstanding, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "重复回答17遍=一张该贴墙上的纸。小痛点，但它教你一件事：数量化的观察才有说服力。" }
+    terminal: true
+
+  - id: v_e01_d08_studyroom
+    campaign: venture
+    day: 8
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["自习室。书包占座现象普遍，空位上全是书包，人不在。一个找座的同学转了两圈走了，嘴里骂骂咧咧。"]
+    automaticEffects: [{ kind: add, key: userUnderstanding, value: 2 }]
+    dialogue:
+      - { speaker: 你, text: "（记：占座使座位利用率不到一半；学校有预约系统但没人用——为什么？）" }
+      - { speaker: 系统, text: "追问“为什么没人用”比“要不要做个新的”更重要。已有方案失败的原因是免费的教训。" }
+    terminal: true
+
+  - id: v_e01_d09_quad
+    campaign: venture
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 9, phase: end }
+    purpose: { learning: 用户细分：频率×付费意愿四象限 }
+    scene: { location: dorm, characters: [] }
+    setup: ["访谈攒到12份。你把每个人往两个轴上放：问题频率（每天/每学期）、付费意愿（已付过/只动嘴）。"]
+    choices:
+      - id: draw_quad
+        text: 画四象限，只锁定“高频+已付过”那一格
+        visibleResponse: |
+          高频+付过：老K、辩论队社长、王姐——3人，但每人背后是一群人。
+          你把另外9人的纪要归档，格子外的人不再出现在你的文案里。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 8 }, { kind: setFlag, key: quad_done }, { kind: achievement, achievementId: ach_v_quad }]
+      - id: no_quad
+        text: 都重要，四象限太机械了
+        visibleResponse: 文案写出来谁都想覆盖，结果谁看了都觉得“跟我关系不大”。细分不是机械，是聚焦。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 先服务付过钱的高频用户，再谈其他
+    terminal: true
+
+  - id: v_e01_d09_persona
+    campaign: venture
+    day: 9
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 用户画像卡：给用户起名，让团队对话有共同对象 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你决定把目标用户写成一张卡，贴在显示器旁。"]
+    choices:
+      - id: write_persona
+        text: “社长小陈”：管150人社/每月2场活动/最烦合并表格/预算几十到几百
+        visibleResponse: 画像卡贴好了。之后每次犹豫“这功能做不做”，你就问：小陈会用吗？答案立刻清晰。
+        hiddenEffects: [{ kind: addAsset, assetType: document, name: 用户画像·社长小陈, description: 目标用户卡, content: "150人社/月2场活动/烦合并/预算几十到几百" }, { kind: add, key: userUnderstanding, value: 4 }]
+      - id: broad_persona
+        text: 写宽点：“所有大学生”都是用户
+        visibleResponse: 所有人=没有人。“所有大学生”这张卡贴上去三天，你自己都忘了看它。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e01_d10_grad_handover
+    campaign: venture
+    day: 10
+    type: story
+    trigger: { kind: day, day: 10, phase: end }
+    purpose: { learning: 边缘用户访谈：交接期的痛是年度性的深痛 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: ["老K带了个大四的师兄来：“这是我们前任社长，你可以问问交接的事。”师兄苦笑：“我毕业最怕的不是论文，是把17个文档、3个网盘账号交出去。”"]
+    dialogue:
+      - { speaker: 师兄, text: "去年交接花了整个六月。文件散在QQ群、邮箱、某人的电脑里……新人接手第一句：这是啥？" }
+      - { speaker: 老K, text: "（补刀）他交完还删错了盘，把我们活动照片全扬了。", mood: happy }
+      - { speaker: 系统, text: "年度性深痛：一年一次，一次疼一个月。频次低但烈度高——记入“低频烈痛”象限，别和日常痛混谈。" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 5 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·前任社长, description: 社团交接之痛, content: "6月整月交接/文件分散/误删事故" }
+    terminal: true
+
+  - id: v_e01_d10_pick_three
+    campaign: venture
+    day: 10
+    type: decision
+    trigger: { kind: day, day: 10, phase: end }
+    purpose: { learning: 从日志到候选：收敛到3个可验证方向 }
+    scene: { location: dorm, characters: [] }
+    setup: ["观察周结束。问题日志19条、访谈14场。今天必须收敛：最多带3个方向进假设阶段。"]
+    choices:
+      - id: evidence_first
+        text: 按证据强度选：社团收表、王姐记账、PPT代做工具
+        visibleResponse: 三条候选都有访谈、频次或付费记录背书。你给每个方向写了一句“什么证据会证明它错”。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 6 }, { kind: setFlag, key: three_candidates }]
+      - id: passion_first
+        text: 按喜好选：做个校园二手平台，听着就大
+        visibleResponse: "二手平台进了候选——背书栏写着“我觉得有市场”。两周后它会是第一个被证伪的。"
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: setFlag, key: passion_pick }]
+    terminal: true
+
+  - id: v_e01_d02_signals_plus
+    campaign: venture
+    day: 2
+    type: story
+    trigger: { kind: day, day: 2, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["今晚信号池又添4条：⑰打印店PDF转Word¥5（付费现场）⑱快递站有人喊加钱送楼下（供需错配）⑲洗衣房骂完继续等（低优先级）⑳自习室书包占座（已有方案为何失效存疑）。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 3 }
+      - { kind: addAsset, assetType: document, name: 信号池（增补2）, description: 信号17-20, content: "打印付费现场/快递加钱/洗衣低优/占座存疑" }
+    dialogue:
+      - { speaker: 系统, text: "池子20条了。别急着挑，先让它们沉淀一晚——明天的你会比今晚冷静。" }
+    terminal: true
+
+  - id: v_e01_d03_fake_need
+    campaign: venture
+    day: 3
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 伪需求识别三问：谁/多常/现在怎么凑合 }
+    scene: { location: dorm, characters: [] }
+    setup: ["同学兴冲冲来提议：“做个AI帮选课的！每次选课系统都崩，需求绝对刚！”"]
+    choices:
+      - id: three_questions
+        text: 用三问检验：谁用？多久一次？现在怎么凑合的？
+        visibleResponse: 答案浮出来：只用2次/学期（选课就两天）、凑合方式是手速+抢课群。“刚需”其实是“每年痛两天”。归档。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: add, key: userUnderstanding, value: 3 }]
+      - id: buy_the_hype
+        text: 崩的时候骂声最大，需求肯定刚！立项！
+        visibleResponse: 你把它写进了候选。三问没做的功课，证伪环节会加倍补上。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e01_d04_outline
+    campaign: venture
+    day: 4
+    type: decision
+    trigger: { kind: day, day: 4, phase: end }
+    purpose: { learning: 访谈提纲：行为问题清单化，现场不冷场不跑偏 }
+    scene: { location: dorm, characters: [] }
+    setup: ["明天约了两场访谈。你准备提前写提纲。"]
+    choices:
+      - id: behavior_list
+        text: 五个行为问题：上次什么时候/怎么做的/多久/卡在哪/为这花过钱吗
+        visibleResponse: 提纲一页纸，五问全是过去式。第二天两场访谈火力全开，原话记了满满三页。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 5 }, { kind: addAsset, assetType: interview_notes, name: 访谈提纲v1, description: 五问行为清单, content: "何时/怎么做/多久/卡点/花过钱吗" }]
+      - id: no_outline
+        text: 提纲不用写，聊到哪算哪
+        visibleResponse: 聊得很欢，半小时后你发现一半时间在聊食堂哪个窗口好吃。访谈不是唠嗑。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e01_d05_record_ok
+    campaign: venture
+    day: 5
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [] }
+    setup: ["访谈前你问：“录音方便吗？只自己用，不发出去。”对方愣了一下，笑了：“可以，你们创业的还挺讲究。”"]
+    automaticEffects:
+      - { kind: add, key: credibility, value: 3 }
+      - { kind: setFlag, key: record_consent_habit }
+    dialogue:
+      - { speaker: 系统, text: "一句征询换来两样东西：完整的原话，和对方的放松。伦理不是成本，是访谈技巧。" }
+    terminal: true
+
+  - id: v_e01_d06_group_lurk
+    campaign: venture
+    day: 6
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你潜进三个拼单群和两个资料群潜水。一晚上的观察：晚上10点后消息量是白天的5倍，问“有XX资料吗”每晚会出7、8次，然后就是漫长的“蹲一个”。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: document, name: 群潜水观察, description: 资料群供需错配记录, content: "晚10点5倍活跃/每晚7-8次求资料/回复率不足半数" }
+    dialogue:
+      - { speaker: 系统, text: "“蹲一个”是需求的摩斯电码：他们要的不是群，是找得到。" }
+    terminal: true
+
+  - id: v_e01_d07_secondhand
+    campaign: venture
+    day: 7
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["二手交易群。毕业生大甩卖：有人一次挂30件，有人只买不卖，有人被骗过定金后退群。群主天天在置顶“先款后货风险自负”。"]
+    automaticEffects: [{ kind: add, key: userUnderstanding, value: 3 }]
+    dialogue:
+      - { speaker: 你, text: "（记：信任成本是二手交易的真瓶颈——不是没人买，是不敢买生人）" }
+      - { speaker: 系统, text: "信任瓶颈类需求，个体破解很难，往往需要担保方。别急着跳进去。" }
+    terminal: true
+
+  - id: v_e01_d08_morning_class
+    campaign: venture
+    day: 8
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [] }
+    setup: ["早八课。老师照旧花了4分钟点名。你数了数：应到87人，实到62，被点到缺的19人里，有3个在群回“到了”。"]
+    automaticEffects: [{ kind: add, key: userUnderstanding, value: 2 }]
+    dialogue:
+      - { speaker: 系统, text: "点名4分钟×每周2次×16周=两节课的时间，花在确认一件大家会撒谎的事上。这就是低价值流程的样子。" }
+    terminal: true
+
+  - id: v_e01_d08_mom_midcheck
+    campaign: venture
+    day: 8
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [v_family] }
+    setup: ["妈妈微信语音：“问你个事，你说你在弄什么‘项目’——是传销吗？网上说大学生容易被骗。”"]
+    choices:
+      - id: calm_explain
+        text: 视频里给妈妈看你的问题日志：“妈，我在收集大家生活里的麻烦事。”
+        visibleResponse: 妈妈看了半天：“这我看得懂，跟你爸修水管前先记哪儿漏水一个样。”——人类最强方法论，家庭认证。
+        hiddenEffects: [{ kind: relationship, characterId: v_family, delta: 5 }, { kind: add, key: energy, value: 5 }]
+      - id: impatient
+        text: “妈！不是传销！别看那些文章了！”
+        visibleResponse: 你挂了电话，烦躁半天。妈妈的担心没被接住，你自己的心也没被接住。
+        hiddenEffects: [{ kind: relationship, characterId: v_family, delta: -3 }, { kind: subtract, key: energy, value: 4 }]
+    terminal: true
+
+  - id: v_e01_d09_mentor_pool_review
+    campaign: venture
+    day: 9
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["社群例会。罗哥扫了一眼你的信号池，指了指："]
+    dialogue:
+      - { speaker: 罗哥, text: "20条里，有付费行为的几条？", mood: serious }
+    choices:
+      - id: admit_two
+        text: 如实答：“2条。打印转换和社团工具。”
+        visibleResponse: 罗哥点头：“诚实。那就从这2条里选，其余18条当背景板。信号池不是越多越好，是越真越好。”
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: relationship, characterId: v_mentor, delta: 4 }]
+      - id: show_all
+        text: 把20条全讲了一遍，展示勤奋
+        visibleResponse: 罗哥打断：“我问的是付费，你答的是数量。别用勤奋掩盖不敢收敛。”你脸热了一路。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e01_d09_bin_poke
+    campaign: venture
+    day: 9
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["阿斌扫了一眼你的候选方向列表。"]
+    dialogue:
+      - { speaker: 阿斌, text: "社团工具？这玩意儿门槛低，谁都能抄。你打算怎么防？", mood: neutral }
+      - { speaker: 你, text: "现阶段不防。先证明有人肯用肯付钱，抄不抄是活下来之后的事。" }
+      - { speaker: 阿斌, text: "（挑了下眉）……行，你这话比上学期靠谱。数据出来了叫我。", mood: pleased }
+    automaticEffects:
+      - { kind: relationship, characterId: v_partner, delta: 3 }
+      - { kind: add, key: independence, value: 2 }
+    terminal: true
+
+  - id: v_e01_d10_k_introduce
+    campaign: venture
+    day: 10
+    type: story
+    trigger: { kind: day, day: 10, phase: end }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: ["老K在群里@你：“拉了个小群，5个社长，你自己介绍。丑话说前头：你要是糊弄他们，我的脸也没了。”"]
+    automaticEffects:
+      - { kind: add, key: users, value: 0 }
+      - { kind: setFlag, key: k_referral_pool }
+    dialogue:
+      - { speaker: 系统, text: "转介绍的本质：老K拿自己的信用给你背书。别浪费，也别滥用——这是他最贵的东西。" }
+    terminal: true
+
+  - id: v_e01_d10_roommate_interview
+    campaign: venture
+    day: 10
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["小蔡把室友小林也拉来聊。小林是重度考研人，桌上三本真题。"]
+    dialogue:
+      - { speaker: 小林, text: "整理？我不整理。我就把真题按年份摞着，直接刷。要什么工具，刷就完了。", mood: neutral }
+      - { speaker: 你, text: "那你找某年的某道题怎么办？" }
+      - { speaker: 小林, text: "……翻。翻不到就算了，那题多半也不考。（顿了顿）等等，要是有个东西能搜真题，好像还挺想用？" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·小林, description: 反面用户：不整理派, content: "不整理直接刷/检索痛隐藏在“翻不到就算了”里" }
+    dialogue:
+      - { speaker: 系统, text: "反面用户很重要：他们定义了你的产品不是给谁的。“不用工具”也是一种用户洞察。" }
+    terminal: true
+
+  - id: v_e01_d06_survey_pilot
+    campaign: venture
+    day: 6
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 问卷只配当访谈的配角：先小样本试水 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你想发问卷了，20道题那种。"]
+    choices:
+      - id: pilot_five
+        text: 砍到5题，先发给3个人试填
+        visibleResponse: 3个试填的人有2个卡在第3题——“您的需求痛点等级是？”这种题只有出题人自己懂。你改成了大白话。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 4 }, { kind: add, key: userUnderstanding, value: 2 }]
+      - id: send_20
+        text: 20题直接全量发，效率高
+        visibleResponse: 发出80份，回收9份，平均作答时间显示“38秒”。全是乱选的。长问卷劝退正常人。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e01_d07_rival_scan
+    campaign: venture
+    day: 7
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["竞品初扫：你找到4个相关工具——2个高校官方系统（难用、没通知功能）、1个商业SaaS（¥120/月，贵）、1个学长写的开源小工具（两年没更新）。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: document, name: 竞品初扫, description: 4个同类工具对比, content: "官方2个难用/商业¥120月/开源断更2年——空档在轻量+按次" }
+    dialogue:
+      - { speaker: 系统, text: "竞品清单的用途不是吓自己，是找空档：他们贵、重、断更的地方，就是你能站的地方。" }
+    terminal: true
+
+  - id: v_e01_d08_market_vendor
+    campaign: venture
+    day: 8
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: shop, characters: [] }
+    setup: ["周末逛校外菜市场。水果摊大姐一边称重一边用手机接单，两台设备切来切去。你买了两个橙子，顺嘴问了一句。"]
+    dialogue:
+      - { speaker: 摊主, text: "没办法哟，外卖平台一个、微信收款一个、老板娘群一个。娃要是能并到一个手机里……哎，说这些干啥，你买菜不？" }
+      - { speaker: 系统, text: "摊主的抱怨到一半自己掐灭了：她不信有人管。小微商户不是没痛点，是不信解决方案会来。" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 3 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·水果摊主, description: 多平台切换之痛, content: "3平台切换/不信有人解决——信任是前置门槛" }
+    terminal: true
+
+  - id: v_e01_d09_tutor_group
+    campaign: venture
+    day: 9
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["家教群里，家长每晚固定三连：“有数学老师吗”“哪家机构靠谱”“上次那个联系方式谁有”。群主被问烦了，设了个群精华，没人看。"]
+    automaticEffects: [{ kind: add, key: userUnderstanding, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "信息在群里发过了≠信息被找到了。“发过”和“送达”之间，隔着一个检索。" }
+    terminal: true
+
+  - id: v_e01_d10_paid_post
+    campaign: venture
+    day: 10
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你在论坛搜“有偿”。付费帖的关键词真不少：有偿代取快递、有偿拼车、有偿求学长学姐咨询。每条下面都有人秒回。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: document, name: 有偿帖观察, description: 真实付费行为清单, content: "代取/拼车/经验咨询——小额即时服务付费最活跃" }
+    dialogue:
+      - { speaker: 系统, text: "“有偿”二字是付费意愿的直接证据。规律：小额、即时、看得见结果的东西最好卖。" }
+    terminal: true
+
+  - id: v_e01_d05_clerk_talk
+    campaign: venture
+    day: 5
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: shop, characters: [v_user_shop] }
+    setup: ["趁王姐不在，你跟店员小妹聊了几句。"]
+    dialogue:
+      - { speaker: 店员, text: "排班表？贴墙上那张啊。我休息全靠拍照，改一次拍一次。上个月改了4次，我拍糊了一张，白跑一趟。", mood: angry }
+      - { speaker: 你, text: "（记：排班变更=店员的真实痛点，比老板的“管理痛”更具体）" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·店员小妹, description: 排班变更通知痛, content: "月改4次/拍照对表/拍糊白跑——通知触达是关键" }
+    terminal: true
+
+  - id: v_e01_d10_weekly_summary
+    campaign: venture
+    day: 10
+    type: story
+    trigger: { kind: day, day: 10, phase: end }
+    purpose: { learning: 阶段小结：观察→日志→候选的完整闭环 }
+    scene: { location: dorm, characters: [] }
+    setup: ["观察周收尾。你把10天的工作排成一列：问题日志19条→有效信号8条→访谈14场→候选方向3个→每个方向一句证伪条件。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 5 }
+      - { kind: addAsset, assetType: document, name: 观察周小结, description: 日志到候选的漏斗, content: "19日志→8信号→14访谈→3候选→各带证伪条件" }
+    dialogue:
+      - { speaker: 系统, text: "19到3，砍掉的16条没有白记——它们是你敢留下这3条的底气。" }
+    terminal: true

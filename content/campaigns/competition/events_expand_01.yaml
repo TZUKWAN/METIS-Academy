@@ -1,0 +1,769 @@
+# 竞赛线扩展包01：比赛发现 / 赛道选择 / 规则 / 评分 / 报名 / 组队（D1-D3）
+events:
+  # ---- D1：比赛发现 ----
+  - id: c_xe1_push_notify
+    campaign: competition
+    day: 1
+    type: story
+    trigger: { kind: day, day: 1, phase: start }
+    purpose: { narrative: 比赛消息从两个渠道同时到达, learning: 信息来源交叉验证 }
+    scene: { location: dorm, characters: [] }
+    setup: ["早上八点，班级群和校科协公众号同时弹出同一条推送：《第八届校园AI创新竞赛报名开始》。推送下面第一条评论来自邱一鸣：\"今年的奖杯先放我们实验室。\""]
+    dialogue:
+      - { speaker: 江雨桐, text: "报名开始了。你昨天说的\"等一个机会\"，机会在敲门。", mood: happy }
+      - { speaker: 系统, text: "同一条消息，两个渠道。交叉验证过的信息才值得行动。" }
+    next: c_xe1_info_session
+    terminal: false
+
+  - id: c_xe1_info_session
+    campaign: competition
+    day: 1
+    type: npc
+    trigger: { kind: manual }
+    purpose: { narrative: 宣讲会拿到关键情报, learning: 宣讲会是规则解读的第一现场 }
+    scene: { location: auditorium, characters: [] }
+    setup: ["下午的宣讲会座无虚席。组委会的周老师翻着PPT，语速不快。"]
+    dialogue:
+      - { speaker: 周老师, text: "今年变化三点：增设复赛网评、演示视频必须含真机录屏、AI使用须附说明。", mood: serious }
+      - { speaker: 周老师, text: "去年有队伍材料写得漂亮，演示环节当场翻车。我们记住了。" }
+    choices:
+      - id: ask_question
+        text: 举手问：\"复赛网评\"评什么材料？
+        visibleResponse: 周老师："更新版申报书加三分钟视频，评委线上打分。别以为进了决赛圈就稳了。"你记进备忘录。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 4 }, { kind: setFlag, key: knows_semifinal }]
+      - id: listen_only
+        text: 安静听完，散会后找学长打听
+        visibleResponse: 学长的情报一半对一半错——复赛的事他没听说过。一手信息还是得听组委会的。
+        hiddenEffects: [{ kind: add, key: independence, value: 2 }]
+    terminal: true
+
+  - id: c_xe1_track_overview
+    campaign: competition
+    day: 1
+    type: story
+    trigger: { kind: day, day: 1, phase: end }
+    purpose: { narrative: 三条赛道摆在一起, learning: 赛道决定评审视角 }
+    scene: { location: dorm, characters: [] }
+    setup: ["晚上，你把章程里的赛道表抄在笔记本上：A应用开发（作品分60%）、B算法研究（论文与基准测试为主）、C创业设计（商业计划书路演）。"]
+    dialogue:
+      - { speaker: 系统, text: "赛道不是赛道，是三种完全不同的评审眼光。选错赛道，好项目也会被看错。" }
+    next: c_xe1_track_choice
+
+  - id: c_xe1_track_choice
+    campaign: competition
+    day: 1
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 按团队能力与证据结构选赛道，不按名字酷不酷 }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: track_app
+        text: A应用开发——做能跑的东西，我们的强项
+        visibleResponse: 方远投了最积极的一票："别的不敢说，能跑的东西我们做得出来。"
+        hiddenEffects:
+          - { kind: setFlag, key: track_app }
+          - { kind: add, key: execution, value: 3 }
+          - { kind: addAsset, assetType: checklist, name: 赛道评估记录, description: 三赛道对比与选择理由, content: "A应用：作品60%/B算法：论文基准/C创业：BP路演——选A，理由：可演示作品是团队强项" }
+      - id: track_algo
+        text: B算法研究——名字听起来更高级
+        visibleResponse: 雨桐泼了冷水："我们连一篇像样的实验报告都没写过。高级是用实力撑的。"
+        hiddenEffects:
+          - { kind: setFlag, key: track_algo }
+          - { kind: add, key: academicDebt, value: 6 }
+      - id: track_ask_advisor
+        text: 先别选，明天问何老师再定
+        visibleResponse: 何老师只回了一句："你们仨谁写过论文？没有就选A。"赛道第二天敲定。
+        hiddenEffects: [{ kind: relationship, characterId: c_advisor, delta: 3 }, { kind: setFlag, key: track_app }]
+    terminal: true
+
+  # ---- D1-D2：规则 ----
+  - id: c_xe1_ip_clause
+    campaign: competition
+    day: 2
+    type: decision
+    trigger: { kind: day, day: 2, phase: start }
+    purpose: { learning: 知识产权条款决定赛后项目归谁 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["章程附则第9条：获奖作品知识产权归属由队伍在报名时勾选——归学校 / 归团队 / 共有。方远看到\"归学校\"三个字停住了。"]
+    dialogue:
+      - { speaker: 方远, text: "归学校？那我暑假白干？这条不搞清楚，代码我一行都不想写。", mood: angry }
+      - { speaker: Agent, text: "条款解析：勾选不影响参赛资格，仅影响赛后处置权。共有模式允许团队保留使用权。", mood: neutral }
+    choices:
+      - id: ip_shared
+        text: 勾\"共有\"，并把这条转告全队
+        visibleResponse: 你把附则第9条截图发进群里。方远回了个\"行\"。法学院出身的辅导员说这是最稳妥的勾法。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: setFlag, key: ip_settled }]
+      - id: ip_ignore
+        text: 默认勾第一个，这种事以后再说
+        visibleResponse: 方远嘟囔了一句\"随便吧\"。有些账现在不算，赛后会算得更疼。
+        hiddenEffects: [{ kind: setFlag, key: ip_unsettled }, { kind: subtract, key: teamTrust, value: 4 }]
+    terminal: true
+
+  - id: c_xe1_rule_qa_group
+    campaign: competition
+    day: 2
+    type: story
+    trigger: { kind: day, day: 2, phase: end }
+    purpose: { narrative: 答疑群里的公共情报, learning: 别人的问题也是你的问题 }
+    scene: { location: dorm, characters: [] }
+    setup: ["赛事答疑群里，别的队问了十几个问题。你把\"每校进决赛队伍不超过3支\"\"初赛材料一经提交不可更换\"这两条复制进自己的约束清单。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "别人踩坑的记录，是免费的路况播报。" }
+    terminal: true
+
+  - id: c_xe1_rule_teamquiz
+    campaign: competition
+    day: 2
+    type: decision
+    trigger: { kind: day, day: 2, phase: end }
+    purpose: { learning: 规则要对齐到每个人，不是只对齐到队长 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["你出了五道规则题考队友：评分权重？AI条款？截止时间？提交格式？作品归属？方远答对三道——截止时间他答成了初赛当天。"]
+    dialogue:
+      - { speaker: 方远, text: "记这些干什么，你记着不就行了。", mood: neutral }
+      - { speaker: 江雨桐, text: "上次你把交作业的日期记错了一周。", mood: pleased }
+    choices:
+      - id: quiz_together
+        text: 错的题当面讲清楚，直到全队全对
+        visibleResponse: 十分钟讲完。方远嘴上嫌幼稚，但\"截止时间\"这四个字他记住了。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 4 }, { kind: setFlag, key: rule_synced }]
+      - id: quiz_skip
+        text: 算了，规则我盯着就行
+        visibleResponse: 你成了全队唯一的规则备忘录。而你也有记错的时候。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe1_ai_clause_team
+    campaign: competition
+    day: 3
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 3, phase: start }
+    purpose: { learning: 队内AI使用红线先于章程要求 }
+    scene: { location: lab, characters: [c_tech, c_design, c_ai_agent] }
+    setup: ["章程允许AI辅助但须标注。你提议队内定一条比章程更严的红线，免得最后说不清。"]
+    choices:
+      - id: strict_redline
+        text: 红线：数据和事实必须人工核实，AI只碰草稿和脚手架
+        visibleResponse: 三条红线写进了群公告：事实人工核、引用可回溯、AI产出必标注。Agent表示\"已记录约束\"。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: setFlag, key: ai_redline_set }
+          - { kind: achievement, achievementId: ach_c_redline }
+      - id: loose_redline
+        text: 章程允许就用嘛，别自己捆自己手脚
+        visibleResponse: 效率确实高了。但\"哪些是人写的、哪些是AI写的\"这道题，你们留到了最不该答的时候。
+        hiddenEffects: [{ kind: add, key: aiDependence, value: 6 }, { kind: add, key: academicDebt, value: 4 }]
+    unlockKnowledge: [kc_c_ai_disclosure]
+    terminal: true
+
+  # ---- D2-D3：评分 ----
+  - id: c_xe1_score_weights
+    campaign: competition
+    day: 2
+    type: decision
+    trigger: { kind: day, day: 2, phase: start }
+    purpose: { learning: 按评分权重分配21天，而不是按兴趣分配 }
+    scene: { location: classroom, characters: [] }
+    setup: ["白板上写下评分权重：创新30 / 技术25 / 演示25 / 答辩20。满分100，21天。"]
+    dialogue:
+      - { speaker: 系统, text: "21天怎么分，不该跟着兴趣走，该跟着这四个数字走。" }
+    choices:
+      - id: weight_based
+        text: 按权重倒排时间：调研给创新供弹药，演示单独留4天
+        visibleResponse: 时间表改完，创新与演示合计占了55%的精力。方远看不懂分配逻辑，你把权重表拍给他看，他懂了。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: setFlag, key: weight_plan }]
+      - id: tech_first
+        text: 技术是根本，先把代码写爽再说
+        visibleResponse: 方远很开心。但演示25分和创新30分，在白板上眼巴巴地看着你们。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 4 }, { kind: setFlag, key: tech_heavy }]
+    unlockKnowledge: [kc_c_deadline_reverse]
+    terminal: true
+
+  - id: c_xe1_past_winners
+    campaign: competition
+    day: 2
+    type: decision
+    trigger: { kind: day, day: 2, phase: end }
+    purpose: { learning: 获奖名单是公开的评审偏好数据库 }
+    scene: { location: dorm, characters: [c_ai_agent] }
+    setup: ["往届获奖名单挂在学院官网。三年的名单，四十多个获奖项目——这是一份现成的\"评委偏好数据库\"。"]
+    choices:
+      - id: analyze_winners
+        text: 让Agent统计三年获奖项目的共性，你逐条核对
+        visibleResponse: 统计出四条共性：真实用户数据、现场可演示、痛点具体、AI用得克制。你抽查了两届名单，无误。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: addAsset, assetType: document, name: 获奖规律笔记, description: 三年获奖项目共性分析, content: "真实数据/可演示/痛点具体/AI克制" }
+          - { kind: achievement, achievementId: ach_c_winner_scan }
+      - id: skip_history
+        text: 看那些干什么，做好自己
+        visibleResponse: \"做好自己\"是对的，但评委的口味是客观存在的。你们将在初赛答辩用第一天才知道的方式被检验。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    unlockKnowledge: [kc_c_competitor_scan]
+    terminal: true
+
+  - id: c_xe1_winner_pattern
+    campaign: competition
+    day: 3
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 规律会说话, learning: 评审偏好的证据化理解 }
+    scene: { location: lab, characters: [] }
+    setup: ["获奖规律笔记贴在了实验室墙上，雨桐在旁边补了一行手写小字：\"评委也是人，人相信看得见的东西。\""]
+    automaticEffects:
+      - { kind: add, key: progress, value: 2 }
+      - { kind: add, key: credibility, value: 2 }
+    terminal: true
+
+  # ---- D2-D3：报名 ----
+  - id: c_xe1_signup_form
+    campaign: competition
+    day: 2
+    type: story
+    trigger: { kind: day, day: 2, phase: end }
+    purpose: { narrative: 报名表的琐碎, learning: 行政细节也吃人 }
+    scene: { location: dorm, characters: [c_tech] }
+    setup: ["报名系统页面老旧：院系代码要查PDF附表、邮箱要学校后缀、指导老师要工号。方远填到第七项开始骂街。"]
+    dialogue:
+      - { speaker: 方远, text: "这系统是哪个年代的？我Git都能提交，这表提交不了。", mood: angry }
+      - { speaker: 你, text: "填完。行政流程也是比赛的一部分。" }
+    next: c_xe1_signup_check
+
+  - id: c_xe1_signup_check
+    campaign: competition
+    day: 2
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 提交前核对是零成本高收益的动作 }
+    scene: { location: dorm, characters: [c_tech] }
+    setup: ["方远填完了报名表。页面提示：提交后信息不可修改。"]
+    dialogue:
+      - { speaker: 系统, text: "\"提交后不可修改\"是行政系统里最贵的一句话。" }
+    choices:
+      - id: double_check
+        text: 你逐项念，方远逐项对，两分钟后提交
+        visibleResponse: 念到手机号——方远填的是他旧手机号。改完提交，系统回执安静地落进邮箱。两分钟救了三周。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: setFlag, key: signup_done }, { kind: achievement, achievementId: ach_c_signup_check }]
+      - id: submit_fast
+        text: 他自己填的他自己负责，直接交
+        visibleResponse: 提交成功。三天后组委会通知：联系方式无效的队伍将被视为放弃。你翻出旧手机号，慌了半小时才发邮件更正。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: setFlag, key: signup_done }, { kind: subtract, key: energy, value: 8 }]
+    terminal: true
+
+  - id: c_xe1_signup_receipt
+    campaign: competition
+    day: 3
+    type: system
+    trigger: { kind: day, day: 3, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["报名回执编号：A-042。你们是第42支报名的队伍。"]
+    automaticEffects:
+      - { kind: setFlag, key: registered }
+    dialogue:
+      - { speaker: 系统, text: "从此你们不是\"想参赛的人\"，是参赛队伍A-042。" }
+    terminal: true
+
+  # ---- D3：组队与第三人 ----
+  - id: c_xe1_third_member
+    campaign: competition
+    day: 3
+    type: decision
+    trigger: { kind: day, day: 3, phase: start }
+    purpose: { learning: 组队看能力互补，不看人头凑数 }
+    scene: { location: classroom, characters: [c_design] }
+    setup: ["章程允许每队至多3人。现在只有你和方远、雨桐——哦不对，你们就仨。但雨桐提出：材料量太大，想再拉个人。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "PPT、视频、申报书排版……我一个人真的做不完。", mood: worried }
+      - { speaker: 方远, text: "拉人可以，别拉只会喊666的。", mood: neutral }
+    choices:
+      - id: recruit_lin
+        text: 拉大二的林晓——她做过社团活动的物料，还会一点剪辑
+        visibleResponse: 林晓入伙，负责素材整理与视频剪辑。雨桐终于能腾出手做主线材料。队名册上写满三个名字加一个队长。
+        hiddenEffects:
+          - { kind: setFlag, key: lin_joined }
+          - { kind: add, key: teamTrust, value: 4 }
+          - { kind: addAsset, assetType: document, name: 队伍名册, description: 四人分工与联系方式, content: "队长/技术/设计/剪辑素材（林晓）" }
+      - id: keep_three
+        text: 保持三人，砍需求也不加人
+        visibleResponse: 你把视频规格从\"精剪\"降级为\"录屏+口播\"。人少，需求就得让路。
+        hiddenEffects: [{ kind: add, key: execution, value: 2 }, { kind: setFlag, key: three_only }]
+      - id: recruit_random
+        text: 随便拉个熟人凑数，人多力量大
+        visibleResponse: 熟人很有热情，但他三次开会两次不到。第四天你们默默把他的名字从分工表里挪到了\"感谢名单\"。
+        hiddenEffects: [{ kind: subtract, key: teamTrust, value: 5 }, { kind: add, key: academicDebt, value: 3 }]
+    unlockKnowledge: [kc_c_team_charter]
+    terminal: true
+
+  - id: c_xe1_lin_intro
+    campaign: competition
+    day: 3
+    type: npc
+    trigger: { kind: day, day: 3, phase: start }
+    purpose: { narrative: 新成员的第一天, learning: 新人要有明确的第一个任务 }
+    scene: { location: lab, characters: [] }
+    setup: ["林晓抱着笔记本来到实验室，拘谨地站在门口。"]
+    dialogue:
+      - { speaker: 林晓, text: "学长学姐好……我不会写代码，但我可以把乱七八糟的素材理得整整齐齐。", mood: worried }
+      - { speaker: 系统, text: "给新人的第一个任务要小、要具体、要有完成标准。" }
+    choices:
+      - id: small_first_task
+        text: 给她第一个任务：把竞品截图按矩阵整理，今晚交
+        visibleResponse: 晚上九点，十二张截图按四列排好，命名规范得像教科书。方远看了一眼：\"这比我强。\"
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: lin_first_task_done }]
+      - id: no_task_yet
+        text: 先让她自己看着学
+        visibleResponse: 林晓看了一天你们的聊天记录，什么产出都没有，也什么都没问。新人最怕的不是难任务，是没有任务。
+        hiddenEffects: [{ kind: subtract, key: execution, value: 2 }]
+    terminal: true
+
+  - id: c_xe1_advisor_ask
+    campaign: competition
+    day: 3
+    type: npc
+    trigger: { kind: day, day: 3, phase: end }
+    purpose: { narrative: 请指导老师, learning: 求助要有具体请求 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["何老师办公室。桌上摊着半改的实验报告。他抬眼看你，示意你说重点。"]
+    choices:
+      - id: ask_concrete
+        text: "何老师，请您当我们竞赛指导老师。每周汇报一次，每次不超过十五分钟。"
+        visibleResponse: 何老师看了你三秒："十五分钟？行。周三下午，带着进展来，别带着情绪来。"他签了字。
+        hiddenEffects: [{ kind: relationship, characterId: c_advisor, delta: 8 }, { kind: setFlag, key: advisor_confirmed }, { kind: add, key: mentorTrust, value: 6 }]
+      - id: ask_vague
+        text: "何老师，我们想参赛，您能不能指导指导我们？"
+        visibleResponse: "\"指导指导\"——何老师重复了一遍这四个字。"把你们到底要什么写成一句话再来。"你在门口站了十分钟，把请求改具体了才敢再敲门。"
+        hiddenEffects: [{ kind: relationship, characterId: c_advisor, delta: 2 }, { kind: add, key: independence, value: 3 }]
+    terminal: true
+
+  - id: c_xe1_budget_plan
+    campaign: competition
+    day: 3
+    type: decision
+    trigger: { kind: day, day: 3, phase: end }
+    purpose: { learning: 小预算也要有预算纪律 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你盘了下家底：生活费结余500元。可能的花销：云服务器、打印装订、路演当天的交通、以及传说中的奶茶基金。"]
+    choices:
+      - id: budget_sheet
+        text: 记账：服务器0元（免费层）/打印50/备用100，奶茶自费
+        visibleResponse: 表格发进群里。方远盯着\"奶茶自费\"看了很久："队长，你这队伍没有福利。"但还是照办了。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: budget_disciplined }, { kind: addAsset, assetType: checklist, name: 赛程预算表, description: 500元分配与记账规则, content: "服务器免费层/打印50/备用100/奶茶自费" }]
+      - id: no_budget
+        text: 走一步算一步，钱的事用的时候再说
+        visibleResponse: 第17天凌晨两点，你们为\"打印店关了没现金\"吵了十分钟。钱的问题从不体面。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    unlockKnowledge: [kc_c_budget]
+    terminal: true
+
+  - id: c_xe1_workplace
+    campaign: competition
+    day: 2
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 环境是隐性效率变量 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["实验室申请表发下来了：固定工位要导师签名，先到先得。方远已经把背包放在了靠窗那张桌子边上。"]
+    choices:
+      - id: claim_desk
+        text: 今天就把工位定下来：贴名牌、立队规、锁抽屉
+        visibleResponse: 靠窗工位归属"社团管家队"。雨桐在隔板上贴了张倒计时便利贴。领地感这种东西，意外地提气。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 3 }, { kind: setFlag, key: base_set }]
+      - id: float_work
+        text: 游击作业，哪空坐哪
+        visibleResponse: 第三天，你们为了"昨晚谁把转接头拿走了"开了十五分钟侦查会议。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: c_xe1_poster_corridor
+    campaign: competition
+    day: 1
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: corridor, characters: [] }
+    setup: ["公告栏最中间，去年竞赛的巨幅海报还没撕：邱一鸣举着奖杯，笑得像已经预定了今年的。"]
+    automaticEffects:
+      - { kind: add, key: riskTolerance, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "海报会换人。去年的名字印得再大，也只是去年的。" }
+    terminal: true
+
+  - id: c_xe1_rival_comment
+    campaign: competition
+    day: 1
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [c_rival] }
+    setup: ["食堂。邱一鸣端着餐盘路过你们桌，特意停下来。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "新队伍？名字都没听过。今年赛道我们包圆了，你们争个铜奖也挺好的。", mood: pleased }
+      - { speaker: 方远, text: "（筷子没停）铜奖也挺好，铜导热快。", mood: neutral }
+    choices:
+      - id: smile_back
+        text: 笑笑不接话，回去把他的话记进对手档案
+        visibleResponse: 对手档案第一页：邱一鸣，喜欢赛前放话，去年放话内容与事实不符。你的心态稳得像测试全绿。
+        hiddenEffects: [{ kind: add, key: independence, value: 4 }, { kind: setFlag, key: rival_dossier }]
+      - id: talk_back
+        text: 回敬一句：\"决赛见。\"
+        visibleResponse: 邱一鸣挑了挑眉走了。嘴上不输，但接下来半小时你满脑子都是怎么把那句话变成真的——分心了。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 4 }]
+    unlockKnowledge: [kc_c_rival_smoke]
+    terminal: true
+
+  # ---- D3：队名与定位 ----
+  - id: c_xe3_project_name
+    campaign: competition
+    day: 3
+    type: decision
+    trigger: { kind: day, day: 3, phase: end }
+    purpose: { learning: 名字是最低成本的定位声明 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["申报书第一栏：项目名称。方远的候选：\"社管系统v2\"。雨桐的候选：\"社团管家\"。"]
+    dialogue:
+      - { speaker: 方远, text: "名字不重要，能跑才重要。", mood: neutral }
+      - { speaker: 江雨桐, text: "评委翻开申报书第一个看到的就是名字。\"社管系统\"听着像要收物业费。", mood: serious }
+    choices:
+      - id: name_guanjia
+        text: 定\"社团管家\"——名字即定位：我们管的是烦琐事
+        visibleResponse: 申报书第一栏敲定。雨桐顺手把PPT母版标题也改了。名字定了，后面的材料突然都有了主心骨。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: name_set }]
+      - id: name_tech
+        text: 用\"基于LLM的社团事务智能处理平台\"
+        visibleResponse: 名字很长很专业。初赛答辩时评委让你解释\"智能处理\"具体指什么——你解释了两分钟，他没点头。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe3_slogan
+    campaign: competition
+    day: 3
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 一句话定位, learning: 能一句话说清的项目才是想清了的项目 }
+    scene: { location: lab, characters: [] }
+    setup: ["你在白板上写下一句话：\"让72个社团收报名表的时间从3天变成3分钟。\"方远拍了照。"]
+    automaticEffects:
+      - { kind: add, key: progress, value: 2 }
+      - { kind: addAsset, assetType: research_brief, name: 一句话定位, description: 项目slogan与量化目标, content: "72社团报名表：3天→3分钟" }
+    dialogue:
+      - { speaker: 系统, text: "这句话会在申报书第一页、PPT第二页、路演第一句反复出现。它值得现在就写对。" }
+    terminal: true
+
+  - id: c_xe3_role_confirm
+    campaign: competition
+    day: 3
+    type: npc
+    trigger: { kind: manual }
+    purpose: { learning: 口头分工要落成文字 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["开工会前最后确认。你把分工表念了一遍，要求每个人说出自己\"不许做的事\"。"]
+    dialogue:
+      - { speaker: 方远, text: "我，功能与测试。不许做的事：不许接需求——需求走你。", mood: neutral }
+      - { speaker: 江雨桐, text: "我，材料与体验。不许做的事：不许在数据上\"润色\"。", mood: serious }
+    choices:
+      - id: sign_charter
+        text: 把这份口头确认写成分工表v2，全员回复\"确认\"
+        visibleResponse: 群里四条\"确认\"排成一列。这也许是全场最便宜的一份合同。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 5 }, { kind: setFlag, key: charter_v2 }]
+      - id: oral_enough
+        text: 都听见了就行，不用搞形式主义
+        visibleResponse: 一周后关于"视频脚本谁写"的争论中，每个人都记起了不一样版本的分工商定。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    unlockKnowledge: [kc_c_team_charter]
+    terminal: true
+
+  - id: c_xe3_conflict_seed
+    campaign: competition
+    day: 3
+    type: story
+    trigger: { kind: day, day: 3, phase: end }
+    purpose: { narrative: 第一次摩擦, learning: 摩擦来自标准不同而非人品 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["方远给报名页配了系统默认按钮——灰色，直角。雨桐盯着看了十秒，说\"这也拿得出手？\"方远说\"能点不就行了\"。"]
+    dialogue:
+      - { speaker: 方远, text: "功能逻辑没问题。你嫌丑是审美问题，不是工程问题。", mood: angry }
+      - { speaker: 江雨桐, text: "演示的时候，评委就是靠\"感觉\"打分的！丑就是扣分！", mood: angry }
+      - { speaker: 系统, text: "两个人都对了一半。半对加半对，需要一个整对的裁决。" }
+    next: c_xe3_conflict_choice
+
+  - id: c_xe3_conflict_choice
+    campaign: competition
+    day: 3
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 冲突裁决要回到共同判据 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    choices:
+      - id: judge_by_user
+        text: 裁决标准：\"用户第一眼看到什么\"——拿演示脚本当判据
+        visibleResponse: 你指着10步演示脚本第1步："用户第一眼是报名页。雨桐出样式稿，方远保证三步内能报上名。"两人各自认领，散会。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 6 }, { kind: setFlag, key: conflict_resolved_v1 }, { kind: achievement, achievementId: ach_c_first_judgment }]
+      - id: judge_by_vip
+        text: 和稀泥：都让一步，各改一点
+        visibleResponse: 按钮变成了浅灰圆角——没人满意，也没人再吵。这一页成了全项目"差不多"文化的起点。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 3 }, { kind: subtract, key: teamTrust, value: 2 }]
+      - id: judge_by_cap
+        text: 站方远这边：功能优先，样式以后再说
+        visibleResponse: 雨桐没再说话。当晚她把自己的样式稿发在群里，附言："那按你们的来。"群里的安静有点响。
+        hiddenEffects: [{ kind: subtract, key: teamTrust, value: 6 }, { kind: setFlag, key: design_sulking }]
+    learningPoint: 冲突裁决回到共同判据，而不是看谁声音大
+    terminal: true
+
+  - id: c_xe3_kickoff
+    campaign: competition
+    day: 3
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 开工会, learning: 仪式感标记阶段切换 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["晚上九点，实验室。白板：左边的\"18天后初赛\"，中间的一句话定位，右边的分工表。雨桐拍了张照：\"这是我们最早的合影。\""]
+    automaticEffects:
+      - { kind: setFlag, key: kickoff_done }
+      - { kind: add, key: teamTrust, value: 3 }
+    dialogue:
+      - { speaker: 方远, text: "明天开始，别催我。", mood: pleased }
+      - { speaker: 江雨桐, text: "明天开始，请找我对需求。", mood: happy }
+    terminal: true
+
+  # ---- 补充密度：D1-D3 边角 ----
+  - id: c_xe1_notice_group
+    campaign: competition
+    day: 1
+    type: story
+    trigger: { kind: day, day: 1, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["辅导员在群里补了一句：\"参赛计入第二课堂学分，获奖保研细则加分——但别为加分参赛，为加分参赛的队伍一般拿不到奖。\""]
+    automaticEffects:
+      - { kind: add, key: independence, value: 2 }
+    terminal: true
+
+  - id: c_xe2_mood_check
+    campaign: competition
+    day: 2
+    type: npc
+    trigger: { kind: day, day: 2, phase: end }
+    scene: { location: dorm, characters: [c_design] }
+    setup: ["雨桐发来消息：\"邱一鸣他们去年这时候都已经在写代码了吧？我们连队名都没定。\""]
+    choices:
+      - id: pace_reassure
+        text: "他们有去年积累。我们比的是这21天的斜率，不是起点。"
+        visibleResponse: 雨桐回了个\"也是\"，外加一张她刚画的倒计时手账。焦虑被翻译成了计划。
+        hiddenEffects: [{ kind: relationship, characterId: c_design, delta: 5 }, { kind: add, key: teamTrust, value: 3 }]
+      - id: pace_panic
+        text: "那我们今晚就开会！现在！立刻定选题！"
+        visibleResponse: 深夜的情绪决策会开了两小时，产出三个半成品想法和更多焦虑。而且没人睡好。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 10 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe2_pledge
+    campaign: competition
+    day: 2
+    type: story
+    trigger: { kind: day, day: 2, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["《学术诚信与AI使用承诺书》下载好了。第七条画着横线：\"如发现未申报的AI生成内容，组委会有权取消成绩。\""]
+    automaticEffects:
+      - { kind: setFlag, key: pledge_read }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "承诺书不是走过场。它是第17页条款的执行细则。" }
+    terminal: true
+
+  - id: c_xe2_timeline_board
+    campaign: competition
+    day: 2
+    type: system
+    trigger: { kind: day, day: 2, phase: end }
+    scene: { location: lab, characters: [] }
+    setup: ["关键日期上墙：D4选题会 / D6访谈 / D8方案收敛 / D9-D14 Demo / D15材料 / D17彩排 / D19初赛 / D21决赛。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+      - { kind: setFlag, key: timeline_up }
+    dialogue:
+      - { speaker: 系统, text: "日期上了墙，就成了全队的公共记忆。" }
+    terminal: true
+
+  - id: c_xe2_deliverable_list
+    campaign: competition
+    day: 3
+    type: decision
+    trigger: { kind: day, day: 3, phase: end }
+    purpose: { learning: 交付物清单决定后面每天的验收标准 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["初赛交付四件套：申报书PDF（模板内）、5分钟内演示视频（含真机录屏）、诚信承诺书扫描件、作品说明一页。"]
+    choices:
+      - id: deliver_checklist
+        text: 让Agent把四件套拆成验收清单，每项写\"完成的判定标准\"
+        visibleResponse: 清单出来11条，你删掉2条它脑补的，改了1条格式。雨桐按清单开始倒排素材。交付物从此有了验收录。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: addAsset, assetType: checklist, name: 初赛交付清单, description: 四件套验收标准（人工核对版）, content: "申报书/视频≤5min含真机/承诺书/一页说明" }
+      - id: no_checklist
+        text: 四个文件而已，到时候一凑就有
+        visibleResponse: "到时候"到来时，你们发现视频没有真机录屏、申报书模板页边距不对。凑出来的东西有味道，是返工的酸味。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    unlockKnowledge: [kc_c_rule_extract]
+    terminal: true
+
+  - id: c_xe3_rival_probe
+    campaign: competition
+    day: 3
+    type: npc
+    trigger: { kind: day, day: 3, phase: end }
+    scene: { location: corridor, characters: [c_rival] }
+    setup: ["邱一鸣在走廊\"偶遇\"你们，手里拿着奶茶，像来散步的。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "听说你们报了应用赛道？我们今年搞了个大的，具体做什么……保密。", mood: pleased }
+    choices:
+      - id: probe_back
+        text: "大的？那正好，我们做小的，给大奖当个背景板。"
+        visibleResponse: 邱一鸣被噎了一下，笑骂着走了。你注意到他说\"保密\"时的停顿——他也在试探你们。
+        hiddenEffects: [{ kind: add, key: independence, value: 3 }]
+      - id: real_info
+        text: 认真回一句：我们做社团管理工具
+        visibleResponse: 他\"哦\"了一声，眼神像在估价。第二天答疑群里，他队匿名问了一堆社团工具的问题。烟雾弹升级成了明抢。
+        hiddenEffects: [{ kind: setFlag, key: topic_leaked }]
+    terminal: true
+
+  - id: c_xe3_late_night_whiteboard
+    campaign: competition
+    day: 3
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["十一点半，你路过实验室，方远还在白板前画架构图——画的是他自创的\"三层四域\"体系，_arrow_连得像星座图。"]
+    automaticEffects:
+      - { kind: add, key: riskTolerance, value: 2 }
+    dialogue:
+      - { speaker: 方远, text: "我在想登录态怎么管理……（头也不回）你别记我加班，这是兴趣。", mood: happy }
+    terminal: true
+
+  - id: c_xe2_qa_group_lurk
+    campaign: competition
+    day: 2
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["答疑群里，组委会回复了一条容易被忽略的信息：\"初赛不需要提交代码，但决赛现场须可运行。请规划好版本节点。\""]
+    choices:
+      - id: note_version_node
+        text: 把\"可运行版本\"写进里程碑：D14必须有一个能现场跑的版本
+        visibleResponse: 里程碑表多了一行加粗的字。方远看到后说：\"行，那D13我得冻功能。\"——他自己把闸门装上了。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: setFlag, key: version_node_set }]
+      - id: ignore_later
+        text: 决赛的事决赛再说
+        visibleResponse: 决赛前夜再说的事，通常发生在决赛前夜。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe1_senior_template
+    campaign: competition
+    day: 2
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [] }
+    setup: ["你在食堂堵到了去年参赛的赵学长。他嚼着鸡腿听你说完来意。"]
+    dialogue:
+      - { speaker: 赵学长, text: "申报书模板我给你。就一句话：模板里每个加粗小标题都是评委的打分点，别自作聪明改结构。", mood: neutral }
+    choices:
+      - id: take_template
+        text: 要模板，并让他把\"最容易丢分的一节\"圈出来
+        visibleResponse: 他圈了\"项目真实性说明\"：\"这节去年一半队伍空着或抄模板。谁认真写谁加分。\"这句话值一顿鸡腿。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: addAsset, assetType: document, name: 往届申报书模板, description: 带学长批注的模板, content: "评分点=加粗标题/真实性说明最易丢分" }]
+      - id: just_thanks
+        text: 道谢就走，回去自己研究
+        visibleResponse: 你花了一晚上研究出他一句话就能讲清的事。独立不等于从零开始。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 5 }, { kind: add, key: independence, value: 2 }]
+    terminal: true
+
+  - id: c_xe3_first_commit
+    campaign: competition
+    day: 3
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: workbench, characters: [c_tech] }
+    setup: ["方远建好了仓库，第一个提交的说明是：\"init：冠军之路，始于hello world。\""]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+      - { kind: setFlag, key: repo_created }
+    dialogue:
+      - { speaker: 系统, text: "第一天只有空目录和一个README。所有庞大的东西都这样开始。" }
+    terminal: true
+
+  - id: c_xe2_email_hosting
+    campaign: competition
+    day: 2
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你收到一封邮件：《关于严禁使用校园网从事商业性服务及校外备案的通知》。里面提到：竞赛演示用临时域名需报备。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: setFlag, key: domain_noticed }
+    dialogue:
+      - { speaker: 系统, text: "政策邮件平时是垃圾，踩线上时是判决书。报备流程两分钟，现在就办。" }
+    terminal: true
+
+  - id: c_xe3_dorm_talk
+    campaign: competition
+    day: 3
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["熄灯后，室友问你：\"你们这比赛，奖金多少？\""]
+    choices:
+      - id: honest_answer
+        text: "一等奖两千，三个人分，还不够请客。但这个经历值钱。"
+        visibleResponse: 室友\"切\"了一声翻身睡去。你在黑暗里想了想，发现自己说的是真话——你想要的是把一件事做成。
+        hiddenEffects: [{ kind: add, key: independence, value: 3 }]
+      - id: brag
+        text: "很多，到时候请全宿舍。"
+        visibleResponse: 牛皮吹出去了。获奖后请客的预算被你悄悄记进了负债栏——如果没获奖，这债怎么还？
+        hiddenEffects: [{ kind: add, key: riskTolerance, value: 3 }]
+    terminal: true
+
+  - id: c_xe1_group_renamed
+    campaign: competition
+    day: 1
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你建好了三人小群。五分钟后方远把群名从\"竞赛讨论组\"改成了\"夺冠后备役\"。雨桐改成\"材料不会骗人小队\"。你又改回\"竞赛讨论组\"。三个人的审美在这一刻暴露无遗。"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 2 }
+    terminal: true
+
+  - id: c_xe2_signup_extend
+    campaign: competition
+    day: 2
+    type: system
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["答疑群通知：\"因系统维护，报名截止延长48小时。\"有队伍欢呼，你已经交完的你们毫无波澜。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "赶早的人不会被延期奖励，但也不会被意外惩罚。" }
+    terminal: true
+
+  - id: c_xe3_advisor_first_meet
+    campaign: competition
+    day: 3
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["第一次汇报。十五分钟计时开始。何老师手指敲着桌面。"]
+    choices:
+      - id: brief_3min
+        text: 三分钟讲完：选题方向/时间表/需要他什么
+        visibleResponse: 你两分五十秒讲完。何老师关掉计时器："选题明天我发你三个往届案例。另外，把'创新点'三个字从PPT里删掉，拿证据替换它。"
+        hiddenEffects: [{ kind: relationship, characterId: c_advisor, delta: 6 }, { kind: add, key: mentorTrust, value: 5 }, { kind: setFlag, key: advisor_case_incoming }]
+      - id: long_pitch
+        text: 从头讲起：比赛背景、我们的热情、远大愿景……
+        visibleResponse: 第十五分钟你讲到"愿景"，何老师打断："下一个周三，带着完成的东西来，别带着形容词。"你学到：他的耐心按进展计费。
+        hiddenEffects: [{ kind: relationship, characterId: c_advisor, delta: -3 }, { kind: add, key: academicDebt, value: 2 }]
+    terminal: true

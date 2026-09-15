@@ -88,6 +88,7 @@ endings:
         negative: 方远拒绝了，他说："我想继续读书。"
     projectFutureRules:
       - { key: a, condition: { kind: always }, text: 企业赞助让你的团队获得了真实项目经验和行业人脉。 }
+    reflection: 企业赞助和实习机会比奖杯更有长期价值。
     specialTags: [sponsor]
 
   - id: c_ext_media_coverage
@@ -155,4 +156,3 @@ endings:
       - { key: os, condition: { kind: always }, text: 开源版本成了你的活广告。三家企业主动联系你做定制开发。 }
     specialTags: [opensource]
     reflection: 开源不是放弃商业，是换一种方式建立信任。
-    specialTags: [opensource]
