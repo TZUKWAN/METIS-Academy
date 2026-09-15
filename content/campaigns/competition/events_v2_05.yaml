@@ -1,0 +1,136 @@
+# METIS Academy Competition V2 事件批次五 —— 隐藏/NG+ 补完
+events:
+  # ===== 隐藏 W1：评审约谈 =====
+  - id: cv2_w1_judge_side_talk
+    campaign: competition
+    day: 10
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 初赛评委的非正式点评, learning: 评审标准的真实口味 }
+    scene: { location: cafe, characters: [c_judge_prelim] }
+    setup: [“初赛结束，你在咖啡店撞见了初赛评委李老师。寒暄之后她犹豫了一下：”按理不能说太多……但你们初赛的失分点，说真的，是'问题验证'那一节。数据漂亮，但看不出你们真找过用户。“]
+    choices:
+      - id: probe_deeper
+        text: 放下面子，追问具体差在哪
+        visibleResponse: 李老师讲了二十分钟：“你们引用了 500 份问卷，但评委想看到 3 个有名有姓的用户故事。数字证明规模，故事证明真实。”你记了满满两页。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_judge_probe }
+          - { kind: add, key: userUnderstanding, value: 6 }
+        next: cv2_w1_after_probe
+      - id: defend_politely
+        text: 礼貌解释：问卷数据更科学
+        visibleResponse: 你解释了抽样方法。李老师点点头：“科学是好事。”然后看了眼手表。你失去了那二十分钟，也失去了决赛前的最后一张底牌。
+    learningPoint: 主动求取评审反馈，故事与数据缺一不可
+
+  - id: cv2_w1_after_probe
+    campaign: competition
+    day: 10
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 用户故事的补拍, learning: 从数据叙事到人物叙事 }
+    scene: { location: canteen, characters: [v_user_club] }
+    dialogue:
+      - { speaker: v_user_club, text: “你要采访我们社团？行啊——不过丑话说前头，我们用你们的工具，是真的因为好用，不是因为熟。” }
+      - { speaker: 系统, text: “三个有名有姓的用户故事进了你们的决赛材料。李老师那杯咖啡，是你们决赛之路最便宜的门票。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 3 }
+    next: cv2_d11_wire7
+
+  # ===== 隐藏 W2：队友的秘密求职 =====
+  - id: cv2_w2_tech_secret
+    campaign: competition
+    day: 13
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: tech 的秋招冲突, learning: 队友现实压力的体察 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: [“你无意间看到 tech 的屏幕角落开着秋招投递页面——比赛决赛日，正好是他一家目标公司的终面日。他没提，你也假装没看见。”]
+    choices:
+      - id: offer_flexibility
+        text: 主动调整分工：决赛周给他留出面试时间
+        visibleResponse: 你把 tech 的答辩部分砍掉一半，重心移到录播演示——他可以在面试间隙远程调代码。他没说谢谢，但那周他的代码提交量是平时的两倍。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_tech_supported }
+          - { kind: add, key: teamTrust, value: 6 }
+        next: cv2_w2_after_support
+      - id: demand_commitment
+        text: 比赛优先：要求他推掉面试
+        visibleResponse: tech 沉默了几秒，说“行”。他做到了，决赛他全程在场。但你总觉得，他看代码的眼神里多了一点别的东西——比如“如果当初”。
+    learningPoint: 看见队友的现实约束，弹性管理胜过强硬要求
+
+  - id: cv2_w2_after_support
+    campaign: competition
+    day: 13
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 双向的偿还, learning: 弹性换忠诚 }
+    scene: { location: lab, characters: [c_tech] }
+    dialogue:
+      - { speaker: c_tech, text: “面试通过了。我跟 HR 说了，入职推迟一个月——决赛重要。还有，”他晃了晃屏幕，“这是我熬夜写的自动压测脚本，演示时用得上。” }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: -3 }
+    next: cv2_d14_wire7
+
+  # ===== NG+ W3：上一世的评分表 =====
+  - id: cv2_ng_score_memory
+    campaign: competition
+    day: 16
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 16 }
+    purpose: { narrative: NG+ 评分维度的记忆, learning: 上辈子失分的结构性修补 }
+    scene: { location: lab, characters: [] }
+    setup: [“上一世的评分表你看过：创新性 8 分，可行性 6 分，商业性 5 分——商业性是你们的洼地。这一世还剩五天，补哪一块？”]
+    choices:
+      - id: business_patch
+        text: 五天突击商业性：付费验证+成本结构
+        visibleResponse: 你两天谈下三个校园代理意向书，两天做出成本测算表。决赛评分表上，商业性从 5 变成了 8——你盯着那三格，像看着三块补好的城墙。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_ng_business_patched }
+          - { kind: add, key: revenue, value: 4 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+      - id: double_innovation
+        text: 扬长避短：把创新性从 8 冲到 10
+        visibleResponse: 你给方案加了两项炫技创新。创新性确实涨了——但商业性还是 5。总分持平，短板依然在。扬长避短的前提，是短板不致命。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_ng_innovation_double }
+          - { kind: add, key: technicalDebt, value: 3 }
+    learningPoint: NG+ 评分记忆应指向结构性补强而非优势炫耀
+
+  # ===== 汇流 wire =====
+  - id: cv2_d11_wire7
+    campaign: competition
+    day: 11
+    type: story
+    trigger: { kind: day, day: 11, phase: end }
+    purpose: { narrative: D11 夜间复盘, learning: 用户故事的记录 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “三个用户故事的录音你听了三遍。第三遍时你发现：他们用的词，比你们的 PPT 里任何一句话都准。” }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 1 }
+
+  - id: cv2_d14_wire7
+    campaign: competition
+    day: 14
+    type: story
+    trigger: { kind: day, day: 14, phase: end }
+    purpose: { narrative: D14 夜间复盘, learning: 团队弹性的回报 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “睡前你想了想 tech 的面试，又想了想自己的期末。每个人都在打自己的仗——好团队的意义，就是让这些仗不打架。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 1 }

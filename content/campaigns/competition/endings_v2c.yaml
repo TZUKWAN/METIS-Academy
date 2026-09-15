@@ -1,0 +1,90 @@
+# METIS Academy Competition V2 结局批次六 —— 对应 events_v2_05.yaml 旗标
+endings:
+  - id: cv2_judge_probe_end
+    campaign: competition
+    title: 《三个有名有姓的用户》
+    mainResult: 评审视角的验证体系重构
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_judge_probe }
+    priority: 93
+    tier: hidden
+    baseText: 决赛材料里，你们把 500 份问卷压缩成了一页，腾出三页讲了三个用户的故事：大二社长王雨桐的活动复盘、研一助教陈默的作业统计、还有食堂阿姨看儿子用工具的困惑脸。终审评委在“问题真实性”一栏给了全场唯一满分。李老师那天咖啡店里说的“数字证明规模，故事证明真实”，被你抄在了团队 wiki 的首页——从那天起它就是你们的宪法第一条。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了在最尴尬的地方要反馈——被批评的现场，是信息密度最高的现场。 }
+          - { lte: 40, text: 那两页笔记你后来又翻了很多遍。每一遍都在想：如果当时我辩解成功了呢？不敢想。 }
+    characterEpilogueRules:
+      - characterId: c_judge_prelim
+        positive: 决赛评分公布后李老师给你发了条消息：“我说的话，你不但听了，还听懂了。”——这是她最高的褒奖。
+        neutral: 李老师照常出现在决赛评委席。她的表情告诉你：材料确实不一样了。
+        negative: 你把她的提醒当成了“非正式意见”没有重视。决赛失分点，还是那一节。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的所有材料从此固定有“人物页”——三个名字，三段对话，三张笑脸。 }
+    reflection: 数字证明规模，故事证明真实——评委会怀疑统计，但不会怀疑一个有名有姓的人。
+    lessonHint: 主动索取评审反馈，用用户故事补足数据叙事。
+    tone: positive
+    family: research_evidence
+    whyDistinct: 核心结果是“评审视角的验证重构”，由隐藏的咖啡店偶遇解锁。
+
+  - id: cv2_tech_supported_end
+    campaign: competition
+    title: 《双倍提交量》
+    mainResult: 弹性管理赢得队友全情投入
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_tech_supported }
+    priority: 93
+    tier: hidden
+    baseText: 决赛结束后的庆功宴，tech 喝多了，搂着你的肩膀说：“你知道吗，那天你跟我说'去面吧'的时候，我就决定——这个团队，值得我熬夜。”你突然明白：你给出的只是一周弹性的理解，收回来的是一个人把秋招和决赛都拼到极致的全情投入。管理书上说“要关心团队成员”，书上没说的是：关心的时机，往往在你最不该让步的时候。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你悟出了“刚性目标、弹性路径”的管理法。目标不动摇，路径随人调。 }
+          - { lte: 40, text: 那次的调整其实你纠结了一整晚。最后是“换位想一想”帮了你——共情是管理者的隐形武器。 }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: tech 入职后把第一笔工资的一部分换成了团队的升级设备，备注：“利息。”
+        neutral: tech 照常上班、照常帮你们维护代码。有些感谢不用说出口。
+        negative: 你要求他推掉面试的那次，他服从了——但半年后他告诉你，那是他离大厂最近的一次。距离，是留不住人时才懂的词。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们团队后来有条不成文的规矩：人生大事面前，比赛随时可以让路。说这话的底气，是那次学来的。 }
+    reflection: 弹性不是妥协，是投资——你对队友人生的理解，会变成他们对团队的双倍投入。
+    lessonHint: 体察队友现实约束，弹性分工换取全情投入。
+    tone: positive
+    family: team
+    whyDistinct: 核心结果是“弹性管理赢得全情投入”，由隐藏的秋招冲突事件解锁，与强硬要求路径在同一链互斥。
+
+  - id: cv2_ng_business_patched_end
+    campaign: competition
+    title: 《三格城墙》
+    mainResult: NG+ 短板的结构性修补
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_ng_business_patched }
+        - { kind: flag, key: kcv_ng_innovation_double, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 决赛评分表公布：商业性 5 变 8。你盯着那三格的变化，耳边响起上一世评委的评语：“创新性可圈可点，但商业化思考近乎空白。”这一次，三份校园代理意向书、一张成本测算表、一个真实的付费转化实验，把那句话堵死在了发生的路上。NG+ 修补短板的正确姿势：不是害怕它，是把它变成你的新城墙。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: 五天补短板的排程你精确到半天。上一世的失分项变成了这一世的排期表——记忆就是甘特图。 }
+          - { lte: 40, text: 商业性从 5 到 8 还差 2。你知道差在哪：缺一个真正付过钱的客户。下一世……不，没有下一世也要补上。 }
+    characterEpilogueRules:
+      - characterId: c_judge_final
+        positive: 终审评委翻到商业性材料时停了停：“和初赛比，你们的商业思考像换了个团队。”你说：“我们补了五天课。”他笑了。
+        neutral: 评委按表打分，商业性那栏的分数替你说了一切。
+        negative: 突击的商业性材料被评委问出一个细节漏洞。补丁补了墙，墙角还有缝——你不是全知，只是多知。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来的每个项目都先做“评分表推演”：评委会打分的每一格，我们现在的答案是什么？ }
+    reflection: NG+ 的评分记忆不该用来焦虑，该用来排工期——把失分点变成施工图。
+    lessonHint: NG+ 评分维度记忆应指向短板的结构性补强。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 短板修补的排期艺术”，仅 NG+ 可达，与炫技扬长路径在同一链互斥。
