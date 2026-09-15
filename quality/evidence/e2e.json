@@ -1,0 +1,12 @@
+{
+  "gate": "e2e",
+  "gitSha": "6740d3ed2f9711dc43fae7b95c484f65e0486105",
+  "pass": true,
+  "detail": "10/10 V2 flow tests passed (Title→CampaignSelect→Hub→Story→Terminal→Pause)",
+  "at": "2026-09-15T18:05:59.449Z",
+  "extra": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10
+  }
+}

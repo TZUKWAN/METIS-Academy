@@ -60,6 +60,8 @@ export function evaluateCondition(
       return cmp(state.relationships[cond.characterId] ?? 50, cond.value, cond.op);
     case "knowledge":
       return state.knowledge.includes(cond.id);
+    case "ngPlus":
+      return state.ngPlus >= 1;
     case "and":
       return cond.conditions.every((c) => evaluateCondition(state, c, index));
     case "or":

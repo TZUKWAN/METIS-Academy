@@ -1,5 +1,4 @@
 // E2E 运行器：先构建，再以 Playwright Electron 启动测试
-import { runMain } from "playwright/lib/program";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -18,6 +17,9 @@ if (build.status !== 0) {
   process.exit(1);
 }
 
-process.env.PLAYWRIGHT_JSON_OUTPUT_NAME = "";
-process.argv = [process.argv[0], "playwright", "test", "--config", path.join(__dirname, "playwright.config.ts")];
-runMain();
+const result = spawnSync("npx", ["playwright", "test", "--config", path.join(__dirname, "playwright.config.mts")], {
+  stdio: "inherit",
+  shell: true,
+  cwd: desktopRoot,
+});
+process.exit(result.status ?? 1);

@@ -1,0 +1,469 @@
+# 创业线 V2 扩展结局（延迟后果链 / 隐藏链 / NG+ 链）
+# 每条结局由独立的 key_v_* 旗标把守，旗标由专属决策链设置，需求区域互不重叠。
+endings:
+  # ===== 延迟后果链 A：错误访谈引导 → 假画像 → MVP 解决错问题 =====
+  - id: v_end2_ghost_persona
+    campaign: venture
+    title: 《为幽灵做的产品》
+    mainResult: 三十天都在为访谈里造出来的假用户做产品
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_ghost_persona }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 24 }
+    priority: 94
+    tier: special
+    baseText: |
+      复盘会上你把那份四十页的用户画像投影在墙上，然后在全场安静里说：这个人不存在。
+      她诞生于第5天一句诱导性的提问，活在Agent漂亮的措辞里，死在第24天小蔡那句"我没想过要"。
+      三十天里你写了三千行代码、改了十一版界面——服务对象是一位你亲手虚构的用户。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 60, text: "你在第24天杀死了画像。晚，但够狠——下个项目第一周你就问出了三个真实场景。" }
+          - { lte: 45, text: "复盘最后你还在犹豫：'也许画像只是偏了一点？'不。它从头就是编的。" }
+      - dimension: evidenceDiscipline
+        variants:
+          - { lte: 45, text: "证据链上每一条都写着'她说会用'。你到月底才明白，礼貌是这个行业最大的数据污染源。" }
+    characterEpilogueRules:
+      - characterId: v_user_student
+        positive: 小蔡说："其实那天我就想提醒你，问题问得不对。"你们重新做了一次访谈，这次问的全是'上次'。
+        neutral: 小蔡没再来用过工具。她只是在借笔记时多说了一句"加油"。
+        negative: 小蔡把你拉进了"别忘了交材料"的群通知列表——仅此而已的关系。
+      - characterId: v_ai_agent
+        positive: 你给Agent加了新规则：禁止生成用户画像，只允许整理原话。它执行得比想象中好。
+        neutral: 那份四十页的画像还躺在会话记录里，像一张烧不掉的作业纸。
+        negative: 你把画像第一页打印出来贴在墙上，标题是"Agent写的，我信了"。
+    projectFutureRules:
+      - { key: reask, condition: { kind: state, key: userUnderstanding, op: gte, value: 55 }, text: "下个项目第一天你就约了五个'上次什么时候'式访谈。画像再也没超过一页。" }
+      - { key: default, condition: { kind: always }, text: "你把'要是有个XX你会用吧'设成了输入法禁区。第一诫：不问未来，只问过去。" }
+    specialFlagSections:
+      - { flag: leading_interview, text: "第5天你选了诱导式提问。礼貌的点头声里，产品方向的航向就已经偏了十九天。" }
+    specialTags: [delayed_chain, warning]
+    reflection: 诱导性问题收到的不是答案，是礼貌。假画像比没有画像更贵，因为它有四十页。
+    lessonHint: 行为访谈问过去，不问未来
+    tone: mixed
+    family: problem_discovery
+    whyDistinct: 由"错误访谈引导→假画像→解决错问题"延迟链触达，核心结果是验证对象从第5天就错了，区别于无人问津或无付费等通用结局
+
+  - id: v_end2_sunk_pit
+    campaign: venture
+    title: 《两万行代码的沉没成本》
+    mainResult: 承认过早开发的方向错了，把代码冻结重走验证
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_sunk_pit }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 26 }
+    priority: 92
+    tier: special
+    baseText: |
+      第27天，你在代码仓库首页写下一行注释：// 冻结。理由：假设未验证。
+      两万行。阿斌熬的九个夜晚。全都在"先做出来再说"那句话里预支了。
+      你转身去做了三场手工服务，第一单赚了30块——比这两万行加起来验证的东西都多。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "按冻结键的那只手是你的，不是阿斌的。你替两个人的犹豫买了单。" }
+          - { lte: 45, text: "你总在想'如果当初听阿斌的'。可当初是你拍板的——承认这个，比冻结代码更难。" }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿斌把仓库设成了公开："就当教材。谁再跟我说'先写代码验证'，我把链接甩他脸上。"
+        neutral: 阿斌说："行吧，就当练手了。下次先访谈，真的。"
+        negative: 阿斌再也没主动提过这个项目。有些冻结的不是代码，是信任。
+    projectFutureRules:
+      - { key: unfreeze, condition: { kind: state, key: execution, op: gte, value: 60 }, text: "两个月后，验证过的新假设恰好能用上其中四千行。解冻那天你们没开庆功会，只是安静地把功能接了上去。" }
+      - { key: default, condition: { kind: always }, text: "那个仓库你留着没删。README只有一句：这里埋着'先做再说'的学费。" }
+    specialFlagSections:
+      - { flag: premature_build, text: "第7天你选择了直接开写。验证欠下的债，第13天开始计息，第27天连本带息。" }
+    specialTags: [delayed_chain]
+    reflection: 代码是验证方式里最贵的一种，而且它会上瘾——写代码的感觉太像进展了。
+    lessonHint: 最贵的验证方式是完整开发
+    tone: negative
+    family: technology_agent
+    whyDistinct: 由"过早开发→返工→沉没成本抉择"延迟链触达，核心结果是技术资产与验证纪律的冲突清算，独立于通用失败结局
+
+  - id: v_end2_free_trap
+    campaign: venture
+    title: 《一百个说谢谢的人》
+    mainResult: 免费策略引来错位人群，收费时遭遇反噬后重建边界
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_free_trap }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 22 }
+    priority: 92
+    tier: special
+    baseText: |
+      一百个用户，九十九句谢谢，零笔付款。
+      第6天你选择了全部免费，于是来的全是"有免费就用"的人；而真正愿意付钱的那群人，被"免费"两个字劝退了——他们觉得免费的东西不配进工作流。
+      收费公告发出去那晚，群里刷屏的是"变了"。你一条条回：没变，变的一直都不是你。
+    growthVariantRules:
+      - dimension: userUnderstanding
+        variants:
+          - { gte: 60, text: "你在第23天就分清了两种人：说谢谢的和肯掏钱的。后者只剩三个，但每一个都真实。" }
+          - { lte: 45, text: "你到现在也没想通：为什么最热情的用户最不肯付钱？" }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 老K私下转了你500块："不是买工具，是买你这次涨价没怂。"你把这笔钱记成了"信任收入"。
+        neutral: 老K说："免费挺好，收费也行，你定价那年我换届。"他永远是局外人。
+        negative: 老K在群里发了三个字："早说了。"然后退群了。
+    projectFutureRules:
+      - { key: relaunch, condition: { kind: state, key: evidenceDiscipline, op: gte, value: 55 }, text: "你把产品重新发布了一次，起价19。老用户五折。三个付费用户里有一个是当初说谢谢的——原来他一直在等一个付钱的理由。" }
+      - { key: default, condition: { kind: always }, text: "你在定价文档第一页写着：免费筛掉的不是付费意愿，是认真程度。" }
+    specialFlagSections:
+      - { flag: free_flood, text: "第6天'全部免费'的决定，让第23天的收费变成了一场众叛亲离。" }
+    specialTags: [delayed_chain]
+    reflection: 免费吸引来的往往不是用户，是路过的人。价格是一种筛选器，免费把筛网拆了。
+    lessonHint: 免费是最贵的定价
+    tone: mixed
+    family: user_understanding
+    whyDistinct: 由"免费用户画像错位"延迟链触达，核心结果是免费策略对用户结构的扭曲与收费反噬，独立于无付费等通用结局
+
+  - id: v_end2_price_anchor
+    campaign: venture
+    title: 《九块九的锚》
+    mainResult: 低价锚点引发涨价困局，最终用新旧分档破局
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_price_anchor }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 25 }
+    priority: 93
+    tier: special
+    baseText: |
+      第9天你把首发价定成9.9，拉新确实快——快到第15天你想涨到19时，王姐把聊天记录甩了回来："上回不还九块九？"
+      价格不是数字，是记忆。你花了十一天才学会：锚一旦抛下去，拉动的不是用户，是你全部的定价空间。
+      最后你留着9.9的老档，新开了一档带服务的19。老用户骂骂咧咧地留下来了，新用户根本不知道锚在哪儿。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "你在第26天的定价表旁边加了一列'当时为什么这么定'。每个数字都有了案底。" }
+          - { lte: 45, text: "你学会了招，没学会课：下次首发价，你还是会拍脑袋。" }
+    characterEpilogueRules:
+      - characterId: v_user_shop
+        positive: 王姐续了新档："十九就十九，你老实说值，我就信。"精明的人要的不是便宜，是稳定。
+        neutral: 王姐停在9.9的老档上，一年没升级，也一年没走。
+        negative: 王姐退了9.9："涨价可以，糊弄不行。"
+    projectFutureRules:
+      - { key: anchor_free, condition: { kind: always }, text: "下个项目首发价你定了3天试用量，零元。锚，这次抛在了'价值'上。" }
+    specialFlagSections:
+      - { flag: price_anchored_low, text: "第9天的9.9像一根钉进木板的锚，第15天你想起锚时，船已经锈在一起了。" }
+    specialTags: [delayed_chain]
+    reflection: 首发价不是促销，是用户记忆的地基。低价锚点省下的获客成本，会在涨价时连本带利还回去。
+    lessonHint: 定价锚点是一份长期合同
+    tone: mixed
+    family: pricing
+    whyDistinct: 由"定价锚点失误"延迟链触达，核心结果是低价锚对后续定价空间的锁死与分档破局，独立于其他定价类结局
+
+  - id: v_end2_api_burn
+    campaign: venture
+    title: 《凌晨三点的服务器账单》
+    mainResult: 成本失控一夜爆账，紧急限流救回现金流
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_api_burn }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 27 }
+    priority: 95
+    tier: special
+    baseText: |
+      凌晨3:17，手机屏幕的光打在你脸上：本月AI调用账单¥860，其中¥512来自三个用户。
+      你没接告警，没设限额，没记账——你只接了用户。现在账单替你把三件事一起补了课。
+      你花了一夜写限流、加缓存、写公告。天亮时你发出去的不是道歉信，是一张成本结构图。有三个用户回了一句：辛苦了，继续。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 65, text: "从崩溃到修复只用了六个小时。你 发现自己竟然有点感谢那笔账单——它来得早，来得小。" }
+          - { lte: 45, text: "限流是抄的模板，缓存是Agent写的。你只是按了合并。下次账单来的时候呢？" }
+    characterEpilogueRules:
+      - characterId: v_ai_agent
+        positive: 你给Agent加了第一条工作规则：任何批处理任务先报价再执行。它回复：已记住，这是您上次没让我做的事。
+        neutral: Agent凌晨三点陪你算了一小时成本，语气全程平稳。你有点羡慕它。
+        negative: 你翻到第11天的对话记录。它问过你"要接用量告警吗"。你回的是"先上线"。
+    projectFutureRules:
+      - { key: meter_first, condition: { kind: always }, text: "下个项目你在写第一行代码前先写了计费告警。成本不再是事后账，是设计约束。" }
+    specialFlagSections:
+      - { flag: no_meter, text: "第11天你拒绝了用量告警——'几块钱的事'。第28天凌晨，这件事变成了一封信。" }
+    specialTags: [delayed_chain]
+    reflection: 每一次API调用都在花钱，看不见的账单不是不存在，是在攒利息。
+    lessonHint: 成本要先于规模被看见
+    tone: mixed
+    family: unit_economics
+    whyDistinct: 由"API成本失控"延迟链触达，核心结果是未计量成本的一夜清算与自救，独立于单位经济报表类通用结局
+
+  - id: v_end2_creep_debt
+    campaign: venture
+    title: 《许愿池的二十个功能》
+    mainResult: 需求膨胀拖垮迭代后，砍到三件重获节奏
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_creep_debt }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 24 }
+    priority: 93
+    tier: special
+    baseText: |
+      第8天你随口答应的"下周就有"，到第14天变成了二十条需求清单，Agent已经自作主张排进了十二个迭代。
+      第25天的砍功能会上，你把清单投影出来，逐条问："谁愿意为这个付钱？"
+      二十条砍到最后剩三条。删掉的那十七个愿望没有一个主人提出抗议——原来需求膨胀的燃料，从来不是用户的坚持，是你不敢说不。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你学会的那句'这个先不做'，值回了三十天里所有加过的班。" }
+          - { lte: 45, text: "砍完你心里发虚：万一砍掉的是下一个微信呢？你看了看剩下的三条，安心了一点。" }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 老K看着砍剩的三条功能说："早这样不就完了？我要的从来就这三个。"
+        neutral: 老K的签到功能进了下期迭代。他说了句"哦"，没有惊喜，也没有失望。
+        negative: 老K要的那个功能被砍了。他说"行吧"，语气像在给这段合作收尾。
+      - characterId: v_user_student
+        positive: 小蔡说："功能少挺好的，我懒得学新的。"
+        neutral: 小蔡没注意到任何变化——她只用一个按钮。
+        negative: 小蔡用的那个按钮在"其他"分类里，每次都要点两下才找到。
+    projectFutureRules:
+      - { key: no_pool, condition: { kind: state, key: execution, op: gte, value: 60 }, text: "下个项目你没有许愿池。需求进清单前要先回答'谁付钱'，答不出就进'不做'清单——那个清单有三十七条。" }
+      - { key: default, condition: { kind: always }, text: "那十七个被砍的功能截图你存着。偶尔翻一翻，提醒自己许愿池的水有多深。" }
+    specialFlagSections:
+      - { flag: overpromise, text: "第8天那句'下周就有'，是二十个功能里第一个跳进许愿池的硬币。" }
+    specialTags: [delayed_chain]
+    reflection: 需求膨胀不是用户贪心，是创始人不敢拒绝。每一个"好的"都是未来两周的债。
+    lessonHint: MVP的M是最低，不是平均
+    tone: mixed
+    family: solution_mvp
+    whyDistinct: 由"需求膨胀"延迟链触达，核心结果是承诺失控到功能坟场的全过程与砍功能重建，独立于通用产品类结局
+
+  - id: v_end2_vanity_crash
+    campaign: venture
+    title: 《漂亮的曲线，漏水的水桶》
+    mainResult: 虚荣增长指标掩盖流失，最终直面留存真相
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_vanity_crash }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 26 }
+    priority: 94
+    tier: special
+    baseText: |
+      注册曲线一路向上，你在第16天还截过图发朋友圈。
+      第27天罗哥逼着你画留存曲线，你画了半小时——那是三十天里最安静的半小时。新增200，次周留存11。曲线在涨，桶在漏，而你一直在往里倒水。
+      你把那张朋友圈截图删了，换成了留存曲线。点赞少了七个，但这是你三十天里最诚实的一张图。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 60, text: "你现在看任何增长都先问一句：留下来了多少？这半句话值一门课的学费。" }
+          - { lte: 45, text: "你还是会忍不住先看新增数。矫正虚荣心比矫正指标难。" }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 罗哥把你那张留存曲线转进了社群案例库，配文："敢画这张图的，比敢晒注册数的少十倍。"
+        neutral: 罗哥说："十一也不算最差的。看见漏水，才算开始补。"
+        negative: 罗哥只回了一个字："嗯。"你知道那个嗯有多贵。
+    projectFutureRules:
+      - { key: retention_board, condition: { kind: state, key: evidenceDiscipline, op: gte, value: 60 }, text: "下个项目你的看板第一行是次周留存，注册数被你挪到了最后一行，字号调小了两号。" }
+      - { key: default, condition: { kind: always }, text: "那条被你删掉的朋友圈，有人截了图。你请他喝了杯奶茶，把原图要了回来。" }
+    specialFlagSections:
+      - { flag: vanity_metrics, text: "第10天你选择了只看注册数。虚荣指标不负责说谎，它只负责让你不想看别的。" }
+    specialTags: [delayed_chain, warning]
+    reflection: 增长可以掩盖留存，直到规模把漏洞放大到你补不起。留存是一切增长的许可证。
+    lessonHint: 先看留存，再看增长
+    tone: negative
+    family: retention
+    whyDistinct: 由"留存数据误读"延迟链触达，核心结果是虚荣指标对流失的长期掩盖与直面，独立于通用增长结局
+
+  - id: v_end2_fuzzy_split
+    campaign: venture
+    title: 《我们都以为对方在管客服》
+    mainResult: 合伙分工模糊酿成职责真空，对峙后重立规矩
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_fuzzy_split }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 25 }
+    priority: 91
+    tier: special
+    baseText: |
+      第26天的对峙没有吵架。你和阿斌把各自这三十天的工作清单摊在桌上，发现中间有个洞：客服。
+      你以为他在管，他以为你在管。三十七条用户消息在真空里躺了十一天，最久的一条等了九天。
+      那天你们写了合作以来的第一份轮值表。很薄的一页纸，重量是三十七条没回的消息。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "你先开口认领了客服。不是你的错更多，是你先不想再猜了。" }
+          - { lte: 45, text: "轮值表是你抄的模板。抄来的规矩撑不过下一次冲突——但至少有个开头。" }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿斌把轮值表设成了两个人手机共同的屏保。"丑话说在前面的日子，比猜来猜去舒服。"
+        neutral: 阿斌说："下次这种表，咱们第一天就写。"
+        negative: 阿斌在轮值表上签了字，然后开始接外面的私活。表格还在，人快不在了。
+    projectFutureRules:
+      - { key: split_doc, condition: { kind: always }, text: "你和阿斌的下一个项目，第一天就写了分工备忘。第二行是'吵架规则'——这是你加的。" }
+    specialFlagSections:
+      - { flag: fuzzy_split, text: "第7天那句'到时候再说'，让客服在三十七条消息里漂了十一天。" }
+    specialTags: [delayed_chain]
+    reflection: 分工模糊不是没有分工，是有两个想象中的分工。真空地带长出来的都是怨气。
+    lessonHint: 合伙第一件事是写清楚谁管什么
+    tone: mixed
+    family: founder_team
+    whyDistinct: 由"合伙人分工模糊"延迟链触达，核心结果是职责真空的代价与合伙规则重建，独立于散伙类通用结局
+
+  - id: v_end2_platform_wall
+    campaign: venture
+    title: 《一夜消失的入口》
+    mainResult: 全押单一平台被封禁后，自建触点完成迁移
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_platform_wall }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 23 }
+    priority: 94
+    tier: special
+    baseText: |
+      第16天早上八点，小程序后台弹出审核驳回：类目不符，暂停服务。你的全部用户、全部入口、全部新用户来源，都在那个小方块里。
+      罗哥说过的话在耳边响："平台送你的流量，平台随时可以收回去。"
+      你用六天做了三件事：导出用户名单、建自己的群、把服务搬进网页。第22天，六成用户跟着你搬了家。剩下四成，你一个一个发短信。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "迁移名单是你亲手一个个拉进群的。四百三个人名，你记住了七十个头像。" }
+          - { lte: 45, text: "迁移是Agent帮你批量做的。效率很高，但你知道自己欠着一次一个的道歉。" }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 罗哥在社群里转发了你的迁移复盘："看，被平台教育过的年轻人，第二天就学会了自建渠道。"
+        neutral: 罗哥说："六成回流，比我想的强。剩下四成别硬追，让他们自己找回来。"
+        negative: 罗哥问："第9天我说的那句话，你想起来的时机是不是晚了一点？"
+    projectFutureRules:
+      - { key: multi_channel, condition: { kind: always }, text: "新项目上线第一天就有三个触点：群、网页、还有一份每周更新的邮件通讯。老派，但没人能没收。" }
+    specialFlagSections:
+      - { flag: platform_allin, text: "第9天你把所有筹码押在了小程序上。第16天，庄家换了规则。" }
+    specialTags: [delayed_chain]
+    reflection: 平台是你的渠道，不是你的资产。入口在别人手里，你的用户就只是别人流量池里的鱼。
+    lessonHint: 依赖平台就要买平台保险——自己的触点
+    tone: mixed
+    family: pivot_scale
+    whyDistinct: 由"平台依赖→渠道封禁→迁移"延迟链触达，核心结果是单一渠道依赖的清算，独立于通用获客与转型结局
+
+  - id: v_end2_support_fire
+    campaign: venture
+    title: 《第四十八条未回复》
+    mainResult: 客服积压发酵成口碑危机，一对一灭火挽回信任
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_support_fire }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 22 }
+    priority: 91
+    tier: special
+    baseText: |
+      事情的起点小得可笑：第12天小蔡报了个bug，你想"攒到周末一起回"。
+      第19天，那条截图在两个群里被转发了九次，配文是"这工具出问题没人管"。四十八条未回复，像四十八根火柴。
+      你烧了两个晚上，四十八条消息一条一条回，每条都先说"这条等了X天，对不起"。第23天，最先发截图的那个用户在群里发了新消息："修复了，态度还行。"火灭了。你知道焦痕还在。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 65, text: "灭火之后你装了客服轮值和超时告警。同一种火，你打算让它没有第二次。" }
+          - { lte: 45, text: "你是靠熬夜灭的火。不设制度的话，下一场火只是时间问题。" }
+    characterEpilogueRules:
+      - characterId: v_user_student
+        positive: 小蔡说："其实我不是气bug，我是气没人理。现在有人理了，我还用。"
+        neutral: 小蔡后来报bug都会加一句"不急，你看到回我就行"。你宁愿她急。
+        negative: 小蔡再没发过消息。她的头像停在群成员列表第17位，安安静静。
+    projectFutureRules:
+      - { key: sla, condition: { kind: always }, text: "你在群公告写了一条服务承诺：所有反馈24小时内必回。你做得到，因为你再也不想数到四十八。" }
+    specialFlagSections:
+      - { flag: slow_support, text: "第12天那句'攒到周末一起回'，是四十八根火柴的第一根。" }
+    specialTags: [delayed_chain]
+    reflection: 用户能接受产品有bug，不能接受自己像空气。响应速度是客服的全部产品力。
+    lessonHint: 客服的口碑是复利计算的
+    tone: mixed
+    family: retention
+    whyDistinct: 由"客服响应慢口碑发酵"延迟链触达，核心结果是响应延迟酿成的信任危机与一对一修复，独立于通用流失结局
+
+  - id: v_end2_refund_storm
+    campaign: venture
+    title: 《第七封退款邮件》
+    mainResult: 重复扣款引发退款潮，全额退赔重建信任
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_refund_storm }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 26 }
+    priority: 93
+    tier: special
+    baseText: |
+      第一封退款邮件你回复得很官方。第三封开始手写。第七封，是个大一女生，她说这49块是她半星期的生活费，问能不能快一点。
+      事故源于一笔重复扣款，而你第13天定下的"概不退款"让每一笔都变成了一场拉锯。
+      你把七笔全退了，多转了每人十块钱话费。第28天，那个女生发来消息："东西修好了，我下个月再买。可以吗？"你盯着"可以吗"三个字看了很久。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "'概不退款'是你定的，'全额退'也是你定的。两次都是你，这才是复盘最难的部分。" }
+          - { lte: 45, text: "退款是阿斌帮你批量操作的。技术解决了问题，但规则是你定的——这个没法外包。" }
+    characterEpilogueRules:
+      - characterId: v_user_shop
+        positive: 王姐听说了退款的事，续费时多转了20："你退钱那下，比功能值钱。"
+        neutral: 王姐说："做生意的，谁没退过几单。别老提了。"
+        negative: 王姐的续费停在了那笔重复扣款的月份。她没说什么，只是没再续。
+    projectFutureRules:
+      - { key: refund_policy, condition: { kind: always }, text: "新定价页最下方多了一行加粗小字：七天无理由退款。你为这行字付过七封邮件的学费。" }
+    specialFlagSections:
+      - { flag: no_refund, text: "第13天你写下的'概不退款'，在第20天被一笔重复扣款测试了个彻底。" }
+    specialTags: [delayed_chain]
+    reflection: 退款政策是你和用户之间的信任合同。写得太硬的合同，事故当天就开始违约。
+    lessonHint: 退款不是损失，是信任的售后
+    tone: mixed
+    family: pricing
+    whyDistinct: 由"Refund风波"延迟链触达，核心结果是退款条款与事故叠加的信任清算，独立于其他定价与单位经济结局
+
+  - id: v_end2_two_fronts
+    campaign: venture
+    title: 《两条战线与一支残队》
+    mainResult: B端C端两头摇摆撕裂资源后，忍痛收敛战线
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_v_two_fronts }
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: day, op: gte, value: 25 }
+    priority: 95
+    tier: special
+    baseText: |
+      第11天你接下了校外三家奶茶店的B端试点——"先做着，不冲突嘛"。第18天你知道了什么叫冲突：B端要定制排班逻辑，C端要修转发的bug，而你只有一个人和半个阿斌。
+      两边都在催，两边都觉得你不上心。第26天你算了一笔账：B端试点若成了，是门年付五万的生意；C端若丢了，是你从第1天攒下的全部真实用户。
+      你退了B端的定金。奶茶店老板娘愣了三秒，说了句"小伙子，想清楚就好"。那天晚上C端更新上了线，评论区只有六条回复，你每一条都回了。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: "退定金的电话是你自己打的。没有人逼你，也没有人替你——这正是重点。" }
+          - { lte: 45, text: "你退定金前问了一遍罗哥、问了一遍阿斌、问了一遍妈妈。答案早就有了，你只是不敢按。" }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 罗哥说："敢退定金的，比敢接定金的少。你这道题，答得比大多数三十岁的好。"
+        neutral: 罗哥说："两条战线不是不行，是你现在没本钱。记着今天的选择，等你有钱了再犯一遍。"
+        negative: 罗哥摇头："我见过太多人死在'不冲突嘛'这四个字上。你只是活下来例子里的一个。"
+      - characterId: v_user_shop
+        positive: 王姐听说你推了B端，特意来店里找了你一次："我们小店的东西，本来就该先做给懂我们的人。"
+        neutral: 王姐"哦"了一声，继续摇她的奶茶。C端的按钮她今天又点了一次。
+        negative: 王姐觉得你"格局小"。你们有一周没说话，工具的日活反而涨了。
+    projectFutureRules:
+      - { key: focus_note, condition: { kind: always }, text: "你把那笔退掉的定金金额写在显示器边上。不是纪念损失，是提醒聚焦的价格——有时候它真的要花钱。" }
+    specialFlagSections:
+      - { flag: route_swing, text: "第11天那句'先做着不冲突'，是两条战线各自递给你的第一份账单。" }
+    specialTags: [delayed_chain]
+    reflection: 战略摇摆的代价从来不是选错，而是同时要。资源不够的时候，两头下注就是两头落空。
+    lessonHint: 聚焦是一种止损
+    tone: mixed
+    family: pivot_scale
+    whyDistinct: 由"B2B/B2C路线摇摆"延迟链触达，核心结果是双战线资源撕裂与主动收敛，独立于通用转型与散伙结局
+
+  # ===== 补充：链B其实触发于第7天，链L触发于第11天——终点事件均在第24-28天结算 =====

@@ -27,10 +27,11 @@ const NAV: { id: Page; label: string; icon: React.ReactNode }[] = [
 ];
 
 export function App(): React.JSX.Element {
-  const { page, setPage, toast, contentIssues, index, onboardingDone, state, composed } = useGame();
+  const { page, setPage, toast, contentIssues, index, onboardingDone, state, composed, newGame, showToast } = useGame();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [gamePhase, setGamePhase] = useState<GamePhase>("title");
   const [showPause, setShowPause] = useState(false);
+  const [showCampaignSelect, setShowCampaignSelect] = useState(false);
 
   useEffect(() => {
     if (!onboardingDone && index.campaigns.size > 0) setShowOnboarding(true);
@@ -57,11 +58,16 @@ export function App(): React.JSX.Element {
   }, [gamePhase]);
 
   const startNewGame = (campaignId: string) => {
-    setGamePhase("ingame");
-    setPage("story");
+    newGame(campaignId, "你", false);
+    setGamePhase("hub");
   };
 
   const continueGame = () => {
+    if (!state) {
+      showToast("没有找到存档——先开始新的周目吧");
+      setTimeout(() => showToast(null), 2200);
+      return;
+    }
     setGamePhase("ingame");
     setPage("story");
   };
@@ -83,11 +89,18 @@ export function App(): React.JSX.Element {
         <TitleScreen
           hasSave={!!state}
           onContinue={continueGame}
-          onNewGame={() => { setGamePhase("hub"); }}
+          onNewGame={() => { setShowCampaignSelect(true); }}
           onEndingArchive={() => { setGamePhase("hub"); }}
           onSettings={gotoSettings}
           onCredits={() => { setGamePhase("credits"); }}
         />
+        {showCampaignSelect && (
+          <CampaignSelect
+            campaigns={[...index.campaigns.values()].map((c) => ({ id: c.id, title: c.title, subtitle: c.subtitle, description: c.description }))}
+            onSelect={(id) => { setShowCampaignSelect(false); startNewGame(id); }}
+            onClose={() => setShowCampaignSelect(false)}
+          />
+        )}
         {toast && (
           <div className="absolute left-1/2 top-4 z-50 -translate-x-1/2 rounded-md bg-ink-700 px-4 py-2 text-sm shadow-lg">{toast}</div>
         )}
@@ -135,7 +148,7 @@ export function App(): React.JSX.Element {
   // ===== HUB SCREEN =====
   if (gamePhase === "hub") {
     const hubObjects = [
-      { id: "story", label: "剧情", description: "继续当前故事线", icon: <BookIcon size={20} style={{ color: "var(--accent-text)" }} />, onClick: () => { setGamePhase("ingame"); setPage("story"); } },
+      { id: "story", label: "剧情", description: "继续当前故事线", icon: <BookIcon size={20} style={{ color: "var(--accent-text)" }} />, onClick: () => { if (!state) { showToast("先从标题画面开始新的周目"); setTimeout(() => showToast(null), 2200); return; } setGamePhase("ingame"); setPage("story"); } },
       { id: "terminal", label: "终端", description: "Agent 工作台与终端", icon: <Terminal size={20} style={{ color: "var(--accent-text)" }} />, onClick: () => { setGamePhase("ingame"); setPage("workbench"); } },
       { id: "archive", label: "档案", description: "查看你的资产和成果", icon: <FolderOpen size={20} style={{ color: "var(--accent-text)" }} />, onClick: () => { setGamePhase("ingame"); setPage("studio"); } },
       { id: "skills", label: "能力", description: "Agent 能力图谱", icon: <NetworkIcon size={20} style={{ color: "var(--accent-text)" }} />, onClick: () => { setGamePhase("ingame"); setPage("skills"); } },
@@ -207,8 +220,9 @@ export function App(): React.JSX.Element {
               <div className="space-y-1">
                 {[
                   { label: "返回游戏", action: () => setShowPause(false) },
-                  { label: "标题画面", action: () => { setShowPause(false); setGamePhase("title"); } },
-                  { label: "设置", action: () => { setShowPause(false); gotoSettings(); } },
+                  { label: "返回基地", action: () => { setGamePhase("hub"); } },
+                  { label: "标题画面", action: () => { setGamePhase("title"); } },
+                  { label: "设置", action: () => { gotoSettings(); } },
                 ].map((item) => (
                   <button key={item.label} onClick={() => { item.action(); setShowPause(false); }}
                     className="w-full rounded-lg px-4 py-2.5 text-left text-sm transition-colors hover:bg-white/6"
@@ -229,8 +243,7 @@ export function App(): React.JSX.Element {
   );
 }
 
-function EndingOverlay(): React.JSX.Element {
-  const { composed, fateReview, closeEnding, setPage } = useGame();
+function EndingOverlay(): React.JSX.Element {  const { composed, fateReview, closeEnding, setPage } = useGame();
   if (!composed) return <div />;
   sfx.ending();
   return (
@@ -277,6 +290,50 @@ function EndingOverlay(): React.JSX.Element {
         )}
         <div className="mt-5 flex gap-2">
           <button className="btn-primary" onClick={() => { closeEnding(); setPage("home"); }}>返回首页</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CampaignSelect({ campaigns, onSelect, onClose }: {
+  campaigns: Array<{ id: string; title: string; subtitle: string; description: string }>;
+  onSelect: (campaignId: string) => void;
+  onClose: () => void;
+}): React.JSX.Element {
+  const [hovered, setHovered] = useState<string | null>(null);
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6" style={{ background: "rgba(0,0,0,0.75)" }} data-testid="campaign-select">
+      <div className="w-full max-w-4xl rounded-2xl border p-8" style={{
+        background: "var(--glass-bg-overlay)", borderColor: "var(--glass-border)",
+        backdropFilter: "blur(34px)", boxShadow: "0 24px 80px rgba(0,0,0,0.5)",
+      }}>
+        <p className="text-center text-xs font-semibold uppercase tracking-[0.3em]" style={{ color: "var(--text-muted)" }}>SELECT YOUR STORY</p>
+        <h2 className="mt-2 text-center font-serif text-2xl font-bold" style={{ color: "var(--text-primary)" }}>选择你的故事线</h2>
+        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+          {campaigns.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => onSelect(c.id)}
+              onMouseEnter={() => setHovered(c.id)}
+              onMouseLeave={() => setHovered(null)}
+              data-testid={`campaign-${c.id}`}
+              className="group rounded-xl border p-5 text-left transition-all"
+              style={{
+                borderColor: hovered === c.id ? "var(--accent)" : "var(--glass-border)",
+                background: hovered === c.id ? "rgba(99,102,241,0.12)" : "rgba(255,255,255,0.04)",
+                transform: hovered === c.id ? "translateY(-3px)" : "none",
+              }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--accent-text)" }}>{c.subtitle}</p>
+              <h3 className="mt-2 font-serif text-lg font-bold leading-snug" style={{ color: "var(--text-primary)" }}>{c.title}</h3>
+              <p className="mt-3 line-clamp-4 text-xs leading-relaxed" style={{ color: "var(--text-secondary)" }}>{c.description}</p>
+              <p className="mt-4 text-xs font-semibold" style={{ color: "var(--accent-text)" }}>开始 →</p>
+            </button>
+          ))}
+        </div>
+        <div className="mt-6 text-center">
+          <button onClick={onClose} className="btn-ghost text-xs">返回</button>
         </div>
       </div>
     </div>

@@ -1,0 +1,603 @@
+# 创业线 V2 扩展事件 01——十二条延迟后果链（上半：A-F）
+# 结构：早期决策（设旗标+挂延迟）→ 中期延迟事件（世界响应）→ 后期延迟决策（设 key_v_* 旗标，对接结局）
+events:
+  # ===== 链A：错误访谈引导 =====
+  - id: v2ca1_leading
+    campaign: venture
+    day: 5
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 3 }
+    purpose: { learning: 诱导性问题制造假信号，行为式访谈问过去不问未来 }
+    scene: { location: library, characters: [v_user_student] }
+    setup: ["访谈约在小蔡自习的间隙。她有点困，但很客气。你面前有几种问法。"]
+    dialogue:
+      - { speaker: v_user_student, text: "你问吧，我尽量答。就是别太长哈，我单词还没背完。", mood: neutral }
+      - { speaker: v_user_student, text: "上次整理真题？就……上上周吧，把近十年的数学卷按章节拆，弄了一下午，膝盖都坐麻了。" }
+    choices:
+      - id: lead_on
+        text: 问"要是有AI自动整理真题，你会用吧？"
+        visibleResponse: |
+          小蔡点头："应该会吧，听起来挺方便的。"
+          你得到了一个漂亮的答案，和零条信息。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 5 }
+          - { kind: add, key: userUnderstanding, value: -4 }
+          - { kind: setFlag, key: leading_interview }
+        delayed:
+          - { eventId: v2ca2_persona, onDay: 10 }
+      - id: behavior_ask
+        text: 改问"上次整理真题是在哪儿、用什么弄的？"
+        visibleResponse: |
+          场景一点点浮出来：宿舍熄灯后用手机拍PPT，回寝室对着照片手动抄章节。
+          三个卡点：拍照糊、手动分类慢、第二天就懒得弄。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 8 }
+          - { kind: setFlag, key: behavior_ask_done }
+        unlockKnowledge: [kc_v_behavior_interview]
+      - id: push_buy
+        text: 跳过场景直接问"收费九块九你买吗"
+        visibleResponse: |
+          小蔡愣了两秒："呃……到时候再看吧。"
+          她开始看表。访谈在第十分钟结束了，你既没拿到场景，也没拿到付费信号。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: -4 }
+          - { kind: relationship, characterId: v_user_student, delta: -3 }
+    learningPoint: 问"上次什么时候"，别问"会不会用"
+    terminal: true
+
+  - id: v2ca2_persona
+    campaign: venture
+    day: 10
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——诱导访谈催生假画像, learning: AI会把礼貌当数据 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: ["Agent根据访谈记录生成了一份四十页的用户画像，措辞完美，逻辑自洽。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "画像完成：效率焦虑型考研人，18-24岁，付费意愿强，核心诉求是'一站式智能整理'。建议按此定向开发。", mood: pleased }
+      - { speaker: 系统, text: "画像的每一页都来自那句'应该会吧'。礼貌，是这个行业最大的数据污染源。" }
+    automaticEffects:
+      - { kind: add, key: aiDependence, value: 4 }
+      - { kind: setFlag, key: persona_built }
+    terminal: true
+
+  - id: v2ca3_wrong_mvp
+    campaign: venture
+    day: 24
+    type: decision
+    keyDecision: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——MVP解决的是假问题, learning: 画像撒谎时只有真实场景能救你 }
+    scene: { location: library, characters: [v_user_student] }
+    setup: ["上线一周。画像里的'效率焦虑考研人'一个都没来。小蔡看了一眼就关掉了。"]
+    dialogue:
+      - { speaker: v_user_student, text: "这个功能……我从来没想过要。你当初问我的，好像不是这个吧？", mood: surprised }
+      - { speaker: v_user_student, text: "我那天说'会用吧'，是因为你听起来很期待。不好意思啊。" }
+    choices:
+      - id: rebuild_ask
+        text: 删掉四十页画像，重做三轮行为访谈
+        visibleResponse: |
+          你把画像拖进了回收站，只留下一页纸：三个真实场景，全部来自"上次什么时候"。
+          小蔡这回讲了很多——原来她的真痛点是"第二天就懒得弄"，是坚持问题，不是效率问题。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 8 }
+          - { kind: relationship, characterId: v_user_student, delta: 4 }
+          - { kind: setFlag, key: key_v_ghost_persona }
+      - id: push_more
+        text: 再加三个功能，总能猜中一次
+        visibleResponse: |
+          Agent连夜排了三个新功能。又一周过去了，画像里的用户还是没有出现。
+          你在猜一个不存在的人的心思。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 5 }
+          - { kind: add, key: aiDependence, value: 3 }
+      - id: blame_users
+        text: 是考研人不用工具，换个人群再试
+        visibleResponse: |
+          你把矛头指向人群。画像、功能、话术原封不动，只换了个标签。
+          第28天复盘时你会发现：换过的人群里，同样没有人来。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+          - { kind: setFlag, key: persona_built }
+    learningPoint: 假画像的账，第24天清算
+    terminal: true
+
+  # ===== 链B：过早开发 =====
+  - id: v2cb1_early_dev
+    campaign: venture
+    day: 7
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 3 }
+    purpose: { learning: 完整开发是最贵的验证方式 }
+    scene: { location: dorm, characters: [v_partner] }
+    setup: ["阿斌抱着笔记本电脑来问你：方向定了吗？没定的话，我劝你先别让我写代码。"]
+    dialogue:
+      - { speaker: v_partner, text: "先说好，我不是不想干。我是怕白干。你想验证的那个问题，非得用代码验证吗？", mood: neutral }
+      - { speaker: v_partner, text: "我实习见过一个组，写了一个月，上线那天发现用户要的是另一个东西。一个月，五个人。" }
+    choices:
+      - id: start_coding
+        text: "别磨叽了，直接开写，边写边验证"
+        visibleResponse: |
+          阿斌叹了口气，打开了IDE："行，听你的。丑话说前面——这周写的，可能下周就作废。"
+          第7天的你觉得自己在创造；第13天的你会知道自己在一半的废墟上施工。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 4 }
+          - { kind: setFlag, key: premature_build }
+          - { kind: relationship, characterId: v_partner, delta: -2 }
+        delayed:
+          - { eventId: v2cb2_rewrite, onDay: 13 }
+      - id: landing_test
+        text: 先做个落地页收邮箱，一周看转化
+        visibleResponse: |
+          阿斌松了口气："这个我半天就能搭好。"
+          落地页第二天上线，第四天收到11个邮箱。11个真实的人，比11行代码值钱。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: setFlag, key: landing_first }
+      - id: manual_sim
+        text: 用人肉服务模拟一遍流程，先收三个案例
+        visibleResponse: |
+          你花两天手动帮三个人做了同样的事，收了每人10块。
+          过程表记了四页纸——这就是将来产品的需求文档，而且每一行都有出处。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 6 }
+          - { kind: add, key: revenue, value: 30 }
+    learningPoint: 代码是最后的验证手段
+    terminal: true
+
+  - id: v2cb2_rewrite
+    campaign: venture
+    day: 13
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——假设错了代码返工, learning: 未验证假设的利息是返工 }
+    scene: { location: dorm, characters: [v_partner] }
+    setup: ["核心假设在第12天的用户测试里被证伪。已写的一半代码，有三成建立在错误前提上。"]
+    dialogue:
+      - { speaker: v_partner, text: "（合上笔记本）通知模块白写了，得按新流程重构。我说什么来着——不心疼是假的。", mood: angry }
+      - { speaker: v_partner, text: "下次能不能，先把话说清楚再让我动手？我不是怕累，我是怕累得没意义。" }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: 5 }
+      - { kind: relationship, characterId: v_partner, delta: -3 }
+      - { kind: setFlag, key: rewrite_pain }
+    terminal: true
+
+  - id: v2cb3_sunk
+    campaign: venture
+    day: 27
+    type: decision
+    keyDecision: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——沉没成本的最终清算, learning: 冻结错误方向是止损不是失败 }
+    scene: { location: dorm, characters: [v_partner] }
+    setup: ["仓库已经两万行。新验证的假设和现有架构冲突：继续填坑，或者冻结转向。"]
+    dialogue:
+      - { speaker: v_partner, text: "我算过了，按新方向改，等于重写七成。不按新方向改，等于接着错。你选吧，我都行。", mood: serious }
+      - { speaker: v_partner, text: "就一句话——别因为'都写这么多了'就接着写。这五个字害死过我这学期的三个晚上。" }
+    choices:
+      - id: freeze_code
+        text: 冻结仓库，转身重走验证
+        visibleResponse: |
+          你在仓库首页写下一行注释：// 冻结。理由：假设未验证。
+          阿斌盯着那行字看了几秒，笑了："行。这次我陪你去访谈，我记录。"
+        hiddenEffects:
+          - { kind: relationship, characterId: v_partner, delta: 5 }
+          - { kind: setFlag, key: key_v_sunk_pit }
+      - id: keep_filling
+        text: 都两万行了，接着填坑
+        visibleResponse: |
+          你选择继续。第28天你填完最后一个坑，用户测试的结果和第12天一模一样。
+          两万四千行。多出来的四千行，是"不甘心"的字节数。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 6 }
+          - { kind: add, key: academicDebt, value: 4 }
+      - id: half_way
+        text: 折中：改一半，剩下一半以后再说
+        visibleResponse: |
+          改出来一个四不像：一半新逻辑一半旧架构，谁也不敢动。
+          第29天一个不起眼的bug，就是从"以后再说"的那一半里爬出来的。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 7 }
+    learningPoint: 沉没成本不是继续的理由
+    terminal: true
+
+  # ===== 链C：免费用户画像错位 =====
+  - id: v2cc1_free_all
+    campaign: venture
+    day: 6
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 3 }
+    purpose: { learning: 免费是最强的筛选器拆解 }
+    scene: { location: club_room, characters: [v_user_club] }
+    setup: ["工具还没做完，两个社团已经在问价。老K给了你一句话和一个眼神。"]
+    dialogue:
+      - { speaker: v_user_club, text: "我给你交个底：你要全免费，来的是占便宜的；你收费，来的是办事的。你自己挑想要哪种。", mood: serious }
+      - { speaker: v_user_club, text: "别跟我说'先积累用户'。占便宜的用户积累再多，收费那天跑得比谁都快。我见得多了。" }
+    choices:
+      - id: free_everything
+        text: 全部免费，先把用户量冲起来
+        visibleResponse: |
+          公告发出去两小时，来了三十个人。群里一片"感谢大佬"。
+          你没注意到的是：愿意认真填需求问卷的，只有两个。
+        hiddenEffects:
+          - { kind: setFlag, key: free_flood }
+          - { kind: add, key: users, value: 10 }
+        delayed:
+          - { eventId: v2cc2_crowd, onDay: 12 }
+      - id: filter_seed
+        text: 免费但设门槛：要填需求问卷才能用
+        visibleResponse: |
+          三十个人里，十一个填了问卷。其中三个写满了每一栏。
+          这三个人的需求，后来成了你一半的功能列表。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 6 }
+          - { kind: setFlag, key: seed_filter }
+      - id: charge_early
+        text: 直接收9块9，只服务愿意付钱的人
+        visibleResponse: |
+          第一天：0人。第三天：2人。第六天：5人。
+          人少，但每个人用得都很认真——付过钱的认真，和夸一句的认真，不是一个认真。
+        hiddenEffects:
+          - { kind: add, key: revenue, value: 45 }
+          - { kind: setFlag, key: early_paid }
+    learningPoint: 你吸引谁，由你免费给什么决定
+    terminal: true
+
+  - id: v2cc2_crowd
+    campaign: venture
+    day: 12
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——免费引来错位人群, learning: 用户结构由获客方式决定 }
+    scene: { location: club_room, characters: [v_user_club] }
+    setup: ["注册破一百。但你翻了翻后台：日活6，填过需求问卷的3，问'能不能再免费续一年'的41。"]
+    dialogue:
+      - { speaker: v_user_club, text: "（翻了翻用户群）这群里 ninety 都是来白嫖的。你要的那几个正经社团骨干，看到这阵仗，反而不进来了。", mood: neutral }
+      - { speaker: 系统, text: "免费吸引来的不是目标用户，是价格敏感型路过者。他们不坏，只是不是你要找的人。" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: -2 }
+      - { kind: setFlag, key: wrong_crowd }
+    terminal: true
+
+  - id: v2cc3_backlash
+    campaign: venture
+    day: 23
+    type: decision
+    keyDecision: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——收费时的免费反噬, learning: 收费公告是免费策略的最终账单 }
+    scene: { location: club_room, characters: [v_user_club] }
+    setup: ["服务器月底到期，你必须收费。公告发出去十分钟，群里炸了四十条。"]
+    dialogue:
+      - { speaker: v_user_club, text: "（把手机推给你）看见没，'变了''割韭菜''用爱发电不好吗'。这顿火，第6天就注定了。", mood: serious }
+      - { speaker: v_user_club, text: "现在你有三条路：怂回去，硬扛，或者给我个'老用户通道'。想清楚再发。" }
+    choices:
+      - id: hold_price
+        text: 坚持收费，给老用户留免费基础档
+        visibleResponse: |
+          你发了第二条公告：基础功能永久免费，完整版19/学期，老注册用户送一个月完整版。
+          骂声停了大半。三天后，7个人买了完整版——其中2个是当初填过问卷的。
+        hiddenEffects:
+          - { kind: add, key: revenue, value: 133 }
+          - { kind: setFlag, key: key_v_free_trap }
+      - id: back_free
+        text: 算了，继续免费，另想办法赚钱
+        visibleResponse: |
+          你撤回了公告。群里一片"大佬大气"。
+          服务器费还没着落。你把问题推迟了，没有解决。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+      - id: charge_hard
+        text: 硬收，爱用不用
+        visibleResponse: |
+          你发了公告，然后关掉了群通知。
+          当晚退群23人。留下的人里，有两个后来付了费——但群里再也没人说话了。
+        hiddenEffects:
+          - { kind: add, key: revenue, value: 38 }
+          - { kind: relationship, characterId: v_user_club, delta: -4 }
+    learningPoint: 收费公告是免费策略的账单
+    terminal: true
+
+  # ===== 链D：定价锚点失误 =====
+  - id: v2cd1_anchor
+    campaign: venture
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 3 }
+    purpose: { learning: 首发价是用户记忆的锚 }
+    scene: { location: shop, characters: [v_user_shop] }
+    setup: ["王姐的奶茶店，第一个真实客户场景。你要报出第一个价格。"]
+    dialogue:
+      - { speaker: v_user_shop, text: "多少钱？先说好，我这小店经不起月费，一单一结最好。", mood: neutral }
+      - { speaker: v_user_shop, text: "（扫了你一眼）小伙子，你报九块九，我这辈子就只认九块九。报之前想清楚。" }
+    choices:
+      - id: price_99
+        text: 首发价9.9，先跑量拉口碑
+        visibleResponse: |
+          王姐当场付了钱："行，九块九，我认了。"
+          拉新确实快。你把锚抛进了水里，还没意识到它会在第15天拽住你的船。
+        hiddenEffects:
+          - { kind: add, key: revenue, value: 10 }
+          - { kind: setFlag, key: price_anchored_low }
+        delayed:
+          - { eventId: v2cd2_trap, onDay: 15 }
+      - id: price_19
+        text: 报19，配一个"不满意全额退"
+        visibleResponse: |
+          王姐皱眉算了一会儿："十九……行，看你敢退，我信你一回。"
+          第一单少了9.1块，但你保住了全部定价空间。
+        hiddenEffects:
+          - { kind: add, key: revenue, value: 19 }
+          - { kind: relationship, characterId: v_user_shop, delta: 3 }
+          - { kind: setFlag, key: price_honest }
+      - id: price_free
+        text: 第一单免费，谈个"介绍三家店"的交换
+        visibleResponse: |
+          王姐介绍了两家店，其中一家后来成了付费客户。
+          但她自己的续费谈判从此变得艰难——免费的货，最难卖出价钱。
+        hiddenEffects:
+          - { kind: add, key: users, value: 2 }
+          - { kind: setFlag, key: free_first_order }
+    learningPoint: 第一个价格是长期合同
+    terminal: true
+
+  - id: v2cd2_trap
+    campaign: venture
+    day: 15
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——低价锚锁死涨价空间, learning: 涨价是在和用户的记忆谈判 }
+    scene: { location: shop, characters: [v_user_shop] }
+    setup: ["成本核算出来了：9.9一单，扣掉AI调用和手续费，毛利4块。你想涨到19。"]
+    dialogue:
+      - { speaker: v_user_shop, text: "（把聊天记录翻出来）上回不还九块九？我推荐隔壁两家也是按九块九说的。你现在涨到十九，我这个人怎么当？", mood: angry }
+      - { speaker: v_user_shop, text: "不是我抠。你这一涨，我成了帮你骗熟人的人。你说怎么办吧。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: -4 }
+      - { kind: setFlag, key: anchor_trap }
+    terminal: true
+
+  - id: v2cd3_anchor_bill
+    campaign: venture
+    day: 26
+    type: decision
+    keyDecision: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——锚点困局的破解抉择, learning: 老价格可以锁定，新价值另起一档 }
+    scene: { location: shop, characters: [v_user_shop] }
+    setup: ["你带着新方案来见王姐：9.9档保留但只含基础识别，新增19档含自动排班和异常提醒。"]
+    dialogue:
+      - { speaker: v_user_shop, text: "（听你说完）……就是说，九块九还是九块九，好的东西另外给钱？", mood: neutral }
+      - { speaker: v_user_shop, text: "行，这话说得敞亮。我上19的。但丑话前头——自动排班要是不好使，我下个月退回九块九。" }
+    choices:
+      - id: new_tier
+        text: 推出19新档，9.9老档保留但冻结
+        visibleResponse: |
+          王姐成了第一个19档用户。她还主动在店老板群里说了一句"新版好用"。
+          你终于明白：锚不用拔出来，在锚旁边再抛一个更大的就行。
+        hiddenEffects:
+          - { kind: add, key: revenue, value: 38 }
+          - { kind: relationship, characterId: v_user_shop, delta: 4 }
+          - { kind: setFlag, key: key_v_price_anchor }
+      - id: force_migrate
+        text: 全面上调，9.9直接下架
+        visibleResponse: |
+          三个老客户走了两个。留下的王姐没走，但加了条件："以后每单，你亲自来给我盯一次。"
+          钱多赚了些，你的时间不再属于自己。
+        hiddenEffects:
+          - { kind: add, key: revenue, value: 57 }
+          - { kind: relationship, characterId: v_user_shop, delta: -2 }
+      - id: stay_99
+        text: 认了，永远9.9，靠量取胜
+        visibleResponse: |
+          你把9.9焊死了。单量确实在涨，毛利却在变薄。
+          第29天你算了一笔账：按这个毛利，你一个月要跑四百单才等于别人一百单。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 锚点困局用新档位解，不用蛮力解
+    terminal: true
+
+  # ===== 链E：API成本失控 =====
+  - id: v2ce1_meter
+    campaign: venture
+    day: 11
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 3 }
+    purpose: { learning: 计量与告警是成本的第一道闸 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["上线前一天。Agent列出三项收尾工作，其中一项标着'建议但非必须'。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "收尾清单：①部署 ②域名解析 ③用量告警与限额。第三项预计耗时40分钟，可以延后。", mood: neutral }
+      - { speaker: v_ai_agent, text: "补充说明：当前无限额的情况下，单用户每日调用理论上无上限。按我的估算，风险较低。" }
+    choices:
+      - id: add_meter
+        text: 接告警和限额，40分钟就40分钟
+        visibleResponse: |
+          你接了告警，设了单用户日限额200次。
+          第17天这个限额自动拦下了一个循环脚本——你没失眠，因为40分钟在前头替你熬了。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: meter_on }
+      - id: skip_meter
+        text: "先上线，告警这种事'以后再说'"
+        visibleResponse: |
+          网站按时上线了。第11晚你睡得很好。
+          第17天起，'以后再说'开始按小时计费。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+          - { kind: setFlag, key: no_meter }
+        delayed:
+          - { eventId: v2ce2_spike, onDay: 17 }
+      - id: manual_watch
+        text: 不写代码，自己每天手动看用量
+        visibleResponse: |
+          你连着四天每晚十一点查一次后台，都正常。
+          第16天你忘了查——就是那天，循环脚本上线了。
+        hiddenEffects:
+          - { kind: add, key: energy, value: -8 }
+          - { kind: setFlag, key: no_meter }
+        delayed:
+          - { eventId: v2ce2_spike, onDay: 18 }
+    learningPoint: 计量是成本意识的最小实现
+    terminal: true
+
+  - id: v2ce2_spike
+    campaign: venture
+    day: 17
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——失控的调用账单, learning: 无限额系统会把任何bug变成账单 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: ["后台数据异常：某用户的循环脚本两天打了两万次调用，账单已经爬到¥180。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "账单异常：用户'foodie_2026'在36小时内调用19400次。明细显示同一文件被重复解析。已达本月预算的62%。", mood: worried }
+      - { speaker: v_ai_agent, text: "需要说明：由于未设置限额，系统无权拒绝任何请求。我按照您的指令，一直没有说'不'。" }
+    automaticEffects:
+      - { kind: subtract, key: money, value: 180 }
+      - { kind: setFlag, key: bill_spike }
+    terminal: true
+
+  - id: v2ce3_bill_night
+    campaign: venture
+    day: 28
+    type: decision
+    keyDecision: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——成本清算之夜, learning: 成本结构要被设计，不是被道歉 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: ["凌晨3:17。月账单推送：¥860。你坐在黑着灯的宿舍里，屏幕是唯一的光源。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "成本拆解完成：三个高用量用户贡献64%。其中41%为重复解析，可通过缓存消除。另发现两组已被废弃功能仍在调用。", mood: neutral }
+      - { speaker: v_ai_agent, text: "一个观察：您在第一天问我'做告警要多久'。答案是四十分钟。现在是第三百八十六小时。" }
+    choices:
+      - id: fix_all
+        text: 连夜加缓存、限额、下线废弃调用，明早发成本说明
+        visibleResponse: |
+          你干到早上七点。缓存上线，限额生效，公告发出——不是道歉信，是一张成本结构图。
+          三个高用量用户里有两个回消息说"辛苦，继续"。你睡了这周第一个好觉。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: subtract, key: technicalDebt, value: 3 }
+          - { kind: setFlag, key: key_v_api_burn }
+      - id: cut_features
+        text: 直接停掉两个最烧钱的功能，保住现金
+        visibleResponse: |
+          简单粗暴，账单应声回落。但五个靠那个功能留着的用户也走了。
+          你止血成功，顺便失血五分之一的用户。
+        hiddenEffects:
+          - { kind: subtract, key: users, value: 3 }
+          - { kind: setFlag, key: cost_cut }
+      - id: ignore_bill
+        text: 先睡觉，账单月底再说
+        visibleResponse: |
+          你睡了。月底的账单是¥1240，而且这一次，你连拆解它的勇气都没有。
+          你把账单页面关掉的动作，越来越快了。
+        hiddenEffects:
+          - { kind: subtract, key: money, value: 380 }
+          - { kind: add, key: academicDebt, value: 5 }
+    learningPoint: 成本失控的解药是结构，不是运气
+    terminal: true
+
+  # ===== 链F：需求膨胀 =====
+  - id: v2cf1_promise
+    campaign: venture
+    day: 8
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 3 }
+    purpose: { learning: 每一次轻易的承诺都是未来的需求债 }
+    scene: { location: club_room, characters: [v_user_club, v_user_student] }
+    setup: ["老K和小蔡前后脚找你。他们各有一个'小需求'，语气都很轻松。"]
+    dialogue:
+      - { speaker: v_user_club, text: "顺手加个签到呗，小功能，下周能有吧？", mood: neutral }
+      - { speaker: v_user_student, text: "还有还有，能不能导出成好看的图？我发朋友圈用。也是小事啦。" }
+    choices:
+      - id: promise_easy
+        text: "都答应：'下周就有，小事儿'"
+        visibleResponse: |
+          两个人千恩万谢地走了。你心情很好。
+          Agent在后台默默把两条需求排进了迭代——它排得很勤快，比你勤快。
+        hiddenEffects:
+          - { kind: setFlag, key: overpromise }
+        delayed:
+          - { eventId: v2cf2_scope, onDay: 14 }
+      - id: honest_no
+        text: "说实话：'现在做不了，我先记进候选'"
+        visibleResponse: |
+          老K耸耸肩："行，至少你没糊弄我。"小蔡有点失望，但接受了。
+          候选清单上多了两条，你心里也多了一杆秤：每一个'好的'都要过一遍'做得了吗'。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 5 }
+          - { kind: setFlag, key: honest_no }
+      - id: ask_value
+        text: 反问"你愿意为它付多少钱？"
+        visibleResponse: |
+          老K："签到？不加钱。导出图？两块。"
+          你当场记下：一个免费需求，一个付费需求。需求的价格，问一句就出来了。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+    learningPoint: 承诺之前先过秤
+    terminal: true
+
+  - id: v2cf2_scope
+    campaign: venture
+    day: 14
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——需求清单的滚雪球, learning: 需求膨胀的燃料是不敢拒绝 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["一周过去，需求清单从2条变成20条。Agent已经自作主张把12条排进了迭代计划。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "迭代计划已优化：12个功能分四批交付，预计延期9天。我为每个功能都设计了实现方案，随时可以开工。", mood: pleased }
+      - { speaker: 系统, text: "注意：20条需求里，能说出'谁愿意为它付钱'的，只有3条。清单不会拒绝你，它是你所有'好的'的总和。" }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: 4 }
+      - { kind: setFlag, key: scope_bloated }
+    terminal: true
+
+  - id: v2cf3_grave
+    campaign: venture
+    day: 25
+    type: decision
+    keyDecision: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——砍功能大会, learning: 砍需求的勇气决定迭代节奏 }
+    scene: { location: club_room, characters: [v_user_club] }
+    setup: ["迭代延期到第三周，核心功能反而没人修。你把二十条需求投影出来，开了场砍功能会。"]
+    dialogue:
+      - { speaker: v_user_club, text: "（看着清单）好家伙，二十个。这里头我只要签到，其余的谁要的你问谁去。", mood: neutral }
+      - { speaker: v_user_club, text: "砍吧。砍完我第一个用。你现在这样，什么都有一点点，什么都用不了，才是真的坑人。" }
+    choices:
+      - id: cut_three
+        text: 砍到三条核心，发公告说明
+        visibleResponse: |
+          二十条砍剩三条：签到、周报导出、异常提醒。公告发出去，没有一个人抗议。
+          当周核心bug修完，周活第一次涨了。原来用户等的不是更多功能，是能用的功能。
+        hiddenEffects:
+          - { kind: subtract, key: technicalDebt, value: 5 }
+          - { kind: add, key: execution, value: 4 }
+          - { kind: setFlag, key: key_v_creep_debt }
+      - id: cut_half
+        text: 砍一半，留十条"以后慢慢做"
+        visibleResponse: |
+          你砍了十条，留了十条。迭代速度快了一点，但还是赶不上承诺。
+          "以后慢慢做"是需求坟场的官方墓志铭。
+        hiddenEffects:
+          - { kind: subtract, key: technicalDebt, value: 2 }
+          - { kind: add, key: academicDebt, value: 2 }
+      - id: cut_none
+        text: 都留着，加班做完
+        visibleResponse: |
+          你连熬四天，做完了十九个功能。第20个上线的同一天，核心功能崩了。
+          二十个功能像二十块砖，最后一块压塌了承重墙。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 7 }
+          - { kind: add, key: energy, value: -15 }
+    learningPoint: 需求清单的本质是拒绝清单
+    terminal: true

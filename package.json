@@ -41,7 +41,8 @@
     "requirements:audit": "tsx scripts/requirements-audit.ts",
     "assets:audit": "tsx scripts/asset-audit.ts",
     "events:report": "tsx scripts/events-report.ts",
-    "quality:stale-reports": "tsx scripts/stale-reports.ts"
+    "quality:stale-reports": "tsx scripts/stale-reports.ts",
+    "endings:witness-gen": "tsx scripts/witness-generate.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

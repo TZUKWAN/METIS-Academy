@@ -18,6 +18,7 @@ export type Condition =
   | { kind: "skill"; id: string; minLevel: number }
   | { kind: "relationship"; characterId: string; op: CmpOp; value: number }
   | { kind: "knowledge"; id: string }
+  | { kind: "ngPlus" }
   | { kind: "and"; conditions: Condition[] }
   | { kind: "or"; conditions: Condition[] }
   | { kind: "not"; condition: Condition };
@@ -50,6 +51,7 @@ export const ConditionSchema: z.ZodType<Condition> = z.lazy(() =>
       value: z.number(),
     }),
     base.extend({ kind: z.literal("knowledge"), id: z.string().min(1) }),
+    base.extend({ kind: z.literal("ngPlus") }),
     base.extend({ kind: z.literal("and"), conditions: z.array(ConditionSchema).min(1) }),
     base.extend({ kind: z.literal("or"), conditions: z.array(ConditionSchema).min(1) }),
     base.extend({ kind: z.literal("not"), condition: ConditionSchema }),
