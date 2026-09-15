@@ -1,0 +1,152 @@
+# METIS Academy Venture V2 结局批次十一 —— 对应 events_v2_07.yaml 旗标
+endings:
+  - id: v2_retention_squad_end
+    campaign: venture
+    title: 《第 7 天的门》
+    mainResult: 留存小队的快速归因机制
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_retention_squad }
+        - { kind: flag, key: kv_retention_watched, expected: false }
+    priority: 92
+    tier: main
+    baseText: 第 7 天的门槛——手机号绑定——被你们改成微信一键登录后，留存曲线重新抬头。但真正的收获不是那 7 个百分点，是“留存小队”这个机制：每周一次全漏斗扫描，任何一环异动 48 小时内归因。后来第 14 天、第 30 天的坎都被提前修掉了。阿哲总结：“我们不是运气好躲过了留存墙——我们是把墙拆成了台阶。”
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 归因两天的纪录你保持了半年。快速归因后来成了你们面试产品经理的考题。 }
+          - { lte: 40, text: 那次归因靠的是你和阿哲不眠不休。机制要能离开英雄才能活下去——你后来才补上这一课。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲把“48 小时归因”写进了团队宪法第一条。他说这条的诞生日期，是你的“不眠之夜”纪念日。
+        neutral: 阿哲负责执行扫描。机制运转时，没人记得它是一次危机的产物。
+        negative: 留存小队跑了三周就散了——大家太忙。滑坡最终还是在别的环节复发了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的漏斗周报后来投资人都要求加抄送。那份报告的第一行写着：本周无异常——最贵的一句话。 }
+    reflection: 留存墙不是一次性的危机，是持续性的对话——48 小时的响应速度，决定了墙是台阶还是坟墓。
+    lessonHint: 留存异动 48 小时内归因，机制化漏斗扫描。
+    tone: positive
+    family: retention
+    whyDistinct: 核心结果是“留存小队的快速归因机制”，与观望滑坡路径在同一链互斥。
+
+  - id: v2_retention_slide_end
+    campaign: venture
+    title: 《十天的学费》
+    mainResult: 观望策略的留存代价
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_retention_watched }
+        - { kind: flag, key: kv_retention_squad, expected: false }
+    priority: 90
+    tier: main
+    baseText: 十天，31%，一个手机号绑定页。复盘会上你把这三样东西写在白板上，然后写了第四样：“我们当时在忙什么”。答案刺眼：忙着加新功能。你们用十天给 2000 个用户做了加法，却没花两小时找出他们在做减法的原因。你在白板最下面写了一行字，后来成了团队的禁忌警句：“新功能治不了旧伤口。”
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你把“观察一周”这个决定的责任揽到了自己身上——揽责的那一刻，团队的气氛反而松了。 }
+          - { lte: 40, text: 你觉得“观察”本身没有错，错的是运气。这个归因保证了你会再观察一次，再错一次。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲后来成了最快的“刹车手”——每次有人说“再观察观察”，他就讲这十天学费的故事。
+        neutral: 阿哲陪你修完了绑定页。过去的就过去了——但白板上的字他拍了下来。
+        negative: 十天里你有四次机会改主意。四次你都选了新功能。复盘会上没人怪你，你自己坐不住。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “新功能治不了旧伤口”被打印出来贴在产品部门口。出处没人写——大家都知道。 }
+    reflection: 观望是决策的赊账形式——账单会以“流失”的币种到期，利率是你的市场。
+    lessonHint: 留存异动禁止观望，48 小时归因优先于新功能开发。
+    tone: negative
+    family: retention
+    whyDistinct: 核心结果是“观望策略的十天学费”，与快速归因结局在同一链互斥。
+
+  - id: v2_easy_refund_end
+    campaign: venture
+    title: 《29 块的广告位》
+    mainResult: 无理由退款的口碑飞轮
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_easy_refund }
+        - { kind: flag, key: kv_strict_refund, expected: false }
+    priority: 92
+    tier: main
+    baseText: 一年 37 笔退款、1100 元——你的“无理由退款”政策被证明是最便宜的广告位。那位 25 天后退款又回来的用户，后来成了你的年卡用户，还带两个同学入坑。你的转化页上“在他们家退款，秒到账”这行用户原话，比任何设计过的宣传语转化率都高。导师对此的评语是：“所有商业问题归根到底是信用问题——你用 29 块钱买了最贵的信用。”
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 无理由退款你坚持了三年。中间财务劝你加过限制条款，你拒绝了三次。 }
+          - { lte: 40, text: 你承认秒退那一秒心在滴血。信用的第一笔投资，永远是最疼的那笔。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲后来负责退款审批，他的审批速度和你的秒退纪录打平。他说：“信用这东西，慢一秒都算违约。”
+        neutral: 阿哲说“钱是你的，信誉是大家的”。分工明确。
+        negative: 有职业薅羊毛的盯上了你的政策。你损失了 300 块后加了风控——但无理由退款三个字，你没有改。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “秒到账”三个字后来真的变成了技术指标——你们的退款系统重构成了自动化，因为人工跟不上口碑带来的退款量。 }
+    reflection: 退款是产品价值观的照妖镜——你对个体的态度，会被群体看见并定价。
+    lessonHint: 无理由退款是转化的隐形引擎，宽待个体赢得群体信任。
+    tone: positive
+    family: unit_economics
+    whyDistinct: 核心结果是“无理由退款的口碑飞轮”，与严格拒绝路径在同一链互斥。
+
+  - id: v2_refund_winter_end
+    campaign: venture
+    title: 《互联网记打不记改》
+    mainResult: 严苛退款政策的长期口碑债
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_strict_refund }
+        - { kind: flag, key: kv_easy_refund, expected: false }
+    priority: 90
+    tier: main
+    baseText: 你后来改了退款政策——比原来的还宽松。但那篇控诉长文还在搜索结果的第一页，像一张过期却撕不掉的罚单。你花钱做了公关、写了澄清、甚至给当年的用户私信道了歉。有效果，但每一步都在证明那句话：“互联网记打不记改。”你在团队会上说：“我们今天改的每一个政策，都是在替过去那个抠门的自己还债。”
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了在政策的“第一笔交易”上就较真——因为每一笔都是未来口碑的定金。 }
+          - { lte: 40, text: 你把锅甩给了“那位用户太极端”。极端用户是少数，但他们的故事传播力是多数。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲当年是拒绝退款的支持者。他后来主动提出“这次的公关费用从我们俩的分红里出”——他记性好，记得是谁投的票。
+        neutral: 阿哲说“翻篇了”。搜索引擎不这么认为，但团队需要这句话。
+        negative: 那位被拒的用户后来成了你们竞品的铁杆布道者。他每次对比测评都会提那 29 块钱——三年了，还在提。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的每一版用户协议出台前，都会先问一句：“如果这条被截图发到网上，我们扛得住吗？” }
+    reflection: 政策的每一个字都是未来的公关稿——写的时候多难，翻篇的时候就有多难。
+    lessonHint: 退款/服务政策的宽严决定了长期的口碑资产负债表。
+    tone: negative
+    family: unit_economics
+    whyDistinct: 核心结果是“严苛政策的口碑负债”，与退款飞轮结局在同一链互斥。
+
+  - id: v2_ng_preemptive_end
+    campaign: venture
+    title: 《神预言攻略》
+    mainResult: NG+ 用户记忆的超前服务
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_preemptive }
+        - { kind: flag, key: kv_ng_support_bank_unused, expected: true }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 那份“神预言攻略”在用户的社群里被顶了三天。有人说你们“懂用户懂到可怕”，有人开玩笑说“建议查一下是不是装了读心术”。只有你知道真相：不是读心，是记心——上一世你在 11 封邮件里陪这位用户走完了全程，他的每一个卡点都刻在你的记忆里。这一世你只是把“事后救火”提前成了“事前铺路”。用户觉得这是魔法；你知道，这是轮回的复利。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你把“预判式服务”做成了方法论：上一世的每个卡点，这一世都该有一份提前的攻略。 }
+          - { lte: 40, text: 攻略有一处写错了——这一世的产品已经改版。先验知识过期得比你想象的快。 }
+    characterEpilogueRules:
+      - characterId: v_user_student
+        positive: 那位“问题大王”后来成了你们社群的版主。他说：“我留下来，是因为那天那份攻略——你们在我问之前就答了。”
+        neutral: 用户们享受着超前的服务，没人深究它为什么超前。魔法不需要解释。
+        negative: 攻略发的第二天，版本更新改变了卡点位置。你的“神预言”晚了一步——用户笑了，你冷汗了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的“预判攻略库”后来有 30 篇。每一篇的草稿日期，都早于对应问题的第一次出现。 }
+    reflection: 服务的最高形态不是响应快，是发生在提问之前——先知的温柔，是把轮回的学费变成这一世的礼物。
+    lessonHint: NG+ 用户卡点记忆可转化为预判式服务内容。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 预判式服务的神预言”，仅 NG+ 可达，与正常流程服务路径在同一链互斥。

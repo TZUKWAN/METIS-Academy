@@ -1,0 +1,174 @@
+# METIS Academy Venture V2 事件批次七 —— 延迟链 + hidden/NG+ 冲刺
+events:
+  - id: v2u1_churn_wall
+    campaign: venture
+    day: 14
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 14, phase: start }
+    purpose: { narrative: 留存墙的第一道裂缝, learning: 留存曲线的预警信号 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: [“第 7 天留存从 52% 滑到 44%。阿哲说”正常波动“，你盯着曲线的斜率，觉得那不是波动——是滑坡的开始。”]
+    choices:
+      - id: retention_squad
+        text: 成立留存小队：48 小时内找到滑点
+        visibleResponse: 你们用两天做了一次“留存考古”：所有流失用户都停在第 7 天的同一步——绑定手机号。改成微信一键登录后，留存一周回升到 51%。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_retention_squad }
+          - { kind: add, key: userUnderstanding, value: 6 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+        delayed:
+          - { eventId: v2u1b_retention_win, onDay: 24 }
+      - id: watch_and_wait
+        text: 再观察一周，可能是波动
+        visibleResponse: 你选择了观察。一周后，44% 变成了 38%。波动的说法再也说不出口了——滑坡已经过了一半。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_retention_watched }
+          - { kind: add, key: users, value: -5 }
+        delayed:
+          - { eventId: v2u1b_retention_slide, onDay: 24 }
+    learningPoint: 留存下滑要在 48 小时内归因，等待是最贵的选项
+
+  - id: v2u1b_retention_win
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 留存小队的胜利, learning: 快速归因的文化价值 }
+    scene: { location: lab, characters: [v_partner] }
+    dialogue:
+      - { speaker: v_partner, text: “第 7 天那道坎迈过去之后，第 14 天的坎我们也提前修好了。留存小队现在是常设的——每周扫一次全漏斗。” }
+      - { speaker: 系统, text: “48 小时的那次归因，换来的是一套每周运转的预警机制。” }
+    automaticEffects:
+      - { kind: add, key: revenue, value: 4 }
+      - { kind: add, key: teamTrust, value: 2 }
+    next: v2_d24_wire10
+
+  - id: v2u1b_retention_slide
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 滑坡的十个点, learning: 观望的机会成本 }
+    scene: { location: dorm, characters: [] }
+    setup: [“38% 到 31%，十天的滑坡。你现在知道了问题还是手机号绑定——早十天修，流失减半。但你们花那十天做了别的”更重要“的事。”]
+    dialogue:
+      - { speaker: 系统, text: “你用十天的时间验证了一个假设：”可能是波动“。这十天的学费，比任何一堂产品课都贵。” }
+    automaticEffects:
+      - { kind: add, key: revenue, value: -4 }
+    next: v2_d24_wire10
+
+  - id: v2u2_refund_policy
+    campaign: venture
+    day: 17
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 退款政策的宽严抉择, learning: 退款是产品价值观的一部分 }
+    scene: { location: dorm, characters: [] }
+    setup: [“第一笔正式退款请求来了：用户买了月卡，用了 25 天要求全额退款，理由是”没达到预期“。29 块钱，退还是不退？”]
+    choices:
+      - id: no_question_refund
+        text: 无理由退款，再加一句“回头有优惠”
+        visibleResponse: 你秒退了 29 元。那位用户三个月后回来了，续了年卡——还带来两个同学。你的“无理由退款”政策从此写进产品页，成为转化率最高的那行字。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_easy_refund }
+          - { kind: add, key: credibility, value: 5 }
+        delayed:
+          - { eventId: v2u2b_refund_flywheel, onDay: 27 }
+      - id: strict_policy
+        text: 按 TOS 拒绝：已使用 25 天不予退款
+        visibleResponse: 你按协议拒绝了。用户在社群发了长文控诉，你赢了规则，输了群里的风向。那周的转化率肉眼可见地凉了。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_strict_refund }
+          - { kind: add, key: credibility, value: -4 }
+        delayed:
+          - { eventId: v2u2b_refund_winter, onDay: 27 }
+    learningPoint: 退款政策是口碑放大器：宽待个体，赢得群体
+
+  - id: v2u2b_refund_flywheel
+    campaign: venture
+    day: 27
+    type: story
+    hidden: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 退款飞轮, learning: 宽松政策的复利 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “上线以来你退了 37 笔款，总额 1100 元。而”无理由退款“四个字带来的转化增量，按获客成本算价值 6000 元。你用 1100 买了一句用户替你说的广告词：”在他们家退款，秒到账。“” }
+    automaticEffects:
+      - { kind: add, key: revenue, value: 3 }
+      - { kind: add, key: credibility, value: 2 }
+    next: v2_d27_wire10
+
+  - id: v2u2b_refund_winter
+    campaign: venture
+    day: 27
+    type: story
+    hidden: true
+    trigger: { kind: delayed }
+    purpose: { narrative: 退款寒潮, learning: 严苛政策的口碑债 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “那篇控诉长文挂了十天，你的搜索联想词多了一个”抠门“。后来你改了退款政策——但新政策的宣传，怎么也盖不过旧故事的传播。互联网记打不记改。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: -2 }
+    next: v2_d27_wire10
+
+  # ===== NG+ W5：客服的记忆银行 =====
+  - id: v2w5_ng_support_bank
+    campaign: venture
+    day: 16
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 16 }
+    purpose: { narrative: NG+ 用户记忆库, learning: 上辈子的用户名字 }
+    scene: { location: dorm, characters: [] }
+    setup: [“第 16 天的用户邮件里有一个熟悉的名字——上一世你回过他 11 封邮件的”问题大王“。这一世，他还没开始问，你就知道他会在哪里卡住。”]
+    choices:
+      - id: preemptive_guide
+        text: 主动发一份“关卡攻略”
+        visibleResponse: 他回信：“你们是不是在我家装了摄像头？我正要问这个问题！”你的提前量让他成了你的自发宣传员——他社群里 3000 粉丝都看到了这份“神预言攻略”。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_preemptive }
+          - { kind: add, key: credibility, value: 5 }
+          - { kind: add, key: users, value: 3 }
+      - id: normal_service
+        text: 按正常流程服务，不特殊化
+        visibleResponse: 你按标准流程回复，高效、专业。他不知道你为他预留了多少记忆——这份沉默的温柔，只有你自己知道。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 2 }
+    learningPoint: NG+ 用户记忆可转化为超预期的服务体验
+
+  # ===== 汇流 wire =====
+  - id: v2_d24_wire10
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: day, day: 24, phase: end }
+    purpose: { narrative: D24 夜间复盘, learning: 留存的教训 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “留存曲线 today 又画了一遍。你发现自己在笑——这条曲线已经从”心电图的焦虑“变成了”体检报告的从容“。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 1 }
+
+  - id: v2_d27_wire10
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: day, day: 27, phase: end }
+    purpose: { narrative: D27 夜间复盘, learning: 口碑的账本 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你在笔记里加了一栏”口碑账“：每一笔退款、每一条差评、每一句用户原话。账本不长，但每一条都有利息。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 1 }
