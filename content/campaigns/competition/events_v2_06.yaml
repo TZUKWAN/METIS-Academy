@@ -1,0 +1,130 @@
+# METIS Academy Competition V2 事件批次六 —— 决策密集补完
+events:
+  - id: cv2_d5_venue_choice
+    campaign: competition
+    day: 5
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 5, phase: start }
+    purpose: { narrative: 主赛道的取舍, learning: 赛道选择决定评委池 }
+    scene: { location: lab, characters: [c_advisor] }
+    setup: ["组队确认书要选赛道：A 组"智慧校园"竞争 40 队、评委偏工程落地；B 组"AI+人文"只有 12 队、评委偏思辨。你们的两把刀都能磨。"]
+    choices:
+      - id: crowded_track
+        text: 选 A：人多的赛道赢着才有含金量
+        visibleResponse: 你们进了红海。赵老师说得直白："40 队里想被记住，你得是前 3，而且要有辨识度。"
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_crowded_track }
+          - { kind: add, key: riskTolerance, value: 3 }
+      - id: niche_track
+        text: 选 B：小赛道做头部，思辨打法
+        visibleResponse: 你们进了蓝海。但小赛道的小众评审口味，是一张你没摸过的牌。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_niche_track }
+          - { kind: add, key: independence, value: 3 }
+      - id: advisor_pick
+        text: 让赵老师拍板——她带了七届
+        visibleResponse: 赵老师圈了 B 组："你的方案里有社会关怀，那里识货。"交表前她补了一句："输了别怪我。"她说这话时在笑。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_advisor_pick }
+          - { kind: relationship, characterId: c_advisor, delta: 4 }
+    learningPoint: 赛道选择影响评委池、竞争密度与评价标准
+
+  - id: cv2_d7_data_auth
+    campaign: competition
+    day: 7
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 7, phase: start }
+    purpose: { narrative: 引用数据的来源核查, learning: 二手数据的出处链 }
+    scene: { location: library, characters: [] }
+    setup: ["方案里那条"校园社团活动参与率连续三年下降 12%"被导师圈了出来："这条数据哪来的？"你翻开来源——是一篇公众号文章，引用的是另一篇公众号文章。"]
+    choices:
+      - id: trace_original
+        text: 顺藤摸瓜找原始出处
+        visibleResponse: 两小时后你在学校年鉴里找到了原始表格——真实数字是"下降 7%"，且统计口径不同。你改了方案，也改了习惯：每个数字都必须有原始出处。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_data_traced }
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+      - id: soften_claim
+        text: 把数字改模糊："近年持续下滑"
+        visibleResponse: 你删掉了具体数字。方案安全了，但论证力也瘪了——模糊是安全的，也是无力的。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_data_vague }
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 二手数据必须溯源到原始出处并核对口径
+
+  - id: cv2_d9_tech_debt_demo
+    campaign: competition
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 9, phase: start }
+    purpose: { narrative: Demo 的藏拙决策, learning: 演示范围与真实性的平衡 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["tech 盯着屏幕欲言又止："登录那块有个偶发 bug……千人并发肯定崩。演示时，咱们绕开登录页？""]
+    choices:
+      - id: fix_for_demo
+        text: 两天专攻登录链路，演示只演真实功能
+        visibleResponse: 你们用两天把登录修到了"演示级稳定"，砍掉了两个花哨但不稳的功能。决赛现场演示零翻车——评委后来说"你们的稳定度印象很深"。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_demo_stability }
+          - { kind: add, key: technicalDebt, value: -4 }
+          - { kind: add, key: execution, value: 4 }
+      - id: script_the_demo
+        text: 写死演示脚本，绕开所有坑
+        visibleResponse: 你们写了精确到点击的演示脚本，登录页一笔带过。彩排完美。但评委自由体验环节（你们没料到有这个环节），bug 在第 90 秒准时出现了。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_demo_scripted }
+          - { kind: add, key: technicalDebt, value: 5 }
+          - { kind: add, key: credibility, value: -4 }
+    learningPoint: 演示策略优先修真实链路，脚本绕行在自由体验环节必然暴露
+
+  - id: cv2_d12_split_prize
+    campaign: competition
+    day: 12
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 12, phase: start }
+    purpose: { narrative: 奖金分配的预演, learning: 利益分配的提前约定 }
+    scene: { location: canteen, characters: [c_rival] }
+    setup: ["和你们组队的小林突然问："如果拿奖，奖金和证书怎么分？"空气凝固了三秒。你们从没聊过这个。"]
+    choices:
+      - id: equal_split_talk
+        text: 开诚布公：均分+按贡献微调，白纸黑字
+        visibleResponse: 你们花了一小时列贡献清单，定了"均分为基、荣誉各写各的、奖金四人均分+指导老师心意红包"。聊完小林说："其实我就想要个说法。"
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_prime_agreed }
+          - { kind: add, key: teamTrust, value: 6 }
+      - id: avoid_money_talk
+        text: "谈钱伤感情，先比赛"
+        visibleResponse: 话题被岔开了。但它没有消失——它变成了每个人心里的暗账，等一个最坏的时机结算。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_prime_avoided }
+          - { kind: add, key: teamTrust, value: -3 }
+    learningPoint: 利益分配要在开赛谈清，回避是最贵的策略
+
+  - id: cv2_d15_media_strategy
+    campaign: competition
+    day: 15
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 15, phase: start }
+    purpose: { narrative: 赛前媒体曝光, learning: 宣传节奏与评审心态 }
+    scene: { location: lab, characters: [c_advisor] }
+    setup: ["校公众号想给你们做赛前专访。赵老师提了个尖锐问题："决赛前高调，是加分还是招恨？赢了说你实力，输了说你打脸。"]
+    choices:
+      - id: humble_profile
+        text: 低调备赛：专访推到赛后
+        visibleResponse: 你们婉拒了专访，专心打磨决赛。公众号编辑说"你们错过了流量"。赵老师说："你们错过的是心态风险。"
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_low_profile }
+          - { kind: add, key: execution, value: 3 }
+      - id: media_push
+        text: 借势宣传：流量就是影响力
+        visibleResponse: 专访发出去，阅读量破万。你们成了"明星队伍"——然后发现每一场热身赛都有人专门研究你们。聚光灯是双刃剑，刺的那一面现在才开始疼。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_media_push }
+          - { kind: add, key: credibility, value: 3 }
+          - { kind: add, key: energy, value: -5 }
+    learningPoint: 赛前曝光是双刃剑：影响力与心态风险并存

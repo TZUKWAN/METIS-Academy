@@ -1,0 +1,151 @@
+# METIS Academy Competition V2 结局批次七 —— 对应 events_v2_06.yaml 旗标
+endings:
+  - id: cv2_crowded_track_end
+    campaign: competition
+    title: 《四十队里的前三》
+    mainResult: 红海赛道的含金量之战
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_crowded_track }
+        - { kind: flag, key: kcv_niche_track, expected: false }
+    priority: 91
+    tier: main
+    baseText: 红海赛道的晋级名单出来那天，你们的名字在第 3 行。赵老师看着名单说了一句：“40 队里的前三，比 12 队里的第一含金量高——你们选了难走的路，还走通了。”红海教会你们的是差异化：同样是校园工具，你们的“复盘”切口让评委在一堆同质化方案里记住了你们。拥挤不是坏事，它是市场对赛道价值的投票——而你要做的，是在投票里被点名。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你们找到了自己的切口——“复盘”两个字，从此是你们在红海里的浮标。 }
+          - { lte: 40, text: 晋级靠的是执行扎实。差异化？你们的方案和前五名的区别，说不出口。 }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 赵老师把你们的案例讲给下一届：“赛道没有好坏，选择配得上实力才是好。”
+        neutral: 赵老师说“成绩不错”，然后开始研究明年的赛道名单。
+        negative: 前两名远超你们。红海的残酷在于：第三名和第四十名，在评委眼里差别不大。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “复盘”这个切口后来成了你们的产品名。红海里捡回来的词，值一座奖杯。 }
+    reflection: 红海的含金量不在奖杯，在挤过人海后你还剩下的辨识度。
+    lessonHint: 赛道选择权衡竞争密度与自身辨识度。
+    tone: positive
+    family: competition_result
+    whyDistinct: 核心结果是“红海赛道的差异化之战”，与蓝海思辨路径在同一链互斥。
+
+  - id: cv2_data_traced_end
+    campaign: competition
+    title: 《年鉴第 47 页》
+    mainResult: 数据溯源习惯的建立
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_data_traced }
+        - { kind: flag, key: kcv_data_vague, expected: false }
+    priority: 91
+    tier: main
+    baseText: 学校年鉴第 47 页的那张表，成了你们方案的定海神针。决赛答辩时评委质疑数据来源，你直接翻到年鉴影印页：“原始出处，统计口径是全校注册社团数，时间跨度 2021-2023。”评委点头的那两秒，是两个小时的档案馆时间换来的。你们团队从此有条铁律：每个数字都要能回答“你从哪来”——问数据的出身，就像问人的出身一样认真。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 溯源表格成了模板：数字、原始出处、口径、日期，四列缺一不可。 }
+          - { lte: 40, text: 你只溯源了被导师圈出来的那一条。没被圈的，不代表没问题——只代表还没被问。 }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 赵老师说：“我圈出来一条，你们修好了整个数据链的教学效果——比我预想的好。”
+        neutral: 赵老师说“改得对”，然后继续圈下一条。
+        negative: 有队友抱怨“太较真”。决赛数据零质疑的战绩，让抱怨闭了嘴。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的方案附录永远有一节“数据出处链”。评委们后来管它叫“可以查户口的材料”。 }
+    reflection: 数据的公信力不在数字大小，在出处链的完整——从公众号到年鉴，差的不是两小时，是两层可信度。
+    lessonHint: 二手数据必须溯源原始出处并核对统计口径。
+    tone: positive
+    family: research_evidence
+    whyDistinct: 核心结果是“数据溯源链的建立”，与模糊化处理路径在同一链互斥。
+
+  - id: cv2_demo_stability_end
+    campaign: competition
+    title: 《砍掉的两个功能》
+    mainResult: 演示稳定性优先的取舍
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_demo_stability }
+        - { kind: flag, key: kcv_demo_scripted, expected: false }
+    priority: 91
+    tier: main
+    baseText: 你们砍掉了两个花哨功能——“AI 生成海报”和“一键分享朋友圈”——把两天全部砸进了登录链路。决赛现场，评委自由体验环节（谁都没料到有这个环节），你们的登录稳如老狗，反倒是对手们的脚本演示一个个翻车。tech 在台下捏着的手松开了。砍功能的决定在当时像自断双臂，在评委眼里却是“这个团队知道什么最重要”。稳定感，是演示场上最被低估的杀伤力。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: “演示级稳定”成了你们的上线标准。产品后来真的把这两个功能做回来了——用修登录的劲头。 }
+          - { lte: 40, text: 两天修登录其实是豪赌——赢了。但你自己知道，你赌之前做了最坏打算的预案。 }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: tech 说：“那两天你陪我改登录，改到凌晨。你砍功能的时候手都没抖——我服。”
+        neutral: tech 说“应该的”，然后把压测脚本提交了。
+        negative: 被砍功能的创意后来被别的队做了，还拿了创新奖。你的“稳”，错过了那年的“炫”。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的产品原则第一条：“能演示的必须稳定，能稳定的才能演示。” }
+    reflection: 演示的胜负手不是功能多寡，是每一个亮相的功能都稳如泰山——砍掉的花哨，是稳定的祭品。
+    lessonHint: 演示优先修真实链路稳定性，脚本绕行会在自由环节暴露。
+    tone: positive
+    family: product_demo
+    whyDistinct: 核心结果是“演示稳定的取舍”，与脚本绕行路径在同一链互斥。
+
+  - id: cv2_prime_agreed_end
+    campaign: competition
+    title: 《一小时的谈钱》
+    mainResult: 利益分配的透明化预演
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_prime_agreed }
+        - { kind: flag, key: kcv_prime_avoided, expected: false }
+    priority: 91
+    tier: main
+    baseText: 那张写着分配方案的白纸，比赛结束那天被证明是全队最值钱的装备。拿了省二等奖，奖金不多，但分配执行得分毫不差——因为白纸黑字在前，人心没有后账。小林拿着她那份请全组吃了顿饭，席间她说：“我从别的队听说过太多拿奖反目的事。咱们没有。”你们把最尴尬的一小时，换成了最坦荡的一张合影。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你开了“谈钱”的头。团队后来什么都能谈——因为最难谈的已经谈过了。 }
+          - { lte: 40, text: 一小时的方案讨论，你负责起了草。起草的人有话语权——这个权力你用得很谨慎。 }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 小林把那张分配纸拍照存档，配文：“文明的起点，是把丑话说在前面的勇气。”
+        neutral: 分配按纸面执行。没有人再提起那个话题——因为不需要。
+        negative: 微调方案时有队友觉得自己“贡献被低估”。白纸黑字挡住了争吵，挡不住心里的秤。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那张分配纸你们四人各存一份。后来每支新队伍组队，你们都建议先写一张。 }
+    reflection: 谈钱不伤感情，不谈钱才伤——丑话的前面，是后来所有好话的信用。
+    lessonHint: 团队利益分配必须赛前书面约定。
+    tone: positive
+    family: team
+    whyDistinct: 核心结果是“奖金分配的透明预演”，与回避路径在同一链互斥。
+
+  - id: cv2_low_profile_end
+    campaign: competition
+    title: 《错过流量的人》
+    mainResult: 低调备赛的心态保护
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_low_profile }
+        - { kind: flag, key: kcv_media_push, expected: false }
+    priority: 90
+    tier: main
+    baseText: 那篇婉拒的专访，后来被另一个队伍接了。他们成了全校瞩目的明星队——然后带着全场的注视和自己的膨胀，在初赛翻车了。你们安静地进了决赛，安静地拿了奖。公众号编辑赛后找到你们：“现在可以做专访了吧？夺冠故事比赛前吹牛好写多了。”你们笑了。流量一直都在，但它的最佳出场时机，是你用实力配得上它之后。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了对流量说“等等”。实力和名气的时差，要用定力来填。 }
+          - { lte: 40, text: 拒绝专访那周你刷了三次那队的阅读量。低调不是不心动——是心动了也按住。 }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 赵老师说：“你比我当年沉得住气。我第一次带队，就是死在聚光灯下的。”
+        neutral: 赵老师说“低调好”，然后去辅导下一队了。
+        negative: 有同学说你们“闷声搞大事，太阴”。你笑了笑——阴不阴，奖杯说了算。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那篇错过的专访在夺冠后补做了，标题是《迟到的冠军故事》——阅读量比当初那个规划高了一倍。 }
+    reflection: 聚光灯下的膨胀，是比赛的一部分暗牌——低调不是怯场，是把心态的变量锁死在自己手里。
+    lessonHint: 赛前高曝光带来心态风险，赛后专访的含金量更高。
+    tone: positive
+    family: presentation_defense
+    whyDistinct: 核心结果是“低调备赛的心态管理”，与借势宣传路径在同一链互斥。
