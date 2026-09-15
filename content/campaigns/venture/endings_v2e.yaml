@@ -1,0 +1,182 @@
+# METIS Academy Venture V2 结局批次七 —— 对应 events_v2_05.yaml 旗标
+endings:
+  - id: v2_gold_feedback_end
+    campaign: venture
+    title: 《首席挑刺官》
+    mainResult: 流失用户转化为深度顾问
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_gold_feedback }
+    priority: 93
+    tier: hidden
+    baseText: 那位“首席挑刺官”在这一年里挑了 41 根刺，其中 9 根是金子。第 19 根刺——“你们的新手引导假设用户读过说明书，但没人读过”——直接催生了你们口碑最好的改版。他始终没有回来当用户，但你也不需要他回来了：他把自己活成了产品的一部分。上线三周年时，你在更新日志的扉页写了一行字：“献给一位 uninstall 了却没离开的人。”
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了善待批评者——他们是最便宜的顾问，最贵的敌人。 }
+          - { lte: 40, text: 挑刺官制度依赖你个人的维护。你忙起来的时候，他也沉默了。制度，还是要落成流程。 }
+    characterEpilogueRules:
+      - characterId: v_user_student
+        positive: 三周年活动上他终于回来了——作为用户。他说：“刺挑完了，该享受果实了。”
+        neutral: 他偶尔还发邮件，语气依然不客气。你们的友谊，建立在互相不需要上。
+        negative: 有一天他的邮件不再来了。你才发现自己连他的全名都不知道。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “挑刺官”成了你们的固定职位，每一任的邮箱前缀都是那封千字信的编号。 }
+    reflection: 最深的用户洞察藏在流失者的信箱里——留下来的人帮你改良，离开的人告诉你真相。
+    lessonHint: 深度流失用户是高价值顾问来源，逐条回复胜过模板感谢。
+    tone: positive
+    family: user_understanding
+    whyDistinct: 核心结果是“流失者转化为顾问”的隐藏叙事，由千字长信事件解锁。
+
+  - id: v2_bill_audit_end
+    campaign: venture
+    title: 《1900 元的测试库》
+    mainResult: 逐项成本审计的制度化
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_bill_audited }
+    priority: 93
+    tier: hidden
+    baseText: 那个忘关的测试数据库，为你上了一堂价值 1900 元的成本课——而这堂课的学费，在它自己身上赚了回来。账单看板挂墙之后，团队有了新的仪式：每月第一周的“狩猎日”，全员逐项过账单。三个月里，狩猎日累计揪出了 11 个“沉默的支出”。阿哲总结得精辟：“钱不会自己消失，只会自己躲起来——狩猎日就是点名时间。”
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你给每个云资源都加了标签和到期时间。狩猎日渐渐无事可猎——最好的战果是让猎物绝迹。 }
+          - { lte: 40, text: 审计只坚持了两个月。第三个月你“太忙了”——于是那个熟悉的感觉又回来了。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲把第一个月省下的 1900 元换算成了团建基金。“这是我们省出来的第一顿火锅。”
+        neutral: 阿哲负责执行狩猎日。表格是他的，习惯是你的。
+        negative: 有团员抱怨“ Hunting Day 太形式主义”。你翻出 1900 元的账单——抱怨消失了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那张 1900 元的账单截图你们存了很多年，标题是：《创业史上最贵的数据库》。 }
+    reflection: 成本的暗礁不撞不知道——但逐项审计可以把“撞上”变成“绕开”。
+    lessonHint: 月度逐项账单审计可发现结构性浪费。
+    tone: positive
+    family: unit_economics
+    whyDistinct: 核心结果是“成本狩猎的制度化”，由深夜账单审计隐藏事件解锁。
+
+  - id: v2_counter_position_end
+    campaign: venture
+    title: 《错位战争》
+    mainResult: 反向卡位避开正面消耗
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_counter_position }
+        - { kind: flag, key: kv_head_on_battle, expected: false }
+    priority: 93
+    tier: hidden
+    baseText: 三个月后，战报对比刺眼：竞品的抖音获客成本从 40 涨到 60，你的微信群裂变成本稳定在 3 元。他们烧钱的地方你一分没投，你的阵地他们进不来——私域是关系，不是流量，买不来。导师看完数据说了一句：“打仗最高明的境界，是让对方的优势打在空气上。”你从招聘网站上读到这句话的机会——那一夜刷到的 JD，值一场战争。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你建立了“对手情报晨读”：招聘帖、公众号、专利公告，公开信息里全是战略。 }
+          - { lte: 40, text: 说到底你是没钱跟他们打。穷出的智慧——但你确实把限制打成了特色。 }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 导师后来在课堂上讲“错位竞争”，用的案例是你们。他说案例来自“一个会看招聘信息的年轻人”。
+        neutral: 导师说“不错”，然后继续喝他的茶。
+        negative: 董事会上有人质疑“放弃抖音是战略失误”。你用 3 元 vs 60 元的数据顶了回去——但反对的声音记住了你。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那条招聘 JD 你截了图。它的标题现在读来像一份战争预告片。 }
+    reflection: 正面战场的弹药是钱，错位战场的弹药是认知——穷人的核武器，叫差异化。
+    lessonHint: 从竞品公开情报预判其战略，以差异化卡位替代正面竞争。
+    tone: positive
+    family: acquisition
+    whyDistinct: 核心结果是“反向卡位的错位战争”，由隐藏的招聘帖情报事件解锁。
+
+  - id: v2_ng_truth_interviews_end
+    campaign: venture
+    title: 《尖锐的问题》
+    mainResult: NG+ 访谈对象库的精准运用
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_truth_interviews }
+        - { kind: flag, key: kv_ng_fresh_sample, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: “你这次问的问题，比上次尖锐多了。”毒舌学姐说这话时不知道，上一世的你就是用这些问题被她怼得下不来台——因为她答一句你辩三句。这一世你学会了闭嘴：问完、录音、道谢、走人，一句辩解都没有。于是她把真话都给了你。NG+ 教你的从来不是新话术，是旧教训的终极形态——把上一世被怼的疼，变成这一世闭嘴的定力。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你的访谈录音库里，你的声音越来越少，对方的声音越来越多。这就是进步的全部秘密。 }
+          - { lte: 40, text: 三场里你还是辩了一句。就那一句，学姐的表情告诉你：你差点把鱼吓跑。 }
+    characterEpilogueRules:
+      - characterId: v_user_student
+        positive: 毒舌学姐后来主动介绍了两个社团给你。她说：“会听人说话的创业者，值得帮。”
+        neutral: 学姐保持着一贯的毒舌。你们的合作简单、直接、高效。
+        negative: 你把她的毒舌语录发到了朋友圈没打码。她删了你的好友——先知先觉的代价，是人际的笨。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的访谈守则第一条永远写着：问完闭嘴。这条的学费，是上一世的脸面。 }
+    reflection: 访谈的全部秘密在于克制——你想证明自己，就听不到别人。
+    lessonHint: NG+ 人际记忆可优化访谈策略，闭嘴是最好的提问技巧。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 访谈闭嘴定力”，仅 NG+ 可达，与换新样本路径在同一链互斥。
+
+  - id: v2_ng_gray_release_end
+    campaign: venture
+    title: 《10% 的哨兵》
+    mainResult: NG+ 流失记忆升级为灰度机制
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_gray_release }
+        - { kind: flag, key: kv_ng_update_cancelled, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 灰度发布的第 48 小时，10% 样本组里流失信号亮了。你当场回滚——90% 的用户毫无察觉，他们不知道自己刚刚躲过了一颗雷。阿哲后来把灰度机制称为“10% 的哨兵”：让一小部分人先替所有人踩雷。这一世你没有像上一世那样失去那批用户——因为你学会了不拿全部用户去赌。记忆救不了所有人，但机制可以。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 灰度指标你调了三版——流失信号的定义越来越精确。哨兵的眼睛越来越尖。 }
+          - { lte: 40, text: 回滚那晚你复盘：如果不是上一世的记忆，你会灰度吗？机制建立在侥幸上，还是建立在认知上？ }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲给灰度机制起了正式名字，用的是你们俩的外号梗。文档第一行写着：“源于一次未遂的翻车。”
+        neutral: 团队照常执行灰度。他们不知道这套流程的“原型”来自另一个世界。
+        negative: 灰度耽误了两天排期，CEO 式的质疑来了：“每个版本都这么磨蹭？”你顶住了——这次没有记忆兜底，是信念。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “哨兵”灰度机制后来推广到了所有版本。它的起点，是你记忆里一条没发生的差评。 }
+    reflection: 上一世用真实用户付出的学费，这一世变成只收 10% 学费的机制——这就是轮回的意义。
+    lessonHint: NG+ 流失记忆最优形态是升级为灰度发布机制。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 灰度机制发明”，仅 NG+ 可达，与直接砍版本路径在同一链互斥。
+
+  - id: v2_ng_honest_pitch_end
+    campaign: venture
+    title: 《我们还没解决的三件事》
+    mainResult: NG+ 融资教训的诚实打法
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_honest_pitch }
+        - { kind: flag, key: kv_ng_vision_pitch, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: BP 那页“我们还没解决的三件事”，投资人看了最久。看完他抬起头，说的第一句话是：“上一家在这页给我看的是'无限可能'。”term sheet 提前两周。签完字他问你为什么敢这么写，你说：“因为吹过的牛都要还。”他大笑。他不知道你真的还过——上一个周目，用整个项目的死。NG+ 的融资课只有一句：把上一世的死法，写成这一世的生路。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: “洞页”成了你们 BP 的固定栏目，每轮融资更新一次。它成了投资人间的口碑：这团队敢露洞。 }
+          - { lte: 40, text: 你写洞页时手心出汗——诚实需要练习，尤其对着钱练。 }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 导师看完 term sheet 说：“我带你这两年，最大的成果就是你终于学会说'我们不会'。”
+        neutral: 导师说“成了就好”。茶照喝，饭照吃。
+        negative: 团队里有人觉得洞页“示弱”。你给他看了上一世的……不，你只是让他去谈一次崩了的融资。亲测比传教有效。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 每一版 BP 的洞页你都留了底稿。三份底稿摞在一起，就是你整个创业生涯的成长史。 }
+    reflection: 融资的终极信息差不是数据多漂亮，是诚实得有结构——洞在哪、怎么补、要多久，说清楚就赢了。
+    lessonHint: NG+ 融资教训的兑现：把失败记忆转化为披露结构。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 诚实话术的结构化”，仅 NG+ 可达，与愿景话术路径在同一链互斥。

@@ -1,0 +1,228 @@
+# METIS Academy Venture V2 事件批次五 —— 隐藏/NG+ 密集补完
+events:
+  # ===== 隐藏 X 系列：老用户的邮件 =====
+  - id: v2x1_old_user_mail
+    campaign: venture
+    day: 8
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 流失老用户的千字长信, learning: 深度流失用户的 gold feedback }
+    scene: { location: dorm, characters: [] }
+    setup: [“一封来自三周前流失用户的千字邮件。开头是”我 uninstall 了，但还是想跟你说说为什么“。你泡了杯茶，点开了全文。”]
+    choices:
+      - id: deep_read_reply
+        text: 认真读完，逐条回复
+        visibleResponse: 信里有个细节扎了你：“你们的更新日志我每期都看——看的不是新功能，是你们有没有在听。”你回复了 800 字，末尾问了一句：“愿意持续当我们的'编外产品经理'吗？”
+        hiddenEffects:
+          - { kind: setFlag, key: kv_gold_feedback }
+          - { kind: add, key: userUnderstanding, value: 6 }
+        next: v2x1_after_mail
+      - id: skim_reply
+        text: 扫一眼，礼貌回复“感谢反馈”
+        visibleResponse: 你回了模板式的感谢。那封千字长信的作者，再也没出现过。第 19 条更新日志发布时，你忽然想起他说的“看的不是新功能”。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: -2 }
+    learningPoint: 深度流失用户的反馈是产品最诚实的镜子
+
+  - id: v2x1_after_mail
+    campaign: venture
+    day: 8
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 编外产品经理, learning: 用户顾问机制 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “两天后他回复了：”愿意。但我丑话说前头——我不会夸你。“你们的用户小组从此有了一位”首席挑刺官“。他挑的第一根刺，让你省了一次大版本返工。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    next: v2_d9_wire6
+
+  # ===== 隐藏 X2：服务器账单的深夜 =====
+  - id: v2x2_bill_hunt
+    campaign: venture
+    day: 11
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: API 账单的逐项狩猎, learning: 成本结构需要逐项审计 }
+    scene: { location: dorm, characters: [] }
+    setup: [“凌晨，你对着一万二的月度账单睡不着。白天你只看了总额——现在你决定逐项狩猎：哪一笔最不该存在？”]
+    choices:
+      - id: line_item_audit
+        text: 逐行排查账单，给每项标“必要/可省/荒谬”
+        visibleResponse: 排查两小时，战果惊人：一个测试环境的数据库忘了关，跑了 23 天，账单 1900 元。你关掉它的时候手都在抖。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_bill_audited }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: money, value: 5 }
+        next: v2x2_after_audit
+      - id: blame_provider
+        text: "云厂商就是贵，认了"
+        visibleResponse: 你关掉账单页面，认了。下个月，同一个测试数据库又跑了 30 天。
+    learningPoint: 成本审计要逐项归因，“认了”是最贵的态度
+
+  - id: v2x2_after_audit
+    campaign: venture
+    day: 11
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 账单狩猎的战果, learning: 成本意识制度化 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你把逐项审计做成了月度动作，账单看板挂上了墙。第 19 天，阿哲指着看板说：”这个月省的钱，够我们发半个月工资。“成本意识从你的个人习惯，变成了团队的本能。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 2 }
+    next: v2_d12_wire6
+
+  # ===== 隐藏 X3：竞争对手的招聘帖 =====
+  - id: v2x3_rival_hiring
+    campaign: venture
+    day: 14
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 从对手招聘帖读战略, learning: 公开信息里的战略情报 }
+    scene: { location: dorm, characters: [] }
+    setup: [“深夜刷招聘平台，你看到竞品的新 JD：”招增长运营，负责抖音渠道，预算充足。“——他们要全力打抖音了。而你的抖音，还只是一张注册了没用的账号。”]
+    choices:
+      - id: counter_position
+        text: 反向卡位：他们打抖音，我深耕微信群
+        visibleResponse: 你把本要投抖音的预算全部转给了私域运营。三个月后，竞品的抖音获客成本涨到 60 元一个，你的微信群裂变成本是 3 元。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_counter_position }
+          - { kind: add, key: independence, value: 5 }
+          - { kind: add, key: users, value: 5 }
+      - id: follow_battle
+        text: 他们去哪我去哪，正面对轰
+        visibleResponse: 你紧急组建了抖音运营。正面战场弹药消耗巨大——对方的融资是你的五倍，你们的对轰像用步枪打坦克。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_head_on_battle }
+          - { kind: add, key: money, value: -10 }
+    learningPoint: 差异化卡位优于正面跟随，公开情报可用于战略预判
+
+  # ===== NG+ Y 系列 =====
+  - id: v2y1_ng_interview_bank
+    campaign: venture
+    day: 4
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 4 }
+    purpose: { narrative: NG+ 访谈对象库, learning: 上辈子的人际资产 }
+    scene: { location: canteen, characters: [v_user_student] }
+    setup: [“上一世的访谈对象名单还在你脑子里：谁会说真话、谁只会客气、谁藏着最狠的吐槽。这一世第 4 天，你直接跳过了”客气组“。”]
+    choices:
+      - id: skip_to_truth_tellers
+        text: 直接约三个“说真话的”
+        visibleResponse: 三场访谈，场场有收获。那位“毒舌学姐”甚至说：“你这次问的问题，比上次尖锐多了。”她不知道，是你终于学会了怎么问她。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_truth_interviews }
+          - { kind: add, key: userUnderstanding, value: 7 }
+      - id: fresh_sample
+        text: 全部换新面孔，避免记忆偏差
+        visibleResponse: 你刻意避开上一世的人。新样本更干净，但你也失去了“毒舌学姐”——这一世她对你来说只是个路人甲。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_fresh_sample }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+    learningPoint: NG+ 人际资产的使用与污染风险
+
+  - id: v2y2_ng_churn_predict
+    campaign: venture
+    day: 18
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 18 }
+    purpose: { narrative: 流失预测的先知, learning: 上辈子的流失名单 }
+    scene: { location: lab, characters: [] }
+    setup: [“你记得上一世第 24 天流失的那批用户——触发点是同一次糟糕的版本更新。这一世，同样的更新计划又摆上了日程。”]
+    choices:
+      - id: cancel_bad_update
+        text: 砍掉那个版本，回炉重做
+        visibleResponse: 你砍掉了更新。工程师小王不理解：“这版明明测试过了。”你说：“有些问题测试测不出来。”第 24 天，上一世的流失潮没有来。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_update_cancelled }
+          - { kind: add, key: credibility, value: 4 }
+      - id: gray_release
+        text: 灰度发布：先放 10% 用户试水
+        visibleResponse: 你选择了灰度。10% 的样本里流失信号出现了——你当场回滚，90% 的用户毫发无伤。这一世你不仅避开了坑，还发明了探测坑的方法。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_gray_release }
+          - { kind: add, key: technicalDebt, value: 2 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+    learningPoint: NG+ 流失记忆可转化为发布机制升级
+
+  # ===== NG+ Y3：投资人的第二次见面 =====
+  - id: v2y3_ng_investor_2nd
+    campaign: venture
+    day: 25
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 25 }
+    purpose: { narrative: NG+ 融资节奏的把控, learning: 上一世被拒的记忆 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: [“上一世，你在这位投资人面前把三十天的成绩吹成了三百天的样子，被当场看穿。这一世，同样的会面，你决定换个打法。”]
+    choices:
+      - id: pitch_reality
+        text: 只讲做到的，把“没做到的”主动摆上桌
+        visibleResponse: 你的 BP 有一页叫“我们还没解决的三件事”。投资人盯着那页看了最久，然后抬头：“知道自己的洞在哪的团队，钱到了他们手里不会乱花。”term sheet 提前了两周。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_honest_pitch }
+          - { kind: add, key: credibility, value: 6 }
+      - id: pitch_vision
+        text: 少讲数据，多讲愿景
+        visibleResponse: 你讲得激情澎湃。投资人听完鼓了掌，然后问：“数据呢？”你的愿景悬在了空中——上一世的问题，换个周目也不会自动消失。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_vision_pitch }
+          - { kind: add, key: credibility, value: -3 }
+    learningPoint: NG+ 融资教训：诚实的一页洞，胜过十页的愿景。
+
+  # ===== 汇流 wire =====
+  - id: v2_d9_wire6
+    campaign: venture
+    day: 9
+    type: story
+    trigger: { kind: day, day: 9, phase: end }
+    purpose: { narrative: D9 夜间复盘, learning: 用户资产的积累 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你的”编外团队“名单有了第一个名字。名单的标题是：”他们不再用我们，但还在帮我们。“” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 1 }
+
+  - id: v2_d12_wire6
+    campaign: venture
+    day: 12
+    type: story
+    trigger: { kind: day, day: 12, phase: end }
+    purpose: { narrative: D12 夜间复盘, learning: 成本意识的传递 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “阿哲在团队群里发了账单看板链接，配文：”每一分钱都要有名字。“你的成本意识，开始有了自己的生命。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 1 }
