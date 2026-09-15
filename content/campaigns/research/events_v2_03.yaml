@@ -183,6 +183,11 @@ events:
         hiddenEffects:
           - { kind: setFlag, key: rv2_outline_bloated }
           - { kind: add, key: academicDebt, value: 5 }
+      - id: outline_freeze_soft
+        text: 大纲只封主干，细节允许微调
+        visibleResponse: 你给主干上了锁，细节区留了缓冲带。既没有失控膨胀，也没有一刀切死。
+        hiddenEffects:
+          - { kind: add, key: progress, value: 2 }
     learningPoint: 写作范围冻结是交付的护栏
 
   - id: r_v2_y2_backup_slide
@@ -207,6 +212,11 @@ events:
         hiddenEffects:
           - { kind: setFlag, key: rv2_no_arsenal }
           - { kind: add, key: academicDebt, value: 4 }
+      - id: two_page_appendix
+        text: 做 2 页最要命的附录，其余裸奔
+        visibleResponse: 你只补了两页——数据出处和样本口径。最锋利的两把刀，握在了手里。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 2 }
     learningPoint: 附录弹药库是答辩的标准防御工事
 
   - id: r_v2_y3_talk_order
@@ -231,6 +241,11 @@ events:
         hiddenEffects:
           - { kind: setFlag, key: rv2_chronology_kept }
           - { kind: add, key: academicDebt, value: 3 }
+      - id: hybrid_order
+        text: 开头抛一个发现悬念，主体保持时间线
+        visibleResponse: 你在第 2 页埋了一个悬念（"最后有一个反直觉的发现"），主体仍是时间线。评委们果然等到了最后——还提前替你数着页。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 2 }
     learningPoint: 学术讲述以发现为导向，不以工序为导向
 
   # ===== 汇流（wire）事件 =====

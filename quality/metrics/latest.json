@@ -1,8 +1,8 @@
 {
-  "gitSha": "eb9ac82a458916c165d43246fa33defacad7e0b1",
+  "gitSha": "d556dcd03d397182d3185d3f712e6e9914aef8fc",
   "appVersion": "1.0.0",
   "contentVersion": "unknown",
-  "calculatedAt": "2026-09-15T20:40:23.618Z",
+  "calculatedAt": "2026-09-15T22:10:44.663Z",
   "research": {
     "events": 521,
     "baseEndings": 138,
@@ -25,51 +25,51 @@
     "visibleEventRange": 221
   },
   "competition": {
-    "events": 486,
-    "baseEndings": 135,
-    "meaningfulDecisions": 123,
+    "events": 493,
+    "baseEndings": 140,
+    "meaningfulDecisions": 128,
     "delayedConsequences": 57,
     "npcInteractions": 224,
-    "hiddenEvents": 30,
+    "hiddenEvents": 32,
     "ngPlusEvents": 17,
-    "hiddenBaseEndings": 18,
+    "hiddenBaseEndings": 19,
     "ngPlusBaseEndings": 11,
     "ultraRareBaseEndings": 3,
-    "displayVariantCount": 908,
+    "displayVariantCount": 938,
     "endingTones": {
-      "positive": 44,
+      "positive": 49,
       "negative": 26,
       "mixed": 31,
       "ambiguous": 12,
       "unset": 22
     },
-    "visibleEventRange": 193
+    "visibleEventRange": 198
   },
   "venture": {
-    "events": 531,
-    "baseEndings": 110,
-    "meaningfulDecisions": 123,
-    "delayedConsequences": 42,
-    "npcInteractions": 85,
-    "hiddenEvents": 23,
-    "ngPlusEvents": 14,
+    "events": 540,
+    "baseEndings": 115,
+    "meaningfulDecisions": 126,
+    "delayedConsequences": 46,
+    "npcInteractions": 86,
+    "hiddenEvents": 26,
+    "ngPlusEvents": 15,
     "hiddenBaseEndings": 15,
-    "ngPlusBaseEndings": 15,
+    "ngPlusBaseEndings": 16,
     "ultraRareBaseEndings": 1,
-    "displayVariantCount": 711,
+    "displayVariantCount": 741,
     "endingTones": {
-      "positive": 51,
-      "negative": 13,
+      "positive": 54,
+      "negative": 15,
       "mixed": 17,
       "ambiguous": 0,
       "unset": 29
     },
-    "visibleEventRange": 145
+    "visibleEventRange": 148
   },
   "totals": {
-    "events": 1538,
-    "baseEndings": 383,
-    "meaningfulDecisions": 407,
-    "delayedConsequences": 170
+    "events": 1554,
+    "baseEndings": 393,
+    "meaningfulDecisions": 415,
+    "delayedConsequences": 174
   }
 }

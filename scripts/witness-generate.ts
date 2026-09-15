@@ -121,8 +121,8 @@ for (const e of index.endings.values()) {
 }
 
 // 与 ending-resolver 的特异性排序保持一致：特异性 (score, priority) 高于目标的都是竞争者
-function specScore(e: Ending): number {
-  const flagSetters = new Map<string, number>();
+const flagSetters = new Map<string, number>();
+{
   for (const ev of index.events.values()) {
     const keys = new Set<string>();
     for (const f of ev.flags ?? []) keys.add(f.key);
@@ -130,6 +130,9 @@ function specScore(e: Ending): number {
     for (const eff of ev.automaticEffects ?? []) if (eff.kind === "setFlag") keys.add(eff.key);
     for (const k of keys) flagSetters.set(k, (flagSetters.get(k) ?? 0) + 1);
   }
+}
+
+function specScore(e: Ending): number {
   const score = (c: Condition): number => {
     switch (c.kind) {
       case "flag":
@@ -238,7 +241,7 @@ function attemptSolve(target: Ending, campaignId: string, seed: number): { steps
           const r = reducer(clone, { type: "choose", choiceId: ch.id }, index);
           if (r.error) continue;
           let score = conditionProgress(target.requirements as Condition, r.state, index)
-            - 1.5 * competitorPenalty(target, r.state)
+            - 5.0 * competitorPenalty(target, r.state)
             + (r.state.ended && r.state.endingId === target.id ? 100 : 0)
             + rng() * 0.01;
           // 避免设置目标不需要的旗标（会引入竞争结局区域）

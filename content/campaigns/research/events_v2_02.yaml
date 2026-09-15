@@ -81,6 +81,12 @@ events:
           - { kind: add, key: aiDependence, value: 6 }
           - { kind: add, key: progress, value: 3 }
           - { kind: setFlag, key: rv2_ai_deck }
+      - id: steady_cadence
+        text: 按原计划稳步推进，不做特殊安排
+        visibleResponse: 你按既定节奏推进：上午文献、下午数据、晚上写作。没有奇迹，也没有事故。
+        hiddenEffects:
+          - { kind: add, key: progress, value: 3 }
+          - { kind: add, key: independence, value: 1 }
     learningPoint: 冲刺期资源分配：骨架 > 内容 > 表皮
 
   - id: r_v2_d15_skeleton_done
@@ -213,6 +219,11 @@ events:
           - { kind: add, key: academicDebt, value: 7 }
         delayed:
           - { eventId: r_v2_d25_defense_rehearsal_crash, onDay: 25 }
+      - id: self_review
+        text: 自己对着检查清单过一遍
+        visibleResponse: 你用组里的方法检查单自查了一遍，标记了三处存疑——虽然没人当场拷问，但心里有了数。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 2 }
     learningPoint: 主动暴露弱点是最好的防御工事
 
   # ============ D19 隐藏：Agent 的训练数据偏好 ============
@@ -276,6 +287,11 @@ events:
           - { kind: add, key: academicDebt, value: 8 }
         delayed:
           - { eventId: r_v2_d27_disk_death, onDay: 27 }
+      - id: single_quick_backup
+        text: 快速拷一份到移动硬盘，别的以后再说
+        visibleResponse: 你花二十分钟拷了一份到移动硬盘。不算完美策略，但至少不是零。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 1 }
     learningPoint: 数据备份遵循 3-2-1 原则：三份拷贝、两种介质、一份异地
 
   # ============ D21 隐藏：三楼包间 ============
@@ -378,6 +394,11 @@ events:
           - { kind: add, key: academicDebt, value: 5 }
         delayed:
           - { eventId: r_v2_d27_citation_timebomb, onDay: 27 }
+      - id: priority_check
+        text: 只核答辩 PPT 里引用的那 12 条
+        visibleResponse: 你核了 PPT 里实际展示的 12 条引用——第一现场必须万无一失。附录里的，赌评委不翻。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 3 }
     learningPoint: 引用核验可分层：机器初筛、人工终审，但不可省略
 
   # ============ D24 完美主义崩溃（延迟回收）============
@@ -416,6 +437,12 @@ events:
         hiddenEffects:
           - { kind: setFlag, key: rv2_polish_to_the_end }
           - { kind: add, key: academicDebt, value: 8 }
+      - id: split_time
+        text: 四六开：四成时间收尾综述，六成时间搭骨架
+        visibleResponse: 你在综述和骨架之间找了个折中：两边都推进，两边都不完美。第 30 天，你对着两个八成品拼出了答辩。
+        hiddenEffects:
+          - { kind: add, key: progress, value: 6 }
+          - { kind: add, key: academicDebt, value: 3 }
     learningPoint: 危机时刻的取舍标准：什么直接决定通过
 
   # ============ D25 模拟答辩回收 ============
@@ -573,6 +600,12 @@ events:
         hiddenEffects:
           - { kind: setFlag, key: rv2_allnighter }
           - { kind: add, key: energy, value: -15 }
+      - id: light_rehearsal
+        text: 过一遍大纲要点，十一点前睡
+        visibleResponse: 你只过了一遍大纲要点，没有逐字排练。十一点合上电脑——中等强度的准备，中等质量的睡眠。
+        hiddenEffects:
+          - { kind: add, key: energy, value: -4 }
+          - { kind: add, key: execution, value: 2 }
     learningPoint: 答辩前夜的最好准备是排练加睡眠，不是再填一天知识
 
   # ============ D29 NG+：双周目对照 ============
@@ -621,4 +654,9 @@ events:
         visibleResponse: 导师挑了挑眉，没说话。你在他的沉默里读到了一整页批注。
         hiddenEffects:
           - { kind: setFlag, key: rv2_fake_calm }
+      - id: simple_truth
+        text: 点点头，说“来了”
+        visibleResponse: 你和陈教授对视一眼，点了点头。“来了。”两个字，不多不少。教授让开半个身位：“去吧。”有些时刻不需要台词——到场本身就是全部。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 2 }
     learningPoint: 最后一天的差异不在能力，在你与自己状态的关系
