@@ -1,28 +1,28 @@
 {
-  "gitSha": "19ceea9b0fbf4788b9e9c3467e81f48998576773",
+  "gitSha": "63a59d6758fc3cab7c4e5c23007341939efb9489",
   "appVersion": "1.0.0",
   "contentVersion": "unknown",
-  "calculatedAt": "2026-09-15T19:14:21.486Z",
+  "calculatedAt": "2026-09-15T19:29:16.340Z",
   "research": {
-    "events": 485,
-    "baseEndings": 91,
-    "meaningfulDecisions": 141,
+    "events": 498,
+    "baseEndings": 96,
+    "meaningfulDecisions": 148,
     "delayedConsequences": 71,
-    "npcInteractions": 200,
-    "hiddenEvents": 15,
-    "ngPlusEvents": 11,
-    "hiddenBaseEndings": 12,
-    "ngPlusBaseEndings": 8,
+    "npcInteractions": 201,
+    "hiddenEvents": 19,
+    "ngPlusEvents": 13,
+    "hiddenBaseEndings": 15,
+    "ngPlusBaseEndings": 10,
     "ultraRareBaseEndings": 3,
-    "displayVariantCount": 948,
+    "displayVariantCount": 978,
     "endingTones": {
-      "positive": 30,
+      "positive": 34,
       "negative": 17,
-      "mixed": 17,
+      "mixed": 18,
       "ambiguous": 0,
       "unset": 27
     },
-    "visibleEventRange": 209
+    "visibleEventRange": 216
   },
   "competition": {
     "events": 458,
@@ -46,13 +46,13 @@
     "visibleEventRange": 179
   },
   "venture": {
-    "events": 482,
+    "events": 508,
     "baseEndings": 87,
-    "meaningfulDecisions": 101,
-    "delayedConsequences": 29,
-    "npcInteractions": 81,
-    "hiddenEvents": 10,
-    "ngPlusEvents": 7,
+    "meaningfulDecisions": 111,
+    "delayedConsequences": 38,
+    "npcInteractions": 83,
+    "hiddenEvents": 13,
+    "ngPlusEvents": 9,
     "hiddenBaseEndings": 8,
     "ngPlusBaseEndings": 8,
     "ultraRareBaseEndings": 1,
@@ -64,12 +64,12 @@
       "ambiguous": 0,
       "unset": 29
     },
-    "visibleEventRange": 127
+    "visibleEventRange": 139
   },
   "totals": {
-    "events": 1425,
-    "baseEndings": 297,
-    "meaningfulDecisions": 352,
-    "delayedConsequences": 151
+    "events": 1464,
+    "baseEndings": 302,
+    "meaningfulDecisions": 369,
+    "delayedConsequences": 160
   }
 }

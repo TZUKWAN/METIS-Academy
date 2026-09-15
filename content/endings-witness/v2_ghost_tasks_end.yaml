@@ -21,35 +21,37 @@ steps:
     expectEvent: v_y_d1_wishlist
   - do: endDay
     expectDay: 2
+  - do: advance
+    expectEvent: v_e01_d04_wall_stats
+  - do: startMission
+    missionId: vm2
   - do: choose
-    choiceId: monthly_only
-    expectEvent: v_e06_d29_saas_page
+    choiceId: investigate_club
+    expectEvent: v_d04_who
   - do: advance
     expectEvent: v_x_d2_more_signals
   - do: advance
     expectEvent: v_e01_d02_signals_plus
   - do: advance
     expectEvent: v_y_d2_tool_check
-  - do: startMission
-    missionId: vm2
-  - do: choose
-    choiceId: investigate_club
-    expectEvent: v_d04_who
   - do: endDay
     expectDay: 3
   - do: choose
-    choiceId: fall_for_pro
+    choiceId: ideas_to_pool
     expectEvent: v_d03_ai_ideas
   - do: advance
-    expectEvent: v_e06_d25_b2c_psych
+    expectEvent: v_e05_d23_miniapp_reject
   - do: choose
     choiceId: keep_all
     expectEvent: v_e01_d03_log_trim
   - do: endDay
     expectDay: 4
   - do: choose
-    choiceId: ltv_dismiss
-    expectEvent: v_e05_d28_ltv_calc
+    choiceId: cheap_domain
+    expectEvent: v2s11_domain_choice
+  - do: choose
+    choiceId: invite_bin
+    expectEvent: v_x_d14_bin_join
   - do: choose
     choiceId: no_outline
     expectEvent: v_e01_d04_outline
@@ -62,8 +64,8 @@ steps:
     choiceId: go_verbal
     expectEvent: v2g1_partner_split
   - do: choose
-    choiceId: skip_report
-    expectEvent: v_e04_d25_usage_report
+    choiceId: send_redpacket
+    expectEvent: v_e03_d21_group_quiet
   - do: advance
     expectEvent: v_x_d5_senior_case
   - do: advance
@@ -73,8 +75,10 @@ steps:
   - do: advance
     expectEvent: v_d06_real_talk
   - do: choose
-    choiceId: direct_dm
-    expectEvent: v_e06_d24_find_dm
+    choiceId: fix_tos
+    expectEvent: v2s12_tos_choice
+  - do: advance
+    expectEvent: v_e05_d25_niche_defense
   - do: startMission
     missionId: vm3
   - do: choose
@@ -97,7 +101,7 @@ steps:
     choiceId: refuse_deal
     expectEvent: v2h1_platform_choice
   - do: advance
-    expectEvent: v_e03_d22_union_knock
+    expectEvent: v_e04_d22_loud_free
   - do: choose
     choiceId: cold_interview
     expectEvent: v_e01_d07_friend_bias
@@ -109,20 +113,23 @@ steps:
     choiceId: segment_users
     expectEvent: v_d08_segment
   - do: choose
-    choiceId: refuse_rival
-    expectEvent: v_e06_d28_partner_with_rival
+    choiceId: raise_budget
+    expectEvent: v2s1_cac_rise
+  - do: choose
+    choiceId: wall_route
+    expectEvent: v_e01_d01_walk_route
   - do: endDay
     expectDay: 9
   - do: choose
     choiceId: delay_support
     expectEvent: v2i1_support_setup
   - do: choose
-    choiceId: honest_note
-    expectEvent: v_e07_d29_shutdown_note
+    choiceId: gut_feel_cash
+    expectEvent: v_e05_d25_runway
   - do: advance
     expectEvent: v_x_d9_board_check
   - do: choose
-    choiceId: draw_quad
+    choiceId: no_quad
     expectEvent: v_e01_d09_quad
   - do: choose
     choiceId: grade_evidence
@@ -131,14 +138,18 @@ steps:
     expectEvent: v_y_d9_naming
   - do: endDay
     expectDay: 10
-  - do: advance
-    expectEvent: v_e03_d24_flyer_mistake
+  - do: choose
+    choiceId: keep_rich
+    expectEvent: v2s14_positioning
+  - do: choose
+    choiceId: hook_first
+    expectEvent: v_e03_d24_short_video
   - do: advance
     expectEvent: v_x_d10_concierge_log
   - do: advance
     expectEvent: v_e01_d10_grad_handover
   - do: choose
-    choiceId: evidence_first
+    choiceId: passion_first
     expectEvent: v_e01_d10_pick_three
   - do: advance
     expectEvent: v_e01_d10_k_introduce
@@ -153,8 +164,10 @@ steps:
   - do: endDay
     expectDay: 11
   - do: choose
-    choiceId: code_now
-    expectEvent: v_e07_d13_api_doc
+    choiceId: public_statement
+    expectEvent: v2s5_copycat
+  - do: advance
+    expectEvent: v_e01_d02_print_shop
   - do: choose
     choiceId: track_cost
     expectEvent: v_x_d11_cost
@@ -169,9 +182,8 @@ steps:
   - do: choose
     choiceId: chase_both
     expectEvent: v2j1_route_choice
-  - do: choose
-    choiceId: write_agreement
-    expectEvent: v_e05_d22_equity_talk2
+  - do: advance
+    expectEvent: v_e03_d18_user_video
   - do: advance
     expectEvent: v_e02_d12_test_first
   - do: endDay
@@ -179,11 +191,19 @@ steps:
   - do: advance
     expectEvent: v_d13_init
   - do: choose
-    choiceId: wait_for_users
-    expectEvent: v_e03_d17_seed_list
+    choiceId: patch_again
+    expectEvent: v2s7_refactor_pain
+  - do: choose
+    choiceId: discount_once
+    expectEvent: v2s13_price_experiment
+  - do: choose
+    choiceId: feed_all
+    expectEvent: v_y_d12_privacy_think
   - do: choose
     choiceId: write_rules
     expectEvent: v_d13_rules
+  - do: advance
+    expectEvent: v2_d13_wire2
   - do: endDay
     expectDay: 14
   - do: advance
@@ -192,8 +212,8 @@ steps:
     choiceId: mvp_contract
     expectEvent: v_d14_contract
   - do: choose
-    choiceId: ask_past_paid
-    expectEvent: v_e01_d07_past_payment
+    choiceId: rotate_key
+    expectEvent: v_e02_d17_secret_leak
   - do: choose
     choiceId: blame_and_move
     expectEvent: v2g3_ghost_choice
@@ -202,35 +222,54 @@ steps:
   - do: endDay
     expectDay: 15
   - do: choose
-    choiceId: launch_goal
+    choiceId: fuzzy_goal
     expectEvent: v_d15_goal
   - do: choose
     choiceId: trust_average
     expectEvent: v2k1_churn_read
-  - do: advance
-    expectEvent: v_e07_d28_thanks_wall
+  - do: choose
+    choiceId: keep_control
+    expectEvent: v2s9_community_seed
+  - do: choose
+    choiceId: accept_favor
+    expectEvent: v2s15_partner_cousin
+  - do: choose
+    choiceId: blame_first
+    expectEvent: v_e04_d22_service_script
   - do: advance
     expectEvent: v_x_d15_test_day
   - do: advance
     expectEvent: v_y_d15_demo_video
+  - do: advance
+    expectEvent: v2_d15_wire2
   - do: endDay
     expectDay: 16
+  - do: advance
+    expectEvent: v2s2_cac_burn
   - do: choose
     choiceId: loop_with_regress
     expectEvent: v_d16_loop
   - do: choose
-    choiceId: hide_failure
-    expectEvent: v_e03_d19_fail_post
+    choiceId: patch_later
+    expectEvent: v2s16_db_migration
+  - do: choose
+    choiceId: give_free
+    expectEvent: v_e03_d17_free_friend
+  - do: choose
+    choiceId: keep_pouring
+    expectEvent: v2s3_cac_verdict
+  - do: advance
+    expectEvent: v2_d16_wire2
   - do: endDay
     expectDay: 17
   - do: advance
     expectEvent: v_d17_deploy
   - do: advance
-    expectEvent: v_e04_d20_payment_fail
+    expectEvent: v_e02_d11_agent_freestyle
   - do: advance
     expectEvent: v_x_d17_pre_announce
   - do: choose
-    choiceId: launch_now
+    choiceId: final_regress
     expectEvent: v_d17_launch_choice
   - do: advance
     expectEvent: v_e03_d17_first_ten
@@ -239,18 +278,25 @@ steps:
   - do: endDay
     expectDay: 18
   - do: advance
-    expectEvent: v_e05_d23_mentor_ltv2
+    expectEvent: v2s12b_dispute_shield
+  - do: advance
+    expectEvent: v_e06_d25_b2c_refund_rate
+  - do: advance
+    expectEvent: v2_d18_wire4
   - do: choose
     choiceId: triage_feedback
     expectEvent: v_x_d18_confusion
   - do: advance
     expectEvent: v_e03_d18_first_accompany
+  - do: advance
+    expectEvent: v2_d18_wire2
   - do: endDay
     expectDay: 19
   - do: advance
     expectEvent: v2i2_silent_churn
-  - do: advance
-    expectEvent: v_e06_d23_union_kpi
+  - do: choose
+    choiceId: hype_price
+    expectEvent: v_e04_d21_price_copy
   - do: choose
     choiceId: triage_system
     expectEvent: v2i3_support_rebuild
@@ -264,7 +310,7 @@ steps:
     choiceId: clean_split
     expectEvent: v_d20_pollution
   - do: advance
-    expectEvent: v_e01_d06_group_lurk
+    expectEvent: v_e07_d05_pomodoro
   - do: advance
     expectEvent: v_x_d20_moon
   - do: advance
@@ -277,44 +323,56 @@ steps:
   - do: advance
     expectEvent: v_e03_d20_word_of_mouth
   - do: choose
-    choiceId: keep_all_ch
+    choiceId: cut_hard
     expectEvent: v_e03_d20_kill_channel
   - do: advance
     expectEvent: v_y_d20_churn_call
+  - do: advance
+    expectEvent: v2_d20_wire4
   - do: endDay
     expectDay: 21
   - do: advance
     expectEvent: v2j2_both_burn
-  - do: advance
-    expectEvent: v_e02_d16_race_conflict
   - do: choose
-    choiceId: double_down_b2b
+    choiceId: no_budget
+    expectEvent: v_e07_d16_error_budget
+  - do: choose
+    choiceId: double_down_b2c
     expectEvent: v2j3_route_verdict
   - do: advance
     expectEvent: v_d21_churn
   - do: advance
     expectEvent: v_x_d21_pricing_page
   - do: choose
-    choiceId: no_promise
+    choiceId: promise_refund
     expectEvent: v_y_d21_price_page
   - do: advance
     expectEvent: v2_d21_wire
   - do: endDay
     expectDay: 22
+  - do: advance
+    expectEvent: v2s6_lawsuit_threat
   - do: choose
-    choiceId: thank_and_upgrade
+    choiceId: cold_process
     expectEvent: v_d22_first_paid
-  - do: choose
-    choiceId: keep_refunding
-    expectEvent: v_e04_d24_refund_abuse
+  - do: advance
+    expectEvent: v_e06_d25_corp_account
+  - do: advance
+    expectEvent: v2_d23_wire2
+  - do: advance
+    expectEvent: v2_d22_wire4
   - do: endDay
     expectDay: 23
+  - do: advance
+    expectEvent: v2s8_archaeology_day
   - do: choose
-    choiceId: refund_plus
+    choiceId: deny_refund
     expectEvent: v_d23_refund
   - do: choose
-    choiceId: three_axes
-    expectEvent: v_e05_d27_cost_three
+    choiceId: brag
+    expectEvent: v_x_d12_family_dinner
+  - do: advance
+    expectEvent: v2_d24_wire2
   - do: advance
     expectEvent: v_e04_d23_big_order
   - do: endDay
@@ -322,8 +380,8 @@ steps:
   - do: advance
     expectEvent: v2g4_collapse_day
   - do: choose
-    choiceId: give_free
-    expectEvent: v_e03_d17_free_friend
+    choiceId: self_serve
+    expectEvent: v_e04_d24_refund_self
   - do: advance
     expectEvent: v2_d24_wire
   - do: choose
@@ -335,14 +393,19 @@ steps:
     expectEvent: v_e03_d24_hundred_users
   - do: endDay
     expectDay: 25
+  - do: advance
+    expectEvent: v2s13b_discount_hangover
   - do: choose
     choiceId: keep_quiet
     expectEvent: v2k2_averaged_trap
   - do: choose
-    choiceId: creative_accounting
+    choiceId: honest_ledger
     expectEvent: v_d25_unit_econ
+  - do: choose
+    choiceId: send_survey
+    expectEvent: v_x_d22_wenjuan
   - do: advance
-    expectEvent: v_e06_d25_b2c_psych
+    expectEvent: v2_d25_wire4
   - do: advance
     expectEvent: v_e04_d25_price_result
   - do: advance
@@ -350,44 +413,58 @@ steps:
   - do: advance
     expectEvent: v_e07_d25_burn_sign
   - do: choose
-    choiceId: research_legal
+    choiceId: ignore_legal
     expectEvent: v_y_d25_tax_think
   - do: endDay
     expectDay: 26
+  - do: advance
+    expectEvent: v2s4_cash_alarm
   - do: choose
     choiceId: double_warm
     expectEvent: v_d26_channels_cost
   - do: advance
-    expectEvent: v_y_d22_teach_friend
+    expectEvent: v_e04_d23_bill_transparent
+  - do: advance
+    expectEvent: v2_d27_wire2
   - do: advance
     expectEvent: v_e05_d26_money_discipline
   - do: endDay
     expectDay: 27
-  - do: choose
-    choiceId: blame_users
-    expectEvent: v_d27_retention
   - do: advance
-    expectEvent: v_e07_d25_long_term_mind
+    expectEvent: v2s15b_favor_cost
+  - do: choose
+    choiceId: onboarding_fix
+    expectEvent: v_d27_retention
+  - do: choose
+    choiceId: panic_copy
+    expectEvent: v_x_d7_rival_idea
+  - do: advance
+    expectEvent: v2_d27_wire4
   - do: choose
     choiceId: call_dont_mail
     expectEvent: v_x_d27_churn_email
   - do: advance
     expectEvent: v_e04_d27_creep_check
   - do: choose
-    choiceId: keep_grinding
+    choiceId: systematize
     expectEvent: v_e04_d27_support_budget
   - do: choose
     choiceId: total_only
     expectEvent: v_e05_d27_cac_table
   - do: choose
-    choiceId: all_metrics
+    choiceId: three_metrics
     expectEvent: v_y_d27_metrics_review
   - do: advance
     expectEvent: v2_d27_wire
   - do: endDay
     expectDay: 28
   - do: advance
-    expectEvent: v_e06_d26_due_diligence
+    expectEvent: v2s16b_db_scare
+  - do: choose
+    choiceId: informal_chat
+    expectEvent: v_e07_d30_retro
+  - do: advance
+    expectEvent: v2_d28_wire4
   - do: advance
     expectEvent: v_e05_d28_ratio_review
   - do: advance
@@ -397,9 +474,8 @@ steps:
   - do: choose
     choiceId: keep_cash
     expectEvent: v_d29_allocate
-  - do: choose
-    choiceId: accept_acq
-    expectEvent: v_e06_d26_acq_offer
+  - do: advance
+    expectEvent: v_e01_d05_clerk_talk
   - do: advance
     expectEvent: v_x_d29_final_check
   - do: advance
@@ -408,18 +484,20 @@ steps:
     choiceId: hybrid_road
     expectEvent: v_e06_d29_studio_or_product
   - do: choose
-    choiceId: fill_bmc
+    choiceId: skip_bmc
     expectEvent: v_e06_d29_bmc
   - do: advance
     expectEvent: v_y_d29_backup_data
+  - do: advance
+    expectEvent: v2_d29_wire2
   - do: endDay
     expectDay: 30
   - do: choose
-    choiceId: confidence_numbers
+    choiceId: confidence_users
     expectEvent: v2_final_pitch_day
   - do: choose
-    choiceId: pivot_mood
-    expectEvent: v_e06_d25_pivot_question
+    choiceId: rule_block
+    expectEvent: v_e04_d24_refund_abuse
   - do: advance
     expectEvent: v_x_d30_letter
   - do: advance
@@ -427,12 +505,12 @@ steps:
   - do: advance
     expectEvent: v_e07_d30_legacy
   - do: choose
-    choiceId: write_handoff
+    choiceId: keep_in_head
     expectEvent: v_e07_d30_handoff_doc
   - do: advance
     expectEvent: v_e07_d30_letter_next
   - do: choose
-    choiceId: send_letter
+    choiceId: skip_letter
     expectEvent: v_y_d30_letter_to_users
   - do: endDay
     expectDay: 31

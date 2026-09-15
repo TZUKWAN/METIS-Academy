@@ -120,9 +120,50 @@ for (const e of index.endings.values()) {
   campaignEndingsByCampaign.set(e.campaign, list);
 }
 
+// 与 ending-resolver 的特异性排序保持一致：特异性 (score, priority) 高于目标的都是竞争者
+function specScore(e: Ending): number {
+  const flagSetters = new Map<string, number>();
+  for (const ev of index.events.values()) {
+    const keys = new Set<string>();
+    for (const f of ev.flags ?? []) keys.add(f.key);
+    for (const ch of ev.choices ?? []) for (const eff of ch.hiddenEffects ?? []) if (eff.kind === "setFlag") keys.add(eff.key);
+    for (const eff of ev.automaticEffects ?? []) if (eff.kind === "setFlag") keys.add(eff.key);
+    for (const k of keys) flagSetters.set(k, (flagSetters.get(k) ?? 0) + 1);
+  }
+  const score = (c: Condition): number => {
+    switch (c.kind) {
+      case "flag":
+      case "flagValue":
+        return (flagSetters.get(c.key) ?? 0) === 1 ? 2 : 0;
+      case "assetType":
+      case "assetExists":
+      case "skill":
+      case "knowledge":
+        return 1;
+      case "and":
+      case "or":
+        return Math.max(0, ...c.conditions.map(score));
+      case "not":
+        return score(c.condition);
+      default:
+        return 0;
+    }
+  };
+  let s = score(e.requirements as Condition);
+  if ((e as { ngPlus?: boolean }).ngPlus === true || (e as { ultraRare?: boolean }).ultraRare === true) s = Math.max(s, 1);
+  return s;
+}
+
+function beatsTarget(t: Ending, e: Ending): boolean {
+  const st = specScore(t);
+  const se = specScore(e);
+  if (se !== st) return se > st;
+  return e.priority > t.priority;
+}
+
 function competitorPenalty(target: Ending, state: GameState): number {
   const competitors = (campaignEndingsByCampaign.get(target.campaign) ?? []).filter(
-    (e) => e.id !== target.id && e.priority > target.priority,
+    (e) => e.id !== target.id && beatsTarget(target, e),
   );
   if (competitors.length === 0) return 0;
   let closeness = 0;
