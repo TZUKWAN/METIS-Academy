@@ -1,0 +1,158 @@
+# METIS Academy V2 扩展结局 — 第二批
+endings:
+  - id: r_ext_peer_conflict
+    campaign: research
+    title: 组会冲突
+    mainResult: 与同门在组会上公开争执
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: independence, op: gte, value: 65 }
+        - { kind: state, key: mentorTrust, op: gte, value: 45 }
+    priority: 55
+    baseText: 组会上你和同级同门就方法论问题激烈争论。陈教授没有制止，只是最后说："学术争论是好事，但要对事不对人。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 70, text: 你用数据回应了对方的每一个质疑。最终陈教授说："你们俩的方法都可行，但你更有说服力。" }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 会后你们一起去吃了饭。他说："下次组会我站你这边。"
+        neutral: 你们之间有了一道看不见的墙。
+        negative: 从那以后你的发言总被打断。
+    reflection: 学术争论可以很激烈，但不能变成人身攻击。
+    specialTags: [conflict]
+
+  - id: r_ext_writing_block
+    campaign: research
+    title: 写作瓶颈
+    mainResult: 论文写作陷入长期瓶颈
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: defense_done }
+        - { kind: state, key: execution, op: lte, value: 35 }
+    priority: 45
+    baseText: 你对着空白文档坐了三个小时。你知道要写什么，但每次开始就停下来改前一段。三个小时后你只写了标题。你开始怀疑自己是否适合做研究。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 65, text: 你最终跳过了完美主义的陷阱——先写完再改。虽然初稿很粗糙，但你至少有了可以修改的东西。 }
+          - { lte: 40, text: 你一直没走出来。瓶颈持续了整个月。 }
+    reflection: 写作瓶颈的解药不是等灵感，是降低标准先写完。
+    specialTags: [writing]
+
+  - id: r_ext_peer_review
+    campaign: research
+    title: 同行评议
+    mainResult: 论文通过同行评议并收到修改意见
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: defense_done }
+        - { kind: state, key: evidenceDiscipline, op: gte, value: 60 }
+    priority: 58
+    baseText: 你的论文收到了三位审稿人的意见。两位建议小修，一位建议大修。你逐条阅读了每一条意见——有些很中肯，有些你不同意。但至少，有人认真读了你的工作。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 75, text: 你逐条回应了每一条意见，连标点符号错误都改了。三个月后论文录用。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 林师姐帮你审了一遍修改稿，说："比之前好多了。"
+        neutral: 林师姐说："你自己的论文自己改。"
+        negative: 林师姐没有回复你的请求。
+    reflection: 同行评议是学术的质量控制机制，也是成长机会。
+    specialTags: [publishing]
+
+  - id: c_ext_sponsor
+    campaign: competition
+    title: 企业赞助
+    mainResult: 获得企业赞助和实习机会
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: prelim_passed }
+        - { kind: state, key: credibility, op: gte, value: 65 }
+        - { kind: flag, key: c_final_done }
+    priority: 105
+    baseText: 一家科技公司的 HR 在赛后找到了你们："你们的Demo很有创意，我们愿意提供赞助和实习机会。"方远和江雨桐对视了一眼——这对他们来说比奖杯更有吸引力。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 70, text: "你们三个人全部拿到了 offer。方远说：'比奖杯实在多了。'" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远接受了实习 offer，他说："终于可以做真项目了。"
+        neutral: 方远没有立刻决定，说要考虑一下。
+        negative: 方远拒绝了，他说："我想继续读书。"
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 企业赞助让你的团队获得了真实项目经验和行业人脉。 }
+    specialTags: [sponsor]
+
+  - id: c_ext_media_coverage
+    campaign: competition
+    title: 媒体报道
+    mainResult: 项目被校园媒体报道
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: prelim_passed }
+        - { kind: state, key: credibility, op: gte, value: 55 }
+    priority: 78
+    baseText: 校园官方公众号做了一期竞赛专题报道，你们的项目被选为典型案例。江雨桐接受了采访，方远的代码截图被放在了封面。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: 报道发布后，三个学院的学生会主动联系你们想用你们的工具。 }
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 媒体报道带来了意想不到的资源——实验室空间、额外经费，甚至跨校合作邀请。 }
+    reflection: 媒体曝光是放大器，但前提是你有值得放大的东西。
+    specialTags: [media]
+
+  - id: v_ext_burnout
+    campaign: venture
+    title: 燃尽
+    mainResult: 创始人过度疲劳导致项目暂停
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: energy, op: lte, value: 15 }
+        - { kind: state, key: day, op: gte, value: 20 }
+    priority: 92
+    tier: main
+    baseText: 连续三周每天工作 14 小时之后，你在凌晨三点醒来，发现自己无法起床。不是 Lazy——是身体在罢工。医生说你需要至少休息一个月。项目被迫暂停。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 70, text: 你接受了这个现实，把项目交给了可信赖的伙伴暂管。一个月后你带着新能量回来了。 }
+          - { lte: 40, text: 你不肯停下来。项目在你"坚持"的第 25 天彻底崩溃了——代码和身体一起。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿斌说："你终于肯休息了。项目我看着。"
+        neutral: 阿斌发了一条消息："注意身体。"
+        negative: 阿斌说："创业者不能倒下。你要想办法撑住。"
+    reflection: 创业是马拉松，不是百米冲刺。身体是你唯一的引擎。
+    specialTags: [burnout]
+
+  - id: v_ext_open_source
+    campaign: venture
+    title: 开源之路
+    mainResult: 决定将产品开源
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: v_final_done }
+        - { kind: state, key: independence, op: gte, value: 75 }
+    priority: 105
+    tier: special
+    baseText: 你做出了一个出人意料的决定：将产品完全开源，用社区和服务模式盈利。你的导师说你疯了，你的合伙人说你是天才。三个月后，GitHub 上有 500 个 star 和 3 个外部贡献者。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 80, text: 你在 README 里写道："这个项目教会我的不是怎么写代码，是怎么验证一个想法。" }
+    projectFutureRules:
+      - { key: os, condition: { kind: always }, text: 开源版本成了你的活广告。三家企业主动联系你做定制开发。 }
+    specialTags: [opensource]
+    reflection: 开源不是放弃商业，是换一种方式建立信任。
+    specialTags: [opensource]
