@@ -1,0 +1,507 @@
+# METIS Academy Venture V2 事件批次四 —— S11-S25 密集延迟链（决策/延迟/隐藏/NG+ 补完）
+events:
+  # ===== S11：域名与品牌的坑 =====
+  - id: v2s11_domain_choice
+    campaign: venture
+    day: 4
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 4, phase: start }
+    purpose: { narrative: 域名注册的短视, learning: 品牌资产的早期决策 }
+    scene: { location: dorm, characters: [v_partner] }
+    setup: [“注册域名时，想要的 .com 被抢注了，标价 8000。阿哲建议用拼音缩写凑合：”反正产品好就行。“”
+    ]
+    choices:
+      - id: buy_domain
+        text: 咬牙买下 .com——品牌不能将就
+        visibleResponse: 8000 元买了个字符串，心疼了一周。三个月后天使投资人问的第一件事就是“域名是自己的吗”。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_brand_bought }
+          - { kind: add, key: money, value: -8 }
+          - { kind: add, key: credibility, value: 3 }
+      - id: cheap_domain
+        text: 用缩写域名，钱花在刀刃上
+        visibleResponse: 你省下了 8000。从此每次口头介绍产品，都要多花二十秒解释“缩写怎么拼”。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_brand_cheap }
+          - { kind: add, key: academicDebt, value: 2 }
+    learningPoint: 品牌基础资产要在早期一次到位
+
+  # ===== S12：用户协议的坑 =====
+  - id: v2s12_tos_choice
+    campaign: venture
+    day: 6
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 6, phase: start }
+    purpose: { narrative: 用户协议的复制粘贴, learning: 法律文本不能裸奔 }
+    scene: { location: dorm, characters: [] }
+    setup: [“上线前最后一项：用户协议。Agent 十秒生成了一份。你 scroll 到底部准备直接用——忽然看到”适用法律：美国特拉华州“。”]
+    choices:
+      - id: fix_tos
+        text: 逐条改协议： jurisdiction、免责、数据归属
+        visibleResponse: 你花了半天改成中国法律适用、明确了数据归用户。后来一次客诉纠纷里，这半天省了两万块。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_tos_fixed }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+        delayed:
+          - { eventId: v2s12b_dispute_shield, onDay: 18 }
+      - id: ship_now
+        text: 先上线再说，协议以后改
+        visibleResponse: 产品按时上线了。那份美国协议在服务器上安静地躺着，等一个不合适的时机被人发现。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_tos_lazy }
+          - { kind: add, key: technicalDebt, value: 3 }
+        delayed:
+          - { eventId: v2s12b_tos_exposed, onDay: 18 }
+    learningPoint: 用户协议是法律防线，AI 生成的必须人工适配辖区
+
+  - id: v2s12b_dispute_shield
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 协议挡下的第一刀, learning: 法律准备的红利 }
+    scene: { location: dorm, characters: [] }
+    setup: [“一位用户投诉数据丢失要求高额赔偿。你翻出协议第三条：数据归用户所有，平台提供的是存储服务而非担保。沟通十分钟，对方接受了补偿方案。”]
+    dialogue:
+      - { speaker: 系统, text: “那半天的协议修改，在今天的十分钟里完成了回本。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 2 }
+    next: v2_d18_wire4
+
+  - id: v2s12b_tos_exposed
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 协议被扒, learning: 法律裸奔的社死现场 }
+    scene: { location: dorm, characters: [] }
+    setup: [“一个学法律的用户在群里贴出截图：”你们的用户协议适用美国特拉华州法律？“配了个微笑表情。群里安静了十分钟。”]
+    dialogue:
+      - { speaker: 系统, text: “你连夜换掉了协议，并在群里道歉。有人回复：”学到了，原来协议真的有人看。“你宁愿没人看。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: -4 }
+    next: v2_d18_wire4
+
+  # ===== S13：定价实验的意外 =====
+  - id: v2s13_price_experiment
+    campaign: venture
+    day: 13
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 13, phase: start }
+    purpose: { narrative: 降价促销的诱惑, learning: 折价对品牌锚点的侵蚀 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: [“增长遇到瓶颈，阿哲提议：搞个”首月五折“促销冲一波。月付 29 打折后 14.5。”]
+    choices:
+      - id: hold_price
+        text: 不降价：送服务不送价格
+        visibleResponse: 你推出了“首月送 1v1 引导”——价格不变，价值+1。转化率升了 2 个点，锚点完好无损。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_hold_price }
+          - { kind: add, key: revenue, value: 3 }
+        delayed:
+          - { eventId: v2s13b_anchor_hold, onDay: 25 }
+      - id: discount_once
+        text: 就这一次，五折冲量
+        visibleResponse: 促销三天，新用户翻了三倍。你盯着漂亮的数据，忽然想起一个问题：下个月恢复原价，他们会留下吗？
+        hiddenEffects:
+          - { kind: setFlag, key: kv_discount_once }
+          - { kind: add, key: users, value: 7 }
+          - { kind: add, key: revenue, value: -2 }
+        delayed:
+          - { eventId: v2s13b_discount_hangover, onDay: 25 }
+    learningPoint: 折价促销会重置价格锚点，优先用增值替代降价
+
+  - id: v2s13b_anchor_hold
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 锚点的坚守红利, learning: 不降价的长期回报 }
+    scene: { location: dorm, characters: [] }
+    setup: [“季度复盘：你的客单价稳定在 29，续费率 61%。同赛道一个靠五折冲量的竞品，客单价已经被”永远在促销“固定在了 14.5。”]
+    dialogue:
+      - { speaker: 系统, text: “价格是承诺：你对自己定价的尊重，就是用户对它尊重的上限。” }
+    automaticEffects:
+      - { kind: add, key: revenue, value: 4 }
+    next: v2_d25_wire4
+
+  - id: v2s13b_discount_hangover
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 折价宿醉, learning: 促销用户的留存真相 }
+    scene: { location: dorm, characters: [] }
+    setup: [“恢复原价后的续费日到了。促销用户的续费率：11%。他们爱的不是你的产品，是那个折扣。”]
+    dialogue:
+      - { speaker: 系统, text: “促销引来的用户像潮水——涨潮时壮观，退潮时只剩下你，和一片湿漉漉的运营报表。” }
+    automaticEffects:
+      - { kind: add, key: revenue, value: -4 }
+    next: v2_d25_wire4
+
+  # ===== S14：产品定位的一句话 =====
+  - id: v2s14_positioning
+    campaign: venture
+    day: 10
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 10, phase: start }
+    purpose: { narrative: 定位句的取舍, learning: 一句话说清产品 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: [“导师要求你用一句话说清产品。你的版本有 47 个字，三个逗号，两个”并且“。”]
+    choices:
+      - id: one_sentence
+        text: 砍到一句话：为谁，解决什么，凭什么
+        visibleResponse: 你改了十几版，最后定稿：“帮大学生社团半小时搞定活动复盘。”导师听完点头：“现在去验证这句话就行。”
+        hiddenEffects:
+          - { kind: setFlag, key: kv_one_sentence }
+          - { kind: add, key: userUnderstanding, value: 5 }
+        delayed:
+          - { eventId: v2s14b_positioning_pays, onDay: 22 }
+      - id: keep_rich
+        text: 产品复杂，一句话说不清很正常
+        visibleResponse: 你保留了 47 字版本。每次介绍完，对方的第一反应都是“所以它到底是……”。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_rich_positioning }
+          - { kind: add, key: credibility, value: -2 }
+    learningPoint: 定位句是产品的宪法——说不清就做不深
+
+  - id: v2s14b_positioning_pays
+    campaign: venture
+    day: 22
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 定位句的传播, learning: 清晰定位的自传播 }
+    scene: { location: canteen, characters: [v_user_student] }
+    dialogue:
+      - { speaker: v_user_student, text: “我跟别社推荐你们时就说那句话——半小时搞定活动复盘——他们秒懂，直接扫码了。” }
+      - { speaker: 系统, text: “你的用户开始用你的句子介绍你。这句话成了增长函数里最便宜的一个变量。” }
+    automaticEffects:
+      - { kind: add, key: users, value: 4 }
+    next: v2_d22_wire4
+
+  # ===== S15：合伙人的亲戚 =====
+  - id: v2s15_partner_cousin
+    campaign: venture
+    day: 15
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 15, phase: start }
+    purpose: { narrative: 人情与规则的碰撞, learning: 早期雇佣的规则意识 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: [“阿哲的表弟想来做兼职设计，”不要钱，练手“。你看过他的作品集——大一水平。而你们的设计，正被竞品压着打。”]
+    choices:
+      - id: trial_with_bar
+        text: 给两周试用期，设硬考核标准
+        visibleResponse: 你出了三道实题。表弟交稿那天，阿哲看完沉默了：“确实不行。”没有争吵，因为标准是提前定的。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_merit_bar }
+          - { kind: add, key: teamTrust, value: 3 }
+        delayed:
+          - { eventId: v2s15b_rule_wins, onDay: 27 }
+      - id: accept_favor
+        text: 收下人情，慢慢带
+        visibleResponse: 表弟进来了。你多了一份“设计督导”的隐形工作，和一层不好意思开口辞退的人情。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_favor_hire }
+          - { kind: add, key: execution, value: -3 }
+        delayed:
+          - { eventId: v2s15b_favor_cost, onDay: 27 }
+    learningPoint: 早期团队用人必须量才，人情要制度化处理
+
+  - id: v2s15b_rule_wins
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 规则的胜利, learning: 标准保护关系 }
+    scene: { location: lab, characters: [v_partner] }
+    dialogue:
+      - { speaker: v_partner, text: “谢谢你那天定了标准。要是我自己硬塞他进来，最后兄妹都没得做——现在他知道是能力问题，不是我不要他。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 2 }
+    next: v2_d27_wire4
+
+  - id: v2s15b_favor_cost
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 人情的账单, learning: 无法开口的成本最高 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: [“路演材料的设计稿改了七版还是不行。你不好意思说重做，表弟不好意思承认不会，阿哲夹在中间装看不见。倒计时四天。”]
+    dialogue:
+      - { speaker: 系统, text: “你花 300 元外包了设计。账单可以报销，但那十二天里所有人都别扭着——这份成本没有发票。” }
+    automaticEffects:
+      - { kind: add, key: money, value: -3 }
+      - { kind: add, key: teamTrust, value: -2 }
+    next: v2_d27_wire4
+
+  # ===== S16：数据备份的二次课 =====
+  - id: v2s16_db_migration
+    campaign: venture
+    day: 16
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 16, phase: start }
+    purpose: { narrative: 数据库迁移的窗口, learning: 基础设施要趁早 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: [“用户数据快撑爆免费的 SQLite 了。Agent 估算：现在迁移 2 天，三个月后迁移 8 天，半年后”建议重写“。”]
+    choices:
+      - id: migrate_now
+        text: 现在就迁：两天换三年安稳
+        visibleResponse: 你花两天迁到了 Postgres，配了自动备份。三个月后用户翻五倍的那天，你给当时的自己烧了柱香。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_migrated_now }
+          - { kind: add, key: technicalDebt, value: -6 }
+          - { kind: add, key: progress, value: -2 }
+        delayed:
+          - { eventId: v2s16b_scale_calm, onDay: 28 }
+      - id: patch_later
+        text: 先写个定时备份脚本顶着
+        visibleResponse: 备份脚本写好了，SQLite 继续服役。隐患被推迟了——和利息一起。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_patch_later }
+          - { kind: add, key: technicalDebt, value: 5 }
+        delayed:
+          - { eventId: v2s16b_db_scare, onDay: 28 }
+    learningPoint: 基础设施迁移成本随时间指数增长，窗口期要抓
+
+  - id: v2s16b_scale_calm
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 扩容日的平静, learning: 早期投入的复利 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “用户激增那天，别的创业者在群里哀嚎”数据库挂了“，你只是调了下连接池参数。平静，是提前交过费的。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 2 }
+    next: v2_d28_wire4
+
+  - id: v2s16b_db_scare
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 深夜的数据库警报, learning: 拖延的利息清单 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: [“凌晨一点，备份脚本报错——磁盘满了，备份已经失败三天而你不知道。主库响应慢得像老牛。你盯着 Agent 给出的迁移估算：8 天。”]
+    dialogue:
+      - { speaker: 系统, text: “第 16 天的 2 天变成了第 28 天的 8 天。这就是拖延的汇率——它总是贬值。” }
+    automaticEffects:
+      - { kind: add, key: energy, value: -8 }
+    next: v2_d28_wire4
+
+  # ===== S17：竞品定价表（隐藏）=====
+  - id: v2s17_rival_pricing
+    campaign: venture
+    day: 12
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 竞品内部定价表, learning: 定价的信息差伦理 }
+    scene: { location: cafe, characters: [] }
+    setup: [“邻座遗落了一个 U 盘。你捡起来想交还，插入电脑时它自动打开了——里面是一份行业定价分析，标注着某竞品的成本结构和毛利。你认得那个 LOGO。”]
+    choices:
+      - id: return_unopened
+        text: 立刻归还，不看内容
+        visibleResponse: 你通过失主的邮箱寄回了 U 盘，附了张字条“捡到未看”。三个月后的行业会上，那位失主——正是竞品的定价负责人——主动找你握了手。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_integrity_return }
+          - { kind: add, key: independence, value: 4 }
+          - { kind: add, key: credibility, value: 3 }
+      - id: read_only_pricing
+        text: 只看定价那一页，其他不碰
+        visibleResponse: 你看了那页纸，知道了对方的毛利是 70%。这个数字像根刺——之后每次定价你都会想“他们知道吗”。信息没让你更强，让你不自由。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_integrity_compromised }
+          - { kind: add, key: riskTolerance, value: 2 }
+    learningPoint: 商业信息优势与商业道德的边界测试
+
+  # ===== S18：家人投资（隐藏）=====
+  - id: v2s18_family_money
+    campaign: venture
+    day: 19
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 父母的投资意向, learning: 亲情资本的边界 }
+    scene: { location: dorm, characters: [v_family] }
+    setup: [“饭桌上，爸爸放下筷子：”听说你那个项目缺钱。你妈和我商量了，拿五万出来入个股。“妈妈在旁边补充：”亏了就当没这回事。“”
+    ]
+    choices:
+      - id: refuse_gracefully
+        text: 温和拒绝：让亲情保持简单
+        visibleResponse: 你说“谢谢爸妈，但这钱我不敢拿——拿了，我做每个决定都会先想你们”。爸爸愣了几秒，然后笑了：“行，像句话。”
+        hiddenEffects:
+          - { kind: setFlag, key: kv_family_refused }
+          - { kind: add, key: independence, value: 5 }
+        next: v2s18b_family_proud
+      - id: accept_with_terms
+        text: 接受，但签正式协议写明风险
+        visibleResponse: 你起草了一份和对外投资人一样的协议。爸爸签字时表情复杂，但签完说了句：“有规矩就好。”
+        hiddenEffects:
+          - { kind: setFlag, key: kv_family_formal }
+          - { kind: add, key: money, value: 10 }
+          - { kind: add, key: teamTrust, value: 1 }
+    learningPoint: 亲情资本需要超清晰的边界，否则成本无限
+
+  - id: v2s18b_family_proud
+    campaign: venture
+    day: 19
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 父母的骄傲, learning: 拒绝也可以是承诺 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: v_family, text: “后来妈妈跟邻居说：”我们家孩子创业没拿家里一分钱。“她说这话时，腰板挺得笔直。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 2 }
+    next: v2_d20_wire4
+
+  # ===== S19：客服数据的金矿（NG+）=====
+  - id: v2ng_s19_support_mining
+    campaign: venture
+    day: 20
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 20 }
+    purpose: { narrative: 客服记录的二次挖掘, learning: 支持数据是需求金矿 }
+    scene: { location: lab, characters: [v_ai_agent] }
+    setup: [“上一世你回完了 240 条客服就翻篇了。这一世你忽然想起：那 240 条里，被你标为”已解决“的问题，有没有重复出现的模式？”]
+    choices:
+      - id: cluster_tickets
+        text: 让 Agent 聚类全部工单，找 top3 痛点
+        visibleResponse: 聚类结果让你愣住：41% 的客服问题来自同一个设计缺陷。你当场排了修复计划——一周后相关工单下降了七成。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_ticket_cluster }
+          - { kind: add, key: userUnderstanding, value: 6 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+      - id: interview_writer
+        text: 回访 10 个提过工单的深度用户
+        visibleResponse: 十个回访里，两位成了你的义务体验官。工单是入口，人是资产。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_ticket_interviews }
+          - { kind: add, key: credibility, value: 4 }
+    learningPoint: 客服工单是需求洞察的第一手矿脉，值得二次挖掘
+
+  # ===== S20：增长与口碑的取舍（NG+）=====
+  - id: v2ng_s20_kyc_memory
+    campaign: venture
+    day: 22
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 22 }
+    purpose: { narrative: 上辈子差评的记忆, learning: 质量防线的提前部署 }
+    scene: { location: dorm, characters: [v_partner] }
+    setup: [“发布日前夜。上一世，这个版本带着一个已知的小 bug 上线了——你说”用户不会注意到“。三个月后，那条 bug 的差评挂在应用商店第一条。”]
+    choices:
+      - id: delay_one_day
+        text: 推迟一天，修掉已知 bug
+        visibleResponse: 你顶住“赶节点”的压力推迟了一天。发布当天，商店评论区第一条是五星好评。你知道那条好评本来会是差评。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_delay_fixed }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: add, key: credibility, value: 3 }
+      - id: ship_on_time
+        text: 按时上线，bug 下版再修
+        visibleResponse: 你按时发布了。明明知道那个 bug 在那，看着用户撞上去——这种感觉，比延迟难受多了。
+        hiddenEffects:
+          - { kind: setFlag, key: kv_ng_ship_anyway }
+          - { kind: add, key: technicalDebt, value: 3 }
+    learningPoint: 已知缺陷必须在发布前修复，“用户不会注意”是自我欺骗
+
+  # ===== 汇流（wire）事件 =====
+  - id: v2_d18_wire4
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { narrative: D18 夜间复盘, learning: 记录法律意识 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你给”上线检查清单“加了第三栏：法律与合规。清单越来越长——这是好事。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 1 }
+
+  - id: v2_d20_wire4
+    campaign: venture
+    day: 20
+    type: story
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { narrative: D20 夜间复盘, learning: 边界的力量 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “日志更新：”今天守住了两条边界——一条对家人，一条对自己。“ ” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }
+
+  - id: v2_d22_wire4
+    campaign: venture
+    day: 22
+    type: story
+    trigger: { kind: day, day: 22, phase: end }
+    purpose: { narrative: D22 夜间复盘, learning: 定位的传播力 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你在竞品监测表里加了一列：他们的一句话是什么。三行空白。你那一行，越来越短。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 1 }
+
+  - id: v2_d25_wire4
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: day, day: 25, phase: end }
+    purpose: { narrative: D25 夜间复盘, learning: 价格即承诺 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “价格表更新了版式——数字没变。你说不清为什么，就是觉得 29 比 29.9 更像一句话，而不是一个 trap。” }
+    automaticEffects:
+      - { kind: add, key: revenue, value: 1 }
+
+  - id: v2_d27_wire4
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: day, day: 27, phase: end }
+    purpose: { narrative: D27 夜间复盘, learning: 规则的人情味 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “阿哲说现在团队”吵完架不用和好，因为标准替我们和好了“。你把这句话记进了管理笔记。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 1 }
+
+  - id: v2_d28_wire4
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: day, day: 28, phase: end }
+    purpose: { narrative: D28 夜间复盘, learning: 基建的安心 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “睡前你看了眼监控面板——全绿。两天的迁移换来此刻的一眼全绿。这笔账，怎么算都值。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }

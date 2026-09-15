@@ -214,7 +214,7 @@ endings:
         - { kind: flag, key: cac_high }
         - { kind: state, key: users, op: gte, value: 10 }
         - { kind: flag, key: v_final_done }
-    priority: 110
+    priority: 89
     tier: special
     baseText: |
       用户曲线很漂亮：30天注册破30。成本曲线更漂亮：¥780的支出，收入 ¥54。
@@ -528,7 +528,7 @@ endings:
         - { kind: state, key: users, op: gte, value: 18 }
         - { kind: flag, key: retention_improved }
         - { kind: flag, key: v_final_done }
-    priority: 150
+    priority: 89
     tier: special
     baseText: |
       那条"全校社团告别Excel"的帖子被校园大号转发了。48小时，注册冲到 60，服务器爆了两次。
@@ -564,7 +564,7 @@ endings:
         - { kind: state, key: users, op: gte, value: 12 }
         - { kind: state, key: credibility, op: gte, value: 65 }
         - { kind: flag, key: v_final_done }
-    priority: 128
+    priority: 89
     tier: special
     baseText: |
       一家教育公司的 BD 加了你微信："我们对你们的校园渠道感兴趣，谈谈收购或合作？"
@@ -726,7 +726,7 @@ endings:
       conditions:
         - { kind: flag, key: v_final_done }
         - { kind: flag, key: transfer_research }
-    priority: 98
+    priority: 89
     tier: special
     baseText: |
       你整理访谈档案时突然意识到：你手里有16个信号、9场行为式访谈、一组完整的"学生创业决策"过程记录。

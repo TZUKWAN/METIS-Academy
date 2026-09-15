@@ -1,0 +1,873 @@
+endingId: r_v2_theory_favor_end
+campaign: research
+description: Auto-solved witness (greedy solver over real reducer)
+steps:
+  - do: startMission
+    missionId: r_m01
+  - do: advance
+    expectEvent: r_d01_mentor
+  - do: choose
+    choiceId: clarify_first
+    expectEvent: r_d01_desk
+  - do: advance
+    expectEvent: r_d01_evening
+  - do: startMission
+    missionId: r_m02
+  - do: choose
+    choiceId: use_codex
+    expectEvent: r_d03_env
+  - do: advance
+    expectEvent: r_e01_corridor_q
+  - do: choose
+    choiceId: solo_night
+    expectEvent: r_e01_peer_panic
+  - do: choose
+    choiceId: write_three
+    expectEvent: r_e01_three_questions
+  - do: endDay
+    expectDay: 2
+  - do: advance
+    expectEvent: r_d02_ai_topics
+  - do: advance
+    expectEvent: r_e02_mentor_mail
+  - do: choose
+    choiceId: ai_dump
+    expectEvent: r_v2_d02_brief
+  - do: choose
+    choiceId: rubric_review
+    expectEvent: r_e07_10_ai_tone_mimic
+  - do: choose
+    choiceId: verify_all
+    expectEvent: r_d02_topic_eval
+  - do: choose
+    choiceId: reply_ok
+    expectEvent: r_e02_mail_react
+  - do: advance
+    expectEvent: r_v2_d02_ai_brief
+  - do: advance
+    expectEvent: r_d02_keep_note
+  - do: choose
+    choiceId: trace_source
+    expectEvent: r_e02_pop_sci
+  - do: advance
+    expectEvent: r_e02_zotero_setup
+  - do: choose
+    choiceId: write_tradeoff
+    expectEvent: r_e08_d2_breadth_tradeoff
+  - do: choose
+    choiceId: skeptical
+    expectEvent: r_d02_group_chat
+  - do: endDay
+    expectDay: 3
+  - do: choose
+    choiceId: three_questions
+    expectEvent: r_e03_abstract_skim
+  - do: choose
+    choiceId: three_level_jump
+    expectEvent: r_e09_d3_topic_ladder
+  - do: choose
+    choiceId: iterate_prompts
+    expectEvent: r_v2_d03_prompt
+  - do: choose
+    choiceId: pure_quant
+    expectEvent: r_e03_16_qual_pill
+  - do: advance
+    expectEvent: r_d03_setup
+  - do: choose
+    choiceId: safe_storage
+    expectEvent: r_d03_key_storage
+  - do: advance
+    expectEvent: r_d03_check
+  - do: startMission
+    missionId: r_m03
+  - do: choose
+    choiceId: expand_tree
+    expectEvent: r_d05_keywords
+  - do: endDay
+    expectDay: 4
+  - do: advance
+    expectEvent: r_d04_dump
+  - do: choose
+    choiceId: diff_analysis
+    expectEvent: r_e04_overlap_check
+  - do: choose
+    choiceId: set_red_line
+    expectEvent: r_e08_d4_dependency_trap
+  - do: choose
+    choiceId: ask_senior
+    expectEvent: r_v2_d04_pilot
+  - do: choose
+    choiceId: decline_help
+    expectEvent: r_random_data_bro
+  - do: advance
+    expectEvent: r_d04_chaos
+  - do: choose
+    choiceId: take_waste
+    expectEvent: r_v2_d04_ask_zhou
+  - do: choose
+    choiceId: write_contract
+    expectEvent: r_d04_contract
+  - do: advance
+    expectEvent: r_d04_result
+  - do: advance
+    expectEvent: r_e04_shelf_find
+  - do: advance
+    expectEvent: r_d04_bro_comment
+  - do: choose
+    choiceId: plan_shelve
+    expectEvent: r_v2_d04_plan
+  - do: endDay
+    expectDay: 5
+  - do: choose
+    choiceId: custom_cols
+    expectEvent: r_e05_matrix_cols
+  - do: choose
+    choiceId: agent_archives
+    expectEvent: r_v2_d05_habit
+  - do: choose
+    choiceId: cite_as_gospel
+    expectEvent: r_e06_preprint
+  - do: startMission
+    missionId: r_m04
+  - do: advance
+    expectEvent: r_d09_context
+  - do: choose
+    choiceId: write_state_file
+    expectEvent: r_d09_statefile
+  - do: advance
+    expectEvent: r_d05_results
+  - do: advance
+    expectEvent: r_e05_note_sync
+  - do: choose
+    choiceId: trust_cloud
+    expectEvent: r_e08_d5_tool_sync_disaster
+  - do: choose
+    choiceId: multi_db
+    expectEvent: r_d05_database_choice
+  - do: choose
+    choiceId: bad_news_first
+    expectEvent: r_v2_d05_report
+  - do: choose
+    choiceId: live_with_it
+    expectEvent: r_e05_note_merge
+  - do: endDay
+    expectDay: 6
+  - do: advance
+    expectEvent: r_d06_flood
+  - do: choose
+    choiceId: abstract_only
+    expectEvent: r_e06_paywall
+  - do: choose
+    choiceId: open_footnote
+    expectEvent: r_v2_d06_footnote
+  - do: advance
+    expectEvent: r_e09_d25_random_star_night
+  - do: choose
+    choiceId: ai_summarize_all
+    expectEvent: r_d06_filter
+  - do: choose
+    choiceId: close_it
+    expectEvent: r_v2_h06_ghost_find
+  - do: advance
+    expectEvent: r_d06_shortlist
+  - do: advance
+    expectEvent: r_e06_deadline_board
+  - do: advance
+    expectEvent: r_d06_tooling
+  - do: endDay
+    expectDay: 7
+  - do: choose
+    choiceId: dimension_split
+    expectEvent: r_d07_batch
+  - do: choose
+    choiceId: write_log
+    expectEvent: r_e07_search_log
+  - do: choose
+    choiceId: push_through_week
+    expectEvent: r_e08_d7_burnout_signal
+  - do: choose
+    choiceId: mentor_decide
+    expectEvent: r_v2_d07_topic
+  - do: choose
+    choiceId: accept_listen
+    expectEvent: r_e03_ai_read_aloud
+  - do: advance
+    expectEvent: r_d07_matrix
+  - do: choose
+    choiceId: title_search
+    expectEvent: r_e07_fake_doi
+  - do: choose
+    choiceId: trust_batch
+    expectEvent: r_d07_spot_check
+  - do: endDay
+    expectDay: 8
+  - do: choose
+    choiceId: verify_doi
+    expectEvent: r_d08_fake_citation
+  - do: choose
+    choiceId: audit_chats
+    expectEvent: r_e09_d08_ai_conversation_audit
+  - do: choose
+    choiceId: run_anyway
+    expectEvent: r_v2_d08_seed
+  - do: choose
+    choiceId: audit_trust
+    expectEvent: r_e07_07_overtrust_moment
+  - do: choose
+    choiceId: take_break
+    expectEvent: r_e08_lib_close
+  - do: choose
+    choiceId: read_original
+    expectEvent: r_e08_d8_seminal_read
+  - do: advance
+    expectEvent: r_d08_aftermath
+  - do: choose
+    choiceId: argue_fight
+    expectEvent: r_v2_d08_definition
+  - do: choose
+    choiceId: keep_flexible
+    expectEvent: r_v2_d08_prereg
+  - do: endDay
+    expectDay: 9
+  - do: advance
+    expectEvent: r_e02_09_gaps_draft
+  - do: choose
+    choiceId: expert_blind_only
+    expectEvent: r_e02_09_operational_def
+  - do: choose
+    choiceId: own_skeleton
+    expectEvent: r_v2_d09_framework
+  - do: choose
+    choiceId: big_sample_wins
+    expectEvent: r_e02_11_matrix_conflict
+  - do: choose
+    choiceId: agent_recap
+    expectEvent: r_e02_09_recount
+  - do: advance
+    expectEvent: r_d09_compare
+  - do: choose
+    choiceId: refresh_state
+    expectEvent: r_e02_09_state_stale
+  - do: advance
+    expectEvent: r_d09_senior_note
+  - do: choose
+    choiceId: accept_both
+    expectEvent: r_v2_d09_double
+  - do: endDay
+    expectDay: 10
+  - do: advance
+    expectEvent: r_d10_bloat
+  - do: advance
+    expectEvent: r_e02_10_lit_review_start
+  - do: choose
+    choiceId: relocate_counter
+    expectEvent: r_e08_d10_mentor_silence
+  - do: choose
+    choiceId: lock_report_version
+    expectEvent: r_v2_d10_numbers
+  - do: choose
+    choiceId: demand_attack
+    expectEvent: r_e02_11_agent_gap_praise
+  - do: choose
+    choiceId: structured_compact
+    expectEvent: r_d10_compact
+  - do: choose
+    choiceId: organize_by_debate
+    expectEvent: r_e02_10_review_angle
+  - do: advance
+    expectEvent: r_d10_after
+  - do: choose
+    choiceId: fix_now
+    expectEvent: r_e02_10_citation_style
+  - do: advance
+    expectEvent: r_e02_10_meeting_audit
+  - do: advance
+    expectEvent: r_e09_d10_tradeoff_sem_final
+  - do: choose
+    choiceId: organize_assets
+    expectEvent: r_d10_asset_review
+  - do: choose
+    choiceId: refuse_polite
+    expectEvent: r_v2_d10_pact
+  - do: choose
+    choiceId: verbal_warn
+    expectEvent: r_v2_d10_contract
+  - do: endDay
+    expectDay: 11
+  - do: advance
+    expectEvent: r_d11_gaps
+  - do: choose
+    choiceId: journal_only
+    expectEvent: r_e02_11_thesis_mine
+  - do: choose
+    choiceId: mix_pre
+    expectEvent: r_v2_d11_sample
+  - do: choose
+    choiceId: diff_rules
+    expectEvent: r_e09_d21_agent_overconfident_bug
+  - do: choose
+    choiceId: build_validation_table
+    expectEvent: r_d11_validate
+  - do: startMission
+    missionId: r_m05
+  - do: choose
+    choiceId: keep_repeating
+    expectEvent: r_d14_rules
+  - do: choose
+    choiceId: add_confound_row
+    expectEvent: r_e02_11_gap_hunter
+  - do: advance
+    expectEvent: r_e08_d11_motivation_dip
+  - do: advance
+    expectEvent: r_d11_gap_types
+  - do: choose
+    choiceId: chase_footnote
+    expectEvent: r_v2_d11_rabbit
+  - do: endDay
+    expectDay: 12
+  - do: advance
+    expectEvent: r_d12_refuted
+  - do: choose
+    choiceId: ask_difference
+    expectEvent: r_e02_12_senior_defense_story
+  - do: choose
+    choiceId: failure_ledger
+    expectEvent: r_e02_12_failure_log
+  - do: choose
+    choiceId: write_power_note
+    expectEvent: r_e03_18_power_brief
+  - do: advance
+    expectEvent: r_d12_reflect
+  - do: choose
+    choiceId: prune_matrix
+    expectEvent: r_e02_12_matrix_prune
+  - do: advance
+    expectEvent: r_e07_12_agent_forget_rule
+  - do: choose
+    choiceId: process_compare
+    expectEvent: r_e08_d12_peer_rivalry
+  - do: advance
+    expectEvent: r_d12_after
+  - do: choose
+    choiceId: switch_sem
+    expectEvent: r_v2_d12_sem
+  - do: choose
+    choiceId: lend_bare
+    expectEvent: r_v2_d12_lend
+  - do: endDay
+    expectDay: 13
+  - do: advance
+    expectEvent: r_e09_px_clarify_dividend
+  - do: choose
+    choiceId: default_bill
+    expectEvent: r_v2_d13_prompt_payoff
+  - do: choose
+    choiceId: rq_ask_ai_best
+    expectEvent: r_d13_converge
+  - do: choose
+    choiceId: skip_stress
+    expectEvent: r_e02_13_rq_stress_test
+  - do: choose
+    choiceId: start_win_log
+    expectEvent: r_e09_d13_micro_win_log
+  - do: choose
+    choiceId: gather_intel
+    expectEvent: r_v2_d13_tailor
+  - do: choose
+    choiceId: accept_estimates
+    expectEvent: r_e02_12_agent_hallucination_detail
+  - do: choose
+    choiceId: polite_decline
+    expectEvent: r_e02_13_peer_outline_swap
+  - do: choose
+    choiceId: wing_it
+    expectEvent: r_e02_13_senior_scenario_quiz
+  - do: advance
+    expectEvent: r_d13_brief_feedback
+  - do: choose
+    choiceId: use_first
+    expectEvent: r_v2_d13_borrow
+  - do: endDay
+    expectDay: 14
+  - do: choose
+    choiceId: fix_seed_now
+    expectEvent: r_v2_d14_rerun_mismatch
+  - do: choose
+    choiceId: rabbit_deep
+    expectEvent: r_v2_d14_rabbit_exit
+  - do: choose
+    choiceId: read_all_slides
+    expectEvent: r_e02_14_week2_report
+  - do: choose
+    choiceId: intuitive_jump
+    expectEvent: r_e09_d14_theory_ladder_check
+  - do: choose
+    choiceId: full_sweep
+    expectEvent: r_v2_d14_sweep
+  - do: choose
+    choiceId: feed_state_first
+    expectEvent: r_e02_09_agent_memory_quiz
+  - do: advance
+    expectEvent: r_e02_14_agents_md_conflict
+  - do: choose
+    choiceId: accept_optimization
+    expectEvent: r_e02_14_agent_permission
+  - do: advance
+    expectEvent: r_d14_test_rules
+  - do: choose
+    choiceId: one_tool
+    expectEvent: r_v2_d14_tools
+  - do: choose
+    choiceId: real_checkpoint
+    expectEvent: r_v2_d14_checkpoint
+  - do: endDay
+    expectDay: 15
+  - do: advance
+    expectEvent: r_d15_theories
+  - do: choose
+    choiceId: no_theory
+    expectEvent: r_e02_15_theory_first_draft
+  - do: choose
+    choiceId: build_ladder
+    expectEvent: r_e02_15_concept_ladder
+  - do: choose
+    choiceId: outsource_design
+    expectEvent: r_v2_d15_sprint
+  - do: advance
+    expectEvent: r_e04_22_normality_fixation
+  - do: choose
+    choiceId: famous_only
+    expectEvent: r_d15_pick
+  - do: choose
+    choiceId: vague_hypothesis
+    expectEvent: r_e02_15_hypothesis_draft
+  - do: choose
+    choiceId: keep_six
+    expectEvent: r_e02_15_hypothesis_count
+  - do: choose
+    choiceId: keep_polishing
+    expectEvent: r_e08_d15_perfection_trap
+  - do: advance
+    expectEvent: r_d15_theory_why
+  - do: endDay
+    expectDay: 16
+  - do: choose
+    choiceId: keep_stitched
+    expectEvent: r_v2_d16_blend_found
+  - do: choose
+    choiceId: concept_table
+    expectEvent: r_d16_concepts
+  - do: choose
+    choiceId: write_layers
+    expectEvent: r_e03_16_sample_frame
+  - do: choose
+    choiceId: ask_agent_ethics
+    expectEvent: r_v2_d16_ethics_form
+  - do: choose
+    choiceId: chase_grant_only
+    expectEvent: r_e08_d31_supervisor_agenda
+  - do: advance
+    expectEvent: r_e03_16_sem_allure
+  - do: choose
+    choiceId: include_rival
+    expectEvent: r_e09_d16_contrarian_theory
+  - do: advance
+    expectEvent: r_d16_after
+  - do: endDay
+    expectDay: 17
+  - do: choose
+    choiceId: skip_chain
+    expectEvent: r_d17_mechanism
+  - do: choose
+    choiceId: write_ethics_plan
+    expectEvent: r_e03_17_ethics_form
+  - do: advance
+    expectEvent: r_e03_17_teaching_material
+  - do: choose
+    choiceId: sneak_assume
+    expectEvent: r_e08_d17_interview_tape
+  - do: advance
+    expectEvent: r_e04_22_deskmate_spotted
+  - do: choose
+    choiceId: use_adapted_scale
+    expectEvent: r_e03_17_measure_craft
+  - do: choose
+    choiceId: figure_out_later
+    expectEvent: r_e03_17_data_entry_plan
+  - do: advance
+    expectEvent: r_d17_chain_check
+  - do: endDay
+    expectDay: 18
+  - do: choose
+    choiceId: habit_pays
+    expectEvent: r_v2_d18_group_meeting
+  - do: choose
+    choiceId: settle_confident
+    expectEvent: r_v2_d18_definition_settle
+  - do: choose
+    choiceId: hand_wave
+    expectEvent: r_e03_18_method_map
+  - do: choose
+    choiceId: peek_significance
+    expectEvent: r_e03_18_pilot_30
+  - do: choose
+    choiceId: scope_lock
+    expectEvent: r_e07_18_agent_permission_dir
+  - do: choose
+    choiceId: partial_mock
+    expectEvent: r_v2_d18_method_review
+  - do: choose
+    choiceId: freeze_outline
+    expectEvent: r_v2_y1_outline_lock
+  - do: choose
+    choiceId: encourage
+    expectEvent: r_random_imposter
+  - do: choose
+    choiceId: raw_readonly
+    expectEvent: r_e03_18_data_storage
+  - do: choose
+    choiceId: gentle_pressure
+    expectEvent: r_e03_18_ethics_midway
+  - do: choose
+    choiceId: memory_only
+    expectEvent: r_e09_d18_tradeoff_register
+  - do: advance
+    expectEvent: r_d18_after
+  - do: endDay
+    expectDay: 19
+  - do: choose
+    choiceId: replan_generic
+    expectEvent: r_v2_d19_plan_rot
+  - do: choose
+    choiceId: pick_pretty
+    expectEvent: r_v2_d19_number_trap
+  - do: choose
+    choiceId: freeze
+    expectEvent: r_d19_data_crisis
+  - do: advance
+    expectEvent: r_e03_19_scale_collect_start
+  - do: choose
+    choiceId: use_morning
+    expectEvent: r_e06_29_afternoon_slot
+  - do: choose
+    choiceId: lottery
+    expectEvent: r_e03_19_channel_push
+  - do: choose
+    choiceId: score_before_analysis
+    expectEvent: r_e03_19_reverse_item
+  - do: choose
+    choiceId: just_listen
+    expectEvent: r_e03_19_midnight_anxiety
+  - do: choose
+    choiceId: delete_missing
+    expectEvent: r_e03_19_missing_pattern
+  - do: choose
+    choiceId: logistics_checklist
+    expectEvent: r_e09_d19_consent_logistics
+  - do: advance
+    expectEvent: r_d19_after
+  - do: endDay
+    expectDay: 20
+  - do: choose
+    choiceId: double_down
+    expectEvent: r_v2_d20_sample_audit
+  - do: choose
+    choiceId: swallow_it
+    expectEvent: r_v2_d20_cross_nocredit
+  - do: choose
+    choiceId: confess_credit
+    expectEvent: r_v2_d20_favor_confront
+  - do: choose
+    choiceId: vague_goal
+    expectEvent: r_d20_goal
+  - do: choose
+    choiceId: look_first
+    expectEvent: r_e04_20_clean_rules
+  - do: choose
+    choiceId: cloud_only
+    expectEvent: r_v2_d20_backup
+  - do: choose
+    choiceId: keep_simple
+    expectEvent: r_e02_15_agent_paraphrase
+  - do: startMission
+    missionId: r_m06
+  - do: choose
+    choiceId: check_data_first
+    expectEvent: r_d18_method
+  - do: choose
+    choiceId: hide_confounder
+    expectEvent: r_e04_20_correlation_surprise
+  - do: choose
+    choiceId: verbal_thanks
+    expectEvent: r_e08_d20_authorship_talk
+  - do: advance
+    expectEvent: r_d20_after
+  - do: endDay
+    expectDay: 21
+  - do: advance
+    expectEvent: r_e09_px_searchlog_boom
+  - do: choose
+    choiceId: allnight_both
+    expectEvent: r_v2_d21_collision
+  - do: choose
+    choiceId: lone_night
+    expectEvent: r_v2_d21_pact_save
+  - do: choose
+    choiceId: escape_fit
+    expectEvent: r_v2_d21_sem_trap
+  - do: choose
+    choiceId: fix_acceptance
+    expectEvent: r_d21_drift
+  - do: advance
+    expectEvent: r_e04_21_alpha_drop
+  - do: choose
+    choiceId: everything_fine
+    expectEvent: r_e04_21_mentor_data_check
+  - do: choose
+    choiceId: ai_transcribe_verify
+    expectEvent: r_e08_d21_transcription_marathon
+  - do: choose
+    choiceId: mini_interview
+    expectEvent: r_e03_16_qual_pill
+  - do: choose
+    choiceId: rerun_until_good
+    expectEvent: r_e04_21_alpha_diagnose
+  - do: choose
+    choiceId: tweak_scale
+    expectEvent: r_e04_21_not_significant
+  - do: advance
+    expectEvent: r_d21_after
+  - do: advance
+    expectEvent: r_v2_d21_wire3
+  - do: endDay
+    expectDay: 22
+  - do: advance
+    expectEvent: r_e09_px_lottery_bill
+  - do: choose
+    choiceId: run_loop
+    expectEvent: r_d22_loop
+  - do: choose
+    choiceId: keep_truncated
+    expectEvent: r_e04_22_chart_truncation
+  - do: choose
+    choiceId: refuse_shortcut
+    expectEvent: r_e08_d22_hidden_shortcut
+  - do: choose
+    choiceId: ai_free_hour
+    expectEvent: r_e09_d22_ai_free_hour
+  - do: choose
+    choiceId: wing_it
+    expectEvent: r_v2_y2_backup_slide
+  - do: advance
+    expectEvent: r_e09_d17_random_bookstore
+  - do: choose
+    choiceId: paste_to_ai
+    expectEvent: r_e04_22_script_crash
+  - do: choose
+    choiceId: cross_check
+    expectEvent: r_e09_d22_double_entry
+  - do: advance
+    expectEvent: r_d22_after
+  - do: advance
+    expectEvent: r_v2_d22_wire3
+  - do: endDay
+    expectDay: 23
+  - do: advance
+    expectEvent: r_e09_px_state_fresh
+  - do: choose
+    choiceId: attach_records
+    expectEvent: r_v2_d23_sweep_payoff
+  - do: choose
+    choiceId: keep_textbook_order
+    expectEvent: r_e04_23_results_structure
+  - do: choose
+    choiceId: full_manual
+    expectEvent: r_v2_d23_citation_final
+  - do: choose
+    choiceId: write_it_down
+    expectEvent: r_e05_25_night_idea
+  - do: choose
+    choiceId: collect_more
+    expectEvent: r_e04_23_data_lock
+  - do: choose
+    choiceId: reverse_quiz
+    expectEvent: r_e08_d23_analysis_ai_pair
+  - do: advance
+    expectEvent: r_d23_after
+  - do: advance
+    expectEvent: r_v2_d23_wire3
+  - do: endDay
+    expectDay: 24
+  - do: advance
+    expectEvent: r_e06_miscite_payoff
+  - do: advance
+    expectEvent: r_e03_19_layout_bug_payoff
+  - do: choose
+    choiceId: vote_majority
+    expectEvent: r_d24_conflict
+  - do: advance
+    expectEvent: r_e04_24_sem_second_wave
+  - do: advance
+    expectEvent: r_e07_27_random_flag_day
+  - do: choose
+    choiceId: pairwise_delete
+    expectEvent: r_e04_24_missing_41
+  - do: choose
+    choiceId: set_seed
+    expectEvent: r_e04_24_seed_repro
+  - do: choose
+    choiceId: share_raw
+    expectEvent: r_e08_d24_data_sharing
+  - do: advance
+    expectEvent: r_d24_after
+  - do: endDay
+    expectDay: 25
+  - do: choose
+    choiceId: chapter_sprint
+    expectEvent: r_e05_25_sprint_plan
+  - do: choose
+    choiceId: pick_flattering
+    expectEvent: r_e09_d25_interpret_courage
+  - do: choose
+    choiceId: discard_roleplay
+    expectEvent: r_e07_10_ai_tone_mimic
+  - do: advance
+    expectEvent: r_e05_25_voice_check
+  - do: choose
+    choiceId: investigate_anomaly
+    expectEvent: r_d25_anomaly
+  - do: advance
+    expectEvent: r_d25_after
+  - do: advance
+    expectEvent: r_v2_d25_wire3
+  - do: choose
+    choiceId: manual_rewrite
+    expectEvent: r_e05_25_deai_rewrite
+  - do: endDay
+    expectDay: 26
+  - do: advance
+    expectEvent: r_d26_evidence_warning
+  - do: choose
+    choiceId: reroute_by_checkpoint
+    expectEvent: r_v2_d26_checkpoint_payoff
+  - do: advance
+    expectEvent: r_e09_px_crosscheck_dividend
+  - do: choose
+    choiceId: full_sync_check
+    expectEvent: r_e05_26_argument_sync
+  - do: choose
+    choiceId: explain_verbal
+    expectEvent: r_e08_d26_figure_revision
+  - do: choose
+    choiceId: keep_chronology
+    expectEvent: r_v2_y3_talk_order
+  - do: choose
+    choiceId: encourage
+    expectEvent: r_random_imposter
+  - do: choose
+    choiceId: leave_it
+    expectEvent: r_d26_handle
+  - do: advance
+    expectEvent: r_d26_map_done
+  - do: choose
+    choiceId: take_note_self
+    expectEvent: r_e05_26_limitation_talk
+  - do: choose
+    choiceId: bury_h2
+    expectEvent: r_e09_d26_null_discussion
+  - do: endDay
+    expectDay: 27
+  - do: advance
+    expectEvent: r_v2_d27_cloud_fright
+  - do: advance
+    expectEvent: r_e09_px_moving_target
+  - do: choose
+    choiceId: full_handoff
+    expectEvent: r_d27_handoff
+  - do: choose
+    choiceId: clean_split
+    expectEvent: r_e05_27_handoff_two
+  - do: advance
+    expectEvent: r_e05_27_mentor_margins
+  - do: choose
+    choiceId: use_morning
+    expectEvent: r_e06_29_afternoon_slot
+  - do: choose
+    choiceId: cram_all_night
+    expectEvent: r_v2_d28_calm_before
+  - do: choose
+    choiceId: obey_all
+    expectEvent: r_e05_27_margin_triage
+  - do: advance
+    expectEvent: r_e05_27_merge_hell
+  - do: choose
+    choiceId: once_enough
+    expectEvent: r_e05_27_grandma_test
+  - do: choose
+    choiceId: read_aloud_pass
+    expectEvent: r_e09_d27_read_aloud_edit
+  - do: advance
+    expectEvent: r_e09_d27_knowledge_flashback
+  - do: advance
+    expectEvent: r_d27_after
+  - do: choose
+    choiceId: single_trunk
+    expectEvent: r_e05_27_merge_fix
+  - do: endDay
+    expectDay: 28
+  - do: advance
+    expectEvent: r_d28_pre_review
+  - do: choose
+    choiceId: claim_per_slide
+    expectEvent: r_e06_28_ppt_skeleton
+  - do: choose
+    choiceId: version_freeze
+    expectEvent: r_e09_d28_backup_final
+  - do: advance
+    expectEvent: r_e09_d12_random_group_therapy
+  - do: choose
+    choiceId: deflect
+    expectEvent: r_d28_question
+  - do: choose
+    choiceId: no_ammo
+    expectEvent: r_e06_28_dark_slides
+  - do: advance
+    expectEvent: r_d28_after
+  - do: endDay
+    expectDay: 29
+  - do: choose
+    choiceId: triage_risk
+    expectEvent: r_d29_triage
+  - do: choose
+    choiceId: bullet_mess
+    expectEvent: r_e06_29_answer_cards
+  - do: choose
+    choiceId: gut_number
+    expectEvent: r_e03_18_power_brief
+  - do: choose
+    choiceId: triple_backup
+    expectEvent: r_e06_29_print_crash
+  - do: advance
+    expectEvent: r_d29_after
+  - do: endDay
+    expectDay: 30
+  - do: advance
+    expectEvent: r_e09_px_backup_calm
+  - do: advance
+    expectEvent: r_e06_30_morning_ritual
+  - do: choose
+    choiceId: fake_calm
+    expectEvent: r_v2_d30_last_day
+  - do: advance
+    expectEvent: r_e07_08_random_canteen_aunt
+  - do: choose
+    choiceId: proper_breakfast
+    expectEvent: r_e06_30_breakfast
+  - do: advance
+    expectEvent: r_e06_30_aftermath_dinner
+  - do: advance
+    expectEvent: r_e06_30_group_photo
+  - do: advance
+    expectEvent: r_e08_d30_final_settle
+  - do: endDay
+    expectDay: 31

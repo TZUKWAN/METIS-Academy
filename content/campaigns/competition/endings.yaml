@@ -310,7 +310,7 @@ endings:
       conditions:
         - { kind: flag, key: transfer_venture }
         - { kind: flag, key: c_final_done }
-    priority: 130
+    priority: 89
     tier: special
     baseText: |
       赛后一个月，社团联合会的采购意向书摆在桌上。方远看完笑了："我们居然真的有人付费了。"
@@ -384,7 +384,7 @@ endings:
       conditions:
         - { kind: flag, key: crash_unfixed }
         - { kind: flag, key: c_final_done }
-    priority: 125
+    priority: 89
     tier: main
     baseText: |
       决赛演示，第7步——那个概率三成的偶发崩溃，如期而至。
@@ -420,7 +420,7 @@ endings:
       conditions:
         - { kind: flag, key: transfer_research }
         - { kind: flag, key: c_final_done }
-    priority: 110
+    priority: 89
     tier: special
     baseText: |
       赛后你做的第一件事是打开访谈纪要。"报销比报名更痛"——5个受访者里4个主动提过。
@@ -454,7 +454,7 @@ endings:
         - { kind: flag, key: transfer_venture }
         - { kind: state, key: userUnderstanding, op: gte, value: 60 }
         - { kind: flag, key: c_final_done }
-    priority: 118
+    priority: 89
     tier: special
     baseText: |
       采购合同签了；更妙的是，另外两所高校的社团联合会主动找来——他们看过你们公开的演示视频。

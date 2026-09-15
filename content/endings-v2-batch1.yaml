@@ -127,7 +127,7 @@ endings:
       conditions:
         - { kind: flag, key: crash_unfixed }
         - { kind: flag, key: c_final_done }
-    priority: 100
+    priority: 89
     tier: main
     baseText: 第7步。就是那个你决定"赌一把不修"的偶发崩溃——在全校师生面前，屏幕变成了白色。你按了F5，页面重新加载，然后又崩了。
     growthVariantRules:
