@@ -1,0 +1,254 @@
+# METIS Academy Research V2 事件批次七 —— 隐藏事件密集补完
+events:
+  - id: r_v2h_q1_predatory_mail
+    campaign: research
+    day: 8
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 掠夺性期刊的邀请函, learning: 学术骗局的识别 }
+    scene: { location: dorm, characters: [] }
+    setup: [“邮箱里躺着一封烫金邀请函：”尊敬的研究者，您的卓越成果被《国际综合科学期刊》选中，可免审快速发表——仅需缴纳 800 美元版面费。“你的成果，你还没写完。”]
+    choices:
+      - id: verify_and_expose
+        text: 查证期刊资质，顺手在群里曝光
+        visibleResponse: 你查了：期刊官网建站三个月，“影响因子”是自编的。你把截图发到组群，赵老师回复：“每年都有人上当。你是我带的学生里第一个主动查证的。”
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_predator_exposed }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: independence, value: 3 }
+      - id: delete_ignored
+        text: 垃圾邮件，删了
+        visibleResponse: 你删除了邮件。它只是垃圾——但“识别垃圾”的能力，你并没有获得。下一封更有说服力的骗局邮件，还在路上。
+    learningPoint: 掠夺性期刊以“快速发表+版面费”为饵，查证资质是基本功
+
+  - id: r_v2h_q2_shadow_library
+    campaign: research
+    day: 11
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 师姐的文献共享库, learning: 灰色资源的使用边界 }
+    scene: { location: canteen, characters: [r_senior_data] }
+    setup: [“师姐给你发来一个链接：”找不到的文献来这里。“你点开——是一个共享网盘，里面有你找了两周的付费文献全文。你看过版权页：这些不应被这样传播。”]
+    choices:
+      - id: use_with_caution
+        text: 只用来判断是否值得买，正版另行获取
+        visibleResponse: 你用网盘版本筛出了真正需要的 5 篇，然后通过图书馆馆际互借拿了正版。师姐看了你的做法说：“你这个用法，是这些资源存在的唯一正当理由。”
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_shadow_caution }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: add, key: independence, value: 3 }
+      - id: full_embrace
+        text: 都在网上了，直接用
+        visibleResponse: 你下载了 30 篇。用起来确实爽——直到答辩前你想引用其中 3 篇，却发现找不到合法获取渠道。灰色资源是借来的便利，迟早要还。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_shadow_embraced }
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 灰色文献资源可用于筛选评估，正式引用必须合法获取
+
+  - id: r_v2h_q3_midnight_idea
+    campaign: research
+    day: 16
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 半夜的灵感管理, learning: 灵感的即时捕捉纪律 }
+    scene: { location: dorm, characters: [] }
+    setup: [“半夜 3:17，你在半梦半醒间想到一个绝妙的分析角度——它像凌晨的露水，你隐隐知道太阳出来就没了。手机就在枕边。”]
+    choices:
+      - id: capture_now
+        text: 摸出手机，语音记下三句话
+        visibleResponse: 你迷迷糊糊录了 90 秒。早上起来回放：两分钟废话里藏着一句金子——“与其比较使用时长，不如比较'第一次成功'的时间差”。这句话后来成了你数据分析的钥匙。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_idea_captured }
+          - { kind: add, key: independence, value: 4 }
+      - id: remember_tomorrow
+        text: 明早肯定还记得
+        visibleResponse: 你睡了。早上起来，你记得“昨晚想到了一个绝妙的东西”——但想不起它是什么。它像退潮的金子，只在你脑子里留了个闪光的位置。
+    learningPoint: 灵感管理的基本纪律：3 秒捕捉，黎明复核
+
+  - id: r_v2h_q4_grumpy_reviewer
+    campaign: research
+    day: 19
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 刻薄评审的公开课, learning: 尖锐反馈的价值萃取 }
+    scene: { location: lab, characters: [] }
+    setup: [“系里公开了往届开题的评审意见存档。你翻到一份出了名刻薄的评语：”方法混乱，问题不清，建议重写“——三行字，不留情面。被评的那个学长，后来拿了优秀论文。”]
+    choices:
+      - id: study_pattern
+        text: 把刻薄评语和该学长的最终论文对照研究
+        visibleResponse: 对照着看，你看出了门道：评语的三条批评，恰好对应最终论文里做得最扎实的三个部分。刻薄的评审像X光——照出的骨头，后来都长了肉。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_harsh_feedback_studied }
+          - { kind: add, key: independence, value: 4 }
+        next: r_v2h_q4_after_study
+      - id: skip_toxics
+        text: 负能量的东西不看
+        visibleResponse: 你合上了存档。负能量确实不该看——但那三条批评里藏着的“评委在意什么”，你也一起错过了。
+    learningPoint: 尖锐批评是高信息密度的反馈，值得逆向工程
+
+  - id: r_v2h_q4_after_study
+    campaign: research
+    day: 19
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 逆向工程的收获, learning: 批评的元认知 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你总结出了那条评语的隐藏结构：第一条批”问题“（最重要的位置），第二条批”方法“（可改的位置），第三批”表达“（最容易改的）。刻薄的人骂得没条理——但这条评语骂得井然有序。它其实是一份修改优先级清单。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    next: r_v2_d20_wire9
+
+  - id: r_v2h_q5_missed_deadline_story
+    campaign: research
+    day: 23
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 错过截止的学长的故事, learning: 死线的弹性管理 }
+    scene: { location: corridor, characters: [] }
+    setup: [“走廊公告栏贴着一张泛黄的处分通报：某研究生因错过中期检查被延迟答辩。你认出了那个名字——就是现在总在实验室待到最晚的那位”扫地僧“师兄。”]
+    choices:
+      - id: ask_directly
+        text: 去问师兄当年发生了什么
+        requirements:
+          kind: and
+          conditions:
+            - { kind: relationship, characterId: r_senior_data, op: gte, value: 50 }
+        requirementHint: 周师兄的信任让你能问私事
+        visibleResponse: 周师兄那天讲了两小时：数据丢过、导师出国、紧接着生病——三件事撞在一起。“我不是输在懒，是输在没有Plan B。”他说，“你替我记住这件事。”
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_planb_story }
+          - { kind: add, key: independence, value: 5 }
+        next: r_v2h_q5_after_story
+      - id: just_read_notice
+        text: 只看通报，不打扰人
+        visibleResponse: 你读完了通报全文，知道了处分，不知道故事。通报教你“别错过”，故事才能教你“为什么别人会错过”。
+    learningPoint: 死线管理的核心是 Plan B 与早期预警，不是意志力
+
+  - id: r_v2h_q5_after_story
+    campaign: research
+    day: 23
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: Plan B 的建立, learning: 冗余计划的心理价值 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “当晚你写下了自己的 Plan B：数据每周三备份到两个地方；关键节点提前三天；如果导师联系不上，联系谁。写完你发现：Plan B 最大的价值不是用上它——是写下它之后，你睡得着了。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+    next: r_v2_d24_wire9
+
+  - id: r_v2h_q6_unknown_room
+    campaign: research
+    day: 26
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 241 会议室的深夜争论, learning: 学术争论的现场观摩 }
+    scene: { location: lab, characters: [] }
+    setup: [“路过 241 会议室，门虚掩着，里面两位老师在争论一个和你研究相关的问题——声音很大，谁也说服不了谁。你手里抱着一摞材料，站在门口。”]
+    choices:
+      - id: listen_five_minutes
+        text: 站在门口听五分钟
+        visibleResponse: 五分钟里你听到了两位老师犯的同一个错误——他们都在用直觉争论数据会怎样，而你手里正好有数据。你敲了门，把那张分析表放在桌上，鞠躬离开。身后传来翻纸的声音和一句“……这学生谁组的？”
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_room241_data }
+          - { kind: add, key: independence, value: 5 }
+          - { kind: add, key: credibility, value: 3 }
+        next: r_v2h_q6_after_listen
+      - id: walk_past
+        text: 走过去，不掺和老师的事
+        visibleResponse: 你抱着材料走了。241 的门在身后合上，把那场争论和你手里能终结争论的数据，一起关在了里面。
+    learningPoint: 数据在手时，学术争论的现场是年轻人的机会窗口
+
+  - id: r_v2h_q6_after_listen
+    campaign: research
+    day: 26
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 241 的回响, learning: 一张纸的涟漪 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “三天后，你的导师在组会上说：”241 的两位老师问我，那个放分析表的学生是谁。“他看了你一眼，”我说是我的学生。你们别给我丢人。“全组的目光刷到你脸上——你知道，有些名字，是靠一张纸立起来的。” }
+    automaticEffects:
+      - { kind: relationship, characterId: r_mentor, delta: 3 }
+    next: r_v2_d27_wire9
+
+  # ===== NG+ 汇流（隐藏 NG+ 双标记）=====
+  - id: r_v2ng_q7_mentor_office_return
+    campaign: research
+    day: 27
+    type: decision
+    keyDecision: true
+    hidden: true
+    ngPlus: true
+    trigger: { kind: manual }
+    purpose: { narrative: NG+ 的 office hour 回访, learning: 双周目资源叠加 }
+    scene: { location: lab, characters: [r_mentor] }
+    setup: [“两个周目里你都去过 office hour。但这一世，你带着上一世的问题清单回来——有些问题，当时问了导师答了，你没懂；现在懂了，问题又升级了。”]
+    choices:
+      - id: ask_upgraded
+        text: 问升级版的问题
+        visibleResponse: 陈教授听完你的问题，从抽屉里拿出一份他自己的研究笔记：“这个问题问到点子上了。这份笔记借你——别外传。”你拿到了连师兄都没见过的东西。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_ng_office_upgrade }
+          - { kind: relationship, characterId: r_mentor, delta: 4 }
+          - { kind: add, key: independence, value: 3 }
+      - id: ask_basic_again
+        text: 重新问一遍基础问题（测试导师记忆）
+        visibleResponse: 你故意问了最基础的版本。导师耐心答了——但你看到了他眼里一闪而过的失望。有些测试，不该拿来测恩人。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_ng_office_test }
+          - { kind: add, key: independence, value: 2 }
+    learningPoint: NG+ 的资源升级：用升级的问题换取更深的信任与资源
+
+  # ===== 汇流 wire =====
+  - id: r_v2_d20_wire9
+    campaign: research
+    day: 20
+    type: story
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { narrative: D20 夜间复盘, learning: 批评的结构 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你给”如何接收批评“总结了三条：先听结构再听情绪，先改容易的再改根本的，先谢再辩。第一条最值钱。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }
+
+  - id: r_v2_d24_wire9
+    campaign: research
+    day: 24
+    type: story
+    trigger: { kind: day, day: 24, phase: end }
+    purpose: { narrative: D24 夜间复盘, learning: Plan B 的安心 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你把 Plan B 折好放进书包侧袋。师兄的故事、你自己的保险——两代人的教训，现在都站在你这边。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }
+
+  - id: r_v2_d27_wire9
+    campaign: research
+    day: 27
+    type: story
+    trigger: { kind: day, day: 27, phase: end }
+    purpose: { narrative: D27 夜间复盘, learning: 一张纸的余温 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你在日志里画了一张纸的简笔画，旁边写：”241。别怕推门。“——给未来的自己，也给每一个路过的门。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }

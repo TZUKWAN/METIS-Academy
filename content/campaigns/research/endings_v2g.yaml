@@ -1,0 +1,212 @@
+# METIS Academy Research V2 结局批次十 —— 对应 events_v2_05.yaml 隐藏旗标
+endings:
+  - id: r_v2_predator_exposed_end
+    campaign: research
+    title: 《烫金的陷阱》
+    mainResult: 识破掠夺性期刊骗局
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_predator_exposed }
+    priority: 93
+    tier: hidden
+    baseText: 你的截图在组群里挂了一周，赵老师把它转发给了研究生院——研究生院把它做进了新生入学教育课件。第二年你听说有外校学生差点被骗了八百美金，是看了那个课件才醒悟的。一封骗局邮件，因为你的较真，变成了保护一届又一届新生的疫苗。你后来常想起自己点开邮件时的那零点五秒心动——较真不是没有欲望，是欲望被专业素养拦住了。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你从此养成“先查资质再心动”的习惯——查证的成本是十分钟，上钩的成本是一篇污点论文。 }
+          - { lte: 40, text: 你查证是因为导师在群里。如果没有赵老师，你会查吗？你的诚信，还依赖环境吗？ }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 赵老师退休时你才知道，那个课件的标题就是你的邮箱截图。她说这是“最生动的教材”。
+        neutral: 赵老师说“做得对”，然后继续筛她的下一批邮件。
+        negative: 有同级笑你“小题大做”。两年后他的一篇文章被挂在了掠夺性期刊官网上，撤稿花了他三个月。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的邮箱过滤器里永远有一组关键词——都是那封烫金邮件教会你的。 }
+    reflection: 掠夺性机构的猎物不是傻子，是想走捷径的聪明人——而你的较真，是聪明人的防弹衣。
+    lessonHint: 掠夺性期刊识别：查建站时间、编造影响因子、付费快审三特征。
+    tone: positive
+    family: evidence_integrity
+    whyDistinct: 核心结果是“掠夺性期刊骗局的识别与曝光”，由隐藏邮件事件解锁。
+
+  - id: r_v2_shadow_caution_end
+    campaign: research
+    title: 《网盘的边界》
+    mainResult: 灰色资源的使用边界实践
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_shadow_caution }
+        - { kind: flag, key: rv2_shadow_embraced, expected: false }
+    priority: 93
+    tier: hidden
+    baseText: “筛选用网盘、引用走正版”——你把这套用法讲给师弟听时，他惊讶于灰色资源还能这样用。馆际互借的五篇正版文献到货那天，你把网盘里的对应文件删了。师姐说你“讲究”，你说：“不是讲究。网盘的东西我改一个字没人知道，正版的东西我引一个字都有底气。”学术生涯很长，你要的是那种走到哪里都硬气的干净。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你发现馆际互借比想象中方便——合法的路径一旦走过一次，就没再走过灰色那条。 }
+          - { lte: 40, text: 等正版的那一周你效率掉了三成。原则的租金，有时候是按效率收的。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 师姐后来把那个网盘关了。她说：“有人把里面的东西用明白了，我的任务完成了。”
+        neutral: 师姐照常分享网盘，你照常只做筛选。你们对彼此的做法保持尊重的沉默。
+        negative: 有同学全文照搬网盘里的文献进了论文，查重时原文命中——师姐的网盘救不了抄袭的人。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的文献管理软件里有两个标签：“已合法获取”和“仅评估用”。第二个标签下的文件，从来不超过 5 篇。 }
+    reflection: 灰色资源的正当用法只有一种：当它是试读，把尊重版权留给最终引用的那一篇。
+    lessonHint: 灰色文献仅作筛选评估，正式引用必须合法获取。
+    tone: positive
+    family: evidence_integrity
+    whyDistinct: 核心结果是“灰色资源的边界实践”，由隐藏网盘事件解锁，与全盘拥抱路径在同一链互斥。
+
+  - id: r_v2_idea_captured_end
+    campaign: research
+    title: 《凌晨三点的 90 秒》
+    mainResult: 灵感捕捉纪律的价值验证
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_idea_captured }
+    priority: 93
+    tier: hidden
+    baseText: 那段 90 秒的糊涂录音里，藏着一句让你数据分析开了窍的话。你后来养成了枕边录音的习惯——三个月攒了 47 条，有用的 6 条，金子 1 条。1/47 的命中率，比基金申请的命中率还高。你在方法课上说：“灵感不是等来的，是抓来的——而且大部分抓上来的都是草，你要接受这个比例，才配等到那 1 条金子。”
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 录音-晨间复核-归档，三步成了你的灵感流水线。流水线保证了金子永远不漏网。 }
+          - { lte: 40, text: 那条录音你听了十几遍才提炼出金句。提炼的能力，是捕捉能力的另一半。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授听你讲“1/47 命中率”时笑了：“我做了三十年研究，命中率是 1/200。你还嫩——但也比我富，你有录音。”
+        neutral: 陈教授说“注意休息”，凌晨三点的灵感归档在他看来不是好习惯。
+        negative: 半夜录音吵醒了室友。你收获了灵感，欠了一个月的道歉——捕捉的工具，要选不吵人的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的灵感库后来超过 500 条。成功率依然约 1/47——但你已经靠那十几条金子，铺出了一条路。 }
+    reflection: 灵感的价值不在出现频率，在捕捉纪律——3 秒的懒惰，抵得上 47 个金子的流失。
+    lessonHint: 建立灵感即时捕捉与晨间复核流程。
+    tone: positive
+    family: research_identity
+    whyDistinct: 核心结果是“灵感捕捉纪律的价值验证”，由深夜录音事件解锁。
+
+  - id: r_v2_harsh_feedback_end
+    campaign: research
+    title: 《刻薄评语的 X 光》
+    mainResult: 批评的逆向工程方法论
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_harsh_feedback_studied }
+        - { kind: flag, key: rv2_reject_letters, expected: false }
+    priority: 93
+    tier: hidden
+    baseText: 你把“刻薄评语逆向工程法”总结成一页纸：拿一条差评，找到差评对应的成品，对照两者，提取“评委在意什么”的排序。这页纸在组里传阅后，师妹用同样的方法研究了三份拒稿信，一周后她的论文回炉重造版投了出去，中了。你渐渐明白一个道理：这个世界上最贵的咨询费，付给了会说刻薄真话的人——而存档里的刻薄评语，是免费的前辈咨询记录。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你收集刻薄评语的癖好出名了。大家看到狠评都会@你：“这条归你的博物馆。”
+          }
+          - { lte: 40, text: 逆向工程做了三个案例你就停了。方法刚成形就束之高阁——一半的功夫，等于没练。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄说：“你连骂人的话都能拆出方法论。你这个脑子，不搞研究可惜了。”话糙理正。
+        neutral: 师兄说“有意思”，然后抄走了你那页纸——没打招呼，但你看见了，也没说。
+        negative: 有人用你的方法研究你被拒的论文，发现了你没发现的三个问题。免费咨询的人，也可能变成免费的对手。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的“刻薄评语博物馆”后来收藏了 23 条。每一条旁边都有一列小字：它教会了我什么。 }
+    reflection: 批评的价值密度与其刻薄程度成正比——前提是你会做逆向工程：从情绪里萃取信息。
+    lessonHint: 逆向研究刻薄评语与最终成果的对应关系，提取评审标准。
+    tone: positive
+    family: research_identity
+    whyDistinct: 核心结果是“批评的逆向工程方法论”，与退稿信（正面案例研究）结局的信息来源不同。
+
+  - id: r_v2_planb_story_end
+    campaign: research
+    title: 《扫地僧的 Plan B》
+    mainResult: 从他人挫折中习得冗余思维
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_planb_story }
+        - { kind: flag, key: rv2_retraction_story, expected: false }
+    priority: 93
+    tier: hidden
+    baseText: 你的 Plan B 清单后来加到了第七条。第八条没来得及加——因为第七条救了你：deadline 前一天服务器迁移，你的备份 Wednesday 副本直接顶上，损失为零。晚上你去实验室找“扫地僧”师兄报喜，他正在拖地（他心情好时才拖）。听完他说了一句：“我这辈子的霉运，看起来是替你挡的。”你们俩笑了很久。故事传承的意义，就是让一个人的霉运变成另一个人的疫苗。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你的 Plan B 从清单进化成了系统：自动化备份、双联系人、提前量公式。师兄听了直点头。 }
+          - { lte: 40, text: 清单你写了七条，一条都没用上过。你在想是不是白写了——其实“没用上”就是它的价值。 }
+    characterEpilogueRules:
+      - characterId: r_senior_data
+        positive: 周师兄毕业时把他的霉运清单正式交给了你。扉页写着：“我的雷，你的地图。”
+        neutral: 周师兄照常拖地、照常待到最晚。你们的交情不需要证明。
+        negative: 你把师兄的故事当谈资讲了出去。传到他耳朵里时，故事已经变了味——他从此对你客气而疏远。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的 Plan B 清单后来加到了第十二条。每一条后面都有一行小字：来源——某人的真实事故。 }
+    reflection: 别人的事故是最便宜的学费——听故事的人以为在听八卦，其实是在领疫苗。
+    lessonHint: 从他人的失败案例中提炼冗余与预警机制。
+    tone: positive
+    family: project_management
+    whyDistinct: 核心结果是“他人挫折的冗余思维转化”，与撤稿启示（案例警示）结局的信息渠道不同。
+
+  - id: r_v2_room241_end
+    campaign: research
+    title: 《241 的敲门声》
+    mainResult: 用数据终结权威之争
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_room241_data }
+    priority: 97
+    tier: hidden
+    baseText: 你那张分析表后来被两位老师联合署名引用在他们的论文里——致谢的最后一行写着：“感谢一位不愿透露姓名的研究生，她/他在正确的时刻带来了正确的数据。”他们至今不知道你是谁（你放完表就跑了）。但导师知道，全组都知道。二十四分钟后（也就是三天后），你收到了第一份跨组合作邀请。一切始于那次没有多想的敲门——你手里刚好有数据，门刚好虚掩着。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你敲门时腿是抖的。数据给了你底气，礼貌给了你台阶——两者的组合叫分寸。 }
+          - { lte: 40, text: 事后你想了十种“如果不”——如果他们不耐烦，如果数据有问题……你庆幸自己没想完就敲了。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 导师后来在组会上转述了 241 的故事（隐去了名字），最后说：“机会不是等来的，是门口站五分钟听来的。”
+        neutral: 导师没提这事。但组里那学期多了一条不成文的鼓励：有数据，就敢说话。
+        negative: 数据有个你没发现的口径问题，241 的老师们一眼看出来了。你的第一次亮相带着瑕疵——好在他们更欣赏勇气。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来路过每一间虚掩的门都会多听五分钟。你的耳朵和你的数据，是你全部的机会嗅觉。 }
+    reflection: 年轻人在学术圈最早立住脚的方式，往往不是发表，而是在对的时间把对的数据放到对的人面前。
+    lessonHint: 手握关键数据时，学术争论的现场就是你的机会窗口。
+    tone: positive
+    family: research_identity
+    whyDistinct: 核心结果是“数据终结权威之争”的传奇时刻，由 241 会议室隐藏事件解锁。
+
+  - id: r_v2_ng_office_upgrade_end
+    campaign: research
+    title: 《抽屉里的笔记》
+    mainResult: NG+ 问题升级赢得导师私藏
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ng_office_upgrade }
+        - { kind: flag, key: rv2_ng_office_test, expected: false }
+        - { kind: flag, key: rv2_office_hour }
+    priority: 97
+    ngPlus: true
+    tier: special
+    hidden: true
+    baseText: 那份笔记本是陈教授 2009 年的研究手记——里面的方法论推演，比你们组所有文献都早了五年。你一页页读下来，发现上一世的你连问出那份笔记存在的能力都没有。问题的等级决定答案的等级：上一世你的问题是“怎么写”，这一世是“为什么这样设计”——同一个导师，两套答案，两个世界。你把读笔记的感悟写了十页，还回去时多了一页你自己的批注。教授看到批注，第一次用平等的眼神看了你很久。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: 你的一页批注后来被教授贴在了抽屉内侧——他说“这是这本笔记的续集第一页”。 }
+          - { lte: 40, text: 升级的问题有一半是记忆给的，一半是你自己长出来的。你分不清哪半更值钱。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 毕业那天教授说：“笔记的续集该你写了。写完了，我的抽屉给你留着位置。”——那是他能让出的最高位置。
+        neutral: 陈教授收回了笔记和批注。你们的交流自此多了一种语言：批注体。
+        negative: 你没敢要回那一页批注。它留在了教授的抽屉里，像一个你没敢认领的孩子。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来读任何前辈笔记都会留批注——因为你知道，批注是下一个读者最需要的东西。 }
+    reflection: NG+ 的复利公式：上一世的问题练出这一世的敏感，这一世的敏感换来上一世拿不到的资源。
+    lessonHint: NG+ 资源升级：问题等级的提升解锁导师的深层信任。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 双周目问题升级的私藏传承”，仅 NG+ 可达，需 office hour 基础线，与测试导师记忆路径在同一链互斥。
