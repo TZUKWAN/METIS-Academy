@@ -161,6 +161,29 @@ function beatsTarget(t: Ending, e: Ending): boolean {
   return e.priority > t.priority;
 }
 
+const targetFlagKeys = new Set<string>();
+{
+  const collect = (c: Condition): void => {
+    if (!c) return;
+    if (c.kind === "flag") targetFlagKeys.add(c.key);
+    else if (c.kind === "flagValue") targetFlagKeys.add(c.key);
+    else if (c.kind === "and" || c.kind === "or") c.conditions.forEach(collect);
+    else if (c.kind === "not") collect(c.condition);
+  };
+}
+function collectTargetFlags(t: Ending): Set<string> {
+  const keys = new Set<string>();
+  const collect = (c: Condition): void => {
+    if (!c) return;
+    if (c.kind === "flag") keys.add(c.key);
+    else if (c.kind === "flagValue") keys.add(c.key);
+    else if (c.kind === "and" || c.kind === "or") c.conditions.forEach(collect);
+    else if (c.kind === "not") collect(c.condition);
+  };
+  collect(t.requirements as Condition);
+  return keys;
+}
+
 function competitorPenalty(target: Ending, state: GameState): number {
   const competitors = (campaignEndingsByCampaign.get(target.campaign) ?? []).filter(
     (e) => e.id !== target.id && beatsTarget(target, e),
@@ -176,6 +199,17 @@ function competitorPenalty(target: Ending, state: GameState): number {
 }
 
 function attemptSolve(target: Ending, campaignId: string, seed: number): { steps: Step[] } | { error: string } {
+  targetFlagKeys.clear();
+  {
+    const collect = (c: Condition): void => {
+      if (!c) return;
+      if (c.kind === "flag") targetFlagKeys.add(c.key);
+      else if (c.kind === "flagValue") targetFlagKeys.add(c.key);
+      else if (c.kind === "and" || c.kind === "or") c.conditions.forEach(collect);
+      else if (c.kind === "not") collect(c.condition);
+    };
+    collect(target.requirements as Condition);
+  }
   const rng = makeRng(seed);
   let state: GameState = newPlaythrough(index, campaignId, "Solver", EMPTY_PROFILE, false);
   const steps: Step[] = [];
@@ -207,10 +241,10 @@ function attemptSolve(target: Ending, campaignId: string, seed: number): { steps
             - 1.5 * competitorPenalty(target, r.state)
             + (r.state.ended && r.state.endingId === target.id ? 100 : 0)
             + rng() * 0.01;
-          if (targetIsGeneric) {
-            // 通用结局：避免任何设置旗标的选择，保住"无旗标"区域
-            const setsFlag = (ch.hiddenEffects ?? []).some((e) => e.kind === "setFlag");
-            if (setsFlag) score -= 3;
+          // 避免设置目标不需要的旗标（会引入竞争结局区域）
+          const wanted = targetFlagKeys;
+          for (const e of ch.hiddenEffects ?? []) {
+            if (e.kind === "setFlag" && !wanted.has(e.key)) { score -= 3; break; }
           }
           if (score > bestScore) {
             bestScore = score;

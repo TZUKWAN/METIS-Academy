@@ -27,6 +27,7 @@ events:
           - { kind: add, key: independence, value: 4 }
           - { kind: add, key: evidenceDiscipline, value: 3 }
           - { kind: add, key: progress, value: 2 }
+          - { kind: setFlag, key: rv2_vanilla }
         next: r_v2_d02_clarify_win
       - id: stall
         text: 先存着，明天状态好了再弄

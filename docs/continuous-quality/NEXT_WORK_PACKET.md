@@ -32,3 +32,17 @@
 ## 禁止事项
 - 不得宣称 RELEASE READY / 全部完成 —— 唯一判据是 `pnpm quality:release-lock` exit 0。
 - macOS 不可作为阻断项。外部真人试玩不阻断。
+
+## 深层设计问题（下一轮叙事手术的核心，2026-09-16 凌晨分析）
+**必经选择设独占旗标 → 遮蔽通用结局**：
+- D24/D26/D28/D30 等必经决策的每个选项都 setFlag（如 rv2_honest_nervous/rv2_fake_calm），
+  且这些旗标是唯一旗标（单事件设置）→ specScore=2。
+- 于是所有通关的 run 都携带若干 score=2 的姿态旗标，对应的姿态结局（93-98）
+  永远压过 score 0-2 的通用结局（r_end_pass/excellent/barely 等，88-89）。
+- 结果：~8-10 个 legacy 通用结局实际不可达（witness-generate 16 次尝试也失败）。
+**候选修复方案（下一轮执行）**：
+1. 把"姿态类"必经选择的旗标从"结局守卫"降级为"epilogue 修饰"（specialFlagSections），
+   对应姿态结局改用组合守卫：姿态旗标 + 核心完成条件 + 关键数值区间。
+2. 或给通用结局配专属"平淡路线"旗标链（早期选择设置），并要求姿态旗标 NOT 同时存在
+   （NOT 条件列全所有姿态旗标，约 6-8 个，可接受）。
+3. 修改后需对每线跑 witness-generate 验证全部可解。
