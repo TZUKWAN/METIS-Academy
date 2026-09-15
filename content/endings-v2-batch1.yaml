@@ -1,0 +1,329 @@
+# METIS Academy V2 扩展结局 — 第一批 20 个
+endings:
+  # ===== 科研线扩展 =====
+  - id: r_ext_peer_betrayal
+    campaign: research
+    title: 同门反目
+    mainResult: 组会数据被同门抢发
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: teamTrust, op: lte, value: 30 }
+        - { kind: state, key: day, op: gte, value: 25 }
+    priority: 70
+    baseText: 你最信任的同门将你们共同讨论的研究思路抢先发表了。导师沉默良久，说："学术圈就是这样。学会保护自己。"
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 70, text: 你开始建立自己的研究笔记加密体系。 }
+          - { lte: 30, text: 你开始怀疑每一次组会讨论的价值。 }
+    characterEpilogueRules:
+      - characterId: r_peer
+        positive: 苏晓后来道歉了，说是导师逼的。
+        neutral: 你们再也没说过话。
+        negative: 毕业典礼上你们假装没看到对方。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你开始写一本关于研究生存指南的书。 }
+    reflection: 信任是学术圈最珍贵的资产，也是最容易失去的。
+    specialTags: [betrayal]
+
+  - id: r_ext_data_breach
+    campaign: research
+    title: 数据泄露
+    mainResult: 问卷数据意外泄露到公开网络
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: key_leak_risk }
+        - { kind: state, key: day, op: gte, value: 20 }
+    priority: 65
+    baseText: 你把问卷原始数据存在了未加密的云盘里。某天你发现搜索结果能直接下载这份包含个人信息的数据表。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 70, text: 你立即通知所有受访者，公开道歉，并重新设计了数据存储方案。 }
+          - { lte: 40, text: 你试图删除文件，但互联网有记忆。 }
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 这件事之后，你成了实验室的数据安全宣传员。 }
+    reflection: 数据安全不是技术问题，是伦理问题。
+    specialTags: [data_breach]
+
+  - id: r_ext_mentor_coauthor
+    campaign: research
+    title: 被署名
+    mainResult: 导师未经同意将你列为共同作者
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: mentorTrust, op: gte, value: 70 }
+        - { kind: flag, key: defense_done }
+    priority: 60
+    baseText: 你的名字出现在导师的新论文致谢和参考文献中——但你从未参与那篇论文的任何工作。你面临一个选择。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 70, text: 你礼貌但坚定地要求撤下你的名字。导师尊重了你的决定。 }
+          - { lte: 40, text: 你选择沉默。但这个决定像影子一样跟了你很久。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 导师后来解释："我想帮你积累发表记录。"你理解了，但也学会了设立边界。
+        neutral: 这件事最终没有影响你们的关系。
+        negative: 你开始怀疑导师之前的所有善意。
+    reflection: 署名权是学术诚信的核心。
+    specialTags: [authorship]
+
+  - id: r_ext_conference_reject
+    campaign: research
+    title: 会议拒稿
+    mainResult: 首次投稿被学术会议拒绝
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: defense_done }
+        - { kind: state, key: academicDebt, op: gte, value: 50 }
+    priority: 50
+    baseText: 审稿意见只有两句话："选题尚可但论证不足。建议重写。"你盯着屏幕看了很久，然后打开了审稿意见的每一条批注。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: 你逐条修改，三个月后重新投稿并录用。 }
+          - { lte: 40, text: 你把拒稿邮件存进了草稿箱，半年后才重新打开。 }
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 拒稿不是终点。你把审稿意见贴在了工位上。 }
+    reflection: 拒稿是学术的日常，不是对你的否定。
+    specialTags: [rejection]
+
+  # ===== 竞赛线扩展 =====
+  - id: c_ext_rule_dispute
+    campaign: competition
+    title: 规则争议
+    mainResult: 因规则理解分歧被扣分
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: prelim_passed }
+        - { kind: state, key: credibility, op: lte, value: 50 }
+    priority: 72
+    baseText: 决赛答辩中，评委指出你们的Demo使用了未授权的第三方API——章程第14条明确禁止。你们没有读过那一页。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: 你当场承认疏忽并提出替换方案。评委给了重新提交的机会。 }
+          - { lte: 40, text: 你辩解说"不知道不算违规"。评委摇了摇头。 }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 何老师说："吃一堑长一智。下次我帮你们逐页审章程。"
+        neutral: 何老师只是叹了口气。
+        negative: 何老师说："我提醒过你三遍。"
+    reflection: 规则不是建议，是边界。
+    specialTags: [rules]
+
+  - id: c_ext_demo_crash
+    campaign: competition
+    title: 临场崩溃
+    mainResult: 决赛演示时程序崩溃且无 B 计划
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: crash_unfixed }
+        - { kind: flag, key: c_final_done }
+    priority: 100
+    tier: main
+    baseText: 第7步。就是那个你决定"赌一把不修"的偶发崩溃——在全校师生面前，屏幕变成了白色。你按了F5，页面重新加载，然后又崩了。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 60, text: "你冷静地说：'这是已知问题，我们准备了替代方案。'然后打开了备用笔记本。" }
+          - { lte: 40, text: "你慌了。你翻了半天U盘，发现备份也是崩溃前的版本。" }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: 方远赛后写了一篇博客《我是如何在全校面前搞崩Demo的》，阅读量破万。
+        neutral: 方远那天晚上没说话。
+        negative: 方远说："我早就说过了。"你们的关系降到了冰点。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: "你的 GitHub 提交记录里多了一条：'fix: the crash that defined my life'." }
+    specialFlagSections:
+      - { flag: demo_backup_ready, text: "幸好你准备了B计划。虽然还是失败了，但至少你没有在全校面前手足无措。" }
+    reflection: 概率三成的崩溃在决赛就是百分之百。
+    specialTags: [crash]
+
+  - id: c_ext_hidden_mentor
+    campaign: competition
+    title: 隐藏的引路人
+    mainResult: 意外获得业界导师的长期指导
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: mentorTrust, op: gte, value: 80 }
+        - { kind: state, key: credibility, op: gte, value: 70 }
+        - { kind: flag, key: c_final_done }
+    priority: 130
+    tier: hidden
+    baseText: 颁奖典礼后，一位你从未见过的中年人走到你面前。"我是XX孵化器的。你答辩时提到的那个用户调研方法很扎实。有兴趣聊聊吗？"这次对话持续了三个小时，开启了你意想不到的大门。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 70, text: 你没有立刻答应。你回去查了他的背景，准备了问题清单。这才是成熟的态度。 }
+    characterEpilogueRules:
+      - characterId: c_judge_final
+        positive: 孙教授后来成了你的学术顾问。
+        neutral: 孙教授的联系方式躺在你的通讯录里，偶尔点赞。
+        negative: 你再也没有见到孙教授。
+    reflection: 有时候，最大的收获不是奖项，而是被正确的人看见。
+    specialTags: [hidden, mentor]
+
+  - id: c_ext_team_rebuild
+    campaign: competition
+    title: 重组之翼
+    mainResult: 团队解散后成功重组并再战
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: team_conflict }
+        - { kind: state, key: teamTrust, op: gte, value: 60 }
+        - { kind: flag, key: c_final_done }
+    priority: 85
+    tier: special
+    baseText: 第一次解散后，你和方远在食堂偶遇。两个人沉默了很久，然后同时开口："要不……再来一次？"第二次比赛，你们的分工表签了字，贴在了墙上。
+    growthVariantRules:
+      - dimension: teamTrust
+        variants:
+          - { gte: 70, text: "这次你们赢了省赛银奖。领奖时方远说：'这次是真的稳。'" }
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 分工表 v3 比第一份多了两行："每周复盘"和"分歧不过夜"。 }
+    specialTags: [team]
+    reflection: 破裂的信任可以修复，但需要双方都有勇气先开口。
+
+  # ===== 创业线扩展 =====
+  - id: v_ext_platform_policy
+    campaign: venture
+    title: 平台规则突变
+    mainResult: 依赖的第三方平台突然修改政策
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: users, op: gte, value: 15 }
+        - { kind: flag, key: v_final_done }
+    priority: 115
+    tier: main
+    baseText: 社团联合会的管理员突然发通知：所有第三方工具必须通过安全审核，否则下个月全部禁用。你的产品有 30 个活跃社团在用。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 65, text: 你在两周内完成了安全审计和备案。产品活了下来，还因为合规性吸引了更多社团。 }
+          - { lte: 45, text: 你来不及完成审核。30 个社团在一个月后全部流失。你第一次理解了什么叫"平台风险"。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿斌说："这次是我太急了。你的冷静救了项目。"
+        neutral: 阿斌说："平台的事谁也控制不了。"
+        negative: 阿斌说："我早说过不要依赖单一平台。"
+    reflection: 平台是租客的地盘。你只是租客。
+    specialTags: [platform_risk]
+
+  - id: v_ext_viral_moment
+    campaign: venture
+    title: 病毒式传播
+    mainResult: 产品被校园大V偶然推荐后爆红
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: users, op: gte, value: 10 }
+        - { kind: state, key: execution, op: gte, value: 70 }
+        - { kind: flag, key: v_final_done }
+    priority: 120
+    tier: special
+    baseText: 一个拥有 5 万粉丝的校园博主发了一条 15 秒的视频——"这个工具让我社团的报名效率提升了 10 倍"。24 小时内，你的注册用户从 30 涨到了 800。
+    growthVariantRules:
+      - dimension: execution
+        variants:
+          - { gte: 75, text: 你的服务器没有崩。因为你在第 13 天就做了负载测试。你冷静地扩容，回复了每一条用户反馈。 }
+          - { lte: 50, text: 服务器崩了。你花了 48 小时修，但 800 个用户只剩 90 个。"爆红"变成了"昙花一现"。 }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 老K在群里说："看，我早就说过这东西好使。"
+        neutral: 老K默默在群里发了+1。
+        negative: 老K说："果然还是太年轻了。"
+    projectFutureRules:
+      - { key: scale, condition: { kind: state, key: technicalDebt, op: lte, value: 40 }, text: 因为技术底子扎实，你顺利支撑了这波增长。三个月后你拿了天使轮。 }
+      - { key: crash, condition: { kind: state, key: technicalDebt, op: gte, value: 60 }, text: 技术债在流量高峰时爆炸了。你花了两个月还债，错过了最佳增长窗口。 }
+    reflection: 运气来了要接得住。接不住就会变成教训。
+    specialTags: [viral]
+
+  - id: v_ext_co_exit
+    campaign: venture
+    title: 合伙人退出
+    mainResult: 核心合伙人中途退出项目
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: bin_left }
+        - { kind: state, key: day, op: gte, value: 20 }
+    priority: 90
+    tier: main
+    baseText: 阿斌的退出没有仪式感。他只是在群里发了最后一条代码提交，然后退出了群聊。没有争吵，没有解释。你打开他的代码，发现注释写得整整齐齐——但从此以后要一个人维护了。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 70, text: 你花了一周读懂他的代码，然后继续推进。孤独，但你做到了。 }
+          - { lte: 40, text: 没有阿斌，项目停了两周。你后来才意识到你有多依赖他。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 三个月后阿斌回来了。他说："我发现我还是喜欢写代码。"
+        neutral: 阿斌偶尔在朋友圈给你的产品点赞。
+        negative: 阿斌拉黑了你的微信。
+    projectFutureRules:
+      - { key: solo, condition: { kind: state, key: independence, op: gte, value: 70 }, text: 你一个人完成了 MVP 的全部开发。虽然累，但你证明了自己可以。 }
+    specialTags: [team]
+    reflection: 合伙人退出不可怕，可怕的是没有退出预案。
+    lessonHint: 合伙先谈散伙
+
+  - id: v_ext_first_refund
+    campaign: venture
+    title: 第一笔退款
+    mainResult: 首个付费用户要求退款
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: first_paid_user }
+        - { kind: flag, key: launch_unverified }
+        - { kind: state, key: day, op: gte, value: 22 }
+    priority: 88
+    tier: special
+    baseText: 你刚收到第一笔 ¥9.5 的付款，高兴了不到一小时，退款请求就来了。理由："和预期不符。"
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 65, text: 你仔细分析了退款原因，发现在定价页做了过度承诺。你修改了文案，第二个付费用户的留存率是 100%。 }
+          - { lte: 40, text: 你把退款归咎于"用户不理解产品"。你没有做任何改变。 }
+    projectFutureRules:
+      - { key: learn, condition: { kind: always }, text: 这笔退款教会你的东西，比十次成功更多。 }
+    reflection: 收到钱只是开始，留住钱才是本事。
+    specialTags: [refund]
+
+  - id: v_ext_community_praise
+    campaign: venture
+    title: 口碑发酵
+    mainResult: 产品在社团圈自发传播
+    requirements:
+      kind: and
+      conditions:
+        - { kind: state, key: users, op: gte, value: 8 }
+        - { kind: state, key: credibility, op: gte, value: 70 }
+        - { kind: flag, key: v_final_done }
+    priority: 95
+    tier: special
+    baseText: 没有投放广告，没有找大V。三个社团的社长自发在新生群里推荐你的工具——"这是真的好用，不是广告"。你看着后台的注册曲线，第一次感受到"口碑"两个字的重量。
+    growthVariantRules:
+      - dimension: credibility
+        variants:
+          - { gte: 75, text: 你从不付费刷量，从不过度承诺。你的用户替你做了最好的广告。 }
+    characterEpilogueRules:
+      - characterId: v_user_club
+        positive: 老K亲自带你去了三个社团做产品演示。他说："这是我第一次主动推荐工具。"
+        neutral: 老K在群里提了一句你的工具，没有多说什么。
+        negative: 老K没有帮你宣传。你们的默契还没有到那一步。
+    projectFutureRules:
+      - { key: organic, condition: { kind: always }, text: 一个月后，你的产品覆盖了全校 60% 的社团。全部通过口碑传播。 }
+    specialTags: [good, organic]
+    reflection: 最好的获客渠道是你的产品真的好用。
+    lessonHint: 口碑是最便宜也最贵的获客方式
