@@ -1,0 +1,78 @@
+# METIS Academy — 唯一需求注册表（Requirements Registry）
+# 所有 Gate（release-lock / requirements-audit / quality-controller）只读取这一份。
+# 禁止各脚本自行写入阈值。修改阈值必须改这里。
+# 来源：V2 游戏化收敛文档（用户 2026-09 最新要求）
+# macOS：OUT OF SCOPE BY PRODUCT DECISION（不计入任何 Gate）
+# 外部真人试玩：OPTIONAL / NON-BLOCKING（内部 GUI 验收由 Agent 完成）
+
+version: 2
+
+research:
+  baseEndings: 160
+  events: 360
+  meaningfulDecisions: 150
+  delayedConsequences: 80
+  npcInteractions: 120
+  hiddenEvents: 40
+  ngPlusEvents: 30
+  hiddenBaseEndings: 20
+  ngPlusBaseEndings: 16
+  ultraRareBaseEndings: 5
+
+competition:
+  baseEndings: 160
+  events: 320
+  meaningfulDecisions: 140
+  delayedConsequences: 70
+  npcInteractions: 110
+  hiddenEvents: 35
+  ngPlusEvents: 25
+  hiddenBaseEndings: 20
+  ngPlusBaseEndings: 16
+  ultraRareBaseEndings: 5
+
+venture:
+  baseEndings: 160
+  events: 380
+  meaningfulDecisions: 160
+  delayedConsequences: 90
+  npcInteractions: 130
+  hiddenEvents: 45
+  ngPlusEvents: 30
+  hiddenBaseEndings: 20
+  ngPlusBaseEndings: 16
+  ultraRareBaseEndings: 5
+
+total:
+  baseEndings: 480
+  events: 1060
+  meaningfulDecisions: 450
+  delayedConsequences: 240
+
+# 非内容指标
+platform:
+  skills: 120
+  knowledge: 100
+
+quality:
+  e2eTotal: 10
+  e2ePassRequired: 10
+  unitTestsPass: true
+  lintZero: true
+  typecheckZero: true
+  contentValidateZero: true
+  similarityBlockersZero: true
+  witnessCoverage: 100   # % of base endings with a replayable witness
+  unknownAssetLicenses: 0
+  forbiddenAssetLicenses: 0
+  missingAssetManifests: 0
+
+gates:
+  cleanAuditRoundsRequired: 3
+  # Clean Round 定义：S0=S1=S2=S3=0 且本轮新增 visible S4 全部当轮修复
+  issueSeveritiesBlocking: [S0, S1, S2, S3]
+
+release:
+  windowsPackageRequired: true
+  macOS: OUT_OF_SCOPE
+  externalHumanPlaytest: NON_BLOCKING

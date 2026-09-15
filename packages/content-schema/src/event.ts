@@ -90,6 +90,10 @@ export const EventSchema = z.object({
   keyDecision: z.boolean().optional(),
   /** 学习点（fate review 显示） */
   learningPoint: z.string().optional(),
+  /** 隐藏事件：需特定条件/探索进入，带来新剧情或新路径 */
+  hidden: z.boolean().optional(),
+  /** NG+ 周目专属事件：需前周目记忆 */
+  ngPlus: z.boolean().optional(),
 });
 export type Event = z.infer<typeof EventSchema>;
 export type DialogueLine = z.infer<typeof DialogueLineSchema>;

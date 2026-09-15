@@ -79,5 +79,15 @@ export const EndingSchema = z.object({
   reflection: z.string().min(1),
   /** 教学启示（fate review 用） */
   lessonHint: z.string().optional(),
+  /** NG+ 周目专属结局（需前周目记忆解锁） */
+  ngPlus: z.boolean().optional(),
+  /** 超稀有结局 */
+  ultraRare: z.boolean().optional(),
+  /** 独立性声明：为什么这是一个不同的核心人生/项目结果 */
+  whyDistinct: z.string().optional(),
+  /** 结局家族（Ending Matrix 审计用） */
+  family: z.string().optional(),
+  /** 情绪基调：positive / negative / mixed / ambiguous */
+  tone: z.enum(["positive", "negative", "mixed", "ambiguous"]).optional(),
 });
 export type Ending = z.infer<typeof EndingSchema>;
