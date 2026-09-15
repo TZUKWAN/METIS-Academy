@@ -57,6 +57,7 @@ events:
       - { speaker: 系统, text: “你在用钱买一个漏水的桶。水加了，桶还是漏的。” }
     automaticEffects:
       - { kind: add, key: money, value: -8 }
+      - { kind: setFlag, key: key_v_vanity_crash }
     next: v2s3_cac_verdict
 
   - id: v2s3_cac_verdict

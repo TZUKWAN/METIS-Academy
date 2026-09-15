@@ -28,6 +28,7 @@ events:
         visibleResponse: 你笑着碰了个杯。分工的模糊处，像气泡一样沉进了可乐里。
         hiddenEffects:
           - { kind: setFlag, key: kv_verbal_split }
+          - { kind: setFlag, key: key_v_fuzzy_split }
           - { kind: add, key: teamTrust, value: 2 }
         delayed:
           - { eventId: v2g2_ghost_tasks, onDay: 14 }
@@ -118,6 +119,7 @@ events:
     automaticEffects:
       - { kind: add, key: credibility, value: -6 }
       - { kind: add, key: revenue, value: -5 }
+      - { kind: setFlag, key: key_v_refund_storm }
     next: v2_d24_wire
 
   # ===== H 链：平台依赖（D7 → D18 → D27）=====
@@ -138,6 +140,7 @@ events:
         visibleResponse: 七天后用户翻了四倍。你把"封禁率 18%"这个数字忘在了第 7 天。
         hiddenEffects:
           - { kind: setFlag, key: kv_all_in_platform }
+          - { kind: setFlag, key: key_v_platform_wall }
           - { kind: add, key: users, value: 15 }
         delayed:
           - { eventId: v2h2_platform_clamp, onDay: 18 }
@@ -245,6 +248,7 @@ events:
         visibleResponse: 反馈表格安静地积累着。三周后它会有 240 条未读——那时它就不是反馈了，是墓志铭。
         hiddenEffects:
           - { kind: setFlag, key: kv_support_debt }
+          - { kind: setFlag, key: key_v_support_fire }
           - { kind: add, key: credibility, value: -4 }
         delayed:
           - { eventId: v2i2_silent_churn, onDay: 19 }
@@ -354,6 +358,7 @@ events:
         visibleResponse: 你开始了双线作战。第 10 天，你在给企业写的周报里，混进了一条学生群的梗。对方回了个问号。
         hiddenEffects:
           - { kind: setFlag, key: kv_chase_both }
+          - { kind: setFlag, key: key_v_two_fronts }
           - { kind: add, key: energy, value: -12 }
         delayed:
           - { eventId: v2j2_both_burn, onDay: 21 }
