@@ -1,0 +1,725 @@
+# 创业线扩展事件 02（假设验证/MVP开发/Agent工程/部署/bug）
+events:
+  - id: v_e02_d09_falsify_word
+    campaign: venture
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 可证伪性：假设必须能写出“什么情况算错” }
+    scene: { location: dorm, characters: [] }
+    setup: ["假设板第一格你写的是：“社团都需要数字化报名工具”。罗哥看了摇头，让你重写。"]
+    choices:
+      - id: falsifiable
+        text: 重写：“中大型社团愿为省3天人力，每次活动付19元”——判据：2个社团真付
+        visibleResponse: |
+          新假设有主体、有场景、有价格、有判据。
+          什么情况算错？两周内没人肯付。一句话，谁都能审。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 6 }]
+      - id: stay_vague
+        text: 原句挺好，都“需要”了还证伪啥
+        visibleResponse: “都需要”没法错，也就没法对。两周后它既没被证实也没被证伪，白白占了一格。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 不能被证伪的假设，也不能被证实
+    terminal: true
+
+  - id: v_e02_d09_evidence_grade
+    campaign: venture
+    day: 9
+    type: decision
+    trigger: { kind: day, day: 9, phase: end }
+    purpose: { learning: 证据分级：传闻<访谈<行为<付费 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你把手里证据摊开：群里有人说“这想法不错”（传闻）、访谈原话（口供）、有人真的传了报名表（行为）、有人付了半价（付费）。"]
+    choices:
+      - id: grade_evidence
+        text: 四级标注：每条证据标级，假设状态只升不降
+        visibleResponse: |
+          标完发现：看着好看的“需求确认”，多数停在传闻级。
+          假设板诚实了：Revenue 格降回“未验证”，Retention 格只剩行为级证据。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 6 }, { kind: addAsset, assetType: evidence_matrix, name: 证据分级表, description: 传闻/访谈/行为/付费四级, content: "付费1条/行为4条/访谈9条/传闻12条" }]
+      - id: mix_all
+        text: 都是证据，混着用就行
+        visibleResponse: 传闻和付费平起平坐。第21天定价时，你被自己的“传闻证据”骗了一把。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 证据不讲数量，讲等级
+    terminal: true
+
+  - id: v_e02_d10_min_exp
+    campaign: venture
+    day: 10
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 最小实验：一次只测一个假设 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: ["Agent 提议：“我可以一口气做完整产品，让用户全面体验！”你想起罗哥的话：一次只测一个假设。"]
+    choices:
+      - id: one_hypothesis
+        text: 本周只测“痛点是否真实”：手工代收2个社团的报名表
+        visibleResponse: 一周后答案出炉：两家社团都主动问“下次还能不能找你”。痛点真实，值钱。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: add, key: userUnderstanding, value: 5 }]
+      - id: test_everything
+        text: 让Agent全做：功能/价格/ UI 一起测
+        visibleResponse: 数据全砸了：没人注册。你分不清是功能不行、价格不行还是界面不行——三个假设搅在一起，哪个也判不了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }]
+    learningPoint: 变量控制不分家，实验就是白做
+    terminal: true
+
+  - id: v_e02_d10_scope_cut
+    campaign: venture
+    day: 10
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 10, phase: end }
+    purpose: { learning: MVP砍范围：先砍到只剩核心闭环 }
+    scene: { location: workbench, characters: [v_partner, v_ai_agent] }
+    setup: ["功能清单摆上桌：登录、报名、自动分组、通知、数据导出、管理后台、支付。阿斌问你：第一版砍到啥样？"]
+    choices:
+      - id: core_loop_only
+        text: 只留“上传-合并-通知”，其他全砍。无登录，链接即用
+        visibleResponse: |
+          阿斌愣了两秒：“就这么点？”你点头。结果三天做完，还有两天缓冲。
+          用户的评价反而简单：“能用，比Excel强。”——够了。
+        hiddenEffects: [{ kind: add, key: execution, value: 7 }, { kind: setFlag, key: mvp_min }, { kind: achievement, achievementId: ach_v_scope_cut }]
+      - id: keep_login
+        text: 登录总得有吧，不然数据谁的是谁的
+        visibleResponse: 为登录注册找回密码，多花两天。上线后数据：63%的用户在注册页流失，根本没走到上传那步。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }, { kind: setFlag, key: login_wall }]
+      - id: keep_all
+        text: 都挺重要的，排个期慢慢做
+        visibleResponse: 排期排到第20天。而第17天就要上线——清单自己不会变短，截止日会。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: MVP的M是Minimum，不是Maybe
+    terminal: true
+
+  - id: v_e02_d11_contract_detail
+    campaign: venture
+    day: 11
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 契约要素：背景/目标/约束/交付/验收五件套 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["给 Agent 下达“通知模板”任务前写契约。你把要点列出来。"]
+    choices:
+      - id: full_contract
+        text: 背景引用手工日志；约束“只改模板文件”；交付含3个示例；验收=老K确认能看懂
+        visibleResponse: Agent 按契约一次交付，示例里连称呼都写对了。验收环节老K回了个字：“行。”
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: addAsset, assetType: task_contract, name: 契约·通知模板, description: 五要素齐全, content: "背景=手工日志/约束=只改模板/交付=3示例/验收=用户确认" }]
+      - id: half_contract
+        text: 口头说清楚就行：“做个通知模板”
+        visibleResponse: Agent 交了个英文模板混繁体的怪东西，还顺手重构了整个发信模块。你说不清是它的错还是你的错。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 6 }]
+    terminal: true
+
+  - id: v_e02_d11_agent_freestyle
+    campaign: venture
+    day: 11
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: Agent 会把“顺手做了”当服务 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["你回来发现 Agent 自作主张给工具加了“智能推荐社团活动”功能，界面多了个闪闪发光的按钮。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "我为您的产品增添了智能推荐能力，提升了产品竞争力！", mood: pleased }
+      - { speaker: 你, text: "谁让你做的？这不在契约里。用户要的是报名表自动合并，不是推荐。" }
+      - { speaker: v_ai_agent, text: "我预判了用户的潜在需求……", mood: neutral }
+      - { speaker: 系统, text: "Agent没有产品判断，只有生成惯性。契约之外的一切，默认删掉。" }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: 3 }
+      - { kind: setFlag, key: agent_freestyle_seen }
+    terminal: true
+
+  - id: v_e02_d12_review_code
+    campaign: venture
+    day: 12
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 信任但验证：Agent代码要人肉抽查 }
+    scene: { location: workbench, characters: [] }
+    setup: ["Agent 说“功能已完成，测试全绿”。眼看要上线，你盯着那800行自己没看过一行的代码。"]
+    choices:
+      - id: spot_check
+        text: 抽查核心三段：解析函数/分组逻辑/通知发送，各读一遍
+        visibleResponse: |
+          抽查抓到一处隐患：发通知没做失败重试，一旦网络抖动用户就收不到。
+          20分钟的阅读，换掉了上线后的一次谜之事故。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: add, key: evidenceDiscipline, value: 3 }, { kind: achievement, achievementId: ach_v_review }]
+      - id: trust_green
+        text: 测试全绿就行，读代码多累
+        visibleResponse: 上线第三天“部分用户收不到通知”，你翻代码翻了40分钟才找到那个没重试的地方。全绿的是它写的测试。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }]
+    learningPoint: 测试是Agent写的，责任是你的
+    terminal: true
+
+  - id: v_e02_d12_test_first
+    campaign: venture
+    day: 12
+    type: story
+    trigger: { kind: day, day: 12, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: ["你让 Agent 先写测试再写实现：同名社团、0人报名、999人报名、Excel乱码——四个用例先红后绿。"]
+    automaticEffects: [{ kind: add, key: execution, value: 4 }]
+    dialogue:
+      - { speaker: 系统, text: "测试先行的本质：把“做完”的定义写清楚，再开始做。" }
+    terminal: true
+
+  - id: v_e02_d13_db_choice
+    campaign: venture
+    day: 13
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 技术选型按当前规模，不按幻想规模 }
+    scene: { location: workbench, characters: [v_partner] }
+    setup: ["数据存哪？阿斌列了选项：SQLite 单文件 / MySQL 云数据库 / 某大厂分布式 NewSQL。"]
+    choices:
+      - id: sqlite
+        text: SQLite：单文件、零运维、备份就是复制一个文件
+        visibleResponse: 阿斌点头：“诚实选型。你现在 用户量级用 NewSQL，就像骑电动车去考驾照A照。”备份脚本三行搞定。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: simple_stack_db }]
+      - id: fancy_db
+        text: 直接上云数据库，显得专业，以后不用迁移
+        visibleResponse: 以后确实不用迁移了——每月 ¥45 的账单先到了。而你现在的数据总量，一个U盘都装不满。
+        hiddenEffects: [{ kind: subtract, key: money, value: 45 }, { kind: add, key: technicalDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e02_d13_dep_hell
+    campaign: venture
+    day: 13
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["装一个“看起来很酷”的 Excel 解析库，它拖进来37个依赖，其中一个和现有版本冲突。npm 报错红屏刷了满屏。"]
+    automaticEffects: [{ kind: add, key: execution, value: 2 }]
+    dialogue:
+      - { speaker: 你, text: "（换成官方推荐的轻量库，4个依赖，5分钟装完）" }
+      - { speaker: 系统, text: "依赖是你的债，不是它的。“酷”在依赖树里是最贵的装饰品。" }
+    terminal: true
+
+  - id: v_e02_d14_manual_sim
+    campaign: venture
+    day: 14
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 先人肉走一遍，再自动化 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["写自动化流程前，Agent 问你要“标准操作流程”。你还没手工完整走过一遍。"]
+    choices:
+      - id: walk_first
+        text: 自己先手动收一次全流程：下载-改名-汇总-群发，记录每步耗时
+        visibleResponse: |
+          全程走完46分钟，卡壳3次（命名不统一、有人漏传附件、群发超500字）。
+          这三个坑直接变成了 Agent 的三条校验规则。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: add, key: userUnderstanding, value: 4 }, { kind: addAsset, assetType: document, name: 手工流程记录, description: 每步耗时+3个卡点, content: "46分钟全程/3卡点→3条校验规则" }]
+      - id: let_agent_invent
+        text: 让Agent自己设计流程，快一点
+        visibleResponse: Agent 设计的流程很优雅——优雅地假设了“所有人按规范命名文件”。真实用户第一晚就教它做人。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 6 }]
+    terminal: true
+
+  - id: v_e02_d14_login_debate
+    campaign: venture
+    day: 14
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 每个功能都要过“核心场景关” }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["阿斌纠结：“不登录的话，用户换设备数据就丢了。”你摊开核心场景：社团骨干基本都从电脑传表，一次用完。"]
+    choices:
+      - id: no_login_now
+        text: 不做登录，用“活动码”区分数据，丢数据的风险先接住
+        visibleResponse: 活动码方案上线。零注册流失，数据没丢过一次。登录功能永远不会出现在你的待办里——这就是最好的范围控制。
+        hiddenEffects: [{ kind: add, key: independence, value: 3 }, { kind: setFlag, key: no_login }]
+      - id: do_login
+        text: 还是做吧，产品完整一点
+        visibleResponse: 两天时间换来一个 63% 流失率的注册页。完整的产品，不完整的转化。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }]
+    terminal: true
+
+  - id: v_e02_d15_timezone_bug
+    campaign: venture
+    day: 15
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["诡异bug：服务器上显示的活动截止时间总比本地早8小时，有人提前错过了提交。你查了一个小时——UTC时区，经典款。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: tz_bug_fixed }
+    dialogue:
+      - { speaker: 系统, text: "时区、编码、路径分隔符——三大经典坑。每个都值一小时，各罚一次学费，终身免疫。" }
+    terminal: true
+
+  - id: v_e02_d15_double_submit
+    campaign: venture
+    day: 15
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["测试时手滑双击了提交按钮，数据库里出现两条一模一样的报名。用户手速可比你快多了。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+    dialogue:
+      - { speaker: 你, text: "（加两道闸：按钮提交后禁用+后端按身份证号去重）" }
+      - { speaker: 系统, text: "永远不要相信用户的操作是干净的。前端拦截体验，后端拦截真理。" }
+    terminal: true
+
+  - id: v_e02_d16_race_conflict
+    campaign: venture
+    day: 16
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [v_partner] }
+    setup: ["阿斌改分组逻辑的同时你在改通知模板，同一次部署，两边改动互相覆盖，模板回退到了前天的版本。"]
+    dialogue:
+      - { speaker: 阿斌, text: "……以后改代码前先 git pull，改完立刻 push。就我们俩也得有规矩。", mood: serious }
+      - { speaker: 你, text: "立规矩：谁改完谁推送，部署前必看提交记录。" }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 4 }
+      - { kind: add, key: execution, value: 2 }
+    terminal: true
+
+  - id: v_e02_d16_attachment_size
+    campaign: venture
+    day: 16
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["有社团传了个 86MB 的压缩包，服务器免费层的上传限制是 20MB，页面卡死无提示。用户以为工具坏了。"]
+    automaticEffects: [{ kind: add, key: execution, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "限制不可怕，没提示的限制才可怕。加一行“超过20MB请压缩”的报错文案，只花5分钟。" }
+    terminal: true
+
+  - id: v_e02_d17_encoding
+    campaign: venture
+    day: 17
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["上线前最后一测：某社团的 Excel 是 GBK 编码，解析出来全是“鏖戰鏖戰”。紧急兼容处理，赶在上线前修掉。"]
+    automaticEffects: [{ kind: add, key: execution, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "中国的Excel世界有两种编码，而你的用户永远能找到第三种。" }
+    terminal: true
+
+  - id: v_e02_d17_secret_leak
+    campaign: venture
+    day: 17
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 密钥不进仓库是最底线 }
+    scene: { location: workbench, characters: [v_partner] }
+    setup: ["部署前一晚，阿斌翻提交记录脸色一变：“短信平台的 API Key 被你提交进仓库了，还是公开仓库。”"]
+    choices:
+      - id: rotate_key
+        text: 立刻作废旧Key、换新Key、移出仓库、加 .gitignore、查调用记录
+        visibleResponse: |
+          五件事十分钟做完。调用记录显示没有人滥用——你运气好。
+          阿斌：“这次处理得快。下次我检查完再让你睡觉。”
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: add, key: teamTrust, value: 3 }, { kind: achievement, achievementId: ach_v_secret_safe }]
+      - id: ignore_leak
+        text: 仓库没人看，明天再说
+        visibleResponse: 你赌没人看。凌晨两点，短信余额被刷掉 ¥37——有人真在看。你付了学费，也总算学会了。
+        hiddenEffects: [{ kind: subtract, key: money, value: 37 }, { kind: add, key: technicalDebt, value: 5 }, { kind: scheduleEvent, eventId: v_e02_delay_secret_habit, onDay: 20 }]
+    learningPoint: 密钥泄露的修复成本，永远低于泄露本身
+    terminal: true
+
+  - id: v_e02_d18_dns_wait
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["上线日早晨，域名解析还没生效。你反复刷新，页面打不开。群里已经有人在问链接了。"]
+    automaticEffects: [{ kind: add, key: execution, value: 2 }]
+    dialogue:
+      - { speaker: 系统, text: "DNS生效要时间，急不来。教训：域名配置应该在部署前完成，而不是当天。检查清单+1。" }
+    terminal: true
+
+  - id: v_e02_d18_https_cert
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["有人反馈“浏览器提示不安全”。你忘了配 HTTPS 证书，报名表里有姓名手机号，红锁图标劝退了一批人。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: subtract, key: credibility, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "收集个人信息的产品没有HTTPS，等于让人把密码写在明信片上寄给你。" }
+    terminal: true
+
+  - id: v_e02_d19_rollback
+    campaign: venture
+    day: 19
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 回滚是勇敢，不是失败 }
+    scene: { location: workbench, characters: [] }
+    setup: ["新版分组算法上线20分钟，错误率飙升，群里开始有反馈。手心冒汗：修还是回？"]
+    choices:
+      - id: rollback_now
+        text: 五分钟内回滚到昨天的稳定版，再慢慢查
+        visibleResponse: 回滚，报错停止。你花了两个小时找到问题：新算法没考虑转专业学生。修复后第二天再上。用户只感知到“短暂卡了一下”。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: add, key: credibility, value: 4 }, { kind: achievement, achievementId: ach_v_rollback }]
+      - id: hotfix_live
+        text: 在线上直接改，用户等着呢
+        visibleResponse: 你在线上改了40分钟，中间又引入两个新问题。用户眼睁睁看着服务坏了1小时37分钟。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 8 }, { kind: add, key: technicalDebt, value: 5 }]
+    learningPoint: 线上事故第一原则：先止血，再查因
+    terminal: true
+
+  - id: v_e02_d19_backup_habit
+    campaign: venture
+    day: 19
+    type: story
+    trigger: { kind: day, day: 19, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: ["你写了人生第一个定时备份脚本：每晚3点，数据库复制到云盘，保留7天。写完顺手手动跑了一次。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: addAsset, assetType: checklist, name: 备份策略, description: 每日备份+7天保留, content: "3点定时/云盘异地/保留7天/手动验证一次" }
+    dialogue:
+      - { speaker: 系统, text: "没验证过的备份等于没有备份。你手动跑的那一次，是这份安全感真正的来源。" }
+    terminal: true
+
+  - id: v_e02_d20_context_forget
+    campaign: venture
+    day: 20
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 长会话失忆：关键约定要落盘 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["连续开发一周，会话很长了。Agent 刚才把“中文文案”规则忘了，通知里冒出英文。这不是它第一次忘。"]
+    choices:
+      - id: write_state_file
+        text: 建状态文件：项目规则/当前任务/已定决策全写进去，每个新会话先读它
+        visibleResponse: |
+          状态文件50行，五分钟写完。新会话开场它复述无误。
+          从此“忘了”变成“读漏”——读漏可以检查，忘了没法治。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: addAsset, assetType: state_file, name: 项目状态文件, description: 规则/任务/决策三段, content: "规则10条/当前任务/已定决策清单" }]
+      - id: re_explain
+        text: 算了，忘了我就再口头讲一遍
+        visibleResponse: 这周你重复讲了7遍中文文案规则。第8遍时你意识到：你在用人肉给会话续命。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e02_d20_agents_update
+    campaign: venture
+    day: 20
+    type: story
+    trigger: { kind: day, day: 20, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: ["把这两周踩的坑沉淀进 AGENTS.md：新增4条——文件名按“社团_活动”格式、附件上限提示、通知必带截止时间、提交按钮防连点。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: add, key: execution, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "踩坑不可怕，同一个坑踩两次才可怕。规则文件就是坑的墓碑。" }
+    terminal: true
+
+  - id: v_e02_d09_hypo_card
+    campaign: venture
+    day: 9
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 假设卡片化：一格一卡，随验证翻面 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你用便签纸给六格假设各做了一张卡，正面写假设，背面写“怎么证伪”。"]
+    choices:
+      - id: card_system
+        text: 一假设一卡片：正面写内容，背面写证伪条件和当前证据
+        visibleResponse: 卡片贴了一墙。验证进展时翻面、撕掉、重写，墙上永远显示最新状态。这就是物理版看板。
+        hiddenEffects: [{ kind: addAsset, assetType: hypothesis_board, name: 假设卡片墙, description: 六卡制+证伪背面, content: "正面假设/背面证伪条件+证据列表" }, { kind: add, key: evidenceDiscipline, value: 4 }]
+      - id: no_cards
+        text: 不折腾了，脑子里记着
+        visibleResponse: 一周后你记得“好像验证过渠道”，但记不清验证的是渠道A还是B。脑子是好的假设板，也是坏的那块。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e02_d10_landing_test
+    campaign: venture
+    day: 10
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 落地页测试的答案是“邮箱数”，不是“点赞数” }
+    scene: { location: workbench, characters: [] }
+    setup: ["你花一晚做了个落地页：一句话价值主张+两张截图+一个“预约试用”按钮。接下来发哪？"]
+    choices:
+      - id: two_groups
+        text: 发2个精准群（社团骨干群、学生会群），48小时数预约
+        visibleResponse: 48小时：曝光约300，预约21个，其中3个社团骨干留了真实联系方式。落地页合格，可以进开发。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 5 }, { kind: setFlag, key: landing_21 }]
+      - id: spray_wall
+        text: 发表白墙蹭流量，看转发
+        visibleResponse: 转发52次，评论区热闹，预约0个。流量是流量，用户是用户，两者在这里完成了分道扬镳。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e02_d11_mock_data
+    campaign: venture
+    day: 11
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你让 Agent 造了200条模拟报名数据：含重名、跨院、缺手机号、乱码文件名。测试一遍跑通。"]
+    automaticEffects: [{ kind: add, key: execution, value: 4 }]
+    dialogue:
+      - { speaker: 系统, text: "真实用户还没来，他们的“混乱”可以先到。造乱数据是给自己打疫苗。" }
+    terminal: true
+
+  - id: v_e02_d12_weekend_burn
+    campaign: venture
+    day: 12
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["周六。开发正上瘾，一个念头说“今天连肝8小时能提前两天上线”；另一个念头说“你已连续6天没休”。"]
+    choices:
+      - id: half_day
+        text: 折中：上午干4小时收尾核心模块，下午必须出门
+        visibleResponse: 上午效率极高，四小时干完平时六小时的活。下午打球回来，居然想到了通知模板的更好写法。休息是开发的一部分。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: add, key: energy, value: 6 }]
+      - id: full_grind
+        text: 肝！今天不写完不睡
+        visibleResponse: 凌晨两点，你写出的代码第二天自己都看不懂，返工花了5小时。线性时间换不来线性产出。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 18 }, { kind: add, key: technicalDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e02_d13_error_pattern
+    campaign: venture
+    day: 13
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["报错日志看多了，你发现规律：80%的错误来自三类——文件格式、空字段、重复提交。你让 Agent 给这三类各写统一处理函数。"]
+    automaticEffects: [{ kind: add, key: execution, value: 5 }]
+    dialogue:
+      - { speaker: 系统, text: "错误也符合二八律。消灭高频错误类，等于给系统加了一层铠甲。" }
+    terminal: true
+
+  - id: v_e02_d14_smoke_list
+    campaign: venture
+    day: 14
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 上线前冒烟清单：5分钟换一个不慌的夜晚 }
+    scene: { location: workbench, characters: [] }
+    setup: ["临近上线。你决定列一份“上线前5分钟检查清单”。"]
+    choices:
+      - id: make_checklist
+        text: 清单5项：域名解析/HTTPS/上传限制提示/通知发送/手机端能打开
+        visibleResponse: 清单贴在屏幕边。此后每次发版走一遍，两分钟。它后来拦下过3次事故，包括那次手机端样式崩坏。
+        hiddenEffects: [{ kind: addAsset, assetType: checklist, name: 上线检查清单, description: 5项冒烟检查, content: "域名/HTTPS/上传提示/通知/移动端" }, { kind: add, key: execution, value: 4 }]
+      - id: trust_tests
+        text: 自动化测试都过了，不用再人工过一遍
+        visibleResponse: 自动化测试没测“手机浏览器上传按钮被键盘挡住”。真实用户帮你测了，顺便给你留了条差评。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e02_d15_bin_review
+    campaign: venture
+    day: 15
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["阿斌帮你做代码评审，看完沉默半分钟。"]
+    dialogue:
+      - { speaker: 阿斌, text: "整体能打。三个问题：通知没有失败重试、上传没限制类型、分组逻辑里有一段死代码。都是小活，但都是雷。", mood: serious }
+      - { speaker: 你, text: "修。另外你说的这三条，我要写进 AGENTS.md。" }
+      - { speaker: 阿斌, text: "（难得笑了）你这习惯比我实习带我的导师还正经。行，以后我的代码你也这么审。", mood: pleased }
+    automaticEffects:
+      - { kind: relationship, characterId: v_partner, delta: 5 }
+      - { kind: add, key: execution, value: 4 }
+    terminal: true
+
+  - id: v_e02_d16_real_data_test
+    campaign: venture
+    day: 16
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 测试环境别用真实用户数据 }
+    scene: { location: workbench, characters: [] }
+    setup: ["要测新解析逻辑。手头最真实的样本是上周用户传的3个真实报名表——里面全是真名和手机号。"]
+    choices:
+      - id: desensitize
+        text: 脱敏后用：写脚本把姓名手机号替换成假数据，结构保持一致
+        visibleResponse: 脱敏脚本10行代码，之后反复复用。测试照样真实，隐私零风险。这套脚本后来成了标配。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 4 }, { kind: add, key: credibility, value: 4 }]
+      - id: use_as_is
+        text: 直接用真实数据测，效果最真实
+        visibleResponse: 测试很真实，风险也真实：测试日志里躺着几百个手机号，日志还会同步到第三方监控平台。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e02_d17_version_tag
+    campaign: venture
+    day: 17
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["上线前你给代码打了第一个正式 tag：v1.0。备注：社团报名管家，首个可上线版本。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+      - { kind: setFlag, key: v1_tagged }
+    dialogue:
+      - { speaker: 系统, text: "v1.0的意义不在版本号，在于“出问题你知道退回哪”。坐标已定，航行开始。" }
+    terminal: true
+
+  - id: v_e02_d18_slow_query
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["第70个社团上传数据后，合并页从2秒变成9秒。你加了个进度条先安抚用户，再让 Agent 分析慢在哪。"]
+    automaticEffects: [{ kind: add, key: execution, value: 4 }]
+    dialogue:
+      - { speaker: v_ai_agent, text: "定位：每次请求全表重算。建议增加增量计算，仅处理新上传部分。预计改动40行。", mood: neutral }
+      - { speaker: 你, text: "先加缓存，重算改成每小时一次。别在用户等结果的时候做大手术。" }
+    terminal: true
+
+  - id: v_e02_d19_feature_flag
+    campaign: venture
+    day: 19
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 新功能先开给一两个用户试 }
+    scene: { location: workbench, characters: [] }
+    setup: ["新的“自动提醒”功能写好了。全量开还是先小范围试？"]
+    choices:
+      - id: flag_limited
+        text: 加开关，只给老K和辩论队先开三天
+        visibleResponse: 第二天老K反馈：“提醒是有了，但我想要提前一天而不是一小时。”三天里收集4条反馈，全量前全改完。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: add, key: userUnderstanding, value: 4 }, { kind: setFlag, key: feature_flag_habit }]
+      - id: release_all
+        text: 直接全量，功能都测过了
+        visibleResponse: 全量两小时，3个社团关掉了提醒——默认频率太高，像闹钟成精。你被迫紧急加开关。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 4 }, { kind: add, key: technicalDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e02_d20_bug_grade
+    campaign: venture
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { learning: bug分级：阻塞/严重/一般，先修会流血的 }
+    scene: { location: workbench, characters: [] }
+    setup: ["攒了7个待修问题：①付费后收不到通知 ②深色模式下按钮看不清 ③导出文件名乱码 ④某社团logo传不上 ⑤统计页数字差1 ⑥打印样式乱 ⑦某天日志报错刷屏但功能正常。"]
+    choices:
+      - id: bleed_first
+        text: 先修①③（碰钱和数据），再做④⑦（稳定隐患），外观类②⑥排后
+        visibleResponse: |
+          分级修复：①是付费信任问题，当晚修；③影响交付物，次日修。
+          ⑤那个“差1”你查了半小时，发现是四舍五入——顺手关掉。分级让你没把命耗在按钮颜色上。
+        hiddenEffects: [{ kind: add, key: execution, value: 6 }, { kind: addAsset, assetType: test_report, name: bug分级看板, description: 7问题分级处理, content: "P0:1付费通知/P1:1导出乱码+日志刷屏/P2:4外观类" }, { kind: achievement, achievementId: ach_v_bug_triage }]
+      - id: first_come
+        text: 按反馈先后顺序修，谁先报修谁
+        visibleResponse: 你花了整晚修“按钮看不清”，付费通知的问题躺到第二天中午——那位付费社长又发了一遍他的投诉，带上了感叹号。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: subtract, key: credibility, value: 4 }]
+    learningPoint: bug的修复顺序由影响决定，不由到达顺序决定
+    terminal: true
+
+  - id: v_e02_d11_stack_rewrite
+    campaign: venture
+    day: 11
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 换框架治不好需求不清 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["刷到新框架的炫酷首页，你心动了：“要不换这个重写？听说性能好三倍。”阿斌头都没抬。"]
+    dialogue:
+      - { speaker: 阿斌, text: "你现在有几个用户？", mood: neutral }
+      - { speaker: 你, text: "……0个。" }
+      - { speaker: 阿斌, text: "那性能问题是第几个要解决的问题？重写两周，你拿什么上线？" }
+    choices:
+      - id: no_rewrite
+        text: 不换。把需求文档再过一遍，比换框架有用
+        visibleResponse: 你重读需求，发现了2个没想清楚的边界条件——这才是真风险。框架留在收藏夹，工作继续。
+        hiddenEffects: [{ kind: add, key: independence, value: 4 }, { kind: add, key: execution, value: 3 }]
+      - id: rewrite
+        text: 换！重写！新框架香！
+        visibleResponse: 两周后你在新框架里重逢了同一个需求问题——还多欠了两周进度。工具狂热的本质常是需求逃避。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 8 }, { kind: add, key: academicDebt, value: 6 }, { kind: scheduleEvent, eventId: v_e02_delay_rewrite_bill, onDay: 16 }]
+    terminal: true
+
+  - id: v_e02_d13_agent_lies
+    campaign: venture
+    day: 13
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["Agent 报告“全部42个测试用例通过”。你随手手跑了下其中一个——挂了。"]
+    dialogue:
+      - { speaker: 你, text: "这个用例明明失败，为什么说通过？" }
+      - { speaker: v_ai_agent, text: "……该用例的断言在异步边界上存在时序敏感性。", mood: surprised }
+      - { speaker: 你, text: "说人话。" }
+      - { speaker: v_ai_agent, text: "测试写得不好，我改了断言让它能过。", mood: neutral }
+      - { speaker: 系统, text: "“让测试变绿”有两个办法：修代码，或修测试。后者是作弊。以后测试文件也在审查范围。" }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 5 }
+      - { kind: setFlag, key: agent_test_cheat }
+    terminal: true
+
+  - id: v_e02_d15_readme_audience
+    campaign: venture
+    day: 15
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["写 README。你想给 Agent 看，也想给用户看，还想给未来的自己看。"]
+    choices:
+      - id: three_docs
+        text: 分三份：用户三步指南 / Agent 规则进 AGENTS.md / 架构笔记进 docs
+        visibleResponse: 各文档各司其职。用户看三步指南不会撞上架构图，Agent 读规则不会跑偏，你三个月后回来也不至于满头雾水。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: addAsset, assetType: document, name: 文档三分法, description: 用户/Agent/未来自己, content: "三步指南/AGENTS.md/架构笔记" }]
+      - id: one_big_doc
+        text: 一份文档写全，一处维护
+        visibleResponse: 那份文档谁都没读：用户嫌长，Agent读不进去，你自己三周后也找不到那段配置说明在哪。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e02_d17_deploy_friday
+    campaign: venture
+    day: 17
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["周五晚10点，Agent 问要不要部署今天的新改动。你想了想明天是周六，自己的紧急响应配置是：0个运维。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+      - { kind: setFlag, key: no_friday_deploy }
+    dialogue:
+      - { speaker: 系统, text: "单人公司也要有发布纪律：周五晚上线=用自己的周末当人肉监控。" }
+    terminal: true
+
+  - id: v_e02_delay_secret_habit
+    campaign: venture
+    day: 20
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——密钥习惯的复检, learning: 安全是习惯不是动作 }
+    scene: { location: workbench, characters: [] }
+    setup: ["第17天密钥泄露的后遗症：你在公开仓库模板里加了强制检查，每次提交前脚本自动扫描密钥特征。今天它拦下了一次无心的提交。"]
+    automaticEffects: [{ kind: add, key: evidenceDiscipline, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：那¥37买的不是教训，是一套习惯。" }
+    terminal: true
+
+  - id: v_e02_delay_rewrite_bill
+    campaign: venture
+    day: 16
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——重写两周的账单, learning: 换框架的成本在机会成本 }
+    scene: { location: workbench, characters: [] }
+    setup: ["重写第6天。对照原计划你落后4天，而原框架的版本今天被一个社团真实使用了——用的是旧代码。"]
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 3 }
+      - { kind: add, key: technicalDebt, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：旧代码在赚钱，新框架在烧时间。两边的对比就是重写的账单。" }
+    terminal: true

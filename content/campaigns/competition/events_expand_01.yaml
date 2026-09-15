@@ -210,7 +210,7 @@ events:
     campaign: competition
     day: 3
     type: story
-    trigger: { kind: manual }
+    trigger: { kind: day, day: 3, phase: end }
     purpose: { narrative: 规律会说话, learning: 评审偏好的证据化理解 }
     scene: { location: lab, characters: [] }
     setup: ["获奖规律笔记贴在了实验室墙上，雨桐在旁边补了一行手写小字：\"评委也是人，人相信看得见的东西。\""]
@@ -336,7 +336,7 @@ events:
         hiddenEffects: [{ kind: relationship, characterId: c_advisor, delta: 8 }, { kind: setFlag, key: advisor_confirmed }, { kind: add, key: mentorTrust, value: 6 }]
       - id: ask_vague
         text: "何老师，我们想参赛，您能不能指导指导我们？"
-        visibleResponse: "\"指导指导\"——何老师重复了一遍这四个字。"把你们到底要什么写成一句话再来。"你在门口站了十分钟，把请求改具体了才敢再敲门。"
+        visibleResponse: "\"指导指导\"——何老师重复了一遍这四个字。'把你们到底要什么写成一句话再来。'你在门口站了十分钟，把请求改具体了才敢再敲门。"
         hiddenEffects: [{ kind: relationship, characterId: c_advisor, delta: 2 }, { kind: add, key: independence, value: 3 }]
     terminal: true
 
@@ -371,11 +371,11 @@ events:
     choices:
       - id: claim_desk
         text: 今天就把工位定下来：贴名牌、立队规、锁抽屉
-        visibleResponse: 靠窗工位归属"社团管家队"。雨桐在隔板上贴了张倒计时便利贴。领地感这种东西，意外地提气。
+        visibleResponse: 靠窗工位归属——社团管家队"。雨桐在隔板上贴了张倒计时便利贴。领地感这种东西，意外地提气。
         hiddenEffects: [{ kind: add, key: teamTrust, value: 3 }, { kind: setFlag, key: base_set }]
       - id: float_work
         text: 游击作业，哪空坐哪
-        visibleResponse: 第三天，你们为了"昨晚谁把转接头拿走了"开了十五分钟侦查会议。
+        visibleResponse: 第三天，你们为了——昨晚谁把转接头拿走了——开了十五分钟侦查会议。
         hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
     terminal: true
 
@@ -441,7 +441,7 @@ events:
     campaign: competition
     day: 3
     type: story
-    trigger: { kind: manual }
+    trigger: { kind: day, day: 3, phase: end }
     purpose: { narrative: 一句话定位, learning: 能一句话说清的项目才是想清了的项目 }
     scene: { location: lab, characters: [] }
     setup: ["你在白板上写下一句话：\"让72个社团收报名表的时间从3天变成3分钟。\"方远拍了照。"]
@@ -450,7 +450,7 @@ events:
       - { kind: addAsset, assetType: research_brief, name: 一句话定位, description: 项目slogan与量化目标, content: "72社团报名表：3天→3分钟" }
     dialogue:
       - { speaker: 系统, text: "这句话会在申报书第一页、PPT第二页、路演第一句反复出现。它值得现在就写对。" }
-    terminal: true
+    next: c_xe3_role_confirm
 
   - id: c_xe3_role_confirm
     campaign: competition
@@ -468,12 +468,14 @@ events:
         text: 把这份口头确认写成分工表v2，全员回复\"确认\"
         visibleResponse: 群里四条\"确认\"排成一列。这也许是全场最便宜的一份合同。
         hiddenEffects: [{ kind: add, key: teamTrust, value: 5 }, { kind: setFlag, key: charter_v2 }]
+        next: c_xe3_kickoff
       - id: oral_enough
         text: 都听见了就行，不用搞形式主义
-        visibleResponse: 一周后关于"视频脚本谁写"的争论中，每个人都记起了不一样版本的分工商定。
+        visibleResponse: 一周后关于——视频脚本谁写——的争论中，每个人都记起了不一样版本的分工商定。
         hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+        next: c_xe3_kickoff
     unlockKnowledge: [kc_c_team_charter]
-    terminal: true
+    next: c_xe3_kickoff
 
   - id: c_xe3_conflict_seed
     campaign: competition
@@ -504,7 +506,7 @@ events:
         hiddenEffects: [{ kind: add, key: teamTrust, value: 6 }, { kind: setFlag, key: conflict_resolved_v1 }, { kind: achievement, achievementId: ach_c_first_judgment }]
       - id: judge_by_vip
         text: 和稀泥：都让一步，各改一点
-        visibleResponse: 按钮变成了浅灰圆角——没人满意，也没人再吵。这一页成了全项目"差不多"文化的起点。
+        visibleResponse: 按钮变成了浅灰圆角——没人满意，也没人再吵。这一页成了全项目——差不多——文化的起点。
         hiddenEffects: [{ kind: add, key: technicalDebt, value: 3 }, { kind: subtract, key: teamTrust, value: 2 }]
       - id: judge_by_cap
         text: 站方远这边：功能优先，样式以后再说
@@ -604,7 +606,7 @@ events:
           - { kind: addAsset, assetType: checklist, name: 初赛交付清单, description: 四件套验收标准（人工核对版）, content: "申报书/视频≤5min含真机/承诺书/一页说明" }
       - id: no_checklist
         text: 四个文件而已，到时候一凑就有
-        visibleResponse: "到时候"到来时，你们发现视频没有真机录屏、申报书模板页边距不对。凑出来的东西有味道，是返工的酸味。
+        visibleResponse: 到时候到来时，你们发现视频没有真机录屏、申报书模板页边距不对。凑出来的东西有味道，是返工的酸味。
         hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
     unlockKnowledge: [kc_c_rule_extract]
     terminal: true
@@ -764,6 +766,6 @@ events:
         hiddenEffects: [{ kind: relationship, characterId: c_advisor, delta: 6 }, { kind: add, key: mentorTrust, value: 5 }, { kind: setFlag, key: advisor_case_incoming }]
       - id: long_pitch
         text: 从头讲起：比赛背景、我们的热情、远大愿景……
-        visibleResponse: 第十五分钟你讲到"愿景"，何老师打断："下一个周三，带着完成的东西来，别带着形容词。"你学到：他的耐心按进展计费。
+        visibleResponse: 第十五分钟你讲到——愿景"，何老师打断："下一个周三，带着完成的东西来，别带着形容词。"你学到：他的耐心按进展计费。
         hiddenEffects: [{ kind: relationship, characterId: c_advisor, delta: -3 }, { kind: add, key: academicDebt, value: 2 }]
     terminal: true

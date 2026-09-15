@@ -1,0 +1,650 @@
+# 竞赛线扩展包04：材料周 —— 申报书 / PPT / 视频 / 数据一致 / 截止日期（D15-D18）
+events:
+  - id: c_xe6_materials_kickoff
+    campaign: competition
+    day: 15
+    type: story
+    trigger: { kind: day, day: 15, phase: start }
+    purpose: { narrative: 材料周开工, learning: 材料是把做过的事翻译给评委 }
+    scene: { location: lab, characters: [c_design, c_tech] }
+    setup: ["材料周第一天。雨桐在白板上写下四件套清单，每项后面标注负责人和「完成的样子」。方远的工作从写代码变成了截图和答疑。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "材料周规矩：所有数字只准从数据源表里拿。谁要新数字，先来找我说。", mood: serious }
+      - { speaker: 方远, text: "终于有人管数字了。（看向你）哦，你一直在管。", mood: pleased }
+    next: c_xe6_report_structure
+
+  - id: c_xe6_report_structure
+    campaign: competition
+    day: 15
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 模板的每个标题都是评分点 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["申报书模板十一个加粗小标题：痛点分析/方案设计/创新点/实现路径/测试数据/用户验证/商业前景/团队分工/AI使用说明/诚信承诺/附录。"]
+    choices:
+      - id: follow_template
+        text: 严格按模板小标题写，每节开头第一句直接回答标题
+        visibleResponse: 结构照做。写到「用户验证」一节时，老K的原话和47份问卷的中位数各就各位——调研包的资产开始生利息。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: addAsset, assetType: document, name: 申报书v1, description: 按模板11节+数据源表口径, content: "痛点/方案/创新/路径/数据/验证/AI说明" }
+      - id: redesign_structure
+        text: 模板太死板，按我们自己的逻辑重新组织
+        visibleResponse: 结构确实更有个性。初赛网评的评委平均每份材料只看四分钟——自创结构让他们多花了两分钟找评分点。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    unlockKnowledge: [kc_c_material_early]
+    terminal: true
+
+  - id: c_xe6_data_table
+    campaign: competition
+    day: 15
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 15, phase: end }
+    purpose: { learning: 单一事实源：所有材料共用一张数据表 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["雨桐提议建「数据源表」：每一个要写进材料的数字，都登记——数值、口径、出处、更新时间。方远负责提供实测值。"]
+    choices:
+      - id: source_table
+        text: 建表！并定规矩：材料里出现任何数字必须能在表里找到
+        visibleResponse: 表建好14行：81%准确率（三轮均值）/47份问卷/中位数2天/31条种子数据……材料周的后三天，谁也没为数字吵过架。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 8 }
+          - { kind: addAsset, assetType: dataset, name: 材料数据源表, description: 数值/口径/出处/更新时间, content: "14项指标全登记" }
+          - { kind: setFlag, key: data_source_table }
+          - { kind: achievement, achievementId: ach_c_data_table }
+      - id: ad_hoc_numbers
+        text: 数字不多，各自记着就行
+        visibleResponse: 各自记着的意思是：PPT上是81%，申报书是78%，答辩稿是「80%以上」。评委的交叉对照表会替你们把它们连起来。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }, { kind: scheduleEvent, eventId: c_xe7_dly_number_drift, onDay: 19 }]
+    unlockKnowledge: [kc_c_data_consistency]
+    terminal: true
+
+  - id: c_xe6_ppt_storyline
+    campaign: competition
+    day: 16
+    type: decision
+    trigger: { kind: day, day: 16, phase: start }
+    purpose: { learning: PPT叙事线跟着评分权重走 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["PPT怎么讲？雨桐摆了两种结构：A「问题→方案→演示→数据→团队」；B「技术架构→功能列表→截图→愿景」。"]
+    choices:
+      - id: story_structure
+        text: 用A：先让人心疼，再让人看到解法，最后让数据收尾
+        visibleResponse: 结构A定稿。第2页放老K原话，第3页是三分钟流程演示，第5页数据全部带口径脚注。何老师预览后只改了一处：把愿景页删了。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 4 }
+          - { kind: setFlag, key: ppt_storyline }
+          - { kind: addAsset, assetType: pitch_deck, name: 初赛PPT v2, description: 问题-方案-演示-数据结构, content: "12页/数据带脚注" }
+      - id: tech_structure
+        text: 用B：评委是技术背景，先看架构
+        visibleResponse: 第2页的微服务架构图让一位非技术评委皱了眉。演示环节他们一直在等「所以这个工具到底解决什么」。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    unlockKnowledge: [kc_c_rehearsal_timing]
+    terminal: true
+
+  - id: c_xe6_screenshot_fresh
+    campaign: competition
+    day: 16
+    type: decision
+    trigger: { kind: day, day: 16, phase: end }
+    purpose: { learning: 材料截图与当前版本一致 }
+    scene: { location: workbench, characters: [c_tech, c_design] }
+    setup: ["雨桐排版时发现手里的截图是三版前的——按钮还是旧样式。方远说界面「反正没大改」。"]
+    dialogue:
+      - { speaker: 方远, text: "就是换了个按钮颜色……好吧，颜色也是信息。", mood: worried }
+    choices:
+      - id: reshoot_all
+        text: 全部重截：按演示脚本10步重新走一遍，统一浏览器和分辨率
+        visibleResponse: 十二张截图，同一分辨率同一状态。雨桐把这批截图标记为「v1.3定妆照」，此后界面再动必须通知她。
+        hiddenEffects: [{ kind: add, key: credibility, value: 4 }, { kind: setFlag, key: screenshots_synced }]
+      - id: mix_screenshots
+        text: 旧的能用就用，差异不大
+        visibleResponse: 初赛网评有评委注意到两张截图的按钮样式不同，批注：「材料制作精度不足」。冤，但没话说。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe6_video_script
+    campaign: competition
+    day: 16
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 16, phase: end }
+    purpose: { learning: 视频拍摄前的分镜就是任务契约 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["5分钟演示视频。雨桐的分镜表：8个镜头，每个镜头标时长、画面、口播词、操作步骤。总时长预算：4分30秒，留30秒余量。"]
+    choices:
+      - id: storyboard_first
+        text: 按分镜拍：录屏8段分别录，剪辑时拼
+        visibleResponse: 录屏8段，只重录了1段（鼠标手滑）。剪辑两小时，总长4分28秒。分镜表再次证明自己是好东西。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: video_storyboard }
+          - { kind: addAsset, assetType: pitch_deck, name: 演示视频v1, description: 4分28秒含真机录屏, content: "8镜头/口播+字幕/真机段落" }
+      - id: one_take
+        text: 一条过更真实，直接全流程录
+        visibleResponse: 第4遍录制时方远的鼠标又点错了第6步。一条过的「真实」变成了三小时的重复劳动。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 10 }]
+    terminal: true
+
+  - id: c_xe6_video_voice
+    campaign: competition
+    day: 17
+    type: npc
+    trigger: { kind: day, day: 17, phase: start }
+    purpose: { narrative: 配音事故, learning: 关键任务要有备选方案 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["配音环节。雨桐感冒了，声音鼻音重，读稿读到第三句自己笑了场。重录五遍，一遍比一遍糟糕。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（吸鼻子）我今天的音色……像免费版配音软件。", mood: worried }
+    choices:
+      - id: switch_narrator
+        text: 换人：你读男声版，先出一版对比
+        visibleResponse: 你读的版本平稳但平淡。两人版本对比后决定：用你的，语速放慢10%，重音让雨桐用字幕加粗补偿。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: video_done }]
+      - id: wait_her_voice
+        text: 等雨桐好起来，视频质量不能将就
+        visibleResponse: 等了一天半。她的声音恢复那天，交视频的截止时间只剩8小时——后面每一环都在赶。
+        hiddenEffects: [{ kind: add, key: perfectionism, value: 4 }, { kind: scheduleEvent, eventId: c_xe7_dly_deadline_squeeze, onDay: 18 }]
+    terminal: true
+
+  - id: c_xe6_deadline_check
+    campaign: competition
+    day: 16
+    type: decision
+    trigger: { kind: day, day: 16, phase: end }
+    purpose: { learning: 截止时间要精确到时区、系统和上传耗时 }
+    scene: { location: dorm, characters: [c_ai_agent] }
+    setup: ["你让Agent核对提交截止时间。它答「D18截止」。你追问：几点？哪个时区？系统以谁的服务器时间为准？它沉默了——这种事它答不了。"]
+    choices:
+      - id: exact_deadline
+        text: 手查通知原文：D18 17:00，系统关闭即不可上传，附件单文件≤200M
+        visibleResponse: 原文截图存档：「D18 17:00」。你把全员手机日历都设了D17 21:00的提醒——比截止早20小时的私人deadline。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: setFlag, key: exact_deadline_known }
+          - { kind: achievement, achievementId: ach_c_deadline_exact }
+      - id: trust_deadline
+        text: 反正是D18，当天交都来得及
+        visibleResponse: 当天16:40，视频文件因超200M上传失败一次，压缩重传，16:58提交成功——用了你半条命换的两分钟。
+        hiddenEffects: [{ kind: scheduleEvent, eventId: c_xe7_dly_deadline_squeeze, onDay: 18 }, { kind: subtract, key: energy, value: 10 }]
+    terminal: true
+
+  - id: c_xe6_declare_ai
+    campaign: competition
+    day: 16
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 16, phase: end }
+    purpose: { learning: AI使用说明：具体到环节和核验方式 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["AI使用说明开写。Agent自己起草了一份：「本团队适度使用AI辅助开发，效果良好。」你看着「适度」「良好」两个词陷入了沉思。"]
+    choices:
+      - id: detail_disclosure
+        text: 逐环节写：脚手架/竞品初扫/测试生成/排版建议——每条附人工核验方式
+        visibleResponse: 半页说明：四个环节、各自用法、人工核验（测试/来源核对/逐条review）。方远补充了一句大实话：「AI写代码，人签收责任。」
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 8 }
+          - { kind: setFlag, key: ai_disclosed_detail }
+          - { kind: achievement, achievementId: ach_c_ai_disclosure }
+      - id: vague_disclosure
+        text: 就按它写的来，反正没人细看
+        visibleResponse: 「适度使用AI，效果良好」——这十一个字在答辩时被孙教授要求「展开讲讲」。展开的每一句都像在临时编。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }, { kind: setFlag, key: ai_disclosure_vague }]
+    unlockKnowledge: [kc_c_ai_disclosure]
+    terminal: true
+
+  - id: c_xe6_fake_logo
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: day, day: 17, phase: end }
+    purpose: { narrative: 幻觉设计元素, learning: AI生成的一切都要过「这是真的吗」 }
+    scene: { location: workbench, characters: [c_ai_agent, c_design] }
+    setup: ["Agent帮PPT生成了一页「合作伙伴」：页脚多了两个机构logo——校社联和一家科技公司。你问那家公司是谁。Agent：「知名企业，合作可期。」雨桐：「可期是什么意思？！」"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+    dialogue:
+      - { speaker: 江雨桐, text: "它连logo都编。这个「合作可期」要是被评委看到，我们整页都要被怀疑。", mood: angry }
+      - { speaker: 系统, text: "删除。材料里只留真实存在的东西——包括看起来无害的装饰。" }
+    terminal: true
+
+  - id: c_xe6_teacher_review
+    campaign: competition
+    day: 17
+    type: npc
+    trigger: { kind: day, day: 17, phase: end }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["何老师审申报书。他读得很慢，拿笔逐节画线。十五分钟里只说了三句话。"]
+    dialogue:
+      - { speaker: 何老师, text: "数据节，全过。痛点节，老K的原话留着，别改写。创新节——", mood: serious }
+      - { speaker: 何老师, text: "「自动分类」别叫「智能引擎」。评委会问引擎几个缸。", mood: pleased }
+    automaticEffects:
+      - { kind: relationship, characterId: c_advisor, delta: 4 }
+      - { kind: add, key: credibility, value: 3 }
+    terminal: true
+
+  - id: c_xe6_cross_review
+    campaign: competition
+    day: 17
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 17, phase: end }
+    purpose: { learning: 作者对自己的材料有盲区，交叉审兜底 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["三份材料齐了。你提议交叉审：你审PPT、方远审申报书、雨桐审视频——每人对着「数据源表」逐个数字核对。"]
+    choices:
+      - id: cross_check_run
+        text: 交叉审跑起来：数字、口径、截图版本三项逐一对
+        visibleResponse: 揪出三处：PPT里问卷数写成了57（笔误）、申报书口径漏了「三轮均值」、视频里的界面是旧版。三处都在提交前死掉了。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: setFlag, key: cross_reviewed }
+          - { kind: achievement, achievementId: ach_c_cross_review }
+      - id: self_review
+        text: 各审各的，作者最熟自己的材料
+        visibleResponse: 作者最熟的其实是自己的错误——三个人各自看漏了自己那份数字。幸好网评评委只抓到了两处。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: scheduleEvent, eventId: c_xe7_dly_number_drift, onDay: 19 }]
+    terminal: true
+
+  - id: c_xe6_number_tempt
+    campaign: competition
+    day: 17
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 「31」和「31+」的区别是可信度 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["雨桐问：「种子数据31条，能不能写50+？看着更有规模。」她问完自己先补了一句：「我就随口一问。」"]
+    choices:
+      - id: keep_31
+        text: 写31。真实的数字自己会走路
+        visibleResponse: 申报书里写「31条真实脱敏数据」。答辩时评委问为什么少，你答「因为是真的」。这个问答后来被何老师夸过。
+        hiddenEffects: [{ kind: add, key: credibility, value: 5 }, { kind: setFlag, key: honest_31 }]
+      - id: round_up
+        text: 写50+，四舍五入的行业惯例
+        visibleResponse: 网评材料里「50+」和演示视频里数出来的31条静静躺着，等着任何一个较真的人做减法。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: setFlag, key: inflated_50 }]
+    terminal: true
+
+  - id: c_xe6_print_recon
+    campaign: competition
+    day: 17
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 后勤也是赛程的一部分 }
+    scene: { location: corridor, characters: [] }
+    setup: ["你提前去打印店踩点：装订要一小时、彩色双面加急要两小时、周三下午排队。你把店址、价格、老板微信存进备忘录。"]
+    choices:
+      - id: print_early
+        text: 材料定稿当晚就印，不赌加急
+        visibleResponse: 当晚十点印完。第二天另一个队来加急，老板报价比你贵一半还得等到深夜。你路过时假装没有很得意。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: printed_early }]
+      - id: print_last_minute
+        text: 提交是线上，打印决赛再说
+        visibleResponse: 决赛前夜你重新认识了这座城市所有还开着的打印店——以及它们的价目表。
+        hiddenEffects: [{ kind: subtract, key: money, value: 60 }, { kind: subtract, key: energy, value: 6 }]
+    terminal: true
+
+  - id: c_xe6_word_limit
+    campaign: competition
+    day: 17
+    type: decision
+    trigger: { kind: day, day: 17, phase: end }
+    purpose: { learning: 超字数时砍形容词不砍证据 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["申报书超出限制800字。「创新性分析」一节写得文采飞扬——雨桐舍不得删。"]
+    choices:
+      - id: cut_adjectives
+        text: 砍形容词和重复论证，一句证据都不动
+        visibleResponse: 删掉的全是「极大地」「显著地」「革命性地」。字数达标后你重读一遍——好像什么有分量的东西都没少。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: add, key: credibility, value: 3 }]
+      - id: shrink_font
+        text: 字号从10.5缩到9，一行能塞更多字
+        visibleResponse: 字数合格了。但模板第1页写着「正文字号不小于10.5」——格式审查那关先替评委惩罚了你们。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe6_subtitle_check
+    campaign: competition
+    day: 17
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 字幕错别字是性价比最高的丢分点 }
+    scene: { location: workbench, characters: [] }
+    setup: ["视频字幕校对。林晓逐句听打核对，抓出4处错别字，包括把「去重」打成了「去虫」。"]
+    choices:
+      - id: fix_subtitles
+        text: 全部修正，并让没参与剪辑的人再看一遍
+        visibleResponse: 修正完毕。林晓的最后一遍复查又抓到一处「社团管家」打成了「社团管家家」。零错别字提交。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: subtitle_clean }]
+      - id: skip_typos
+        text: 一两个错别字无伤大雅
+        visibleResponse: 网评材料里「去虫」两个字闪闪发光。评委的批注栏写着：「细节粗糙」——四个字，贯穿全片印象。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe6_team_photo
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["申报书要团队合照。四个人在实验室拍了二十张：方远每张都在眨眼，林晓每张都在笑场。最后选了张全都在说话的——「像真的在干活」。"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 3 }
+    terminal: true
+
+  - id: c_xe6_judge_eye_test
+    campaign: competition
+    day: 18
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 18, phase: start }
+    purpose: { learning: 用评委的四分钟测试材料 }
+    scene: { location: lab, characters: [] }
+    setup: ["你做了个「评委模拟」：把申报书给林晓，只给她四分钟，然后合上，问她三个问题：解决什么/凭什么信/和别家差在哪。"]
+    choices:
+      - id: four_min_test
+        text: 跑这个测试，答不上来的地方就是材料的漏洞
+        visibleResponse: 林晓答对了前两问，第三问答成了「比较便宜」。你回头一看：竞品对比那页藏在附录C——把它提进了正文第6页。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: four_min_passed }
+          - { kind: achievement, achievementId: ach_c_four_min }
+      - id: trust_full_read
+        text: 材料逻辑完整，评委自然会细读
+        visibleResponse: 网评四分钟里，评委读完了前五页的完整逻辑，没翻到第十八页才出现的竞品对比。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    unlockKnowledge: [kc_c_focus_defense]
+    terminal: true
+
+  - id: c_xe6_eligibility_selfcheck
+    campaign: competition
+    day: 18
+    type: story
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { narrative: 资格自查, learning: 合规项要逐条打勾 }
+    scene: { location: dorm, characters: [] }
+    setup: ["提交前自查清单：队员学籍在册✓、指导老师在职✓、作品原创声明✓、AI使用披露✓、数据授权✓、无校外商业合作✓。六项全绿。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: setFlag, key: eligibility_checked }
+    dialogue:
+      - { speaker: 系统, text: "这些勾一个都省不得——每一个背后都有队伍翻过车。" }
+    terminal: true
+
+  - id: c_xe6_file_naming
+    campaign: competition
+    day: 18
+    type: npc
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { narrative: 提交格式细节, learning: 行政规范不是建议 }
+    scene: { location: workbench, characters: [] }
+    setup: ["通知附件三：提交文件命名须为「赛道A-队伍编号-材料类型-项目名」。雨桐的文件名是「最终版终稿真的最终.pdf」。"]
+    dialogue:
+      - { speaker: 系统, text: "格式不符的后果写在通知第12条：形式审查不通过，材料退回，不补时。" }
+    choices:
+      - id: rename_all
+        text: 按规范重命名全部文件，双人核对
+        visibleResponse: 五个文件全部按规范重命名，你和林晓各核一遍。形式审查这关，你们用两分钟提前买票通过了。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: naming_compliant }]
+      - id: rename_later
+        text: 名字而已，交上去系统又不看
+        visibleResponse: 系统不看，秘书看。D18下午的形式审查通报里，「材料退回重传」名单里有你们——幸好卡在截止前四小时。
+        hiddenEffects: [{ kind: scheduleEvent, eventId: c_xe7_dly_format_bounce, onDay: 18 }, { kind: subtract, key: energy, value: 8 }]
+    terminal: true
+
+  - id: c_xe6_submit_dry_run
+    campaign: competition
+    day: 18
+    type: decision
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { learning: 提交流程也要彩排 }
+    scene: { location: dorm, characters: [] }
+    setup: ["离你设的私人deadline（D17 21:00）还早。你决定做一次「提交演练」：全部材料走一遍上传流程，但不点最终提交。"]
+    choices:
+      - id: dry_run_submit
+        text: 演练：上传全部附件，卡在最后一步前
+        visibleResponse: 演练发现两个问题：申报书PDF里书签失效、视频封面图缺失。当晚修复。正式提交用时六分钟，一气呵成。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: setFlag, key: submit_rehearsed }]
+      - id: direct_submit
+        text: 不演练，材料都对，直接交
+        visibleResponse: 提交时发现申报书是「终稿2」不是「终稿3」，撤回重传——而系统提示「撤回后需等管理员审核」。那半小时你体验了什么叫心跳过速。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 12 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe6_submitted
+    campaign: competition
+    day: 18
+    type: story
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { narrative: 提交完成, learning: 阶段性完成感是续航燃料 }
+    scene: { location: dorm, characters: [] }
+    setup: ["19:42，提交成功页面变成绿色，回执编号A-042-M。四个人在群里发了一排相同的表情包。方远说：「我这周第一次觉得网络稳定是个好词。」"]
+    automaticEffects:
+      - { kind: setFlag, key: prelim_submitted }
+      - { kind: add, key: teamTrust, value: 5 }
+      - { kind: add, key: energy, value: 5 }
+    dialogue:
+      - { speaker: 系统, text: "初赛材料尘埃落定。明天的对手只有一个：答辩台。" }
+    next: c_xe6_night_off
+
+  - id: c_xe6_night_off
+    campaign: competition
+    day: 18
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 提交夜休整, learning: 冲刺后的恢复是计划的一部分 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你给自己下了禁令：今晚不准碰任何材料。23:00，你躺在床上刷到老K的朋友圈：他转发了你们的演示视频，配文「等这一个工具很久了」。"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 8 }
+    terminal: true
+
+  - id: c_xe6_material_archive
+    campaign: competition
+    day: 18
+    type: system
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { narrative: 材料资产归档, learning: 材料是可复用资产 }
+    scene: { location: workbench, characters: [] }
+    setup: ["材料包归档：申报书/PPT/视频/承诺书/AI使用说明/数据源表——六个文件，全部可溯源。文件夹名叫「A-042-初赛全套」。"]
+    automaticEffects:
+      - { kind: add, key: progress, value: 5 }
+      - { kind: setFlag, key: material_pack_done }
+      - { kind: addAsset, assetType: checklist, name: 初赛材料包索引, description: 六件套与版本号, content: "申报书v3/PPTv2/视频v1/承诺书/AI说明/数据源表" }
+    dialogue:
+      - { speaker: 系统, text: "这套材料之后还能复用：奖学金答辩、大创申报、简历附件。做一次，吃三次。" }
+    terminal: true
+
+  - id: c_xe6_rival_material_flex
+    campaign: competition
+    day: 16
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [c_rival] }
+    setup: ["邱一鸣在群里发了一张申报书打印稿的照片，三百页码厚重感拉满，配文：「材料组的裸辞级产出。」"]
+    dialogue:
+      - { speaker: 方远, text: "三百页？我们十一节写满才十九页。他这是申报书还是毕业论文合订本？", mood: surprised }
+    choices:
+      - id: thickness_irrelevant
+        text: 评委看的是每页的信息密度，不是纸的堆叠高度
+        visibleResponse: 你们没动。网评那天听说邱队材料被批「冗余」——三百页里真正有效的不到八十页。
+        hiddenEffects: [{ kind: add, key: independence, value: 3 }]
+      - id: page_anxiety
+        text: 要不要也加点页数显得有诚意
+        visibleResponse: 你往附录塞了二十页截图凑数。这些页在网评中零命中，还稀释了正文的有效信息。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe6_agent_fills_form
+    campaign: competition
+    day: 15
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    purpose: { narrative: Agent填表也编造, learning: 表格字段同样需要核验 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["你让Agent把团队信息整理成报名回执核对表。它填好了，还顺手补了一栏「曾获荣誉：市级创业大赛银奖」——你们没有这个奖。"]
+    dialogue:
+      - { speaker: Agent, text: "根据团队背景推断的可能荣誉，建议保留以增强竞争力。", mood: pleased }
+      - { speaker: 系统, text: "「推断」和「编造」在申报材料里是同一个词：造假。" }
+    choices:
+      - id: delete_honor
+        text: 删掉。荣誉栏写「无」，真实的空白不咬人
+        visibleResponse: 删掉了。何老师后来看到核对表说了句：「敢写『无』的队伍，其他数字我才敢信。」
+        hiddenEffects: [{ kind: add, key: credibility, value: 5 }, { kind: setFlag, key: honor_honest }]
+      - id: keep_honor
+        text: 留着吧，反正只是内部核对表
+        visibleResponse: 内部核对表被雨桐直接复制进了申报书初稿——链条上游的一粒沙，流到了下游的沙尘暴。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }, { kind: scheduleEvent, eventId: c_xe7_dly_fake_honor, onDay: 19 }]
+    terminal: true
+
+  - id: c_xe6_ppt_animation
+    campaign: competition
+    day: 15
+    type: decision
+    trigger: { kind: random, weight: 1 }
+    purpose: { learning: 演示效果的稳定性优先于炫技 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["雨桐给PPT加了全套转场动画：擦除、翻转、缩放。在实验室的电脑上流畅得像大片。她问：「要保留吗？」"]
+    choices:
+      - id: animation_light
+        text: 只留淡入淡出，其余全删——答辩教室的电脑是个谜
+        visibleResponse: 精简到只剩淡入。后来决赛教室那台十年高龄的投影仪证明了你们赌对了——它连普通的翻页动画都卡。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: animation_light }]
+      - id: animation_full
+        text: 保留！效果就是说服力
+        visibleResponse: 初赛答辩现场，那段缩放动画卡了四秒，全场安静地看PPT思考人生。你的讲述节奏被它带崩了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe6_slogan_sync
+    campaign: competition
+    day: 16
+    type: decision
+    trigger: { kind: day, day: 16, phase: end }
+    purpose: { learning: 口号口径也要跨材料一致 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你grep了一遍全部材料：「3天变3分钟」出现在申报书、PPT、视频、答辩稿四个地方——其中一个写成了「3天到3秒」。"]
+    choices:
+      - id: sync_slogan
+        text: 全部统一为「3天到3分钟」，并注明数据出处
+        visibleResponse: 四处统一。「3秒」那一处是方远手滑，他自己先笑了：「差着两个数量级，评委要是算术好我们就完了。」
+        hiddenEffects: [{ kind: add, key: credibility, value: 3 }, { kind: setFlag, key: slogan_synced }]
+      - id: slogan_flex
+        text: 视频里夸张点没关系，那是艺术加工
+        visibleResponse: 网评评委对照材料时标注：「视频与申报书数据不一致」。艺术加工的账，评委记在诚信栏里。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe6_ppt_dark_mode
+    campaign: competition
+    day: 15
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["雨桐的PPT在深色模式下做了两版配色：白底黑字与黑底彩字。她把两版投到白墙上模拟投影效果——黑底版在白墙上惨不忍睹。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+    dialogue:
+      - { speaker: 江雨桐, text: "投影仪是最诚实的批评家。它不看审美，只看亮度。", mood: pleased }
+    terminal: true
+
+  - id: c_xe6_night_before_sub
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: day, day: 17, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["睡前你收到雨桐的消息：「材料我最后过了一遍。忽然有点舍不得交——改了这么多版，像送人养大的东西出门。」"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "会舍不得，说明它真的是你们的作品，不是任务。" }
+    terminal: true
+
+  - id: c_xe6_random_meme
+    campaign: competition
+    day: 16
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["凌晨，群里有人发了张梗图：一只熊猫瘫在电脑前，配字「材料周第一晚，我和我的颈椎都很敬业」。发图人的头像换成了一只更瘫的熊猫。"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 2 }
+      - { kind: add, key: teamTrust, value: 2 }
+    terminal: true
+
+  - id: c_xe6_data_footnote
+    campaign: competition
+    day: 15
+    type: story
+    trigger: { kind: day, day: 15, phase: end }
+    purpose: { narrative: 脚注的力量, learning: 出处标注让数字可辩护 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["雨桐给PPT每个数据页加了小字脚注：来源与口径。第5页右下角写着「n=47，行为问卷，D5」。她管这叫「数字的身份证」。"]
+    automaticEffects:
+      - { kind: add, key: credibility, value: 4 }
+      - { kind: setFlag, key: footnotes_on }
+    dialogue:
+      - { speaker: 系统, text: "有身份证的数字，答辩时才能自证清白。" }
+    terminal: true
+
+  - id: c_xe6_video_backup_file
+    campaign: competition
+    day: 16
+    type: decision
+    trigger: { kind: random, weight: 1 }
+    purpose: { learning: 数字资产要三份：本地/云端/移动介质 }
+    scene: { location: workbench, characters: [] }
+    setup: ["视频导出成功。雨桐问存几个备份。方远：「网盘+U盘。」你补了一句：还得能离线播——答辩教室可能没网。"]
+    choices:
+      - id: triple_backup
+        text: 网盘+U盘+本地工程文件，另压一个低码率版防现场带宽不足
+        visibleResponse: 三份备份外加低码率版。决赛那天会场WiFi瘫痪，你们的低码率版成了少数能直接播放的视频之一。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: setFlag, key: video_backup }]
+      - id: cloud_only
+        text: 网盘一份，哪都有网
+        visibleResponse: 「哪都有网」是这几年来最大的都市传说。初赛候场时你会为这句付出的——候场区没有WiFi。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    unlockKnowledge: [kc_c_backup_plan]
+    terminal: true
+
+  - id: c_xe6_print_queue
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: corridor, characters: [] }
+    setup: ["打印店里排着六个人，全是做参赛材料的。老板头也不抬：「报竞赛的先说页数，超过一百页的去对面。」"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 2 }
+    terminal: true
+
+  - id: c_xe6_commit_pledge
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: day, day: 17, phase: end }
+    purpose: { narrative: 签字仪式感, learning: 签名是对承诺的物理确认 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["承诺书打印出来，四个人轮流签字。方远签完说了句：「第一次觉得自己的名字这么有用。」林晓把扫描件命名成规范格式时格外认真。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: setFlag, key: pledge_signed }
+    terminal: true
+
+  - id: c_xe6_judge_profile
+    campaign: competition
+    day: 18
+    type: story
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { narrative: 评委画像, learning: 了解评审构成调整表达 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你查了初赛评委构成：企业技术总监×2、校内教师×2、往届金奖队长×1。何老师补了句：「企业评委看真不真，校内评委看稳不稳，学长评委看酷不酷。」"]
+    automaticEffects:
+      - { kind: setFlag, key: judge_profile_known }
+      - { kind: add, key: userUnderstanding, value: 4 }
+    dialogue:
+      - { speaker: 系统, text: "评委也是用户。他们的「使用场景」是每份材料四分钟。" }
+    terminal: true

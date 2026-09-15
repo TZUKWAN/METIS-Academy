@@ -1,0 +1,739 @@
+# 创业线扩展事件 07（倦怠/关停/重启/长期经营 + 各阶段补全）
+events:
+  - id: v_e07_d25_burn_sign
+    campaign: venture
+    day: 25
+    type: story
+    keyDecision: true
+    trigger: { kind: day, day: 25, phase: end }
+    purpose: { learning: 倦怠的信号：效率降、乐趣失、逃避反馈 }
+    scene: { location: dorm, characters: [] }
+    setup: ["三个迹象同时出现了：同一封用户邮件你读了两遍没进脑子；打开后台看数据时心里发沉；晚饭点了最辣的外卖却没尝出味道。"]
+    dialogue:
+      - { speaker: 系统, text: "效率下降、乐趣消失、回避反馈——倦怠三联征齐了。这不是你不够拼，是你连续拼了25天。发动机不是靠意志散热的。" }
+    automaticEffects:
+      - { kind: subtract, key: energy, value: 8 }
+      - { kind: setFlag, key: burnout_signs }
+    terminal: true
+
+  - id: v_e07_d25_rest_day
+    campaign: venture
+    day: 25
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 休息是工程决策，不是奖励 }
+    scene: { location: dorm, characters: [] }
+    setup: ["明天是周六。任务清单上还有6件事，你的精力条只剩一格。"]
+    choices:
+      - id: full_rest
+        text: 明天全天休息：关电脑、关群提醒，出门爬山，手机只留电话
+        visibleResponse: |
+          你消失了24小时。回来发现：产品没崩，用户没跑，群里的求助帖阿斌顺手回了。
+          周日晚你一口气处理完6件事，只用了一个下午——满电的大脑快过半电的失眠。
+        hiddenEffects: [{ kind: add, key: energy, value: 25 }, { kind: add, key: teamTrust, value: 3 }, { kind: achievement, achievementId: ach_v_rest }]
+      - id: half_rest
+        text: 半天休息半天干活，折中一下
+        visibleResponse: 休息那半天你刷了三次工作群，干活那半天效率平平。身体在休息，脑子在加班，两头都没讨好。
+        hiddenEffects: [{ kind: add, key: energy, value: 6 }, { kind: add, key: academicDebt, value: 2 }]
+      - id: no_rest
+        text: 休息什么？干！
+        visibleResponse: 你连轴转到第28天，然后在一个深夜对着一个拼写错误调试了40分钟，最后趴在桌上睡着了。身体会自己接管日程——以你最不想要的方式。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 20 }, { kind: add, key: technicalDebt, value: 4 }, { kind: scheduleEvent, eventId: v_e07_delay_crash, onDay: 28 }]
+    learningPoint: 不安排休息，身体会替你安排
+    terminal: true
+
+  - id: v_e07_d26_burn_talk
+    campaign: venture
+    day: 26
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["你跟罗哥坦白：“最近有点撑不住，看到用户消息就烦。”罗哥没讲大道理。"]
+    dialogue:
+      - { speaker: 罗哥, text: "正常。我第一次创业垮掉前三个月就是这样。问你个事：你现在做的哪些事，是可以不做的？", mood: neutral }
+      - { speaker: 你, text: "……每天更新两个群、盯着后台、写内容，全是我一个人干。" }
+      - { speaker: 罗哥, text: "倦怠多半不是干太多，是干太杂。挑出三件只有你能干的事，其他的——授权、延迟、或者让它烂着。" }
+    choices:
+      - id: cut_three
+        text: 照做：砍掉“每天盯后台”和“日更内容”，只留用户服务和关键开发
+        visibleResponse: |
+          砍完当天，你多睡了两个小时。后台数据没看也不会跑，内容改成每周两更，没人发现。
+          倦怠的解药常常不是休息，是减负。
+        hiddenEffects: [{ kind: add, key: energy, value: 12 }, { kind: add, key: independence, value: 4 }, { kind: relationship, characterId: v_mentor, delta: 4 }]
+      - id: shoulder_all
+        text: "没事，我能扛。扛过去就好了。"
+        visibleResponse: 罗哥看了你一眼，没再劝。第29天你的自动回复写成了“我现在不在人状态”——身体开始替你说真话了。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 10 }, { kind: setFlag, key: carried_all }]
+    terminal: true
+
+  - id: v_e07_d26_motivation_low
+    campaign: venture
+    day: 26
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 动力不足时，回看你改变过的具体的人 }
+    scene: { location: dorm, characters: [] }
+    setup: ["动力低谷：你在想“做这一切图什么”。文件夹里躺着那条你一直存着的摄影社感谢信。"]
+    choices:
+      - id: reread_letter
+        text: 打开感谢信重读一遍，再翻翻用户群里的聊天记录
+        visibleResponse: |
+          “干事们第一次没在合并表头上吵架。”底下还有聊天记录里那句“学长你真行”。
+          图什么？图这26个社团再也没人熬夜合表。动力回来了——它一直都在，只是你忘了看。
+        hiddenEffects: [{ kind: add, key: energy, value: 10 }, { kind: setFlag, key: motivation_refilled }]
+      - id: doom_scroll
+        text: 刷一小时别人成功的视频找动力
+        visibleResponse: 你看完了一堆“三个月十万用户”的视频，动力没找到，焦虑倒是充值成功。别人的高光治不了你的低谷。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 6 }, { kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: v_e07_d27_health_alarm
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["连续第四天头疼，下午在工位上眼前发黑了几秒。你吓到了，去校医院查了：低血压+重度睡眠不足，医生的话很难听。"]
+    dialogue:
+      - { speaker: 医生, text: "小伙子，你这身体底子再这么造，别说创业，毕业都费劲。回去睡够一周，别的都是虚的。" }
+      - { speaker: 系统, text: "你把“23点后不写代码”写进了 AGENTS.md——给自己立的规矩，和给Agent的规矩一样重要。" }
+    automaticEffects:
+      - { kind: subtract, key: energy, value: 5 }
+      - { kind: setFlag, key: health_rules }
+    terminal: true
+
+  - id: v_e07_d27_peer_pressure
+    campaign: venture
+    day: 27
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 同辈压力：比较是偷走快乐的贼 }
+    scene: { location: canteen, characters: [] }
+    setup: ["秋招季。室友签了大厂，年包肉眼可见；另一个同学保研了。饭桌上大家问：“你那个小破站，一个月挣多少？”"]
+    choices:
+      - id: own_clock
+        text: “赚得没你们多，但我有62个每周都在用的用户，和一个能跑正的账本。各自有各自的时区。”
+        visibleResponse: 饭桌安静了两秒，室友举杯：“敬你的62个用户。”说出口之后，你发现自己真的信。横向比较没有终点，纵向比较才有。
+        hiddenEffects: [{ kind: add, key: independence, value: 6 }, { kind: add, key: energy, value: 6 }, { kind: achievement, achievementId: ach_v_own_clock }]
+      - id: feel_behind
+        text: 什么都答不上来，笑着敷衍，回宿舍之后emo到凌晨
+        visibleResponse: 你把别人的时间表套在了自己头上，凌晨三点还在想“是不是该去投简历”。比较偷走了你一晚睡眠和一个项目的专注。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 10 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e07_d28_shutdown_list
+    campaign: venture
+    day: 28
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 干净关停清单：让项目死得体面 }
+    scene: { location: dorm, characters: [] }
+    setup: ["最坏的情况也要有预案。罗哥说：“关停不可怕，可怕的是烂尾。写份关停清单备着。”"]
+    choices:
+      - id: write_shutdown
+        text: 写关停清单：提前30天公告/数据导出通道/退款结算/服务器续费截止日/复盘报告
+        visibleResponse: |
+          清单五条写完，你反而安心了——最坏的情况都有路径，眼前的问题就只是眼前的问题。
+          这份文件备用着，但愿它永远用不上。
+        hiddenEffects: [{ kind: addAsset, assetType: checklist, name: 关停预案清单, description: 五步体面收尾, content: "30天公告/数据导出/退款结算/续费节点/复盘报告" }, { kind: add, key: riskTolerance, value: 3 }, { kind: achievement, achievementId: ach_v_shutdown_plan }]
+      - id: no_plan
+        text: 写这个多不吉利，不写
+        visibleResponse: 不写预案不等于不会有预案执行的那天。真到那天，你会手忙脚乱地亏欠每一个信任过你的用户。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e07_d28_user_care
+    campaign: venture
+    day: 28
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 假如关停：用户的善后优先于你的情绪 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你认真想了一遍那个问题：如果明天必须关停，你的9个付费社团怎么办？"]
+    choices:
+      - id: care_plan
+        text: 预案：按剩余时长退款/数据包一键导出/推荐替代工具清单/一对一告别邮件
+        visibleResponse: 你甚至把告别邮件的草稿写好了。写着写着眼眶热了——这不是悲观，是你终于承认这些用户对你有多重要。
+        hiddenEffects: [{ kind: add, key: credibility, value: 4 }, { kind: addAsset, assetType: document, name: 用户善后预案, description: 退款/导出/替代方案/告别信, content: "按比例退款+一键导出+替代清单+一对一邮件" }]
+      - id: avoid_care
+        text: 不想这些，太沉重了
+        visibleResponse: 逃避没有让问题消失，只是让它在突然发生时更丑陋。你的用户值得一个有预案的经营者，哪怕预案永远不用。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: v_e07_d29_shutdown_note
+    campaign: venture
+    day: 29
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 关停公告怎么写：坦诚+交代+不留尾巴 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你见过最差的关停公告是一句“服务器到期，勿念”。你决定提前想好自己的版本——假如需要的话。"]
+    choices:
+      - id: honest_note
+        text: 草拟版本：承认没跑通/交代发生了什么/数据如何领取/推荐替代方案/留下你的复盘链接
+        visibleResponse: |
+          草稿200字，五要素齐了。写完你把它存进“关停预案”文件夹。
+          最坏打算写清楚的人，才有资格全力奔向最好的可能。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 3 }, { kind: setFlag, key: shutdown_note_ready }]
+      - id: no_note
+        text: 真到那天再说吧
+        visibleResponse: “那天再说”的公告，通常是在情绪最糟的深夜里仓促发出的。那不是公告，是逃跑的脚印。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: v_e07_d29_restart_seed
+    campaign: venture
+    day: 29
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 重启的种子早就埋在旧项目的问题日志里 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你翻出第一周的问题日志。19条信号里被搁置的“社团交接档案”和“活动物资共享”两条，现在看依然闪闪发光。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 3 }
+      - { kind: addAsset, assetType: document, name: 下一个项目种子, description: 旧日志里筛出的候选, content: "社团交接档案/物资共享——旧信号的新机会" }
+    dialogue:
+      - { speaker: 系统, text: "一个项目最值钱的遗产，是它攒下的信号池。关停可以带走一切，带不走你看问题的眼睛。" }
+    terminal: true
+
+  - id: v_e07_d30_retro
+    campaign: venture
+    day: 30
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 复盘会：对事不对人，产出是下学期的规则 }
+    scene: { location: lab, characters: [v_mentor, v_partner] }
+    setup: ["学期复盘会，三个人，一块白板，两小时的承诺。规则：只说“什么做对了/什么做砸了/下学期改什么”。"]
+    choices:
+      - id: full_retro
+        text: 三栏复盘照做，最后产出“下学期五条军规”贴在墙上
+        visibleResponse: |
+          五条军规诞生：①付费前先验证②砍范围不手软③账本天天看④客服限时⑤周三必须休息。
+          罗哥补了一句：“明年这时候，我要看到第六条。”复盘会开成了传统。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 7 }, { kind: add, key: teamTrust, value: 5 }, { kind: addAsset, assetType: checklist, name: 下学期五条军规, description: 复盘产出, content: "先验证/砍范围/看账本/限客服/周内休息" }, { kind: achievement, achievementId: ach_v_retro }]
+      - id: informal_chat
+        text: 不搞形式主义，吃顿饭聊聊得了
+        visibleResponse: 饭吃了，天聊了，感慨了一堆。两周后你想引用复盘结论时发现：没有结论。感慨不留档，教训就会重演。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 没有产出的复盘只是团建
+    terminal: true
+
+  - id: v_e07_d30_second_act
+    campaign: venture
+    day: 30
+    type: story
+    trigger: { kind: day, day: 30, phase: end }
+    purpose: { learning: 无论结算如何，创业是可重启的技能 }
+    scene: { location: dorm, characters: [] }
+    setup: ["结算前夜。你在便签上写下两个词：这台机器的说明书，和下一台机器的图纸。"]
+    automaticEffects:
+      - { kind: setFlag, key: restart_mindset }
+      - { kind: add, key: independence, value: 4 }
+    dialogue:
+      - { speaker: 系统, text: "项目有终点，创业者没有。30天教会你的不是做一个报名工具，是“从0到1”这台机器的操作方法。机器可以重启，方法属于你。" }
+    terminal: true
+
+  - id: v_e07_d25_long_term_mind
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 长期经营思维：从赶工切换到养店 }
+    scene: { location: dorm, characters: [] }
+    setup: ["心态切换的一天：你把待办从“赶功能”改成“养店铺”——每天固定巡店（数据）、补货（修复）、打扫（优化）。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: long_term_mode }
+    dialogue:
+      - { speaker: 系统, text: "赶工的心态做项目，养店的心态做事业。前者冲刺30天，后者经营30年。" }
+    terminal: true
+
+  - id: v_e07_d26_semester_renew
+    campaign: venture
+    day: 26
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 续约要提前90天启动，别等合同到期 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: ["距学生会合同到期还有6周。老K提醒：“走流程要提前报预算，你上学期就是踩着点谈的，差点黄。”"]
+    choices:
+      - id: early_renew
+        text: 本周启动续约：带上学期数据报告+下学期规划+早鸟价（提前签约9折）
+        visibleResponse: |
+          学生会两个星期内完成续约，还主动提了迎新周深度合作。
+          早启动的续约是谈合作，晚启动的续约是求收留。
+        hiddenEffects: [{ kind: add, key: revenue, value: 359 }, { kind: setFlag, key: early_renewal }, { kind: achievement, achievementId: ach_v_renew_early }]
+      - id: late_renew
+        text: 到期再谈，现在忙别的
+        visibleResponse: 到期前一周你去谈，对方预算周期刚过，只能按零星采购慢慢磨。你在焦灼里等了23天，续上了，但差点没续上。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e07_d27_maint_rhythm
+    campaign: venture
+    day: 27
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 维护节奏化：固定窗口处理琐事，保护整块时间 }
+    scene: { location: workbench, characters: [] }
+    setup: ["琐事总在打断你：看数据、回群、小修小补……你决定给它们圈一个固定时间窗。"]
+    choices:
+      - id: fixed_window
+        text: 每天16:00-17:00统一处理琐事，其余时间手机勿扰
+        visibleResponse: 整块时间回来了。琐事没有变少，但它们学会了排队——你的下午终于能连续写代码了。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: setFlag, key: fixed_window_set }]
+      - id: ad_hoc
+        text: 随来随处理，灵活动态
+        visibleResponse: “灵活”的一天被切成了17段，每段都刚进入状态就被打断。你以为自己在多线作战，其实在给打断打工。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 6 }, { kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: v_e07_d28_auto_ops
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["你让 Agent 写了三个自动化：每日数据报表自动生成、磁盘告警自动通知、每周日凌晨自动备份校验。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 5 }
+      - { kind: addAsset, assetType: document, name: 运维自动化清单, description: 三项日常自动化, content: "日报自动生成/磁盘告警/周日备份校验" }
+    dialogue:
+      - { speaker: v_ai_agent, text: "自动化部署完成。预计每周为您节省2.5小时。", mood: pleased }
+      - { speaker: 你, text: "这2.5小时我要拿去睡觉——这也是生产投资。" }
+    terminal: true
+
+  - id: v_e07_d29_brand_assets
+    campaign: venture
+    day: 29
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 品牌是复利的容器：名字、口碑、识别度 }
+    scene: { location: workbench, characters: [] }
+    setup: ["“报名管家”这个名字用了一学期，用户都这么叫它——包括那些你自己都没做过推广的场景。要不要正式做套品牌？"]
+    choices:
+      - id: brand_kit
+        text: 做迷你品牌包：统一名称/一句定位语/一个头像/一份介绍模板
+        visibleResponse: |
+          品牌包两小时做完。之后每次被转发、被截图、被口口相传，都指向同一个名字和同一句话。
+          用户嘴里念出来的名字，才是真正的品牌资产——你只是把它固定了下来。
+        hiddenEffects: [{ kind: add, key: credibility, value: 5 }, { kind: addAsset, assetType: document, name: 品牌迷你包, description: 名称/定位/头像/模板, content: "报名管家/“把收表从3天变3分钟”/统一视觉" }, { kind: achievement, achievementId: ach_v_brand }]
+      - id: skip_brand
+        text: 名字无所谓，产品好就行
+        visibleResponse: 产品确实好，但它一会儿被叫“那个收表的”，一会儿被叫“社团小程序”。模糊的名字，让每一次口碑都打了折。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e07_d30_legacy
+    campaign: venture
+    day: 30
+    type: story
+    trigger: { kind: day, day: 30, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["最后盘点你留下的东西：一个有62个周活用户的产品、一份30天的完整账本、一套验证方法论、五个被你改变工作方式的社团。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 5 }
+      - { kind: add, key: credibility, value: 5 }
+    dialogue:
+      - { speaker: 系统, text: "项目无论继续还是停在这，这些东西都已经是你的了。结算吧——无论数字多少，你已经不是30天前的你。" }
+    terminal: true
+
+  - id: v_e07_d25_mom_worry2
+    campaign: venture
+    day: 25
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [v_family] }
+    setup: ["妈妈视频里盯着你的脸看了三秒：“你眼里全是血丝。是不是又熬通宵了？”"]
+    choices:
+      - id: promise_sleep
+        text: 承诺：“这周开始23点睡。我发毒誓，真扛不住就跟您说。”
+        visibleResponse: 妈妈将信将疑，但转头开始给你寄枸杞。你真的执行了——不是怕枸杞，是怕她视频查岗时的心疼。
+        hiddenEffects: [{ kind: relationship, characterId: v_family, delta: 5 }, { kind: add, key: energy, value: 8 }]
+      - id: hide_fatigue
+        text: “没熬夜！最近气色好着呢！”
+        visibleResponse: 妈妈没拆穿你，只是叹了口气讲了十分钟养生。报喜不报忧最伤的是：她连担心你的资格都被你没收了。
+        hiddenEffects: [{ kind: relationship, characterId: v_family, delta: -3 }, { kind: setFlag, key: hide_from_mom }]
+    terminal: true
+
+  - id: v_e07_d26_bin_tired
+    campaign: venture
+    day: 26
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["阿斌揉着眼睛合上电脑：“我也到极限了。这周我效率大概只有平时的四成。”"]
+    choices:
+      - id: give_rest
+        text: “你去歇。代码我来顶，出不了大事——有测试兜底呢。”
+        visibleResponse: 阿斌愣了一下，笑了：“行，你还学会兜底了。”三天后他满血回归，提交了憋了很久的重构方案。会休息的队伍才走得远。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 6 }, { kind: add, key: execution, value: 2 }]
+      - id: push_bin
+        text: “再顶一顶，这周过了就好了。”
+        visibleResponse: 阿斌顶了，但周日后他提了暂停合作两周。过载的队友不会立刻走，但会在心里默默记账。
+        hiddenEffects: [{ kind: subtract, key: teamTrust, value: 6 }, { kind: setFlag, key: bin_overloaded }]
+    terminal: true
+
+  - id: v_e07_d27_small_wins
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 小胜利清单：对抗倦怠的日常弹药 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你开始记录“今日小胜利”：今天修掉一个存在三周的bug、今天有个用户主动夸了界面、今天账本是正的。三条，就三条。"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 5 }
+      - { kind: setFlag, key: small_wins_log }
+    dialogue:
+      - { speaker: 系统, text: "创业的进度条经常看不到头，小胜利清单是你自己画的刻度。每天三格，一个月就是九十格证据。" }
+    terminal: true
+
+  - id: v_e07_d28_thanks_wall
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你把一学期的用户好评和感谢截图贴成一面墙：7条语音转文字、12条聊天记录、1封手写信的扫描件。"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 8 }
+      - { kind: addAsset, assetType: user_feedback, name: 感谢墙合辑, description: 一学期好评存档, content: "7语音+12聊天+1手写信——低谷备用弹药库" }
+    dialogue:
+      - { speaker: 系统, text: "这面墙的正式名称叫“意义存档”。哪天想放弃时先来这里站三分钟。" }
+    terminal: true
+
+  - id: v_e07_d29_next_season
+    campaign: venture
+    day: 29
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 下学期的选择：继续、收缩、还是转手 }
+    scene: { location: dorm, characters: [v_mentor] }
+    setup: ["下学期你可能要外出实习半年。产品怎么办？罗哥给了三个选项。"]
+    choices:
+      - id: semi_auto
+        text: 继续运营但降配：只保服务器+周更公告+紧急客服，暂停新功能
+        visibleResponse: |
+          “低功耗模式”定了。实习半年回来，用户还在、数据还在、口碑还在。
+          冻结不是死亡，是冬眠——冬眠的项目醒来就是现成的生意。
+        hiddenEffects: [{ kind: add, key: independence, value: 4 }, { kind: setFlag, key: low_power_mode }, { kind: achievement, achievementId: ach_v_lowpower }]
+      - id: find_keeper
+        text: 找学弟接手维护，你远程指导+分成
+        visibleResponse: 你物色到一个大二学弟，手把手带了两周。交接文档写了8页——你的项目第一次在“你不在场”的情况下也能活着。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 5 }, { kind: addAsset, assetType: handoff, name: 接手人交接文档, description: 8页运维手册, content: "账号/流程/红线/分成/应急联系人" }]
+      - id: wind_down
+        text: 学期末体面收尾，把精力留给实习
+        visibleResponse: 你启动了关停预案：公告、退款、导出、告别邮件。做完全套只花了一天——预案在写下那一刻就已经值回票价。
+        hiddenEffects: [{ kind: add, key: independence, value: 5 }, { kind: setFlag, key: graceful_winddown }]
+    terminal: true
+
+  - id: v_e07_d30_handoff_doc
+    campaign: venture
+    day: 30
+    type: decision
+    trigger: { kind: day, day: 30, phase: end }
+    purpose: { learning: 交接文档：让项目离开你也能活 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["你决定写一份“假如我消失两周”的交接文档。"]
+    choices:
+      - id: write_handoff
+        text: 写全：账号清单/服务器配置/日常流程/红线禁忌/用户关系图谱/应急联系方式
+        visibleResponse: |
+          文档11页。写完你意识到：这份文档最大的读者其实是三个月后的自己。
+          能被接手的项目，才是真的资产；只能拴在你身上的，只是份工作。
+        hiddenEffects: [{ kind: addAsset, assetType: handoff, name: 消失两周交接文档, description: 11页运维+关系手册, content: "账号/配置/流程/红线/关系图/应急" }, { kind: add, key: execution, value: 5 }, { kind: achievement, achievementId: ach_v_handoff }]
+      - id: keep_in_head
+        text: 都在我脑子里，不会丢
+        visibleResponse: 脑子不会丢？你第13天连自己的Node版本都忘了。押注记忆的项目，赌注是整个项目。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e07_d01_daily_three
+    campaign: venture
+    day: 1
+    type: story
+    trigger: { kind: day, day: 1, phase: end }
+    purpose: { learning: 每日三问：今天的假设/证据/下一步 }
+    scene: { location: dorm, characters: [] }
+    setup: ["睡前三问，写在日志页脚：今天的核心假设是什么？今天拿到什么证据？明天最重要的一个动作是什么？"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: setFlag, key: daily_three }
+    dialogue:
+      - { speaker: 系统, text: "三问不超过两分钟，但它防止你用忙碌代替思考——创业最常见的死法。" }
+    terminal: true
+
+  - id: v_e07_d03_note_tool2
+    campaign: venture
+    day: 3
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["访谈记录越攒越多，聊天记录、语音转文字、手写笔记散落三处。要整合吗？"]
+    choices:
+      - id: one_place
+        text: 统一到一个文件夹：按“日期_受访者”命名，原话加引号，结论加标注
+        visibleResponse: 整合花了一小时。两周后写假设板时，你引用任何一条原话都只要30秒——找得到证据，证据才有用。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 4 }, { kind: setFlag, key: notes_unified }]
+      - id: leave_mess
+        text: 先乱着，反正都在
+        visibleResponse: “都在”和“找得到”是两回事。第9天你为了找一句关键原话翻了40分钟聊天记录——那40分钟够做一场访谈。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e07_d05_pomodoro
+    campaign: venture
+    day: 5
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你试了番茄钟工作法：25分钟专注+5分钟休息。上午4个番茄钟，完成了平时一天的量。"]
+    automaticEffects: [{ kind: add, key: execution, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "专注力是学生创业者唯一的免费资源。番茄钟便宜、土、有效——像大多数好东西一样。" }
+    terminal: true
+
+  - id: v_e07_d08_data_ask
+    campaign: venture
+    day: 8
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 请教罗哥的正确姿势：带数据，不带情绪 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["你去请教罗哥一个纠结：两个候选方向选哪个。你准备了两种开场方式。"]
+    choices:
+      - id: bring_data
+        text: 摊开数据：“方向A访谈8场付费线索2条；方向B问卷40份无一付费。我倾向A，您看漏洞在哪？”
+        visibleResponse: |
+          罗哥盯着数据看了两分钟：“A。你已经有答案了，我来只是帮你确认——这叫请教。相反那种叫倒垃圾。”
+          你学到：带着结论和数据来，问题就变成了校准。
+        hiddenEffects: [{ kind: relationship, characterId: v_mentor, delta: 6 }, { kind: add, key: evidenceDiscipline, value: 4 }]
+      - id: bring_feelings
+        text: 倒苦水：“我最近好迷茫，两边都挺难的，你说我该怎么办啊？”
+        visibleResponse: 罗哥喝了口咖啡：“先去做访谈，做完再来。”迷茫不是拿去请教的，是拿去用行动消除的。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e07_d12_env_check
+    campaign: venture
+    day: 12
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["开发环境体检：Node版本固定（.nvmrc）、依赖锁定（lockfile）、密钥走环境变量、README三行能跑起来。四项全绿。"]
+    automaticEffects: [{ kind: add, key: execution, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "环境是最容易被忽视的生产资料。四张体检单，值未来无数个“我这里怎么跑不起来”。" }
+    terminal: true
+
+  - id: v_e07_d13_api_doc
+    campaign: venture
+    day: 13
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["要接入短信服务商API。文档60页，Agent 说“我可以直接写代码不用看完全部”。"]
+    choices:
+      - id: digest_first
+        text: 先让Agent通读并复述：计费规则/频控限制/回调机制/错误码，输出一页速查卡
+        visibleResponse: |
+          复述环节抓到一个关键点：回调地址必须HTTPS且需验签——文档第38页的脚注。
+          直接写代码的话，这就是三天后的一次深夜事故。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: addAsset, assetType: document, name: 短信API速查卡, description: 四要点一页纸, content: "计费/频控/回调验签/错误码速查" }]
+      - id: code_now
+        text: 边写边查，快就完事
+        visibleResponse: 代码两小时写完，上线当晚回调验签没做，被人伪造请求刷了30条短信。¥4.5的损失，和一晚上的心惊肉跳。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }, { kind: subtract, key: money, value: 5 }]
+    terminal: true
+
+  - id: v_e07_d15_test_data2
+    campaign: venture
+    day: 15
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["上线演练：你用假数据把“社长视角”完整跑了一遍——从收到链接到合并成功发通知，全程4分11秒。你把它录下来当演示视频。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: addAsset, assetType: pitch_deck, name: 4分11秒完整演练, description: 社长视角全程实录, content: "假数据全流程/录屏/用于演示和引导" }
+    dialogue:
+      - { speaker: 系统, text: "自己当一次用户，胜过十次脑内测试。那4分11秒里藏着你产品真正的样子。" }
+    terminal: true
+
+  - id: v_e07_d16_error_budget
+    campaign: venture
+    day: 16
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 错误预算：给稳定性定价 }
+    scene: { location: workbench, characters: [v_partner] }
+    setup: ["阿斌提议给项目定“错误预算”：每月允许2次小故障、1小时停机。超了就冻结新功能，全部时间修稳定性。"]
+    choices:
+      - id: set_budget
+        text: 采纳。超支即冻结——写进 AGENTS.md 和团队规则
+        visibleResponse: |
+          预算制实施。第一次超支时你咬牙冻结了新功能一周，
+          换来之后连续40天零故障。稳定性不是道德，是预算。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: add, key: teamTrust, value: 3 }, { kind: setFlag, key: error_budget }]
+      - id: no_budget
+        text: 小项目不需要这套大厂仪式
+        visibleResponse: 没有预算约束的后果：你永远在“加新功能”和“救火”之间反复横跳，两头都是你，两头都不体面。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }]
+    terminal: true
+
+  - id: v_e07_d21_user_dinner2
+    campaign: venture
+    day: 21
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: ["老K学期末要准备换届了。你约他吃了个饭，聊聊“换届季工具能不能帮上忙”。"]
+    choices:
+      - id: ask_transition
+        text: 聊换届交接场景，顺手做了一页“社团交接模板”给他
+        visibleResponse: |
+          老K把模板转进了5个社团群。换届季你的工具新增了“交接档案”使用场景——
+          老用户的深层需求，都藏在饭桌的闲聊里。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 6 }, { kind: add, key: users, value: 2 }, { kind: relationship, characterId: v_user_club, delta: 5 }]
+      - id: just_thanks
+        text: 纯感谢饭，不聊需求
+        visibleResponse: 饭吃得很开心，关系更铁了。但你错失了换届这个场景窗口——它一年只有一次。
+        hiddenEffects: [{ kind: subtract, key: money, value: 60 }, { kind: relationship, characterId: v_user_club, delta: 4 }]
+    terminal: true
+
+  - id: v_e07_d22_k_wrap
+    campaign: venture
+    day: 22
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: ["老K学期总结：“这学期我们办了9场活动，全用了你的工具。说实话三个字——省事、稳、快。哦这是四个字。”"]
+    dialogue:
+      - { speaker: 老K, text: "换届后新社长我来交代用你的工具。丑话说前头：明年你要是收了费变难用，我第一个提意见。", mood: serious }
+      - { speaker: 你, text: "求之不得。你的意见永远插队。" }
+    automaticEffects:
+      - { kind: relationship, characterId: v_user_club, delta: 5 }
+      - { kind: setFlag, key: k_lifetime_fan }
+    terminal: true
+
+  - id: v_e07_d23_xiaocai_ref
+    campaign: venture
+    day: 23
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [v_user_student] }
+    setup: ["小蔡考研上岸了，来报喜。她顺手拉来一个需求：“我表妹社团在招新，400人报名，你那个工具能撑住吗？”"]
+    dialogue:
+      - { speaker: 小蔡, text: "当年你问我问题的样子还挺专业的，所以我有需求第一个想到你。不过说好了，给我表妹打折！", mood: happy }
+      - { speaker: 系统, text: "最早那批访谈用户，正在变成你的渠道。你当年花12元奶茶钱买的，是这些时刻的种子。" }
+    automaticEffects:
+      - { kind: relationship, characterId: v_user_student, delta: 4 }
+      - { kind: add, key: users, value: 1 }
+    terminal: true
+
+  - id: v_e07_d24_invoice_2
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["第二次有人要发票，这次是培训机构的¥499单子。你已经办好了代开流程：手机申请、次日开出、税费¥15。"]
+    automaticEffects:
+      - { kind: add, key: revenue, value: 499 }
+      - { kind: setFlag, key: invoice_ready }
+    dialogue:
+      - { speaker: 系统, text: "上次因发票卡壳的单子，这次顺利成交。合规不是成本，是别人不跟你合作的原因清单上，被你划掉的一行。" }
+    terminal: true
+
+  - id: v_e07_d26_first_pr
+    campaign: venture
+    day: 26
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["开源库收到了第一个外部PR：一个高中生修复了你解析逻辑里的一个正则缺陷，附了测试用例和工整的commit message。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+      - { kind: add, key: credibility, value: 4 }
+    dialogue:
+      - { speaker: 系统, text: "你审了三遍合并了。开源第一次让你体会到：你写的代码可以比自己走得更远。" }
+    terminal: true
+
+  - id: v_e07_d27_rival_dead
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["“社团帮”停止更新了，公告写“团队因学业压力暂停运营”。他们的免费用户开始在你的群里问：“你们还活着吗？”"]
+    choices:
+      - id: welcome_warmly
+        text: 出一份《从社团帮迁移指南》：数据怎么导、怎么导入、老用户首月5折
+        visibleResponse: |
+          指南发出，一周接住23个迁移用户。
+          对手死亡不是庆祝的时候，是收割信任的时候——你接住的每个用户都会讲“当时只有他接住了我”。
+        hiddenEffects: [{ kind: add, key: users, value: 23 }, { kind: add, key: revenue, value: 115 }, { kind: achievement, achievementId: ach_v_catch_fallout }]
+      - id: celebrate_only
+        text: 发个帖子庆祝自己笑到最后
+        visibleResponse: 帖子发出，观感微妙。迁移用户看着你的“庆祝”，默默选了别家——幸灾乐祸是把双刃剑，刀刃永远朝自己。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 5 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e07_d29_platform_copy
+    campaign: venture
+    day: 29
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 大平台抄你：拼深度和贴身，不拼功能 }
+    scene: { location: dorm, characters: [] }
+    setup: ["大新闻：学校官方平台“智慧校园2.0”上线了社团报名功能——比你更官方、更免费、入口更深。三个社团当天转移了。"]
+    choices:
+      - id: deep_dive
+        text: 转型做官方做不了的：跨校活动、数据分析报表、代运营服务、定制审批流
+        visibleResponse: |
+          你找到了自己的生态位：官方工具覆盖“标准报名”，你做它做不动的“脏活累活定制活”。
+          一个月后那三个社团回来了两个——官方工具收不了他们的奇葩需求。
+        hiddenEffects: [{ kind: add, key: users, value: 2 }, { kind: add, key: revenue, value: 150 }, { kind: addAsset, assetType: business_model, name: 生态位转型方案, description: 官方做不了的四件事, content: "跨校/报表/代运营/定制审批流" }, { kind: achievement, achievementId: ach_v_niche_shift }]
+      - id: fight_official
+        text: 硬刚：打价格战+发帖吐槽官方工具难用
+        visibleResponse: 官方免费你免费不了，官方难用但它有强制入口。你的吐槽帖火了半天，然后被悄悄删除——你猜到了开头，没猜到结尾。
+        hiddenEffects: [{ kind: subtract, key: users, value: 3 }, { kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 和平台竞争的唯一方式，是去平台不去的地方
+    terminal: true
+
+  - id: v_e07_d30_letter_next
+    campaign: venture
+    day: 30
+    type: story
+    trigger: { kind: day, day: 30, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["你给下学期的自己（或者下一个想创业的学弟）写了封信，压在问题日志的最后一页。"]
+    dialogue:
+      - { speaker: 系统, text: "信里最重要的三句话：先找问题再做产品；账本比梦想诚实；身体比项目重要。其余的，让下学期自己写。" }
+    automaticEffects:
+      - { kind: addAsset, assetType: document, name: 给下学期的信, description: 三句最重要的话, content: "先问题后产品/账本诚实/身体第一" }
+      - { kind: add, key: independence, value: 3 }
+    terminal: true
+
+  - id: v_e07_delay_crash
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——透支的身体接管日程, learning: 不休息的人会被强制休息 }
+    scene: { location: dorm, characters: [] }
+    setup: ["连续透支的第28天，你发烧38.6度，在床上躺了两天。项目没停——用户群里，是老K和几个社长在互相答疑。"]
+    automaticEffects:
+      - { kind: subtract, key: energy, value: 10 }
+      - { kind: add, key: credibility, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：你没给身体安排休息，身体自己批了假。意外之喜是——你养出的用户社区，在你缺席时接住了彼此。" }
+    terminal: true

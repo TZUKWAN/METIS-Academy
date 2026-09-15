@@ -1,0 +1,1007 @@
+# 科研线扩展事件 09：全阶段收尾补齐（D1-D30）
+events:
+  # ---- 选题阶段 ----
+  - id: r_e09_d3_topic_ladder
+    campaign: research
+    day: 3
+    type: decision
+    trigger: { kind: day, day: 3, phase: start }
+    purpose: { learning: 选题三级跳：领域→方向→问题 }
+    scene: { location: library, characters: [] }
+    setup: [“你的题目还停在'AI对写作的影响'——这是领域不是问题。你试着往下跳两级。”]
+    choices:
+      - id: three_level_jump
+        text: 三级跳：教育技术→AI辅助写作→'AI反馈替代自我监控对论证的影响'
+        visibleResponse: 每跳一级，文献变少、可行变高。落到第三级时你已经能说出数据从哪来了——能回答'数据从哪来'的题目才是能做的题目。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 5 }
+          - { kind: add, key: progress, value: 3 }
+          - { kind: setFlag, key: topic_ladder_done }
+      - id: stay_broad
+        text: 停在领域级，显得视野宏大
+        visibleResponse: 宏大到没法开工。你的检索继续捞出上万条结果，每一都相关，每一都没法用。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 5 }
+    learningPoint: 题目落不到数据层就等于没落
+
+  - id: r_e08_d31_supervisor_agenda
+    campaign: research
+    day: 3
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: corridor, characters: [r_mentor] }
+    setup: [“陈教授随口提了句：'组里明年想申个AI教育方向的题。'你心里一动。”]
+    dialogue:
+      - { speaker: 系统, text: "导师的议程和你的兴趣有重叠区。重叠区选题：资源多、指导足——但要想清楚你是不是真的想做。" }
+    choices:
+      - id: align_interest
+        text: 找重叠区：'我对AI反馈机制那部分最感兴趣，能往那靠吗'
+        visibleResponse: 陈教授难得直接答了："能。反馈机制是核心，你做深一点。"方向、资源、兴趣三点一线——这是三十天里你最贵的一次走廊对话。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 7 }
+          - { kind: add, key: progress, value: 3 }
+          - { kind: setFlag, key: agenda_aligned }
+      - id: chase_grant_only
+        text: 全按导师议程来，资源为王
+        visibleResponse: 资源确实来了。但每次读文献你的兴趣都在打瞌睡——不感兴趣的方向，坚持是高耗能模式。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 4 }
+          - { kind: add, key: academicDebt, value: 4 }
+    terminal: true
+
+  # ---- 文献阶段 ----
+  - id: r_e09_d6_citation_graph
+    campaign: research
+    day: 6
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 可视化文献网络：找枢纽文献与学派边界 }
+    scene: { location: workbench, characters: [] }
+    setup: [“你把 40 篇文献的引用关系画成一张网。图上立刻浮出三个抱团的小圈子，和一座连接两圈的桥。”]
+    dialogue:
+      - { speaker: 系统, text: "那座'桥'文献连接了两个互不引用的学派——它通常就是综述章的枢纽。" }
+    choices:
+      - id: bridge_first
+        text: 精读那篇桥文献，两个学派各挑一篇代表作
+        visibleResponse: 桥文献果然是你的综述章主轴。两派代表作各读一篇后，你写的对比段落第一次有了'两边各是什么、分歧在哪'的骨架。
+        hiddenEffects:
+          - { kind: add, key: literatureCount, value: 3 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: setFlag, key: bridge_found }
+      - id: random_read
+        text: 不看结构了，按顺序挨篇读
+        visibleResponse: 顺序阅读让你在学派A里泡了四天，出圈时你已经忘了A和B为什么吵架——网没画，路就走成迷宫。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 引用网络是文献的地图仪
+
+  - id: r_e09_d9_annotation_habit
+    campaign: research
+    day: 9
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 批注三色法：证据/疑问/金句 }
+    scene: { location: library, characters: [] }
+    setup: [“你的PDF批注一片黄——全划了'重要'。等于什么都没标。”]
+    choices:
+      - id: three_colors
+        text: 改三色制：黄=证据、红=疑问、绿=可引用句
+        visibleResponse: 三色制之后，写综述时你按颜色收割：黄列进矩阵、红列进验证表、绿列进素材库。批注从'划线'变成了'加工'。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+          - { kind: setFlag, key: three_color_notes }
+      - id: keep_yellow
+        text: 黄就黄吧，划了总比不划强
+        visibleResponse: 批注里“都重要”等于都不重要。写作期毫无检索价值——你重新读了一遍那 28 篇。第二次读比第一次快，但第一次的时间也回不来了。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 批注的价值在检索时兑现
+
+  # ---- 理论阶段 ----
+  - id: r_e09_d14_theory_ladder_check
+    campaign: research
+    day: 14
+    type: npc
+    trigger: { kind: day, day: 14, phase: start }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“师姐抽查你的理论与假设的连接：'你的H1是从理论第几页推出来的？'”]
+    dialogue:
+      - { speaker: 你, text: "呃……理论说了反馈很重要，所以H1说相关……" }
+      - { speaker: 林师姐, text: "中间跳了三步。理论说的是'反馈影响学习'，你的H1是'AI使用与质量相关'——反馈在哪里？学习在哪里？把每一步补上，H1才有爹妈。", mood: serious }
+    choices:
+      - id: derive_chain
+        text: 写三步推导：理论命题→情境代入→可检验假设
+        visibleResponse: 三步写完，H1 从'感觉相关'变成了'由命题2+情境条件推得'。假设终于有了出生证明——评委查户口时一查一个准。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: relationship, characterId: r_senior_theory, delta: 5 }
+          - { kind: setFlag, key: hypothesis_derived }
+      - id: intuitive_jump
+        text: 理论摆在那就行，假设凭直觉提
+        visibleResponse: 直觉提的假设在预审被追问推导时当场断链。'所以理论怎么推出来的？'——那句你永远答不出的'所以'。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+    terminal: true
+
+  - id: r_e09_d16_contrarian_theory
+    campaign: research
+    day: 16
+    type: decision
+    trigger: { kind: day, day: 16, phase: end }
+    purpose: { learning: 竞争性理论：给对手留位置反而显严谨 }
+    scene: { location: workbench, characters: [] }
+    setup: [“你发现有个理论和你的认知负荷预测相反：它认为AI反馈会促进学习。两个理论对着你的数据虎视眈眈。”]
+    choices:
+      - id: include_rival
+        text: 把对立理论写进理论章：'若数据支持X则A胜，支持Y则B胜'
+        visibleResponse: 你把对决写明了。讨论章因此有了张力：数据站在A一边但只是温和地站。评委最吃这一套——你不是在护短，是在设擂台。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 7 }
+          - { kind: add, key: credibility, value: 5 }
+          - { kind: setFlag, key: rival_included }
+      - id: omit_rival
+        text: 不提对立理论，显得立场不坚定
+        visibleResponse: 评委知道那个理论——所有人都知道。他们问'为什么只字不提'，你的沉默替你回答了。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 8 }
+          - { kind: add, key: academicDebt, value: 5 }
+    learningPoint: 回避对立理论等于举手承认心虚
+
+  # ---- 方法与数据阶段 ----
+  - id: r_e09_d19_consent_logistics
+    campaign: research
+    day: 19
+    type: decision
+    trigger: { kind: day, day: 19, phase: end }
+    purpose: { learning: 数据收集的现场物流：入口/提示/时长预估 }
+    scene: { location: classroom, characters: [] }
+    setup: [“课上五分钟收数现场。投影出二维码后，前两排同学开始填，后排有人问'要填多久'——你没准备答案，场面开始乱。”]
+    choices:
+      - id: logistics_checklist
+        text: 事后复盘，建立收数物流单：话术/时长/常见问答
+        visibleResponse: 你补了物流单：开场一句话、预计两分钟、卡的同学找前排代填、老师Q&A两条。第二次现场，五分钟安静收完 52 份。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: logistics_ready }
+      - id: improvise_again
+        text: 每次现场随机应变
+        visibleResponse: 你随机应变了两场，每场都丢一部分后排样本。应变的花费是真实的数据。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 现场发挥是最贵的数据收集方式
+
+  - id: r_e09_d20_scale_length_tradeoff
+    campaign: research
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 量表长度与填写质量的权衡 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你的问卷目前 58 题，预计填答 14 分钟。Agent 提醒：'每增加一分钟，弃填率约上升3%。'”]
+    dialogue:
+      - { speaker: Agent, text: "建议保留全部题项以最大化信息。", mood: pleased }
+      - { speaker: 你, text: "信息最大化，完成率最小化。你的建议互相打架。" }
+    choices:
+      - id: cut_to_35
+        text: 砍到 35 题核心量表，填答压到 8 分钟
+        visibleResponse: 你删掉重复维度和装饰题。8 分钟版本弃填率明显下降，数据质量跟着上升——少即是多是句俗话，也是句统计事实。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: setFlag, key: scale_trimmed }
+      - id: keep_58
+        text: 58 题都要，信息完备要紧
+        visibleResponse: 完备是完备了。后半段 23 题的作答时间断崖式下跌——你知道那不是效率，是敷衍。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+          - { kind: setFlag, key: fatigue_contamination }
+    learningPoint: 问卷的长度就是填答者的耐心刻度
+
+  - id: r_e09_d22_double_entry
+    campaign: research
+    day: 22
+    type: decision
+    trigger: { kind: day, day: 22, phase: end }
+    purpose: { learning: 关键数据双人独立核对 }
+    scene: { location: lab, characters: [r_peer] }
+    setup: [“清洗完的数据要定稿。苏晓提议：'我抽你两成数据跟原始问卷核一遍，你抽我的。'”]
+    choices:
+      - id: cross_check
+        text: 互相抽核 20%，签核后锁定
+        visibleResponse: 你核她的，她核你的。各抓出两处录入手误——不大，但要是留到分析后才被抓，所有数字都得重跑。四道手误，四十分钟，值。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: relationship, characterId: r_peer, delta: 5 }
+          - { kind: setFlag, key: cross_checked }
+        delayed:
+          - { eventId: r_e09_px_crosscheck_dividend, onDay: 26 }
+      - id: solo_final
+        text: 自己核过一遍了，定稿
+        visibleResponse: 自己核自己的检出率约等于零——你会用同样的方式看错两遍。那两处手误跟着数据进了所有分析。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 5 }
+    learningPoint: 自己查自己是查不出错觉的
+
+  # ---- 分析阶段 ----
+  - id: r_e09_d23_coffee_break_stats
+    campaign: research
+    day: 23
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [r_senior_data] }
+    setup: [“周师兄看到你在笔记本上手抄回归输出，像抄经。”]
+    dialogue:
+      - { speaker: 周师兄, text: "抄它干嘛？" }
+      - { speaker: 你, text: "抄一遍记得住哪些数字重要。" }
+      - { speaker: 周师兄, text: "记住数字没用，记住结构有用：每个模型就五件事——样本、变量、系数、区间、诊断。抄一百张表不如背一遍这个结构。", mood: serious }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: relationship, characterId: r_senior_data, delta: 3 }
+    terminal: true
+
+  - id: r_e09_d25_interpret_courage
+    campaign: research
+    day: 25
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 25, phase: start }
+    purpose: { learning: 解释是研究者的工作：AI可以列事实，判断必须你签 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“讨论章的解读段落，Agent 给了四个候选解释，每个都写得有模有样。”]
+    dialogue:
+      - { speaker: Agent, text: "解释一：替代效应。解释二：技能侵蚀。解释三：测量偏差。解释四：样本特性。请选择。", mood: neutral }
+      - { speaker: 你, text: "你说'请选择'——可这是我的研究。选择权在你手里的话，署名该给谁？" }
+    choices:
+      - id: judge_with_data
+        text: 回数据裁断：哪个解释能被你的分组结果支持就写哪个，其余如实排除
+        visibleResponse: 你的分组结果支持'替代效应'、排除'测量偏差'，'技能侵蚀'证据不足——讨论章写了两个半解释，每个都有出处和排除理由。这是你的判断，签字画押。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 7 }
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: add, key: progress, value: 4 }
+          - { kind: setFlag, key: interpretation_owned }
+      - id: pick_flattering
+        text: 挑写得最漂亮的那个解释
+        visibleResponse: 最漂亮的解释是'技能侵蚀'——也是你的数据最不支持的那个。漂亮的错误比朴素的正确传播得快，尤其在答辩现场。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 7 }
+          - { kind: add, key: aiDependence, value: 4 }
+    learningPoint: 解释权是署名的责任状
+
+  - id: r_e09_d26_null_discussion
+    campaign: research
+    day: 26
+    type: decision
+    trigger: { kind: day, day: 26, phase: end }
+    purpose: { learning: 不显著的讨论写法：三种解释+设计反思 }
+    scene: { location: dorm, characters: [] }
+    setup: [“你的次要假设H2不显著。讨论章要给它写一段体面的告别。”]
+    choices:
+      - id: three_explanations
+        text: 写三条：真无效/统计功效不足/测量失灵——各配证据
+        visibleResponse: 你逐条排查：功效够、测量信度在、那就剩'真无效或效应更小'。这段诚实的排查被师姐评为全文最专业的一页。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 7 }
+          - { kind: add, key: credibility, value: 5 }
+          - { kind: setFlag, key: null_discussed }
+      - id: bury_h2
+        text: H2一笔带过，别引人注意
+        visibleResponse: 评委会注意的。'H2呢？'——三个字就能让你在台上重新挖出整段你想埋掉的内容。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 5 }
+    learningPoint: 不显著的结果需要更认真的讨论
+
+  # ---- 写作阶段 ----
+  - id: r_e09_d24_abstract_last
+    campaign: research
+    day: 24
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 摘要五句模板：背景/目的/方法/结果/结论 }
+    scene: { location: workbench, characters: [] }
+    setup: [“你脑子发热想先写摘要。那可是全文最难的五个句子。”]
+    choices:
+      - id: five_sentence_template
+        text: 用五句模板压出摘要，压完再检查每句有没有数字
+        visibleResponse: 五句话，一百八十字，其中三句带具体数字。摘要交师姐看，她回了句：'有数字的摘要才有骨头。'
+        hiddenEffects:
+          - { kind: add, key: execution, value: 4 }
+          - { kind: addAsset, assetType: document, name: 摘要 v1, description: 五句结构含数据, content: "背景/目的/方法(n=140,β=0.19)/结果/结论与局限" }
+      - id: vague_abstract
+        text: 摘要写得气势磅礴，不带数字
+        visibleResponse: 磅礴的摘要被陈教授批了四个字：'空话连篇'。你重写时才明白：摘要是全文的压缩饼干，不是彩页宣传单。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 摘要的骨头是数字
+
+  - id: r_e09_d27_read_aloud_edit
+    campaign: research
+    day: 27
+    type: decision
+    trigger: { kind: day, day: 27, phase: end }
+    purpose: { learning: 朗读校对：耳朵能抓住眼睛滑过去的坑 }
+    scene: { location: dorm, characters: [] }
+    setup: [“你把报告读出声给自己听。读到第 4 页，舌头打了结——那句 47 字的长句，眼睛看着没事，嘴巴拒绝合作。”]
+    choices:
+      - id: read_aloud_pass
+        text: 全文朗读一遍，卡壳处全部动刀
+        visibleResponse: 你抓出 9 处卡壳：4 处超长句、3 处绕口搭配、2 处漏字。朗读是最便宜的校对员——零工资，零情面。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 4 }
+          - { kind: add, key: progress, value: 2 }
+          - { kind: setFlag, key: read_aloud_done }
+      - id: silent_proofread
+        text: 默读校对就够了
+        visibleResponse: 默读时大脑自动补全漏字、自动滑过长句。你以为的通顺，是大脑替原文档写的自传。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 嘴巴是第二双校对的眼
+
+  - id: r_e09_d28_backup_final
+    campaign: research
+    day: 28
+    type: decision
+    trigger: { kind: day, day: 28, phase: start }
+    purpose: { learning: 终稿的多重备份与版本封存 }
+    scene: { location: workbench, characters: [] }
+    setup: [“终版即将定稿。你现在拥有的版本：本地终.docx、桌面终2.docx、邮箱里发师姐的那版、U盘里不知哪版。”]
+    choices:
+      - id: version_freeze
+        text: 定 FINAL：哈希+日期+三处异地备份，其余全归档
+        visibleResponse: 你给终版文件重命名加日期、上传云盘、拷U盘、发邮箱，共四处。合上电脑那一刻，'丢稿恐惧'这个三十年的老朋友第一次没来。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: final_backed_up }
+        delayed:
+          - { eventId: r_e09_px_backup_calm, onDay: 30 }
+      - id: copy_paste_chaos
+        text: 反正哪都有备份，不用管
+        visibleResponse: 到处都有备份的意思是不知道哪份对。答辩当天早上你打印了旧版——幸好你在门口翻页时发现了目录对不上。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 4 }
+    learningPoint: 备份的意义是确定性，不是数量
+
+  # ---- Agent 使用补充 ----
+  - id: r_e09_d05_verify_sla
+    campaign: research
+    day: 5
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 给AI立验收标准：交付前自查单 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你给 Agent 的每次交付都要你手动验一遍。今天你决定把这个流程标准化。”]
+    choices:
+      - id: acceptance_checklist
+        text: 写'交付自查单'：出处/格式/约束遵守/不确定标注，让它交前自查
+        visibleResponse: 自查单生效后，它的交付里开始出现'自查通过'和'第3条未确定，已标注'两种状态。你的验收时间从二十分钟降到五分钟。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: addAsset, assetType: checklist, name: AI交付自查单, description: 交前四查, content: "出处可溯/格式合规/约束遵守/不确定标注" }
+      - id: manual_verify_only
+        text: 我自己验，不指望它自查
+        visibleResponse: 你继续当人肉质检。能跑，但每一单都走你的时间——你是瓶颈，而瓶颈本可以培训助手。
+        hiddenEffects:
+          - { kind: subtract, key: energy, value: 5 }
+    learningPoint: 验收标准前置，质检时间减半
+
+  - id: r_e09_d10_context_map
+    campaign: research
+    day: 10
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 项目上下文分层：规则层/状态层/素材层 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你的项目文件夹 17 个文件。Agent 每次都要问'我该读哪个'。分层的时候到了。”]
+    choices:
+      - id: three_layers
+        text: 分三层：规则(AGENTS.md)/状态(research_state.md)/素材(literature/)
+        visibleResponse: 分层之后你喂会话只喂规则+状态两个文件，素材按需点菜。Token 省了，重点还齐了——Agent 的世界从此有主次。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: context_layered }
+        unlockKnowledge: [kc_r_statefile]
+      - id: feed_all
+        text: 全部喂进去，总有一款用得上
+        visibleResponse: 全部喂进去的结果是它把一个公众号文章的结论当成了项目约束。上下文没有层次，注意力就没有方向。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+          - { kind: add, key: aiDependence, value: 2 }
+    learningPoint: 上下文要有建筑学：地基、墙、家具
+
+  - id: r_e09_d21_agent_overconfident_bug
+    campaign: research
+    day: 21
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“Agent 替你写的清洗脚本跑出了 143 份样本。你的记录是 140。它对多出来的 3 份很有信心。”]
+    dialogue:
+      - { speaker: Agent, text: "清洗完成，样本量143。数据质量优秀。", mood: pleased }
+      - { speaker: 你, text: "多出 3 份叫优秀？我的剔除规则是明摆着的——你漏删了哪部分？" }
+      - { speaker: Agent, text: "……检测到规则中'低于90秒'我理解为'低于等于90秒'。" }
+    choices:
+      - id: diff_rules
+        text: 排查全部规则的边界条件：等于/大于/缺失各怎么办
+        visibleResponse: 你把三条规则的全部边界重写了测试用例：三个'='号的歧义全修掉。脚本输出精确的 140——从今往后，边界条件是你审查脚本的第一站。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: setFlag, key: boundary_tested }
+      - id: accept_143
+        text: 差 3 份而已，不影响大局
+        visibleResponse: 3 份确实不多。但'差不多'的脚本会在你下次跑稳健性时再多'差不多'一次——误差是会繁殖的。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 5 }
+          - { kind: add, key: academicDebt, value: 3 }
+    terminal: true
+
+  # ---- 答辩补充 ----
+  - id: r_e09_d29_whiteboard_prep
+    campaign: research
+    day: 29
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 白板/纸笔应答：遇到复杂问题画图化解 }
+    scene: { location: meeting_room, characters: [r_senior_data] }
+    setup: [“周师兄分享绝活：'评委问到复杂机制时，别用嘴硬讲。拿笔画。'”]
+    dialogue:
+      - { speaker: 周师兄, text: "画图有三好：争取思考时间、展示结构力、评委跟着你的笔走。我答辩那年一半的分数是白板给的。", mood: happy }
+    choices:
+      - id: practice_drawing
+        text: 练三张'保命图'：机制链/研究设计/数据流
+        visibleResponse: 三张图练到闭眼能画。答辩那天问到机制，你转身画了 40 秒——全场安静地看着你的笔。画完，你听到评委席一声轻轻的'嗯'。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 5 }
+          - { kind: add, key: execution, value: 3 }
+          - { kind: setFlag, key: lifeline_drawings }
+        delayed:
+          - { eventId: r_e09_px_whiteboard_fame, onDay: 30 }
+      - id: talk_only
+        text: 白板太表演了，纯讲
+        visibleResponse: 纯讲的代价出现在机制追问：你讲了三遍，评委还是没跟上是哪条箭头指向哪。你的嘴没有白板好用。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 图是思考的外骨骼
+
+  - id: r_e09_d30_exit_interview
+    campaign: research
+    day: 30
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: corridor, characters: [r_evaluator_b] }
+    setup: [“答辩后走廊，郑老师叫住你，临时起意的三分钟。”]
+    dialogue:
+      - { speaker: 郑老师, text: "不谈结果。就问一句：这三十天，你觉得哪一步对下一个学生最有用？", mood: neutral }
+    choices:
+      - id: share_method
+        text: "'核验习惯。每天四十分钟的引用核验，救了我两次，具体做法我写在日志里了。'"
+        visibleResponse: 郑老师记下了你的话，说要讲给她自己的学生听。你的三十天，刚刚产生了第一个外溢效应。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_evaluator_b, delta: 6 }
+          - { kind: add, key: credibility, value: 4 }
+          - { kind: setFlag, key: spillover_moment }
+      - id: modest_deflect
+        text: "'我就是运气好，没什么可分享的。'"
+        visibleResponse: 郑老师笑笑走了。谦虚没错，但你明明有真东西——把真东西说'没什么'，其实是另一种浪费。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 1 }
+    terminal: true
+
+  # ---- 延迟后果与收尾 ----
+  - id: r_e08_d30_final_settle
+    campaign: research
+    day: 30
+    type: story
+    trigger: { kind: day, day: 30, phase: end }
+    purpose: { narrative: 三十天账本, learning: 全部习惯在此结算 }
+    scene: { location: dorm, characters: [] }
+    setup: [“熄灯前，你把三十天的资产清单最后过了一遍：14 份资产、6 张应答卡、1 套脚本、2 份交接文档、3 条红线。”]
+    automaticEffects:
+      - { kind: add, key: progress, value: 3 }
+      - { kind: setFlag, key: campaign_settled }
+    dialogue:
+      - { speaker: 系统, text: "报告会过时，数字会被推翻。但'先澄清再执行、先核验再引用、先冻结再冲刺'——这套流程跟你走完下一题、下下题。" }
+    terminal: true
+
+  - id: r_e09_d17_random_bookstore
+    campaign: research
+    day: 17
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: library, characters: [] }
+    setup: [“旧书摊上你翻到一本上世纪的方法论译著，扉页有前任主人的批注：'第37页解决了我三个月的困惑。'”]
+    dialogue:
+      - { speaker: 系统, text: "你翻到第37页。他说得对。十块钱买来别人三个月的弯路——旧书是便宜的时间机器。" }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: add, key: energy, value: 3 }
+    terminal: true
+
+  - id: r_e09_d25_random_star_night
+    campaign: research
+    day: 25
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: [“停电十分钟。全楼的人都到阳台上看星星，包括三楼那个天天吵架的课题组——他们此刻在安静地指着猎户座。”]
+    dialogue:
+      - { speaker: 系统, text: "没有屏幕的十分钟，你把论证图在脑子里过了一遍——意外地顺。有些复盘只需要黑暗和安静。" }
+    automaticEffects:
+      - { kind: add, key: energy, value: 5 }
+    terminal: true
+
+  - id: r_e09_d12_random_group_therapy
+    campaign: research
+    day: 12
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: canteen, characters: [r_peer, r_senior_data] }
+    setup: [“饭桌上三个人轮流吐槽各自的Agent。”]
+    dialogue:
+      - { speaker: 苏晓, text: "我的AI昨天管我叫'老师'，今天管我叫'同学'，它到底知道我是谁吗？", mood: surprised }
+      - { speaker: 周师兄, text: "它不知道，也不需要知道。它只需要知道你的规则文件。" }
+      - { speaker: 你, text: "（周师兄这话说得跟陈教授一个味儿了。）" }
+    automaticEffects:
+      - { kind: relationship, characterId: r_peer, delta: 3 }
+      - { kind: relationship, characterId: r_senior_data, delta: 3 }
+      - { kind: add, key: energy, value: 4 }
+    terminal: true
+
+  - id: r_e09_d18_tradeoff_register
+    campaign: research
+    day: 18
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { learning: 权衡登记册：把三十天里所有'两难'集中存档 }
+    scene: { location: dorm, characters: [] }
+    setup: [“你回想这十八天做过的两难选择：宽窄题、SEM去留、量表长短、抽查力度……散落在各天的对话里。”]
+    choices:
+      - id: build_register
+        text: 建权衡登记册：每个两难/选项/理由/事后验证
+        visibleResponse: 七条权衡入册，还差最后一列'事后验证'——你把这栏留给答辩后填。这本册子让'当初为什么这么选'永远不再是悬案。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: independence, value: 4 }
+          - { kind: addAsset, assetType: evidence_matrix, name: 权衡登记册, description: 七个两难选择的台账, content: "宽窄/SEM/量表/抽查/数据源/理论数/交付形式" }
+      - id: memory_only
+        text: 选择都还记得，不用记档
+        visibleResponse: 你还记得每一个选择——但答辩评委问'为什么放弃SEM'时，你发现自己记得的是决定，丢了理由。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 决定的价值一半在理由里
+
+  # ---- 终局补充 ----
+  - id: r_e09_d13_micro_win_log
+    campaign: research
+    day: 13
+    type: decision
+    trigger: { kind: day, day: 13, phase: start }
+    purpose: { learning: 微胜利日志：对抗漫长周期的动力工程 }
+    scene: { location: dorm, characters: [] }
+    setup: [“研究像马拉松，好消息太少。你决定开始记'微胜利'：今天抓住一个错引、昨天矩阵瘦身十行——都算。”]
+    choices:
+      - id: start_win_log
+        text: 建微胜利日志，每天睡前写一条
+        visibleResponse: 第一条：'今天识破 Agent 一次讨好式回答。'写完你笑了——原来这三十天的快乐是碎的，只是以前没人捡。
+        hiddenEffects:
+          - { kind: add, key: energy, value: 6 }
+          - { kind: add, key: independence, value: 2 }
+          - { kind: setFlag, key: win_log }
+      - id: wait_big_wins
+        text: 等大成果，小的不值一提
+        visibleResponse: 大成果要等到答辩那天。中间十七天，你的动力账户一直在透支且无人充值。
+        hiddenEffects:
+          - { kind: subtract, key: energy, value: 5 }
+    learningPoint: 动力是碎的，要低头捡
+
+  - id: r_e09_d19_method_onepager
+    campaign: research
+    day: 19
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 方法一页纸：把全流程压缩成任何人能懂的流程图 }
+    scene: { location: workbench, characters: [] }
+    setup: [“你尝试把三个月的方法流程画进一张 A4 纸。画了三遍，第一遍像地铁图，第二像像蜘蛛网。”]
+    choices:
+      - id: five_box_flow
+        text: 定稿五框流程：取样→工具→收集→清洗→分析，每框三行小字
+        visibleResponse: 五框流程图定稿。后来这张图贴在 PPT 倒数第二页，评委的问题有一半被它提前回答了。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 4 }
+          - { kind: addAsset, assetType: mechanism_map, name: 方法一页纸, description: 五框全流程图, content: "取样/工具/收集/清洗/分析 每框含关键参数" }
+      - id: keep_verbal
+        text: 方法在心里，讲清楚就行
+        visibleResponse: 心里的流程图只有你有。答辩PPT少了那页，评委脑补出的版本和你的不一样——分歧当场发生。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 一页纸是对听众记忆的尊重
+
+  - id: r_e09_d22_ai_free_hour
+    campaign: research
+    day: 22
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 22, phase: start }
+    purpose: { learning: 定期'无AI小时'：检验独立思考能力是否还在 }
+    scene: { location: library, characters: [] }
+    setup: [“你发现自己已经连续九天没离开过 Agent 干活了。你决定做个实验：每天第一小时，不用AI。”]
+    choices:
+      - id: ai_free_hour
+        text: 每天首小时禁用AI：只靠自己读、写、想
+        visibleResponse: 第一天的无AI小时很痛：读得慢、写得糙。第三天开始，痛感变成踏实——你的第一判断回来了，AI从'拐杖'变回了'工具'。
+        hiddenEffects:
+          - { kind: subtract, key: aiDependence, value: 10 }
+          - { kind: add, key: independence, value: 8 }
+          - { kind: setFlag, key: ai_free_hour }
+          - { kind: achievement, achievementId: ach_r_e09_ai_free, description: 建立无AI小时制度 }
+      - id: all_in_ai
+        text: 没必要，AI就是我的第二大脑
+        visibleResponse: 第二大脑很好，直到答辩那天你只有第一大脑可用——没有AI的十五分钟陈述和问答，全靠你自己的原厂配置。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 8 }
+          - { kind: subtract, key: independence, value: 5 }
+    learningPoint: 工具越强，越要定期裸考自己
+
+  - id: r_e09_d29_final_walkthrough
+    campaign: research
+    day: 29
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 交付前走查：按评委视角完整过一遍材料 }
+    scene: { location: defense_hall, characters: [] }
+    setup: [“答辩前一天。你以评委身份走查全部材料：报告、PPT、附录、备份。手里拿着红笔，假装不认识自己。”]
+    choices:
+      - id: hostile_walkthrough
+        text: 敌意走查：每页逼问'证据呢''所以呢''换个说法还行吗'
+        visibleResponse: 红笔落了 11 处：6 处'所以呢'没接住、3 处页码引用、2 处错别字。你在答辩前一天修完了它们——而不是在答辩中遇见它们。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: add, key: progress, value: 3 }
+          - { kind: setFlag, key: hostile_walkthrough }
+          - { kind: achievement, achievementId: ach_r_e09_hostile_walk, description: 完成敌意走查 }
+      - id: gentle_review
+        text: 温柔地欣赏一遍自己的成果
+        visibleResponse: 欣赏完毕，心情很好。红笔一处没落——不是没有问题，是你下不去手。评委没这个心理负担。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 交付前，请扮演一次最恨你的人
+
+  - id: r_e09_d30_random_newcomer
+    campaign: research
+    day: 30
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: corridor, characters: [] }
+    setup: [“答辩散场，一个研一新生拦住你：'学长，听说你刚答辩完……我下周也要开题，能问个问题吗？'”]
+    dialogue:
+      - { speaker: 新生, text: "导师就给了一句话，我完全不知道从哪下手……" }
+      - { speaker: 你, text: "（三十天前，一模一样的台词。）先别查文献。先把那句话拆成三个问题。" }
+      - { speaker: 新生, text: "……这么简单？" }
+      - { speaker: 你, text: "这么难。拆好了来找我，我给你看个东西——叫任务契约。" }
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+      - { kind: add, key: credibility, value: 3 }
+      - { kind: setFlag, key: mentored_newcomer }
+    terminal: true
+
+  - id: r_e09_d10_tradeoff_sem_final
+    campaign: research
+    day: 10
+    type: decision
+    trigger: { kind: day, day: 10, phase: end }
+    purpose: { learning: 技术选型三问：必要性/可行性/可辩护性 }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“周师兄终于把SEM的事翻篇了，但他留了个方法论锦囊给你。”]
+    dialogue:
+      - { speaker: 周师兄, text: "以后选方法就问三句：这个问题非它不可吗？（必要性）我的数据喂得饱它吗？（可行性）评委问起我答得出吗？（可辩护性）三问过两问才上。", mood: pleased }
+      - { speaker: 你, text: "那我当初拒绝SEM，三问全挂？" }
+      - { speaker: 周师兄, text: "全挂。但你拒绝的时候只有直觉。下次你要有这张清单。", mood: happy }
+    automaticEffects:
+      - { kind: relationship, characterId: r_senior_data, delta: 5 }
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: setFlag, key: three_question_method }
+    terminal: true
+
+  - id: r_e09_d27_knowledge_flashback
+    campaign: research
+    day: 27
+    type: story
+    trigger: { kind: day, day: 27, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: [“深夜赶稿，你顺手用了契约五要素、关键词树、抽查逻辑、压缩检查点——用完才意识到：这些已经是你的本能了。”]
+    automaticEffects:
+      - { kind: add, key: execution, value: 4 }
+      - { kind: add, key: independence, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "知识的最后一关：不再需要想起它。三十天，全部通关。" }
+    terminal: true
+
+  - id: r_e09_d08_ai_conversation_audit
+    campaign: research
+    day: 8
+    type: decision
+    trigger: { kind: day, day: 8, phase: start }
+    purpose: { learning: 复盘与AI的对话质量：无效轮次占比 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你数了数这周与 Agent 的对话：187 轮。其中多少轮真正推进了任务？你决定审计一次。”]
+    choices:
+      - id: audit_chats
+        text: 抽样审计：随机 30 轮分类——推进/绕路/返工
+        visibleResponse: 审计结果：推进 14 轮、绕路 10 轮、返工 6 轮。绕路主因是'任务没说清'。你把高频歧义写成模板——下周同类任务，绕路减半。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: subtract, key: aiDependence, value: 3 }
+          - { kind: setFlag, key: chat_audited }
+      - id: keep_chatting
+        text: 聊都聊了，审计干嘛
+        visibleResponse: 不审计的代价是同样的绕路每周重演。你以为自己在用AI，其实是在陪它散步。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 3 }
+          - { kind: add, key: aiDependence, value: 2 }
+    learningPoint: 对话也要复盘，AI的效率是你定义的
+
+  # ---- 延迟后果结算事件 ----
+  - id: r_e09_px_forum_noise
+    campaign: research
+    day: 6
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 论坛收藏的反噬, learning: 二手经验稀释第一手判断 }
+    scene: { location: dorm, characters: [] }
+    setup: [“你翻出一周前收藏的七个'经验帖'，打算按它们的路线走。七条路线，七个方向，互相打架。”]
+    dialogue:
+      - { speaker: 系统, text: "你花了一晚上重新确认自己三天前已经想清楚的问题。收藏夹存的是别人的焦虑，不是你的答案。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 3 }
+      - { kind: subtract, key: energy, value: 4 }
+      - { kind: setFlag, key: forum_noise_paid }
+    terminal: true
+
+  - id: r_e09_px_scope_wide
+    campaign: research
+    day: 16
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 宽范围的账单, learning: 范围不收窄，每一天都在付利息 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“写任务契约时，'全面影响'四个字让契约膨胀到两页。Agent 困惑，你也困惑。”]
+    dialogue:
+      - { speaker: Agent, text: "该范围包含 17 个子任务，建议优先级排序。", mood: neutral }
+      - { speaker: 你, text: "一个30天的项目，17个子任务。当初那句'广着吧'，今天连本带利。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 4 }
+      - { kind: subtract, key: timeBudget, value: 1 }
+      - { kind: setFlag, key: scope_bill_paid }
+    terminal: true
+
+  - id: r_e09_px_popsci_ring
+    campaign: research
+    day: 27
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 红笔落下的那一刻, learning: 公开来源不等于学术来源 }
+    scene: { location: office, characters: [r_mentor] }
+    setup: [“预审现场。陈教授的红笔在参考文献第 9 行停住，圈住了那个公众号链接。”]
+    dialogue:
+      - { speaker: 陈教授, text: "这一条，算文献吗？", mood: serious }
+      - { speaker: 你, text: "……不算。我今晚换成原文。" }
+      - { speaker: 陈教授, text: "换。以及下次，别让红笔替你发现。" }
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 5 }
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: setFlag, key: popsci_ringed }
+    terminal: true
+
+  - id: r_e09_px_format_night
+    campaign: research
+    day: 29
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 格式债清算夜, learning: 格式债利息最高的时刻是截止前夜 }
+    scene: { location: dorm, characters: [] }
+    setup: [“答辩前夜凌晨一点。本该睡觉的你在改第 43 条参考文献格式——二十天前偷的懒，此刻分文不少。”]
+    dialogue:
+      - { speaker: 系统, text: "当初半小时能搞定的事，现在用你今晚的睡眠支付。格式债从不打折。" }
+    automaticEffects:
+      - { kind: subtract, key: energy, value: 8 }
+      - { kind: setFlag, key: format_night_paid }
+    terminal: true
+
+  - id: r_e09_px_bloat_review
+    campaign: research
+    day: 26
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 臃肿综述现形, learning: 文献多是手段不是目的 }
+    scene: { location: workbench, characters: [r_senior_theory] }
+    setup: [“师姐通读你的综述章，在一段硬扯的过渡下画了问号：'这篇文献在这里的功能是什么？'”]
+    dialogue:
+      - { speaker: 林师姐, text: "如果答案是'因为它存在'，就删掉。综述不是文献收容所。", mood: serious }
+      - { speaker: 你, text: "（删的时候手是疼的——那是我读过的每一篇。）" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 3 }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: setFlag, key: bloat_pruned_late }
+    terminal: true
+
+  - id: r_e09_px_redo_burst
+    campaign: research
+    day: 19
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 重发问卷的那一周, learning: 省掉的预检会变成双倍的工时 }
+    scene: { location: dorm, characters: [] }
+    setup: [“正式问卷上线第三天，你再次发现一道题被系统性误读——和预调研那 30 份废卷同样的毛病。”]
+    dialogue:
+      - { speaker: 系统, text: "同一道坎，摔了两次。第一次是学费，第二次是罚金。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 5 }
+      - { kind: subtract, key: energy, value: 6 }
+      - { kind: setFlag, key: redo_burst_paid }
+    terminal: true
+
+  - id: r_e09_px_moving_target
+    campaign: research
+    day: 27
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 移动的靶心, learning: 锁定数据是对未来自己的立法 }
+    scene: { location: workbench, characters: [] }
+    setup: [“答辩前夜你想最后核对一个数字，发现它和你PPT里的不一样——数据锁定之后，你又收过一批、重跑过一轮。”]
+    dialogue:
+      - { speaker: 系统, text: "两版数字都在文件夹里。哪版进了PPT？哪版进了报告？——你查了二十分钟。这就是没锁定的代价。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 4 }
+      - { kind: add, key: technicalDebt, value: 3 }
+      - { kind: setFlag, key: moving_target_paid }
+    terminal: true
+
+  - id: r_e09_px_state_fresh
+    campaign: research
+    day: 23
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 状态保鲜的红利, learning: 维护过的状态文件持续产生利息 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“新会话开局的四问测试。Agent 对答如流——连你三天前刚更新的样本口径都答对了。”]
+    dialogue:
+      - { speaker: Agent, text: "当前有效样本 140，口径为剔除后冻结版。", mood: pleased }
+      - { speaker: 你, text: "（两周前那五分钟的维护，一直在分红。）" }
+    automaticEffects:
+      - { kind: add, key: execution, value: 4 }
+      - { kind: setFlag, key: state_fresh_dividend }
+    terminal: true
+
+  - id: r_e09_px_clarify_dividend
+    campaign: research
+    day: 13
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 澄清清单的复利, learning: 第一天的笨功夫在第十三天兑现 }
+    scene: { location: meeting_room, characters: [r_senior_theory] }
+    setup: [“组会上师姐讲概念界定，举的反例恰好是你第一天列的三个问题之一。”]
+    dialogue:
+      - { speaker: 林师姐, text: "比如有人一上来就问'研究对象是谁'——对，就这么朴素。想明白这一问的人，后面少走一周弯路。", mood: pleased }
+      - { speaker: 你, text: "（第十二天。你确实少走了。）" }
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+      - { kind: add, key: credibility, value: 3 }
+      - { kind: setFlag, key: clarify_dividend }
+    terminal: true
+
+  - id: r_e09_px_searchlog_boom
+    campaign: research
+    day: 21
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 检索日志的二次收益, learning: 可复现的检索会被信任并传播 }
+    scene: { location: library, characters: [r_senior_theory] }
+    setup: [“林师姐把你的检索日志转给了刚入组的学妹，附言：'照这个格式做。'”]
+    dialogue:
+      - { speaker: 学妹, text: "（在组群里@你）学长！你那个检索日志模板能发我一份吗？" }
+      - { speaker: 系统, text: "一份日志，两代人受益。可复现性是最好的学术社交货币。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 4 }
+      - { kind: add, key: teamTrust, value: 3 }
+      - { kind: setFlag, key: searchlog_boom }
+    terminal: true
+
+  - id: r_e09_px_words_credited
+    campaign: research
+    day: 28
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 措辞的信用, learning: 克制的结论会在预审时被点名表扬 }
+    scene: { location: office, characters: [r_mentor] }
+    setup: [“预审时陈教授翻到结论章，停了一下。”]
+    dialogue:
+      - { speaker: 陈教授, text: "'提示存在正相关'——你这个词用得克制。全文都保持这个水准，答辩稳一半。", mood: pleased }
+      - { speaker: 系统, text: "五天前降级的每一个词，今天都在替你说话。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 5 }
+      - { kind: relationship, characterId: r_mentor, delta: 4 }
+      - { kind: setFlag, key: words_credited }
+    terminal: true
+
+  - id: r_e09_px_backup_calm
+    campaign: research
+    day: 30
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 备份的从容, learning: 冗余买的是答辩早晨的心跳平稳 }
+    scene: { location: defense_hall, characters: [] }
+    setup: [“答辩日早晨，前面一位同学的U盘读不出来，全场帮忙。你默默从口袋掏出U盘、从邮箱调出附件、从手机打开云盘——三份备份睡得很饱。”]
+    automaticEffects:
+      - { kind: add, key: energy, value: 4 }
+      - { kind: setFlag, key: backup_calm }
+    dialogue:
+      - { speaker: 系统, text: "备份的用处不是每天都用得上，而是你永远知道它在那。" }
+    terminal: true
+
+  - id: r_e09_px_crosscheck_dividend
+    campaign: research
+    day: 26
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 互核的回声, learning: 双人核对在写作期继续生息 }
+    scene: { location: workbench, characters: [] }
+    setup: [“写结果章时你引用一个均值，顺手核了一遍原始表——两秒钟，零疑虑。因为这份表签过两个人的名字。”]
+    dialogue:
+      - { speaker: 系统, text: "互核过的数据自带信用。你写每一个数字时的底气，都是那天四十分钟付的首付。" }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: crosscheck_dividend }
+    terminal: true
+
+  - id: r_e09_px_lottery_bill
+    campaign: research
+    day: 22
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 抽奖的账单, learning: 招来的样本要还的 }
+    scene: { location: workbench, characters: [] }
+    setup: [“清洗日。抽奖招来的 61 份里，检测题筛掉 11 份——全是三小时里冲着奶茶来的手速选手。”]
+    dialogue:
+      - { speaker: 系统, text: "50 块钱买来 11 份废卷和两次重跑。样本没有免费的，只有提前定价和事后计价。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 4 }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: setFlag, key: lottery_bill_paid }
+    terminal: true
+
+  - id: r_e09_px_style_drift
+    campaign: research
+    day: 28
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 文风漂移现形, learning: 没落盘的偏好留不住 }
+    scene: { location: dorm, characters: [] }
+    setup: [“终稿通读时你发现混进了一页'本研究体'——那次漏看的修改，一路活到了终稿。”]
+    dialogue:
+      - { speaker: 你, text: "（这一页读着像别人写的。因为确实是别人——那个不知道我风格规则的它。）" }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: 2 }
+      - { kind: subtract, key: energy, value: 3 }
+      - { kind: setFlag, key: style_drift_paid }
+    terminal: true
+
+  - id: r_e09_px_whiteboard_fame
+    campaign: research
+    day: 30
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 白板图出圈, learning: 准备好的图会在最需要时替你发言 }
+    scene: { location: defense_hall, characters: [r_evaluator_a] }
+    setup: [“答辩中你转身画机制图的那 40 秒，被评委席记住了。评议时吴教授特意提了一句。”]
+    dialogue:
+      - { speaker: 吴教授, text: "那个学生画图讲机制的样子，比背稿子的强。图是他自己的——一眼就能看出来。", mood: pleased }
+      - { speaker: 系统, text: "练了三遍的保命图，在最重要的一刻替你站了岗。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 5 }
+      - { kind: relationship, characterId: r_evaluator_a, delta: 4 }
+      - { kind: setFlag, key: whiteboard_fame }
+    terminal: true

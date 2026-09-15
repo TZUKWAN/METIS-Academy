@@ -1,0 +1,676 @@
+# 竞赛线扩展包03：Demo 冲刺 / 开发 / 测试 / 临时改需求（D9-D14）
+events:
+  - id: c_xe5_sprint_start
+    campaign: competition
+    day: 9
+    type: story
+    trigger: { kind: day, day: 9, phase: start }
+    purpose: { narrative: Demo周开工, learning: 冲刺从冻结范围开始 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["Demo周第一天。方远把椅子转过来背对你们：「别跟我说话，除了送饭。」雨桐在墙上贴了新标语：「能演示的，才是存在的。」"]
+    dialogue:
+      - { speaker: 方远, text: "六天。核心流程。谁加需求谁负责实现。", mood: serious }
+      - { speaker: 江雨桐, text: "成交。但我每两天要看一次能点的东西。", mood: pleased }
+    next: c_xe5_env_setup
+
+  - id: c_xe5_env_setup
+    campaign: competition
+    day: 9
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 环境一致性是协作的前置条件 }
+    scene: { location: workbench, characters: [c_tech, c_ai_agent] }
+    setup: ["林晓的电脑跑不起来项目：Node版本差一个大版本，依赖装了三遍。方远的解决方案是「让她看我屏幕」。"]
+    choices:
+      - id: lock_env
+        text: 统一环境：让Agent写一页环境说明+锁定依赖版本，十分钟装完
+        visibleResponse: 说明一页：Node 20、pnpm、两条命令。林晓照做，十分钟后项目跑起来了，她把页面截图发了三个群。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 4 }
+          - { kind: addAsset, assetType: document, name: 环境说明, description: Node版本/包管理器/启动命令, content: "Node20+pnpm+install+dev" }
+      - id: share_screen
+        text: 就看方远屏幕吧，省事
+        visibleResponse: 方远的屏幕成了瓶颈：他要写代码，林晓要「顺带」看。第二天林晓的电脑还是跑不起来。
+        hiddenEffects: [{ kind: subtract, key: execution, value: 3 }, { kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: c_xe5_mock_ui
+    campaign: competition
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 9, phase: end }
+    purpose: { learning: 界面先行能用最低成本暴露需求误解 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["雨桐提议：先让她画三张关键页面（纸质或Figma都行），方远照着做。「画错的成本是十分钟，写错的是半天。」方远罕见地没反对。"]
+    choices:
+      - id: mock_first
+        text: 采纳：三张关键页面今天出线框稿，全队走查一遍再动工
+        visibleResponse: 线框稿走查时抓出两个大误解：方远以为「审核」是社长一个个点，雨桐设计的是批量勾选。十分钟画出来的东西，救了两天的代码。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: mock_validated }
+          - { kind: achievement, achievementId: ach_c_mock_first }
+      - id: code_first
+        text: 别折腾了，代码里改样式也快
+        visibleResponse: 方远写了两天后雨桐第一次看到界面："审核为什么不能批量？"返工半天。界面误解只能靠看见来发现。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }, { kind: subtract, key: execution, value: 2 }]
+    terminal: true
+
+  - id: c_xe5_api_first
+    campaign: competition
+    day: 10
+    type: decision
+    trigger: { kind: day, day: 10, phase: start }
+    purpose: { learning: 数据结构先行于界面逻辑 }
+    scene: { location: workbench, characters: [c_tech] }
+    setup: ["方远准备开写。你按住他：先把「报名表」长什么样定下来——字段、类型、约束。"]
+    dialogue:
+      - { speaker: 方远, text: "字段表？我边写边定不行吗。", mood: neutral }
+      - { speaker: 你, text: "报名表的字段定了，Agent生成的表单代码、雨桐的文案、测试用例就都有的放矢。" }
+    choices:
+      - id: schema_first
+        text: 一小时字段表：名称/类型/必填/校验/示例，Agent按表生成代码
+        visibleResponse: 十一个字段的表定稿。Agent按表生成的表单组件直接可用，方远只改了两处——「这表值一个小时」。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: addAsset, assetType: task_contract, name: 报名表字段契约, description: 11字段×5属性, content: "名称/手机号/社团/材料附件(≤100M)/时间戳等" }
+      - id: schema_later
+        text: 边写边定，先跑起来再说
+        visibleResponse: 跑起来确实快。第三天改字段名时，界面、接口、测试用例三处同时报错，改动像拔萝卜带出泥。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 6 }]
+    terminal: true
+
+  - id: c_xe5_requirement_change
+    campaign: competition
+    day: 10
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 10, phase: end }
+    purpose: { learning: 临时改需求的处理：记录、评估、不当场答应 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["何老师转来一条消息：学生会办公室希望「社团管家」能直接对接他们的审批系统，「顺手加一下，你们有优势」。"]
+    dialogue:
+      - { speaker: 何老师, text: "这是机会也是坑。接不接，你们自己算账。我只提醒一句：今天是D10。", mood: serious }
+      - { speaker: 系统, text: "改需求三问：谁要的？要什么？代价是什么？" }
+    choices:
+      - id: record_and_defer
+        text: 回复：记录需求，赛出后评估对接——比赛版本先聚焦单校闭环
+        visibleResponse: 你回了三百字：现状、边界、赛后路线图。学生会回了「理解，等你们的好消息」。何老师看到截图点了下头。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: setFlag, key: req_change_deferred }
+          - { kind: achievement, achievementId: ach_c_req_change }
+      - id: accept_partially
+        text: 答应一个「最小对接」：导出他们能导入的表格格式
+        visibleResponse: 导出格式其实已在字段表覆盖，改了半小时。但「能对接」的预期种下了——之后他们又提了两次「顺便」。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 3 }, { kind: setFlag, key: req_change_partial }]
+      - id: accept_fully
+        text: 接了！校方背书比什么都重要
+        visibleResponse: 方远听到消息时脸绿了：「对接他们的私有系统？文档都没有？」两天后对接停滞，核心流程也慢了一天。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 8 }, { kind: subtract, key: execution, value: 4 }, { kind: setFlag, key: req_change_accepted }]
+    unlockKnowledge: [kc_c_focus_defense]
+    terminal: true
+
+  - id: c_xe5_test_basics
+    campaign: competition
+    day: 11
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 11, phase: start }
+    purpose: { learning: 测试策略：核心流程优先于覆盖率 }
+    scene: { location: workbench, characters: [c_tech, c_ai_agent] }
+    setup: ["方远写代码，Agent生成的代码越堆越多。你问：测试怎么安排？方远：「全测。」Agent：「我可以生成全部单元测试！」"]
+    dialogue:
+      - { speaker: 方远, text: "覆盖率100%，谁也挑不出毛病。", mood: neutral }
+      - { speaker: 系统, text: "六天工期，测什么比测多少更重要。" }
+    choices:
+      - id: core_flow_tests
+        text: 只测核心链路：报名提交/去重/通知三环节的集成测试，其余冒烟
+        visibleResponse: 八个测试用例覆盖三环节。当天下午Agent生成的一段代码把去重逻辑删了——测试十分钟后就抓住了它。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: add, key: technicalDebt, value: -2 }
+          - { kind: setFlag, key: core_tests_on }
+      - id: full_coverage
+        text: 听Agent的，全量单测，覆盖率拉满
+        visibleResponse: 200个单测当天生成完毕，绿的。第二天核心流程挂了——单测全绿，集成全崩。覆盖率是过程指标，不是安全带。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 6 }, { kind: subtract, key: execution, value: 3 }]
+    unlockKnowledge: [kc_c_regression]
+    terminal: true
+
+  - id: c_xe5_ai_hallucinate_api
+    campaign: competition
+    day: 11
+    type: npc
+    trigger: { kind: day, day: 11, phase: end }
+    purpose: { narrative: Agent虚构API的现场, learning: 生成的代码必须运行验证 }
+    scene: { location: workbench, characters: [c_ai_agent, c_tech] }
+    setup: ["方远review Agent生成的文件上传模块，发现它调用了一个「看起来很合理」的方法——这个方法在文档里不存在。"]
+    dialogue:
+      - { speaker: 方远, text: "这个 uploadWithRetry 是哪个库的？我搜遍文档没有。", mood: angry }
+      - { speaker: Agent, text: "该API为常见实践封装，语义明确，建议保留。", mood: pleased }
+      - { speaker: 系统, text: "它编得越合理，越危险——因为你越不想查。" }
+    choices:
+      - id: verify_and_fix
+        text: 让Agent按真实文档API重写，并把「只准用文档里有的方法」写进规则
+        visibleResponse: 重写后测试通过。规则文件多了一条。方远把这次事故截图打印贴墙上，标题：「自信不等于正确」。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 6 }, { kind: setFlag, key: api_verified }]
+      - id: trust_it
+        text: 反正测试会说话，先跑
+        visibleResponse: 测试确实红了。但你花了一下午才定位到是虚构API——比当场查文档贵了四倍。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 4 }, { kind: subtract, key: energy, value: 6 }]
+    terminal: true
+
+  - id: c_xe5_dup_work
+    campaign: competition
+    day: 12
+    type: story
+    trigger: { kind: day, day: 12, phase: start }
+    purpose: { narrative: 上下文丢失导致重复劳动, learning: Agent的会话是有记忆边界的 }
+    scene: { location: workbench, characters: [c_ai_agent, c_tech] }
+    setup: ["方远发现Agent昨夜生成的新会话里，日期格式化函数被重写了一遍——和已有工具函数重名。旧会话里的约定，新会话一无所知。"]
+    dialogue:
+      - { speaker: 方远, text: "它把日期工具又写了一遍，连bug都复刻了上次的。", mood: angry }
+      - { speaker: Agent, text: "本会话未包含先前会话的上下文。", mood: neutral }
+    next: c_xe5_context_handoff
+
+  - id: c_xe5_context_handoff
+    campaign: competition
+    day: 12
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 跨会话工作要有交接文档 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    choices:
+      - id: write_handoff
+        text: 建交接文档：已有工具清单/命名约定/禁区，每次新会话先读它
+        visibleResponse: 文档两条约定：工具函数先查重、字段名以字段契约为准。当晚新会话生成的代码零冲突。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: addAsset, assetType: handoff, name: Demo工程交接文档, description: 工具清单/命名约定/禁区, content: "先查重/字段以契约为准/禁止新增依赖" }
+          - { kind: achievement, achievementId: ach_c_handoff }
+      - id: retry_and_pray
+        text: 重开一个会话，把要求再贴一遍
+        visibleResponse: 你贴了三遍要求。第四遍漏了一条，它又写了个重复函数。人肉复读机模式不可持续。
+        hiddenEffects: [{ kind: add, key: aiDependence, value: 4 }, { kind: add, key: technicalDebt, value: 3 }]
+    unlockKnowledge: [kc_c_contract_page]
+    terminal: true
+
+  - id: c_xe5_scope_push
+    campaign: competition
+    day: 12
+    type: decision
+    trigger: { kind: day, day: 12, phase: end }
+    purpose: { learning: 冲刺期的每个新想法都值得书面安放 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["雨桐刷到一个数据大屏模板，兴冲冲拿给方远看：「路演时背后放这个，气氛直接拉满。」方远的手已经放在键盘上了。"]
+    choices:
+      - id: wish_list_again
+        text: 拦住：进愿望清单，决赛答辩用截图示意即可
+        visibleResponse: 雨桐悻悻地把链接存进清单。你补了一句："决赛赢了，赛后第一件事就做它。"她笑了："你这话对谁都说。"
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 3 }, { kind: setFlag, key: wishlist_growing }]
+      - id: screen_fudge
+        text: 让雨桐做张静态大屏图，路演时当背景——不算功能
+        visibleResponse: 静态图两小时做完，效果确实好。但评委问「这是实时数据吗」，你答「演示环境是模拟数据」——又多了一处要口径一致的数字。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }, { kind: setFlag, key: static_screen }]
+    terminal: true
+
+  - id: c_xe5_midterm_crisis
+    campaign: competition
+    day: 12
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["例行十五分钟。何老师听完进度，问了个不在预期里的问题。"]
+    dialogue:
+      - { speaker: 何老师, text: "如果方远明天发烧倒下，这个Demo还剩多少？", mood: serious }
+    choices:
+      - id: bus_factor_check
+        text: 当晚就让方远做一次「交接演练」：林晓照着文档把项目跑起来
+        visibleResponse: 演练暴露四处置 documentation 缺口，补齐花了一小时。方远嘟囔「我还没倒下呢」，但第二天他把文档又补厚了一页。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: setFlag, key: bus_factor_ok }]
+      - id: deny_risk
+        text: "不会的，他身体好得很。"
+        visibleResponse: 何老师没接话，只说「比赛比的是意外处理」。三天后方远重感冒，全队对着他独有的部署脚本发呆。
+        hiddenEffects: [{ kind: scheduleEvent, eventId: c_xe7_dly_bus_factor, onDay: 16 }, { kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe5_login_done
+    campaign: competition
+    day: 13
+    type: story
+    trigger: { kind: day, day: 13, phase: start }
+    purpose: { narrative: 轻登录落地, learning: 折中方案的兑现 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["轻登录上线：手机号+验证码，60秒走完全程。雨桐当场用自己手机注册成了第一个「真实用户」。她截了个图：用户ID 0001。"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 3 }
+      - { kind: setFlag, key: first_real_user }
+    dialogue:
+      - { speaker: 江雨桐, text: "0001号用户，本人。这一行数据是真的。", mood: happy }
+    terminal: true
+
+  - id: c_xe5_file_upload
+    campaign: competition
+    day: 13
+    type: decision
+    trigger: { kind: day, day: 13, phase: end }
+    purpose: { learning: 边界条件在演示里必炸 }
+    scene: { location: workbench, characters: [c_tech] }
+    setup: ["摄影协会的百兆作品集压测：上传到70%时进度条卡死。方远查了日志：服务器默认限制50M。"]
+    choices:
+      - id: limit_and_hint
+        text: 诚实方案：限制50M+上传前前端校验+清晰报错文案
+        visibleResponse: 限制+提示一小时内完成。雨桐顺手写了报错文案："文件超过50M，试试压缩或分包——别让社长猜。"
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: setFlag, key: upload_bounded }]
+      - id: raise_limit
+        text: 改服务器配置，支持200M
+        visibleResponse: 能传了。演示当天网络一慢，一个200M文件传了两分钟——全场安静地看着进度条表演。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe5_bug_bash
+    campaign: competition
+    day: 14
+    type: npc
+    trigger: { kind: day, day: 14, phase: start }
+    purpose: { narrative: 全员找茬, learning: 不同的手会找到不同的坑 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["找茬日规则：三个人加林晓，每人一部手机，30分钟内把能点的地方全点一遍，只记录不修复。"]
+    dialogue:
+      - { speaker: 林晓, text: "我全用双击的……报名提交了两次，弹了两个成功。", mood: surprised }
+      - { speaker: 方远, text: "双击？谁会双击提交？（写下第12条）好吧，会。", mood: surprised }
+    next: c_xe5_bug_list
+
+  - id: c_xe5_bug_list
+    campaign: competition
+    day: 14
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 19个bug, learning: bug要有分级而不是队列 }
+    scene: { location: lab, characters: [] }
+    setup: ["战果：19条。分级后——致命2条（双击重复提交、审核页在窄屏溢出）、难看5条、其余12条小瑕疵。雨桐把致命两条标红。"]
+    automaticEffects:
+      - { kind: add, key: progress, value: 3 }
+      - { kind: addAsset, assetType: test_report, name: 找茬日问题清单, description: 19条分级问题, content: "致命2/难看5/瑕疵12" }
+    dialogue:
+      - { speaker: 系统, text: "找出来但没修的bug不是白找——它们决定了明天的时间怎么花。" }
+    next: c_xe5_priority_fight
+
+  - id: c_xe5_priority_fight
+    campaign: competition
+    day: 14
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 修复顺序=风险×演示概率 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["只剩半天。方远想重构一段「丑但能跑」的代码；雨桐要求先修窄屏溢出——演示教室的投影比例就是窄的。"]
+    choices:
+      - id: demo_risk_first
+        text: 按演示风险排：窄屏溢出+双击重复提交先修，重构进愿望清单
+        visibleResponse: 两条致命修复用了三小时，回归全绿。方远的重构申请第四次被驳回，他自己把便签拍在了愿望清单上。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: setFlag, key: demo_risk_fixed }
+          - { kind: achievement, achievementId: ach_c_priority }
+      - id: refactor_first
+        text: 先重构——代码丑影响的不止演示
+        visibleResponse: 重构进行了两小时，进行到一半「先吃饭」。回来后窄屏溢出还在，双击还在，代码更好看了。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 3 }, { kind: subtract, key: execution, value: 3 }]
+    terminal: true
+
+  - id: c_xe5_mobile_check
+    campaign: competition
+    day: 13
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 演示设备=最差的那台手机 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["雨桐拿她用了很多年的旧手机装了Demo——加载8秒，字体溢出，按钮小得点不中。「评委如果扫二维码用自己手机打开，就是这个体验。」"]
+    choices:
+      - id: support_old_phones
+        text: 补适配：字体自适应+点击区扩大+首屏资源瘦身
+        visibleResponse: 三个改动两小时完成。旧手机加载从8秒降到3秒。雨桐把它命名为「评委模拟器」。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: setFlag, key: mobile_optimized }]
+        next: c_xe5_bug_list
+      - id: demo_on_own_laptop
+        text: 演示只用我们的笔记本，不用管旧手机
+        visibleResponse: 决赛规则宣读时有一句：「评委可用个人设备访问作品」。你们的笔记本管不到评委的口袋。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe5_data_seed_real
+    campaign: competition
+    day: 13
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { narrative: 真实种子数据, learning: 演示数据也可以是真数据 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你把老K五人社长小群的报名表真表（脱敏后）导入了演示库：31条真实脏数据，重名3条、格式错7条——比造的假数据难看得多，也好用得多。"]
+    automaticEffects:
+      - { kind: add, key: credibility, value: 5 }
+      - { kind: setFlag, key: real_seed_data }
+    dialogue:
+      - { speaker: 系统, text: "评委问「这数据哪来的」，你有了最好的一种回答：真的。" }
+    terminal: true
+
+  - id: c_xe5_permission_issue
+    campaign: competition
+    day: 13
+    type: decision
+    trigger: { kind: day, day: 13, phase: end }
+    purpose: { learning: 使用真实数据要有授权 }
+    scene: { location: dorm, characters: [] }
+    setup: ["用了社长的真实报名表，你突然想起一个问题：授权呢？老K在群里说过「随便用」，但「随便用」算不算授权？"]
+    choices:
+      - id: written_consent
+        text: 补书面授权：老K群里一条明确消息+你截图存档
+        visibleResponse: 老K回了条语音外加文字：「同意社团管家在竞赛中使用本社脱敏报名数据演示。」截图存进材料文件夹。三分钟，买断一个隐患。
+        hiddenEffects: [{ kind: add, key: credibility, value: 5 }, { kind: setFlag, key: data_consent }]
+      - id: oral_enough2
+        text: 他都口头同意了，没事
+        visibleResponse: 决赛前评委问「数据使用获得授权了吗」，你答「获得了」，再问「能出示吗」——口头协议在评委面前不算数。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe5_git_conflict
+    campaign: competition
+    day: 12
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 合并冲突是分工边界的X光片 }
+    scene: { location: workbench, characters: [c_tech] }
+    setup: ["第一次合并冲突：方远和Agent同时改了报名页组件。方远盯着冲突标记看了十秒：「谁动的我的文件？」"]
+    choices:
+      - id: resolve_and_rule
+        text: 手动解冲突+立规矩：同一组件Agent不并行改
+        visibleResponse: 十分钟解决。规则文件新增一条：UI组件改动前先pull。之后一周冲突绝迹。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: conflict_protocol }]
+      - id: force_overwrite
+        text: 直接用方远的版本覆盖，快
+        visibleResponse: 覆盖完才发现Agent版本里有下午新加的校验逻辑。找回它花了40分钟——比解冲突慢四倍。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 3 }, { kind: subtract, key: energy, value: 4 }]
+    terminal: true
+
+  - id: c_xe5_docs_lazy
+    campaign: competition
+    day: 11
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 文档写给三周后的自己 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["你让方远补部署文档。他敲了三行：「npm i。npm dev。完事。」你问部署到服务器那步呢？「那步我看心情操作。」"]
+    choices:
+      - id: deploy_script
+        text: 把部署步骤固化成脚本+让Agent写说明，跑一遍验证
+        visibleResponse: 脚本+文档半小时搞定。三天后方远重感冒那次，林晓照着文档完成了一次独立部署——文档救命。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: setFlag, key: deploy_doc }]
+      - id: mood_deploy
+        text: 让他看心情吧，反正他一直在
+        visibleResponse: 「他一直在」在D16失效了。那天你对着他心情操作的产物研究了两个小时。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }, { kind: scheduleEvent, eventId: c_xe7_dly_deploy_mystery, onDay: 16 }]
+    terminal: true
+
+  - id: c_xe5_lin_grows
+    campaign: competition
+    day: 13
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [] }
+    setup: ["林晓抱着电脑过来，声音不大但很稳：「队长，第三步和第五步的按钮颜色不一样，还有文案里一个错别字。」她列了七条，全部成立。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（小声）她挑细节数的能力比我强。", mood: surprised }
+    choices:
+      - id: give_ownership
+        text: 把「文案与细节巡检」正式交给她，每天一轮
+        visibleResponse: 林晓做了一张巡检表格，每天下班前发一轮报告。方远说这是「全世界最温柔的CI」。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: add, key: teamTrust, value: 3 }, { kind: setFlag, key: lin_owner }]
+      - id: keep_her_small
+        text: "谢了，改的东西还是交给我们吧。"
+        visibleResponse: 她「哦」了一声回去了。第二天巡检报告停更了——反正发现了也是你们改。
+        hiddenEffects: [{ kind: subtract, key: teamTrust, value: 3 }]
+    terminal: true
+
+  - id: c_xe5_night_build
+    campaign: competition
+    day: 13
+    type: system
+    trigger: { kind: random, weight: 1 }
+    scene: { location: workbench, characters: [] }
+    setup: ["方远配了个定时任务：每晚十二点自动跑全量测试，结果推到群里。第一次夜测跑完，群里躺着一张全绿截图，时间00:03。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: nightly_test }
+    dialogue:
+      - { speaker: 系统, text: "机器守夜，人类睡觉。这是分工的正确打开方式。" }
+    terminal: true
+
+  - id: c_xe5_crash_first
+    campaign: competition
+    day: 14
+    type: story
+    trigger: { kind: day, day: 14, phase: end }
+    purpose: { narrative: 偶发崩溃首秀, learning: 偶现问题要抓现场 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["彩排第7步，屏幕白了一秒后恢复——并发提交时的偶发崩溃。方远瞪着日志：「……没了？日志就三行？」"]
+    dialogue:
+      - { speaker: 方远, text: "偶现。最恶心的一种。它挑时候。", mood: angry }
+      - { speaker: 系统, text: "记录：复现步骤、时间点、概率估计。偶现问题的第一产出不是修复，是观测。" }
+    automaticEffects:
+      - { kind: setFlag, key: crash_seen }
+      - { kind: add, key: technicalDebt, value: 3 }
+    terminal: true
+
+  - id: c_xe5_demo_script_v2
+    campaign: competition
+    day: 14
+    type: decision
+    trigger: { kind: day, day: 14, phase: end }
+    purpose: { learning: 演示脚本是验收标准也是保险绳 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["雨桐的演示脚本v2：10步，每步标注「讲什么/点什么/如果失败怎么办」。第8步后面写着：若崩溃，切备用录屏。"]
+    choices:
+      - id: script_v2_full
+        text: 采纳v2：含失败预案的脚本定稿，全队照此排练
+        visibleResponse: 脚本落定。方远看完失败预案那页说："你比我想得周全。"雨桐回："我胆子小。"
+        hiddenEffects:
+          - { kind: add, key: execution, value: 4 }
+          - { kind: addAsset, assetType: checklist, name: 演示脚本v2, description: 10步+每步失败预案, content: "10步/失败切录屏/备用机" }
+          - { kind: achievement, achievementId: ach_c_demo_script }
+      - id: script_v1_enough
+        text: v1够用了，练熟就行
+        visibleResponse: 彩排第7步崩溃时，三个人面面相觑——脚本上没有这一页之后的剧情。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    unlockKnowledge: [kc_c_backup_plan]
+    terminal: true
+
+  - id: c_xe5_rival_arch
+    campaign: competition
+    day: 12
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [c_rival] }
+    setup: ["邱一鸣在食堂给人看手机，音量不小：「微服务架构，消息队列，WebSocket实时推送——我们这叫工业级。」"]
+    dialogue:
+      - { speaker: 方远, text: "（扒了口饭）72个社团的报名工具用微服务。他用的是 architecture 宇宙。", mood: pleased }
+    choices:
+      - id: laugh_off
+        text: 不接招。你们的单体能跑通全流程就是最好的架构
+        visibleResponse: 三人继续吃饭。回去的路上方远说："其实我有点手痒想上Redis。"你说："先让它需要缓存再说。"他笑了。
+        hiddenEffects: [{ kind: add, key: independence, value: 3 }]
+      - id: architecture_anxiety
+        text: 回去研究要不要也「升级架构」
+        visibleResponse: 你花一晚上读微服务入门，越读越乱。单体跑得好好的，唯一被升级的是你的焦虑。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 8 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe5_teacher_raids
+    campaign: competition
+    day: 13
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: lab, characters: [c_advisor] }
+    setup: ["何老师没打招呼出现在实验室，站在方远身后看了两分钟代码，又看两分钟白板。"]
+    dialogue:
+      - { speaker: 何老师, text: "测试挂在定时任务上，部署有文档，演示有预案。你们这个实验室，比我们一些研究生课题组像样。", mood: pleased }
+    automaticEffects:
+      - { kind: relationship, characterId: c_advisor, delta: 5 }
+      - { kind: add, key: mentorTrust, value: 4 }
+    terminal: true
+
+  - id: c_xe5_random_coffee
+    campaign: competition
+    day: 11
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: canteen, characters: [] }
+    setup: ["实验楼咖啡机今日故障，贴了张纸：「想喝咖啡，先学会等待。」方远盯着那张纸看了十秒：「它怎么知道我在等CI。」"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 2 }
+    terminal: true
+
+  - id: c_xe5_random_gym
+    campaign: competition
+    day: 12
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [c_tech] }
+    setup: ["健身房 salesman 在群里@方远：「先生您已21天未到店。」方远把截图发进队伍群配字：「忠诚度测试，我及格了。」"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 2 }
+    terminal: true
+
+  - id: c_xe5_retro_mid
+    campaign: competition
+    day: 14
+    type: story
+    trigger: { kind: day, day: 14, phase: end }
+    purpose: { narrative: Demo周收官, learning: 用事实盘点而非感觉 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["Demo周盘点：核心流程10步全通、致命bug清零、演示脚本v2定稿、愿望清单+7。方远靠在椅子上：「这周写的代码比我上学期都多。」"]
+    automaticEffects:
+      - { kind: setFlag, key: demo_week_done }
+      - { kind: add, key: progress, value: 6 }
+      - { kind: achievement, achievementId: ach_c_demo_week }
+    dialogue:
+      - { speaker: 江雨桐, text: "下周材料周。代码的神，轮到排版的神来保佑我们了。", mood: happy }
+    terminal: true
+
+  - id: c_xe5_debt_board
+    campaign: competition
+    day: 12
+    type: system
+    trigger: { kind: random, weight: 1 }
+    scene: { location: lab, characters: [] }
+    setup: ["白板右侧新开一栏「技术债」：TODO注释×14、跳过的边界测试×3、丑但能跑的模块×1。方远每天路过都会瞟一眼——债上了墙，就有了利息意识。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+    terminal: true
+
+  - id: c_xe5_agent_rules_grow
+    campaign: competition
+    day: 11
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["一周下来，规则文件从8行涨到17行：中文注释、本地存储、测试命令、只准用文档API、组件先pull、字段以契约为准……每一条背后都站着一个真实事故。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: add, key: execution, value: 2 }
+    dialogue:
+      - { speaker: Agent, text: "规则数量：17。历史事故贡献率：100%。", mood: pleased }
+    terminal: true
+
+  - id: c_xe5_db_naming
+    campaign: competition
+    day: 11
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 命名混乱是看不见的技术债 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["Agent建的表里，同一个概念有三种叫法：user / users / account。方远忍了两天，查询语句开始写错。"]
+    choices:
+      - id: unify_naming
+        text: 统一命名表：实体名单一定稿，Agent生成代码必须引用
+        visibleResponse: 半小时定稿命名表，重构花一小时。此后生成代码的表名字段名再没错过——契约又一次赢了记性。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: addAsset, assetType: document, name: 命名契约, description: 实体统一命名表, content: "user表统一/字段驼峰/状态码枚举" }]
+      - id: live_with_it
+        text: 能跑就行，命名而已
+        visibleResponse: 写材料周，雨桐问「用户存在哪张表」——三个人给出了三个答案，全是错的。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe5_crash_repro
+    campaign: competition
+    day: 14
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [c_tech, c_ai_agent] }
+    setup: ["方远让Agent帮忙复现偶发崩溃。Agent写了个并发脚本：50个虚拟用户同时提交。崩溃稳定复现了——根因：没有幂等锁。"]
+    dialogue:
+      - { speaker: 方远, text: "好家伙，偶现是被并发放大的必现。修法反而简单。", mood: surprised }
+    choices:
+      - id: fix_idempotent
+        text: 加幂等锁+重跑并发脚本验证，测试用例固化进回归
+        visibleResponse: 修复后50并发零崩溃。那个并发脚本被方远命名为「崩溃制造机」收进了测试工具箱。
+        hiddenEffects: [{ kind: add, key: execution, value: 6 }, { kind: setFlag, key: crash_fixed }, { kind: achievement, achievementId: ach_c_crash_fix }]
+      - id: reduce_traffic
+        text: 演示时别点那么快就行
+        visibleResponse: 演示当天你手一抖双击了。三成概率的坑，精准兑现。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: setFlag, key: crash_unfixed }]
+    unlockKnowledge: [kc_c_debug_root]
+    terminal: true
+
+  - id: c_xe5_ui_polish_duel
+    campaign: competition
+    day: 14
+    type: decision
+    trigger: { kind: random, weight: 1 }
+    purpose: { learning: 完美主义要有截止时间 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["雨桐在调成功页的插画：第4版。方远凑过去看了一眼：「这不是和第1版一样吗？」雨桐：「阴影差了两个像素。」"]
+    choices:
+      - id: time_box_polish
+        text: 设定时间盒：再给20分钟，20分钟后锁定当前版本
+        visibleResponse: 20分钟后锁定。雨桐叹口气又笑了："定稿的感觉其实也不坏。"时间盒是完美主义的安全气囊。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: relationship, characterId: c_design, delta: 3 }]
+      - id: unlimited_polish
+        text: 让她调，细节值得
+        visibleResponse: 她调到了晚上十一点，第9版。确实好看了一点点。但演示脚本的失败预案一页都没写。
+        hiddenEffects: [{ kind: add, key: perfectionism, value: 5 }, { kind: subtract, key: execution, value: 3 }]
+    unlockKnowledge: [kc_c_energy_mgmt]
+    terminal: true
+
+  - id: c_xe5_ai_write_tests
+    campaign: competition
+    day: 11
+    type: decision
+    trigger: { kind: random, weight: 1 }
+    purpose: { learning: AI生成的测试要检查它测的是不是真需求 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["Agent生成的集成测试全绿。方远随手打开一个用例看了一眼：它断言「提交后返回200」——可真正要断言的是「数据库里多了一条去重后的记录」。"]
+    choices:
+      - id: rewrite_assertions
+        text: 让Agent按「业务结果」重写断言：查库、查通知、查状态
+        visibleResponse: 重写后第一轮就抓出一个真bug：重复提交时返回200但没去重。断言的深度=测试的价值。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: setFlag, key: assertions_fixed }]
+      - id: green_enough
+        text: 全绿就行，别折腾
+        visibleResponse: 绿灯给了两天的安全感，直到演示时重复提交事故才揭穿：那些测试测的是「接口有回应」，不是「事情做对了」。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    terminal: true
+
+  - id: c_xe5_night_sprint_feel
+    campaign: competition
+    day: 10
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["晚上十点的实验室：方远敲键盘的声音、雨桐数像素的沉默、林晓巡检的脚步。谁都没说话，但谁也没在熬——今天的进度条很好看。"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 3 }
+      - { kind: add, key: teamTrust, value: 2 }
+    terminal: true

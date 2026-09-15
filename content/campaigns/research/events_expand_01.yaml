@@ -31,6 +31,8 @@ events:
           - { kind: add, key: independence, value: 5 }
           - { kind: add, key: evidenceDiscipline, value: 3 }
           - { kind: addAsset, assetType: research_brief, name: 澄清问题清单, description: 对象/比较/结果三问, content: "1.研究谁？2.跟什么比？3.'影响'用什么指标？" }
+        delayed:
+          - { eventId: r_e09_px_clarify_dividend, onDay: 13 }
       - id: ask_mentor_appt
         text: 给导师发邮件，约十分钟当面澄清
         visibleResponse: 陈教授回了两个字："周四。"你突然觉得这三个问题最好在周四之前自己先想一遍。
@@ -46,6 +48,8 @@ events:
         text: 去论坛搜"这个方向好做吗"
         visibleResponse: 两小时后你收藏了七个帖子，方向反而更乱了。
         hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+        delayed:
+          - { eventId: r_e09_px_forum_noise, onDay: 6 }
     learningPoint: 澄清先于检索：问题不清，检索就是漫游
 
   - id: r_e01_peer_panic
@@ -112,6 +116,8 @@ events:
         hiddenEffects:
           - { kind: add, key: academicDebt, value: 4 }
           - { kind: setFlag, key: scope_too_wide }
+        delayed:
+          - { eventId: r_e09_px_scope_wide, onDay: 16 }
     terminal: true
 
   # ---- D2 ----
@@ -177,6 +183,8 @@ events:
         hiddenEffects:
           - { kind: add, key: academicDebt, value: 6 }
           - { kind: setFlag, key: cited_pop_sci }
+        delayed:
+          - { eventId: r_e09_px_popsci_ring, onDay: 27 }
       - id: discard_all
         text: 公众号都不可信，关掉
         visibleResponse: 你关掉了页面。它提的那个硕论，你之后再也没见过。
@@ -726,6 +734,8 @@ events:
           - { kind: relationship, characterId: r_senior_theory, delta: 6 }
           - { kind: add, key: literatureCount, value: 5 }
           - { kind: addAsset, assetType: checklist, name: 检索日志, description: 可复现的检索过程记录, content: "| 日期 | 库 | 检索式 | 命中 | 保留 | 排除原因 |" }
+        delayed:
+          - { eventId: r_e09_px_searchlog_boom, onDay: 21 }
       - id: recreate_later
         text: 先口头说个大概，回头补
         visibleResponse: 师姐等了两天没等到。第三周她在走廊提了一句："检索式呢？"你的耳朵又热了。

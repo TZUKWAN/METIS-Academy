@@ -1,0 +1,572 @@
+# 科研线扩展事件 06：答辩准备与终章支线（D28-D30）
+events:
+  # ---- D28 ----
+  - id: r_e06_28_ppt_skeleton
+    campaign: research
+    day: 28
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 28, phase: start }
+    purpose: { learning: 答辩PPT骨架：一页一个主张，页数为陈述时间服务 }
+    scene: { location: dorm, characters: [] }
+    setup: [“距答辩还有两天。你的PPT目前有 34 页，陈述限时 15 分钟。”]
+    dialogue:
+      - { speaker: 系统, text: "34 页讲 15 分钟，平均每页 26 秒。这叫幻灯片浏览赛跑，不叫答辩。" }
+    choices:
+      - id: claim_per_slide
+        text: 砍到 14 页：每页一个主张，标题写成结论句
+        visibleResponse: 你把标题全改成结论句——'相关稳健：三口径β均在0.16-0.21'。评委只读标题就能跟上你的论证，翻页有了呼吸感。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 7 }
+          - { kind: add, key: progress, value: 4 }
+          - { kind: setFlag, key: claim_slides }
+      - id: keep_34
+        text: 34 页都留着，体现工作量
+        visibleResponse: 你在第 19 页被喊停：'跳到结论吧。'——你的最得意分析还压在没讲到的第 22 页。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 5 }
+    learningPoint: PPT为耳朵服务，不为硬盘服务
+
+  - id: r_e06_28_talk_pyramid
+    campaign: research
+    day: 28
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 陈述结构：结论先行，理由随后 }
+    scene: { location: dorm, characters: [] }
+    setup: [“两种开场：A'大家好，我的研究背景是……' B'我的研究发现：AI使用与论证质量正相关且稳健，接下来讲我怎么得到它。'”]
+    choices:
+      - id: conclusion_first
+        text: 结论先行：先给答案，再讲怎么来的
+        visibleResponse: 排练时你自己都感觉到了区别——从第一句起评委就知道该往哪听。悬念是留给小说的，答辩要的是地图。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 5 }
+          - { kind: setFlag, key: conclusion_first }
+      - id: suspense_first
+        text: 铺垫先行：按研究过程从头讲，层层推进
+        visibleResponse: 你铺垫了六分钟，评委开始翻你的材料找结论——听众自己找答案时，是不会听你讲的。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 评委的时间结构决定你的叙述结构
+
+  - id: r_e06_28_timer_rehearsal
+    campaign: research
+    day: 28
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 计时排练：暴露超时点 }
+    scene: { location: meeting_room, characters: [r_peer] }
+    setup: [“苏晓帮你掐表，第一次完整排练。”]
+    dialogue:
+      - { speaker: 苏晓, text: "（按停秒表）21分40秒。超时6分40秒。其中第7页你讲了4分钟。", mood: surprised }
+      - { speaker: 你, text: "第7页是我的稳健性表……" }
+      - { speaker: 苏晓, text: "那你答辩那天也讲4分钟？评委听两分钟就想问了。" }
+    choices:
+      - id: rehearse_cut
+        text: 三轮计时排练，每轮砍超时段落
+        visibleResponse: 三轮下来 14 分 30 秒。第 7 页你只讲一句'三口径全部守住，详见这页'，把 4 分钟还给了结论。最后一轮苏晓鼓了掌。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: relationship, characterId: r_peer, delta: 5 }
+          - { kind: setFlag, key: timed_rehearsal }
+      - id: mental_rehearsal
+        text: 在脑子里过一遍就行，开口多累
+        visibleResponse: 脑内排练永远 14 分钟。真实开口的第一句就吞了三次舌头——嘴和脑需要合练。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 5 }
+    learningPoint: 排练要出声，要计时，要有人
+
+  - id: r_e06_28_dark_slides
+    campaign: research
+    day: 28
+    type: decision
+    trigger: { kind: day, day: 28, phase: end }
+    purpose: { learning: 附录页策略：预判问题，备好弹药 }
+    scene: { location: dorm, characters: [] }
+    setup: [“你把可能被问的六个问题列在纸上，给每个问题配了一页'弹药页'放在PPT附录。”]
+    choices:
+      - id: ammo_slides
+        text: 六页附录：功效计算/稳健性/信度/抽样/伦理/概念表
+        visibleResponse: 答辩时评委问到抽样，你一页翻到弹药页——图、数、出处俱全。评委'哦'了一声，那种满意的'哦'。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: add, key: progress, value: 2 }
+          - { kind: setFlag, key: ammo_slides }
+      - id: no_ammo
+        text: 备太多显慌，裸装上阵
+        visibleResponse: 评委问到信度细节，你凭记忆报了个数——报成了预调研的 0.86。正式是 0.79。附录页本可以替你记住。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 5 }
+    learningPoint: 弹药页是给提问者的尊重
+
+  - id: r_e06_28_night_before
+    campaign: research
+    day: 28
+    type: story
+    trigger: { kind: manual }
+    scene: { location: dorm, characters: [] }
+    setup: [“预审结束的晚上。你的桌上：修改清单一张、应答卡六张、PPT终版、还有半包吃剩的饼干。”]
+    dialogue:
+      - { speaker: 系统, text: "三十天前你只有一句话。现在你有一叠能被提问的纸。" }
+    next: r_e06_28_sleep_choice
+
+  - id: r_e06_28_sleep_choice
+    campaign: research
+    day: 28
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 睡眠是答辩装备的一部分 }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: sleep_early
+        text: 十一点半睡，明早状态优先
+        visibleResponse: 你把手机放远，闭眼前把六张应答卡在脑子里过了一遍。睡着之前的最后一个念头是：'该做的都做了。'
+        hiddenEffects:
+          - { kind: add, key: energy, value: 15 }
+          - { kind: setFlag, key: slept_well }
+      - id: cram_night
+        text: 再刷一遍PPT到两点
+        visibleResponse: 两点睡的代价在第二天上午结算：你把'效度'说成'信度'两次，被评委听见了两次。
+        hiddenEffects:
+          - { kind: subtract, key: energy, value: 15 }
+          - { kind: subtract, key: credibility, value: 3 }
+    learningPoint: 最后的分数是睡眠给的
+
+  - id: r_e06_28_zombie_letter
+    campaign: research
+    day: 28
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 师门同门反馈, learning: 每一次外部反馈都是免费预演 }
+    scene: { location: lab, characters: [r_senior_theory] }
+    setup: [“林师姐约你做最后一批内容对表。她拿着你报告的打印稿，翻到讨论章。”]
+    dialogue:
+      - { speaker: 林师姐, text: "讨论章你只写了'支持了假设'。讨论章的任务是：结果和文献吵起来了，你判谁有理。", mood: serious }
+      - { speaker: 你, text: "可我的结果不显著……" }
+      - { speaker: 林师姐, text: "不显著才有得吵。跟哪三个研究一致、跟哪个研究相反、为什么——这三段就是你的讨论章。", mood: neutral }
+    choices:
+      - id: rewrite_discussion
+        text: 按'三个一致一个相反'重写讨论
+        visibleResponse: 你写了一夜。写完发现讨论章第一次有了观点——它不再复述结果，它审判结果。师姐看后说了句："这才叫讨论。"
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: relationship, characterId: r_senior_theory, delta: 6 }
+          - { kind: add, key: progress, value: 4 }
+      - id: keep_summary_style
+        text: 保持现状，别折腾了
+        visibleResponse: 平静的讨论章迎来了平静的提问：'你的结果和谁的研究对得上？'你举了一个例子——第二个就举不出了。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 5 }
+    terminal: true
+
+  # ---- D29 ----
+  - id: r_e06_29_answer_cards
+    campaign: research
+    day: 29
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 29, phase: start }
+    purpose: { learning: 应答卡结构：一句话立场+一句证据+一句边界 }
+    scene: { location: dorm, characters: [] }
+    setup: [“你把六个最可能被问的问题升级成应答卡 2.0。格式由师兄推荐：立场/证据/边界三行制。”]
+    dialogue:
+      - { speaker: 系统, text: "例：Q'样本才140'→立场：满足功效要求 / 证据：计算+出处 / 边界：外推限于同类群体。" }
+    choices:
+      - id: three_line_cards
+        text: 六张卡全部按三行制重写并背熟
+        visibleResponse: 你在食堂对着饭背卡，苏晓听得能接下句了。三行制的妙处：再刁的问题，你都有前 15 秒可以说的话——然后边说边想。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: add, key: execution, value: 4 }
+          - { kind: addAsset, assetType: checklist, name: 应答卡2.0, description: 六问×三行制, content: "样本/效度/AI角色/机制证据/局限/未来研究" }
+      - id: bullet_mess
+        text: 还是散点笔记，反正内容都在
+        visibleResponse: 内容确实都在——散落在六页纸里。真实答辩的 30 秒思考时间内，你翻到了第 4 页的下半段。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 应答的骨架比应答的内容先救命
+
+  - id: r_e06_29_mock_defense
+    campaign: research
+    day: 29
+    type: npc
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { narrative: 模拟答辩, learning: 在友军火力下暴露所有问题 }
+    scene: { location: meeting_room, characters: [r_peer, r_senior_data, r_senior_theory] }
+    setup: [“三人模拟评委团：苏晓扮郑老师，周师兄扮吴教授，师姐坐镇。你做了 15 分钟陈述。”]
+    dialogue:
+      - { speaker: 周师兄, text: "（清嗓子，进入角色）第一个问题。你说'稳健'——如果我把你的因变量换成老师评分，你的β还是正的吗？", mood: serious }
+    choices:
+      - id: admit_and_frame
+        text: "答：'换因变量我没跑过，这是设计内未覆盖的稳健性，我会在论文里作为未来工作。'"
+        visibleResponse: 周师兄退出角色："及格。没编，没慌，知道边界。"师姐补刀："答辩要的不是全对，是诚实+有预案。"
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: relationship, characterId: r_senior_data, delta: 4 }
+          - { kind: setFlag, key: mock_passed }
+      - id: bluff_it
+        text: "答：'应该还是正的，我的结果很稳健。'"
+        visibleResponse: 周师兄追问'哪次分析支持这个说法'，你说了'感觉'。全场笑了——模拟场合的笑是免费的，真答辩的沉默是收钱的。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 5 }
+          - { kind: setFlag, key: mock_blunder }
+    learningPoint: 模拟的价值在于把尴尬花在赛前
+
+  - id: r_e06_29_ai_evaluator
+    campaign: research
+    day: 29
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“深夜加练。你让 Agent 扮演最恶毒的评委，并要求它'攻击证据链最薄处'。”]
+    dialogue:
+      - { speaker: Agent, text: "进入角色。你的横断面设计无法排除反向因果：可能论证差的人更依赖AI。请回应。", mood: serious }
+      - { speaker: 你, text: "（这个问题方向你都替评委想好了……但回答还得我自己来。）" }
+    choices:
+      - id: adversarial_rounds
+        text: 跟它打三轮对抗问答，每轮记录卡壳点
+        visibleResponse: 三轮下来你记了五个卡壳点，全部补进应答卡。Agent 退出角色后评价：'您的回答未使用任何不实信息，通过。'——被AI夸诚实，感觉微妙。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: execution, value: 4 }
+          - { kind: setFlag, key: adversarial_sparring }
+      - id: go_to_sleep
+        text: 太晚了，睡了，明天靠临场
+        visibleResponse: 临场确实来了：评委的原话和 Agent 的版本只差两个字。你终于知道'预演过的问题'和'想好的答案'是两回事。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: r_e06_29_print_crash
+    campaign: research
+    day: 29
+    type: decision
+    trigger: { kind: day, day: 29, phase: end }
+    purpose: { learning: 关键路径要有 Plan B }
+    scene: { location: corridor, characters: [] }
+    setup: [“晚上九点打印店。店员的电脑蓝屏了，你的PPT在U盘里，明天早上八点答辩。”]
+    choices:
+      - id: triple_backup
+        text: 三备份：邮箱一份+手机一份+云盘一份，明早换店打印
+        visibleResponse: 你花十分钟把文件铺满三个渠道。明早换店顺利打印。走出打印店时你突然理解了'冗余'这个词的温度。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 4 }
+          - { kind: setFlag, key: triple_backup }
+      - id: wait_repair
+        text: 等店员修电脑，明天一早再打
+        visibleResponse: 电脑修好时已经十一点。你赶着打了材料——打错了两页顺序，明早你在答辩教室门口手动重排纸质版。
+        hiddenEffects:
+          - { kind: subtract, key: energy, value: 8 }
+    learningPoint: 备份不是多余，是保险
+
+  - id: r_e06_29_room_recon
+    campaign: research
+    day: 29
+    type: story
+    trigger: { kind: manual }
+    scene: { location: defense_hall, characters: [] }
+    setup: [“你提前去答辩教室踩点：投影接口是HDMI，讲台在左，评委席三个座位，你的站位有顶光。”]
+    dialogue:
+      - { speaker: 系统, text: "踩点清单：接口/翻页笔/你的站位/计时器位置/水放哪。陌生的场地消耗临场内存，熟悉的场地省下它。" }
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: room_recon }
+    terminal: true
+
+  - id: r_e06_29_afternoon_slot
+    campaign: research
+    day: 29
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [r_peer] }
+    setup: [“答辩顺序公布，你抽到下午第五个。苏晓凑过来看。”]
+    dialogue:
+      - { speaker: 苏晓, text: "下午场好啊。评委吃饱了不凶，你还能上午再练一轮。", mood: happy }
+      - { speaker: 你, text: "你这是安慰还是幸灾乐祸？" }
+      - { speaker: 苏晓, text: "都是。", mood: pleased }
+    choices:
+      - id: use_morning
+        text: 上午加练一轮，中午眯二十分钟
+        visibleResponse: 你把上午变成了第四轮排练+午休。下午进场时嗓子是开的，脑子是醒的——第五个上场变成了第五个从容。
+        hiddenEffects:
+          - { kind: add, key: energy, value: 8 }
+          - { kind: add, key: execution, value: 3 }
+      - id: dread_all_morning
+        text: 上午躺床上刷手机等死
+        visibleResponse: 你刷了四小时手机，越刷越慌。下午上场时嗓子里像塞了棉花——第一页讲了三遍才顺。
+        hiddenEffects:
+          - { kind: subtract, key: energy, value: 6 }
+          - { kind: add, key: academicDebt, value: 2 }
+    terminal: true
+
+  # ---- D30 ----
+  - id: r_e06_30_morning_ritual
+    campaign: research
+    day: 30
+    type: story
+    trigger: { kind: day, day: 30, phase: start }
+    purpose: { narrative: 答辩之晨, learning: 仪式感是给神经的扶手 }
+    scene: { location: dorm, characters: [] }
+    setup: [“答辩日早晨。你按昨晚定好的流程走：洗澡、早餐、把应答卡放进外套左口袋、检查U盘。”]
+    dialogue:
+      - { speaker: 系统, text: "流程的意义：让身体先动起来，脑子跟上就行。" }
+    next: r_e06_30_breakfast
+
+  - id: r_e06_30_breakfast
+    campaign: research
+    day: 30
+    type: decision
+    trigger: { kind: manual }
+    scene: { location: canteen, characters: [] }
+    choices:
+      - id: proper_breakfast
+        text: 正经早餐：粥+蛋+包子，七分饱
+        visibleResponse: 七分饱是最好的答辩状态：不饿，不困。你甚至有力气把应答卡又过了一遍。
+        hiddenEffects:
+          - { kind: add, key: energy, value: 8 }
+      - id: no_breakfast
+        text: 吃不下，喝杯咖啡空腹上
+        visibleResponse: 咖啡因在第三页开始表演：心跳加速、手心出汗，你以为自己慌了——其实是血糖在报警。
+        hiddenEffects:
+          - { kind: subtract, key: energy, value: 8 }
+    terminal: true
+
+  - id: r_e06_30_peer_sendoff
+    campaign: research
+    day: 30
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: corridor, characters: [r_peer] }
+    setup: [“答辩教室门口，苏晓已经等在那，手里拎着瓶水。”]
+    dialogue:
+      - { speaker: 苏晓, text: "拿着。进场前喝两口。你口袋里那六张卡，昨晚我都能背了，你怕什么。", mood: happy }
+      - { speaker: 你, text: "……谢了。" }
+      - { speaker: 苏晓, text: "出来我请你吃饭。不管结果。", mood: pleased }
+    automaticEffects:
+      - { kind: relationship, characterId: r_peer, delta: 5 }
+      - { kind: add, key: energy, value: 5 }
+      - { kind: setFlag, key: peer_sendoff }
+    terminal: true
+
+  - id: r_e06_30_breathing
+    campaign: research
+    day: 30
+    type: decision
+    trigger: { kind: manual }
+    scene: { location: defense_hall, characters: [] }
+    setup: [“候场。前面那位同学的陈述声隔着门传出来，你的心跳在耳朵里打鼓。”]
+    choices:
+      - id: box_breathing
+        text: 吸四秒-停四秒-呼四秒-停四秒，三轮
+        visibleResponse: 三轮下来，鼓声降成了背景乐。你摸了摸口袋里的应答卡——硬硬的，还在。
+        hiddenEffects:
+          - { kind: add, key: energy, value: 4 }
+          - { kind: setFlag, key: calmed_entry }
+      - id: rehearse_furious
+        text: 抓紧最后时间把稿子再背一遍
+        visibleResponse: 你背到了第三遍的中间，门开了。脑子里全是稿子，第一句问候说得像背稿子——因为它就是。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 2 }]
+    terminal: true
+
+  - id: r_e06_30_opening
+    campaign: research
+    day: 30
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 开场三十秒定基调 }
+    scene: { location: defense_hall, characters: [r_evaluator_a, r_evaluator_b, r_mentor] }
+    setup: [“轮到你了。你走上讲台，翻开PPT第一页。三位评委抬头看你。”]
+    dialogue:
+      - { speaker: 系统, text: "接下来三十秒，决定他们用哪种姿态听你讲十五分钟。" }
+    choices:
+      - id: calm_conclusion_open
+        text: "'各位老师好。我的研究结论是：AI使用与论证质量正相关但关联温和，我的任务是用140份证据说清它从哪来、边界在哪。'"
+        visibleResponse: 吴教授放下了手里的笔——这是个好信号，他准备听了。你的声音在第二句稳了下来。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 8 }
+          - { kind: setFlag, key: strong_opening }
+      - id: apologetic_open
+        text: "'老师们好，我准备得不太充分，请大家多包涵……'"
+        visibleResponse: 话一出口你就后悔了。郑老师皱了皱眉——她还没听你讲，就先收到了你的免责声明。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 6 }
+    learningPoint: 开场不道歉，道歉等于先缴械
+
+  - id: r_e06_30_ai_disclosure
+    campaign: research
+    day: 30
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: AI使用披露：主动交代工具边界 }
+    scene: { location: defense_hall, characters: [r_evaluator_b] }
+    setup: [“陈述中你讲到Agent辅助的部分。郑老师抬起头，问题已经在路上了。”]
+    dialogue:
+      - { speaker: 郑老师, text: "你大量使用了AI辅助。我想确认：哪些工作是它做的，哪些是你做的？", mood: neutral }
+    choices:
+      - id: transparent_split
+        text: 拿出分工表：'检索润色它做，验证判断我做——每条引用可溯源到我的核验记录'
+        visibleResponse: 你翻开附录的分工说明和核验日志。郑老师看完笑了："这是今天第二份让我意外的材料。第一份是你的稳健性表。"
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 10 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: setFlag, key: ai_disclosed_well }
+          - { kind: achievement, achievementId: ach_r_e06_ai_disclosure, description: 从容披露AI分工 }
+      - id: downplay_ai
+        text: "'主要都是我自己做的，AI就是查查资料。'"
+        visibleResponse: 吴教授随口一问：'那这篇综述的检索式是谁写的？'你卡了两秒——这两秒被三个评委同时看见了。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 8 }
+          - { kind: add, key: aiDependence, value: 3 }
+    learningPoint: 对AI使用的诚实是新的学术礼仪
+
+  - id: r_e06_30_validity_probe
+    campaign: research
+    day: 30
+    type: npc
+    trigger: { kind: manual }
+    purpose: { narrative: 最难一问, learning: 用'承认+对策'接住攻击 }
+    scene: { location: defense_hall, characters: [r_evaluator_a] }
+    setup: [“提问环节。吴教授终于出手了。”]
+    dialogue:
+      - { speaker: 吴教授, text: "横断面数据，自变量因变量同时测。你怎么排除'论证差的人转头去依赖AI'这种反向解释？", mood: serious }
+    choices:
+      - id: concede_and_defend
+        text: "'您说的方向确实无法用本设计排除——这正是我把结论定为'关联'而非'影响'的原因。两周预调研数据提示方向性，追踪设计是下一步。'"
+        visibleResponse: 吴教授盯着你看了三秒，在本子上写了什么。然后他问了一个更温和的问题——攻击结束了，他收手了。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 10 }
+          - { kind: relationship, characterId: r_evaluator_a, delta: 6 }
+          - { kind: setFlag, key: validity_survived }
+      - id: deny_problem
+        text: "'我控制了变量，不存在这个问题。'"
+        visibleResponse: 吴教授回了八个字——“控制变量解决不了时间方向”。然后他花两分钟给你上课，那是全场最安静的六百秒。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 12 }
+          - { kind: relationship, characterId: r_evaluator_a, delta: -6 }
+    learningPoint: 承认设计的边界，是防住追问的唯一姿势
+
+  - id: r_e06_30_future_question
+    campaign: research
+    day: 30
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: defense_hall, characters: [r_evaluator_b] }
+    setup: [“郑老师收尾一问，语气放软。”]
+    dialogue:
+      - { speaker: 郑老师, text: "如果给你三个月和一百个样本的追踪权限，你的研究往哪走？", mood: neutral }
+    choices:
+      - id: concrete_next
+        text: "'两周纵向追踪，每周测一次使用与论证表现，重点验证反向因果——具体设计在我'未来研究'第三段。'"
+        visibleResponse: 你报出了设计要点和页码。郑老师笑着对吴教授说："这学生知道自己下一步去哪。"
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: setFlag, key: future_answered }
+      - id: vague_future
+        text: "'以后可以扩大样本，做更深入的研究。'"
+        visibleResponse: “更深入”三个字像没充值的会员。郑老师点头致谢，眼神里写着“这题白问了”。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 4 }]
+    terminal: true
+
+  - id: r_e06_30_aftermath_dinner
+    campaign: research
+    day: 30
+    type: npc
+    trigger: { kind: day, day: 30, phase: end }
+    scene: { location: canteen, characters: [r_peer, r_senior_data, r_senior_theory] }
+    setup: [“答辩结束。不管结果如何，火锅已经订上了——师姐组的规矩：答辩完必须吃火锅。”]
+    dialogue:
+      - { speaker: 周师兄, text: "来，敬30天。从一句话到一场答辩，你现在是能独立跑研究的人了。", mood: happy }
+      - { speaker: 林师姐, text: "敬你被推翻的那条gap。它比你通过的假设更说明问题。", mood: pleased }
+      - { speaker: 苏晓, text: "敬毛肚！还有敬我们组没有延毕！", mood: happy }
+    automaticEffects:
+      - { kind: relationship, characterId: r_peer, delta: 4 }
+      - { kind: relationship, characterId: r_senior_data, delta: 4 }
+      - { kind: relationship, characterId: r_senior_theory, delta: 4 }
+      - { kind: add, key: energy, value: 10 }
+      - { kind: subtract, key: money, value: 60 }
+    terminal: true
+
+  - id: r_e06_30_mentor_last_word
+    campaign: research
+    day: 30
+    type: npc
+    trigger: { kind: manual }
+    scene: { location: corridor, characters: [r_mentor] }
+    setup: [“散场时陈教授在走廊叫住你，只说了一段话。”]
+    dialogue:
+      - { speaker: 陈教授, text: "今天你答得如何，评委说了算。但方法你带得走——下一个题目、下一个学生，都还要用。", mood: serious }
+      - { speaker: 陈教授, text: "放假前把研究日志整理给我。写研究的过程，比研究本身值钱。" }
+    choices:
+      - id: promise_log
+        text: "答应整理，并当场列出日志的三条主线"
+        visibleResponse: 陈教授听完三条主线，点头走人。你站在走廊里，突然分不清是答辩结束了，还是真正的研究刚开场。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 6 }
+          - { kind: add, key: independence, value: 4 }
+          - { kind: setFlag, key: log_promised }
+      - id: just_nod
+        text: 用力点头，一句多余的话不说
+        visibleResponse: 他拍了拍你的肩。这个动作，三十天里是第一次。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 3 }
+    terminal: true
+
+  - id: r_e06_30_self_review
+    campaign: research
+    day: 30
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 终局复盘：带走的不是PPT是方法 }
+    scene: { location: dorm, characters: [] }
+    setup: [“深夜，一切结束。你打开三十天前那个只有一句话的文档，开始写复盘。”]
+    dialogue:
+      - { speaker: 系统, text: "复盘三问：哪一步最值？哪一步最险？如果重来的话，哪天你会改？" }
+    choices:
+      - id: full_retrospective
+        text: 写完整复盘：三问各答一段，附上方法清单
+        visibleResponse: 你写了两千字。写到最后发现：真正值钱的不是那份通过的报告，是契约、核验、机制链、交接——它们对下一个题目百分之百可复用。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 8 }
+          - { kind: add, key: execution, value: 4 }
+          - { kind: addAsset, assetType: session_summary, name: 30天复盘, description: 三问复盘+可复用方法清单, content: "最值:假引用核验习惯 / 最险:D21不显著夜 / 重来:D16早冻结设计" }
+          - { kind: achievement, achievementId: ach_r_e06_retro, description: 完成30天复盘 }
+      - id: skip_retro
+        text: 累了，直接睡觉，复盘以后再说
+        visibleResponse: “以后”通常等于“没有”。三个月后你接新题目时，会重新踩一遍今天已经付过学费的坑。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 经验不写下来就会过期
+
+  - id: r_e06_30_letter_future
+    campaign: research
+    day: 30
+    type: story
+    trigger: { kind: manual }
+    scene: { location: dorm, characters: [] }
+    setup: [“复盘的最后一行，你多写了一段：给下学期开题的自己。”]
+    automaticEffects:
+      - kind: addAsset
+        assetType: document
+        name: 给下次开题的信
+        description: 三条叮嘱
+        content: "1.设计两周内冻结，别恋战\n2.AI产出先进待核区，核完才进门\n3.卡住超过两天，带着'试过什么'清单去求助"
+    dialogue:
+      - { speaker: 系统, text: "信不长。但下一场三十天开场时，你会庆幸今天多写了这三行。" }
+    terminal: true
+
+  - id: r_e06_30_group_photo
+    campaign: research
+    day: 30
+    type: story
+    trigger: { kind: day, day: 30, phase: end }
+    scene: { location: defense_hall, characters: [r_mentor, r_peer, r_senior_data, r_senior_theory] }
+    setup: [“师门传统：答辩日在答辩室门口合影。你站在陈教授左手边——新生的位置，一个月前周师兄站过的地方。”]
+    dialogue:
+      - { speaker: 苏晓, text: "三、二、一——", mood: happy }
+      - { speaker: 系统, text: "照片里所有人都比了手势。你手里攥着的，是那六张应答卡。" }
+    automaticEffects:
+      - { kind: add, key: energy, value: 5 }
+      - { kind: setFlag, key: photo_taken }
+    terminal: true

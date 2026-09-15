@@ -1,0 +1,746 @@
+# 创业线扩展事件 05（单位经济/API成本/基础设施/CAC/LTV/合伙人/竞争者/平台风险）
+events:
+  - id: v_e05_d22_gross_margin
+    campaign: venture
+    day: 22
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 毛利=收入-直接变动成本，先单笔算清 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你拆一笔¥19的订单：AI分类调用¥1.4、短信通知¥0.4、支付手续费¥0.12。毛利¥17.08，毛利率90%。"]
+    choices:
+      - id: margin_table
+        text: 给每个付费档位都算一笔：单次/学生价/学期卡各自的毛利和毛利率
+        visibleResponse: |
+          学生价¥9.9毛利8元（81%），学期卡摊到每场活动毛利约¥15（76%）。
+          三档全部健康。你终于能说清楚“每一块钱里多少是你的”。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 6 }, { kind: addAsset, assetType: revenue_report, name: 分档毛利表, description: 三档定价的毛利拆解, content: "19档90%/9.9档81%/99档76%——全部健康" }, { kind: achievement, achievementId: ach_v_margin }]
+      - id: rough_feel
+        text: 差不多就行，反正收入在涨
+        visibleResponse: 收入确实在涨。第28天迎新周高峰，AI调用量翻4倍，你的“差不多”变成了一笔看不懂的账。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 看不懂毛利的增长，是失控的前奏
+    terminal: true
+
+  - id: v_e05_d22_breakeven
+    campaign: venture
+    day: 22
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 盈亏平衡点=固定成本÷单均毛利 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你算盈亏平衡：月固定成本（服务器+域名+短信包底价）约¥95，单均毛利¥17。算下来每月6单保本。"]
+    choices:
+      - id: write_breakeven
+        text: 把“6单保本”写在成本台账首页，每周对着数
+        visibleResponse: “每月6单保本”成了你的北极星数字。现在每月19单——你第一次看清自己离生死线有多远。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: setFlag, key: breakeven_known }, { kind: achievement, achievementId: ach_v_breakeven }]
+      - id: avoid_breakeven
+        text: 不算这个，算了自己吓自己
+        visibleResponse: 不算就不存在吗？你看不见那条线，就只能凭感觉乱花。凭感觉的账，都是糊涂账。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e05_d23_price_drop
+    campaign: venture
+    day: 23
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["AI服务商宣布降价40%。你查了下用量台账：同样是每天600次调用，成本从¥11降到¥6.6。什么都没做，毛利涨了。"]
+    dialogue:
+      - { speaker: v_ai_agent, text: "建议保持成本结构不变，将差价计入利润。", mood: pleased }
+      - { speaker: 你, text: "不。降价红利投给用户体验：把分类模型换成更准的。省下的钱不花在刀刃上，就只是账面数字。" }
+    automaticEffects:
+      - { kind: subtract, key: technicalDebt, value: 2 }
+      - { kind: setFlag, key: model_upgrade }
+    terminal: true
+
+  - id: v_e05_d23_cache_first
+    campaign: venture
+    day: 23
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 成本优化的第一刀永远是缓存 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你发现60%的AI分类调用在重复处理相同格式的表头——“XX大学社团报名表(标准版)”这一个月被解析了800次。"]
+    choices:
+      - id: add_cache
+        text: 加模板缓存：识别过的表头结构存下来，相同结构直接走本地规则，不调AI
+        visibleResponse: |
+          缓存上线：AI调用量从600次/日降到170次/日，成本¥11→¥3.1。
+          而且缓存命中时解析速度快了3倍。省钱的尽头是省心。
+        hiddenEffects: [{ kind: add, key: execution, value: 6 }, { kind: subtract, key: technicalDebt, value: 2 }, { kind: achievement, achievementId: ach_v_cache }]
+      - id: no_cache
+        text: 重构缓存逻辑太麻烦，先这样
+        visibleResponse: 每天¥11里约有¥6.6在重复劳动。一个月下来，你的“怕麻烦”价值¥198——快赶上半个月服务器钱了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 重复的活儿交给缓存，AI只干新活儿
+    terminal: true
+
+  - id: v_e05_d24_batch_api
+    campaign: venture
+    day: 24
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["Agent 提议：把非实时的分类任务攒到深夜批量跑，AI服务商的批处理接口价格是实时的一半。"]
+    choices:
+      - id: use_batch
+        text: 采纳：实时任务走在线，后台整理走批量，价格对半
+        visibleResponse: 用户感知无差别（谁在乎分类是半夜跑的），成本再降一半。工程思维：花在刀刃上的钱，是可以绕开刀背省出来的。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: setFlag, key: batch_api }]
+      - id: stay_realtime
+        text: 不折腾，实时就实时
+        visibleResponse: 你错过的不是折扣，是一种思维：成本结构里每一项都该被问“能不能更便宜地达成同样效果”。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e05_d24_usage_alert
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["半夜手机弹出告警：AI调用量1小时内冲到平日的8倍。你查了——某社团用脚本循环上传同一个文件，触发了2000次分类调用。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: rate_limit_added }
+    dialogue:
+      - { speaker: 系统, text: "你加了频控：单用户每小时上限50次。成本告警的价值不是吓你，是给你止损的窗口。" }
+    terminal: true
+
+  - id: v_e05_d25_server_scale
+    campaign: venture
+    day: 25
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 扩容要贴着负载走，不贴着焦虑走 }
+    scene: { location: workbench, characters: [] }
+    setup: ["用户过了200，免费层服务器开始吃紧：高峰期响应3秒。服务商销售“恰好”发来优惠：年付¥600升级专业版。"]
+    choices:
+      - id: monthly_scale
+        text: 先按月付最低档（¥30/月），压测后再决定要不要年付
+        visibleResponse: |
+          按月升级后高峰响应0.8秒，够用了。两个月后你发现凌晨负载极低，
+          又加了定时降配——最终月成本¥22，比销售的年付方案省了一半多。
+        hiddenEffects: [{ kind: subtract, key: money, value: 30 }, { kind: add, key: execution, value: 4 }, { kind: setFlag, key: smart_scaling }]
+      - id: yearly_upfront
+        text: 年付¥600，一步到位，省心
+        visibleResponse: 确实省心了，省到月底你对账时发现：这个“专业版”的一半功能你根本用不上。一步到位，也一步多花了¥300。
+        hiddenEffects: [{ kind: subtract, key: money, value: 600 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e05_d25_db_backup2
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: day, day: 25, phase: end }
+    scene: { location: workbench, characters: [] }
+    setup: ["你做了一次“灾难演练”：假装数据库丢了，用昨天的备份从零恢复。全程23分钟，恢复后数据完整。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: setFlag, key: disaster_drilled }
+    dialogue:
+      - { speaker: 系统, text: "23分钟，是你未来某天最坏情况的时长上限。演练过的人，半夜才睡得着。" }
+    terminal: true
+
+  - id: v_e05_d26_cdn_slow
+    campaign: venture
+    day: 26
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["有用户反馈页面图片加载慢。你查了：活动海报原图直出，一张8MB，宿舍网络要加载半分钟。"]
+    automaticEffects: [{ kind: add, key: execution, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "压缩+缩略图，10行代码解决。性能优化里最常见的一课：不是系统慢，是你传的东西大。" }
+    terminal: true
+
+  - id: v_e05_d26_icp_filing
+    campaign: venture
+    day: 26
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["服务器服务商发来通知：网站需完成ICP备案，否则30天后停止接入。你打开备案流程，发现要填的东西比想象多。"]
+    automaticEffects:
+      - { kind: setFlag, key: icp_started }
+      - { kind: add, key: academicDebt, value: 2 }
+    dialogue:
+      - { speaker: 你, text: "（个人备案材料：身份证、域名证书、核验单、拍照……预计7-20天审核）" }
+      - { speaker: 系统, text: "合规流程的第一定律：启动时间永远比想象长。今天提交，就是在救30天后的自己。" }
+    terminal: true
+
+  - id: v_e05_d27_cac_table
+    campaign: venture
+    day: 27
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 27, phase: end }
+    purpose: { learning: CAC要按渠道分层算，总账会骗人 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你把本月获客拆开算：转介绍（奶茶¥12/2注册=¥6）、内容（时间成本忽略现金）、广告位（¥50/2=¥25）、地推摊位（¥95/19=¥5）。"]
+    choices:
+      - id: cac_by_channel
+        text: 做分层CAC表，每个渠道单独一列，月度更新
+        visibleResponse: |
+          表做出来了：地摊竟是最低成本渠道（人力的时间被你忽略了，但学生时代时间比钱多）。
+          广告位¥25/注册>单均毛利——这渠道每拉一人亏一笔。砍，毫不犹豫。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 7 }, { kind: addAsset, assetType: revenue_report, name: 分渠道CAC表, description: 四渠道获客成本, content: "转介绍6/内容≈0/广告25/地摊5" }, { kind: achievement, achievementId: ach_v_cac_layer }]
+      - id: total_only
+        text: 算总账就行：总花费÷总注册
+        visibleResponse: 总CAC ¥9.4，看着健康。但总账把“广告位每人亏¥16”藏在了“地摊每人赚¥12”背后——平均数是最大的谎言。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 平均数里藏不住生意，分层才算数
+    terminal: true
+
+  - id: v_e05_d27_ads_test
+    campaign: venture
+    day: 27
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 付费投放：小额测试，设止损线 }
+    scene: { location: dorm, characters: [] }
+    setup: ["同学怂恿你投校园墙信息流：“¥100试试水，万一爆了呢？”你的单均毛利¥17。"]
+    choices:
+      - id: small_test
+        text: 投¥30试水，止损线定死：注册<2人就停
+        visibleResponse: ¥30换来1个注册，止损线触发，停。你用¥30验证了一个渠道不行——这钱花得比闷头投¥300便宜多了。
+        hiddenEffects: [{ kind: subtract, key: money, value: 30 }, { kind: add, key: evidenceDiscipline, value: 4 }, { kind: setFlag, key: ads_stopped }]
+      - id: big_bet
+        text: 投¥100，搏一把大的
+        visibleResponse: ¥100带来3注册，CAC¥33，每个都是亏的。“万一爆了”的万一，没有来。
+        hiddenEffects: [{ kind: subtract, key: money, value: 100 }, { kind: add, key: users, value: 3 }, { kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 投放的纪律比投放的金额重要
+    terminal: true
+
+  - id: v_e05_d28_ltv_calc
+    campaign: venture
+    day: 28
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: LTV=单均毛利×生命周期次数 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你试着算一个社团的LTV：平均每学期办4场活动×毛利¥15.6×预计在校3年=约¥187。而获客成本平均¥9。"]
+    choices:
+      - id: ltv_vs_cac
+        text: 算出LTV/CAC≈20倍，得出结论：值得为优质渠道多花获客成本
+        visibleResponse: |
+          20倍的比例让你敢做以前不敢的决定：给转介绍人免费的学期卡。
+          送出¥99，换回8个新社团——用LTV思维看，白送都是投资。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 6 }, { kind: add, key: users, value: 8 }, { kind: subtract, key: revenue, value: 99 }, { kind: achievement, achievementId: ach_v_ltv }]
+      - id: ltv_dismiss
+        text: LTV太虚了，我只看这个月收了多少钱
+        visibleResponse: 你继续按月看钱，继续舍不得任何获客花费，继续靠转介绍的自然生长。数字没错，只是你少了副眼镜。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: LTV/CAC决定你敢花多少钱买增长
+    terminal: true
+
+  - id: v_e05_d28_ratio_review
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: day, day: 28, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["罗哥远程看了你的账：LTV/CAC 20倍。他难得夸了一句，但补了一刀。"]
+    dialogue:
+      - { speaker: 罗哥, text: "20倍说明你太省了，不敢投。但也别飘：你的LTV是算出来的，不是验证出来的。留存撑不到3年，这个数就是幻觉。", mood: serious }
+      - { speaker: 你, text: "（在台账上补了一行：LTV假设待验证——当前实际数据仅覆盖0.5学期）" }
+    automaticEffects:
+      - { kind: relationship, characterId: v_mentor, delta: 4 }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    terminal: true
+
+  - id: v_e05_d22_equity_talk2
+    campaign: venture
+    day: 22
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 合伙先小人：出力、分钱、退出，全写下来 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["阿斌的投入越来越实：每周10小时代码+评审。你俩默契地从没谈过钱。今天他先开了口。"]
+    dialogue:
+      - { speaker: 阿斌, text: "我不要多，规则要清楚。丑话说在前面，才处得长。", mood: serious }
+    choices:
+      - id: write_agreement
+        text: 写两页纸合伙备忘录：分工/分成比例/退出条款/决策权，各签一份
+        visibleResponse: |
+          备忘录两页，分成五五，退出需提前30天通知且代码留在项目里。
+          写完阿斌说：“踏实了。”——口头兄弟都是气话，白纸黑字才是义气。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 10 }, { kind: addAsset, assetType: document, name: 合伙备忘录, description: 分工/分成/退出条款, content: "五五分成/退出30天/决策以数据为准" }, { kind: achievement, achievementId: ach_v_prenup }]
+      - id: avoid_paper
+        text: 写协议太伤感情了，兄弟之间谈钱多俗
+        visibleResponse: 你把话题岔开了。阿斌没再提，但那之后他的提交频率降了三成——没说出口的在意，都变成了冷淡。
+        hiddenEffects: [{ kind: subtract, key: teamTrust, value: 6 }, { kind: setFlag, key: no_prenup }]
+    learningPoint: 谈钱不伤感情，不谈钱才伤
+    terminal: true
+
+  - id: v_e05_d23_freerider
+    campaign: venture
+    day: 23
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 团队里的搭便车者：要么激活，要么请走 }
+    scene: { location: lab, characters: [] }
+    setup: ["社团里一个同学当初嚷嚷着要入伙，现在两周没产出，群消息也不回。但他的名字还在介绍页的团队栏里。"]
+    choices:
+      - id: straight_talk
+        text: 直接谈：“这两周你这边没动静，是忙还是不想干了？不想干咱好聚好散。”
+        visibleResponse: 他坦白：考研没时间，当初凑热闹。好聚好散，介绍页更新，群里公告。斩钉截铁的对话省下两个月的内耗。
+        hiddenEffects: [{ kind: add, key: independence, value: 4 }, { kind: add, key: teamTrust, value: 3 }, { kind: setFlag, key: freerider_out }]
+      - id: keep_warming
+        text: 不好意思戳破，继续挂着他的名字
+        visibleResponse: 名字挂了一个月。新用户问他“这位是负责什么的”，你替他圆了三次谎。挂名的成本是你自己的信誉。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 4 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e05_d24_exit_clause
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["阿斌拿到一个外地实习offer，6月起全职。他把备忘录翻出来：“按条款，我提前30天说。代码文档我这周整理完交接。”"]
+    dialogue:
+      - { speaker: 你, text: "（心里一沉，但备忘录就是干这个用的）好。交接清单我列，你核对。" }
+      - { speaker: 阿斌, text: "（松了口气）谢谢你没搞悲情那套。说好的好聚好散。", mood: pleased }
+      - { speaker: 系统, text: "第22天写下的退出条款，今天第一次生效——这就是它存在的意义：让离开不再像背叛。" }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 4 }
+      - { kind: setFlag, key: bin_exit_scheduled }
+    terminal: true
+
+  - id: v_e05_d25_rival_launch
+    campaign: venture
+    day: 25
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 竞品上线：先拆解，再决定跟不跟 }
+    scene: { location: dorm, characters: [] }
+    setup: ["深夜刷到：隔壁校一个团队发布了“社团帮”，界面比你精美，免费，功能更像全家桶。群里已经有人转发。"]
+    choices:
+      - id: dissect_rival
+        text: 冷静拆解：注册体验他们的产品，记功能/价格/目标用户，找他们没做的
+        visibleResponse: |
+          拆解报告：他们全而重（必须注册登录）、面向全国、无本地服务。
+          你的差异点反而清晰了：免注册、轻量、你人就在学校能上门。
+          恐慌变成了产品路线图。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 6 }, { kind: addAsset, assetType: document, name: 竞品拆解·社团帮, description: 功能/定位/差异分析, content: "对手全而重/全国化/需注册——本地化+轻量是护城河" }, { kind: achievement, achievementId: ach_v_rival_scan }]
+      - id: panic_feature
+        text: 连夜加功能跟他们对标，他们有什么我们也要有！
+        visibleResponse: 你熬了三夜模仿了三个功能，每个都比你对手的晚且糙。跟在别人身后的产品，永远只能捡剩饭。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 8 }, { kind: subtract, key: energy, value: 15 }, { kind: setFlag, key: panic_follow }]
+    learningPoint: 对手定义赛道，不定义你的产品
+    terminal: true
+
+  - id: v_e05_d26_price_war
+    campaign: venture
+    day: 26
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 价格战：免费的对手，拼的不是价格是定位 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["“社团帮”免费抢走了4个观望用户。你问罗哥要不要降价应战。"]
+    dialogue:
+      - { speaker: 罗哥, text: "他免费你免费，然后呢？比谁烧得起？你烧得起还是他烧得起？", mood: serious }
+      - { speaker: 你, text: "……都烧不起。" }
+      - { speaker: 罗哥, text: "那就别在他的战场上打。他免费要规模，你要活命。说说你用户留下来的真实原因。" }
+    choices:
+      - id: serve_deep
+        text: 反其道：主攻服务——2小时响应、上门陪跑、数据代迁移，服务免费对手给不了
+        visibleResponse: |
+          你在群里公开喊话：“工具可以免费，服务不会。周一到周五，2小时必回，可上门。”
+          两周后走掉的4家回来了3家，还带走一句：“免费的没人管。”
+        hiddenEffects: [{ kind: add, key: credibility, value: 7 }, { kind: add, key: users, value: 3 }, { kind: achievement, achievementId: ach_v_service_war }]
+      - id: match_free
+        text: 跟进免费，先守住用户再说
+        visibleResponse: 你免费了。收入归零，对手依然比你功能多，用户没守住几个，倒是把自己唯一的收入线剪断了。
+        hiddenEffects: [{ kind: subtract, key: revenue, value: 80 }, { kind: add, key: academicDebt, value: 6 }]
+    terminal: true
+
+  - id: v_e05_d26_copied
+    campaign: venture
+    day: 26
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 被抄怎么办：功能可抄，账本抄不走 }
+    scene: { location: dorm, characters: [] }
+    setup: ["发现“社团帮”上线的“活动码”功能，和你上周的几乎一样，连命名都像。你火一下子起来了。"]
+    choices:
+      - id: speed_run
+        text: 接受现实：功能迟早被抄，唯一抄不走的是你的用户关系和迭代速度
+        visibleResponse: |
+          你把火气转成冲刺：两周连发三个贴近用户需求的小改进。
+          用户留言：“社团帮像你，但不像你这么懂我们。”抄袭者能抄昨天，抄不了明天。
+        hiddenEffects: [{ kind: add, key: execution, value: 6 }, { kind: add, key: independence, value: 4 }, { kind: achievement, achievementId: ach_v_anticopy }]
+      - id: legal_fight
+        text: 发律师函警告他们抄袭！
+        visibleResponse: 你花两天研究维权，发现功能设计几乎不可能构成侵权。对面毫发无损，你的开发停了两天。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: add, key: technicalDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e05_d27_moat
+    campaign: venture
+    day: 27
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 小产品的护城河：数据+关系+场景深度 }
+    scene: { location: workbench, characters: [] }
+    setup: ["罗哥问：“如果明天有人1:1抄你，你拿什么守？”你列了三条，越写越清醒。"]
+    choices:
+      - id: data_moat
+        text: 护城河三件套：历史数据迁移成本、社长信任关系、迎新季场景卡位
+        visibleResponse: |
+          数据：三年活动记录都在你这儿，换工具=从零开始；
+          关系：9个社长直通你本人；场景：迎新周只有一次，卡住就赢一学期。
+          功能谁都能抄，这三样抄不走。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 6 }, { kind: addAsset, assetType: business_model, name: 护城河清单, description: 数据/关系/场景三重防御, content: "迁移成本/直达信任/场景窗口" }, { kind: achievement, achievementId: ach_v_moat }]
+      - id: no_moat
+        text: 没想好，走一步看一步
+        visibleResponse: “走一步看一步”翻译过来是：等对手进攻时才想防守。护城河要在和平时期挖。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e05_d28_wechat_depend
+    campaign: venture
+    day: 28
+    type: story
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 平台风险：你的命脉握在谁手里 }
+    scene: { location: dorm, characters: [] }
+    setup: ["夜里的清醒时刻：你的通知100%走微信群发接口、用户触达90%靠微信、支付走微信。微信打个喷嚏，你的产品就感冒。"]
+    automaticEffects:
+      - { kind: setFlag, key: platform_dependency_seen }
+      - { kind: addAsset, assetType: document, name: 平台依赖清单, description: 单点依赖风险盘点, content: "通知/触达/支付三线全押微信——需要备选方案" }
+    dialogue:
+      - { speaker: 系统, text: "你做的不是产品，是微信生态里的一间铺面。铺面可以开，房产证得攥在自己手里：邮件通知、独立账号、至少要有个备胎。" }
+    terminal: true
+
+  - id: v_e05_d23_miniapp_reject
+    campaign: venture
+    day: 23
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["小程序审核被拒，理由：“涉及校园社交类目，需提供相关资质”。你对照规则看了三遍，发现类目选择从一开始就错了。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+      - { kind: add, key: academicDebt, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "重新以“效率工具”类目提交，三天过审。平台规则的第一课：先读规则，再撞南墙。" }
+    terminal: true
+
+  - id: v_e05_d24_api_break
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["第三方短信服务商凌晨升级接口，没发公告，你的通知功能全挂了。用户群安静得可怕——坏消息总是从安静开始。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 4 }
+      - { kind: subtract, key: credibility, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "你在两小时内切到备用服务商，通知恢复。教训：任何单点依赖，都要配一个“如果它明天消失”的预案。" }
+    terminal: true
+
+  - id: v_e05_d25_rule_change
+    campaign: venture
+    day: 25
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 平台规则收紧：合规是底线也是壁垒 }
+    scene: { location: dorm, characters: [] }
+    setup: ["微信群新规：未认证主体不得批量群发营销信息。你的获客主渠道一夜之间踩线。"]
+    choices:
+      - id: go_compliant
+        text: 全面转合规：申请学校社团联合会背书+把通知改为用户主动订阅制
+        visibleResponse: |
+          订阅制反而提升了触达质量：主动订阅的用户打开率是群发的3倍。
+          平台收紧滤掉的是投机者，留下的是守规矩的人。
+        hiddenEffects: [{ kind: add, key: credibility, value: 6 }, { kind: add, key: users, value: 0 }, { kind: setFlag, key: subscription_based }]
+      - id: risk_it
+        text: 先继续群发，封了再说
+        visibleResponse: 三天后你的微信号被限制群发7天。正好撞上社团招新周——你最需要说话的那七天，你哑了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: subtract, key: users, value: 4 }, { kind: scheduleEvent, eventId: v_e05_delay_muted, onDay: 28 }]
+    terminal: true
+
+  - id: v_e05_d26_self_or_platform
+    campaign: venture
+    day: 26
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 借平台流量 vs 自建触点：两条腿走路 }
+    scene: { location: workbench, characters: [] }
+    setup: ["复盘所有触点：微信群（租的）、表白墙（租的）、视频号（租的）……你自己的：一个邮件列表，0订阅。"]
+    choices:
+      - id: build_owned
+        text: 每周固定把沉淀内容同步到自己的邮件列表+官网，哪怕只有几十人
+        visibleResponse: |
+          邮件列表缓慢爬到137人。三个月后平台规则再变时，
+          这137人成了你唯一不需要看任何人脸色的触达——自有渠道才是真资产。
+        hiddenEffects: [{ kind: add, key: credibility, value: 5 }, { kind: setFlag, key: owned_channel }, { kind: achievement, achievementId: ach_v_owned }]
+      - id: platform_only
+        text: 全押平台，流量在哪我去哪
+        visibleResponse: 平台确实流量大。但每次规则变动你都像经历一次地震——租房客永远在搬家。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e05_d27_cost_three
+    campaign: venture
+    day: 27
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 降本三板斧：砍重复、降规格、换计价 }
+    scene: { location: workbench, characters: [] }
+    setup: ["月成本¥210（AI¥96+服务器¥30+杂项¥84），收入¥187，还是负的。罗哥说：降本三板斧，抡起来。"]
+    choices:
+      - id: three_axes
+        text: 砍重复（缓存命中）+降规格（凌晨批处理）+换计价（短信按量改套餐）
+        visibleResponse: |
+          三斧下去：AI¥96→¥38，杂项¥84→¥52，月成本¥210→¥128。
+          当月收入¥211——你第一次看到正数。黑字有黑字的香气。
+        hiddenEffects: [{ kind: add, key: execution, value: 7 }, { kind: add, key: evidenceDiscipline, value: 4 }, { kind: achievement, achievementId: ach_v_cost_cut }]
+      - id: cut_one
+        text: 只砍了服务器，升到最便宜档
+        visibleResponse: 服务器省了¥8。AI调用那¥96的大头纹丝不动——你对着芝麻下刀，西瓜在旁边看笑话。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e05_d28_margin_up
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: day, day: 28, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["月底账本：收入¥211，变动成本¥46，固定成本¥82，当月净+¥83。你把那个“+83”看了很久。"]
+    automaticEffects:
+      - { kind: add, key: revenue, value: 83 }
+      - { kind: setFlag, key: first_positive_month }
+    dialogue:
+      - { speaker: 系统, text: "¥83买不起一顿火锅，但它证明了一件事：这台机器能产生正循环。剩下的只是放大它。" }
+    terminal: true
+
+  - id: v_e05_d22_month_meeting
+    campaign: venture
+    day: 22
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["你和阿斌开了第一次“月度算账会”，就你们俩，一块白板。"]
+    dialogue:
+      - { speaker: 阿斌, text: "成本我认，AI调用量这块还能再压。但我有个条件：别再免费送功能了，上周你又白送了一个导出。", mood: serious }
+      - { speaker: 你, text: "……成交。免费要有额度，人情要有边界。" }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 5 }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    terminal: true
+
+  - id: v_e05_d23_mentor_ltv2
+    campaign: venture
+    day: 23
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["罗哥用一杯美式的时间给你讲透了LTV。"]
+    dialogue:
+      - { speaker: 罗哥, text: "LTV不是财务概念，是经营哲学。你把它算出来那天，就会明白：留住一个老客户，胜过抢三个新的。", mood: serious }
+      - { speaker: 你, text: "所以留存高的产品，敢花的获客钱也多。" }
+      - { speaker: 罗哥, text: "对。留存是一切增长的许可证。没留存的LTV是零，CAC再低也是白烧。" }
+    automaticEffects:
+      - { kind: relationship, characterId: v_mentor, delta: 4 }
+      - { kind: add, key: userUnderstanding, value: 4 }
+    terminal: true
+
+  - id: v_e05_d24_rival_users
+    campaign: venture
+    day: 24
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 访谈对手的用户，找他们的弱点 }
+    scene: { location: canteen, characters: [] }
+    setup: ["两个社团最近换用了“社团帮”。你约了他们的干事喝茶，想听听真实原因。"]
+    choices:
+      - id: listen_rival_users
+        text: 只听不辩：为什么换？哪里不满意？什么情况下会回来？
+        visibleResponse: |
+          答案价值千金：“他们界面新潮，但合并速度慢，而且没人管售后。”
+          你没劝任何人回来，但知道了三件该改的事和一条能打的话。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 7 }, { kind: addAsset, assetType: interview_notes, name: 访谈·竞品用户, description: 换用原因+不满点, content: "新潮但慢/无售后/未来若修复速度可能回" }, { kind: achievement, achievementId: ach_v_rival_interview }]
+      - id: win_back_pitch
+        text: 趁机推销：“要不换回来？我们送你们一个月。”
+        visibleResponse: 对方尴尬地笑笑：“再看看吧。”你想赢回用户的心情，把一场情报局干成了推销会。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e05_d25_niche_defense
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["想通了一件事：你的市场只有这一所大学。“社团帮”要做全国，迟早会把这块“太小”的市场让给你。小，有时候是铠甲。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 4 }
+      - { kind: setFlag, key: niche_strategy }
+    dialogue:
+      - { speaker: 系统, text: "大公司看不上、小对手进不来的缝隙，就是小创业者的安全屋。把一条缝吃透，比一个面都摸强。" }
+    terminal: true
+
+  - id: v_e05_d26_hidden_sms
+    campaign: venture
+    day: 26
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["短信账单出来：¥41。你才意识到每次活动通知都发短信，一场300人的活动就是¥15——隐藏成本藏在每一次“顺手”里。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: subtract, key: money, value: 41 }
+    dialogue:
+      - { speaker: 系统, text: "你把默认通知改成了“微信优先、短信可勾选”，当月短信费降到¥9。成本的账要天天看，不然它就悄悄看你。" }
+    terminal: true
+
+  - id: v_e05_d27_bin_raise
+    campaign: venture
+    day: 27
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["阿斌看完月账本说：“现在我每周投入快20小时了，还是五五分，我觉得我亏。要不多给我10个点？”"]
+    choices:
+      - id: counter_offer
+        text: 还价：“提到55，但你的产出要对应涨：测试和运维全归你。”白纸黑字改备忘录
+        visibleResponse: 阿斌想了想签了。你也踏实——他多拿5个点，扛走了一整块你最头疼的工作。谈判不是谁赢，是把活儿和钱对齐。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 5 }, { kind: addAsset, assetType: document, name: 合伙备忘录v2, description: 分成55/45+分工调整, content: "阿斌55%：代码+测试+运维；你45%：产品+用户+账务" }]
+      - id: refuse_flat
+        text: “当初说好的五五，不能变。”
+        visibleResponse: 阿斌“行”了一声，没再争。但投入悄悄降回了每周8小时——规则没变，人心变了，产出先变。
+        hiddenEffects: [{ kind: subtract, key: teamTrust, value: 6 }, { kind: setFlag, key: bin_demotivated }]
+    terminal: true
+
+  - id: v_e05_d28_plan_b
+    campaign: venture
+    day: 28
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 平台备胎：通知/登录/支付各留一条退路 }
+    scene: { location: workbench, characters: [] }
+    setup: ["平台依赖清单贴了两天了。你决定动手消除最危险的单点。"]
+    choices:
+      - id: triple_backup
+        text: 落地三备胎：邮件通知通道+独立账号密码登录+支付宝备用支付
+        visibleResponse: |
+          三个备胎一周内全部就位，测试通过。
+          从此微信“抽风”的夜里，你的通知照样发、用户照样登录、单照样成交。安全感是做出来的。
+        hiddenEffects: [{ kind: add, key: execution, value: 6 }, { kind: setFlag, key: plan_b_ready }, { kind: achievement, achievementId: ach_v_planb }]
+      - id: defer_plan
+        text: 备胎又费时又费钱，等真出事再说
+        visibleResponse: 真出事那天你才懂：备胎要在晴天装。雨夜里没有供应商理你。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e05_d22_funding_think
+    campaign: venture
+    day: 22
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 要不要拿钱：先想清楚拿钱换什么 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["一个本地商人听说了你的项目，表示“投你两万，占四成，帮年轻人圆梦”。你心跳快了半拍。"]
+    choices:
+      - id: decline_fund
+        text: 婉拒：“现在月毛利为正，暂时不需要。欢迎以后以客户身份支持。”
+        visibleResponse: 罗哥听说后点头：“四成换两万，等于你把未来一大块自己卖了。账算得清，就没人能占你便宜。”
+        hiddenEffects: [{ kind: add, key: independence, value: 6 }, { kind: relationship, characterId: v_mentor, delta: 4 }, { kind: achievement, achievementId: ach_v_no_fund }]
+      - id: take_fund
+        text: 接！两万能把事情做大十倍
+        visibleResponse: 钱到账了，人也来了：每月要看报表、要“建议”产品方向、节假日要你汇报。你用四成的自由，换了两万的加速度——而你的引擎本来就不缺油。
+        hiddenEffects: [{ kind: add, key: money, value: 20000 }, { kind: subtract, key: independence, value: 10 }, { kind: setFlag, key: took_investment }]
+    learningPoint: 拿钱之前先问：我缺的是钱，还是别的
+    terminal: true
+
+  - id: v_e05_d23_investor_meet
+    campaign: venture
+    day: 23
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: cafe, characters: [] }
+    setup: ["毕业后做了三年投资的学长回校，你蹭了杯咖啡请教。"]
+    dialogue:
+      - { speaker: 投资学长, text: "你们这个体量别急着找机构。先回答我：一个用户成本多少？生命周期赚多少？答不上来就先别谈融资，谈了也拿不到好价钱。", mood: serious }
+      - { speaker: 你, text: "获客¥9，LTV估算¥187，比例20倍——但LTV还没被时间验证。" }
+      - { speaker: 投资学长, text: "（挑眉）行啊，比外面一半的BP靠谱。记住这个比例，它是你的底气也是你的枷锁。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 4 }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    terminal: true
+
+  - id: v_e05_d24_valuation_illusion
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你刷创业新闻看入迷了：某校园项目天使轮估值五千万。再看看自己后台：月净利¥83。两种现实的落差有点扎眼。"]
+    automaticEffects: [{ kind: add, key: independence, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "估值是别人嘴里的故事，现金流是你手里的事实。故事能上头条，事实才能交房租。" }
+    terminal: true
+
+  - id: v_e05_d25_runway
+    campaign: venture
+    day: 25
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 现金跑道=现金÷月净消耗，先算能活多久 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你算了“跑道”：账上现金¥1462，当前月净消耗约¥-23（已接近打平）。结论：如果不增长也不恶化，你能一直活。"]
+    choices:
+      - id: runway_doc
+        text: 把“跑道计算”变成月度动作：每月25号算一次现金和跑道
+        visibleResponse: 跑道表进台账。你从此知道每个重大决策有多少个月的试错额度——敢烧钱的人先知道家底。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: setFlag, key: runway_tracked }]
+      - id: gut_feel_cash
+        text: 凭感觉，反正卡里还有钱
+        visibleResponse: 凭感觉的人最后都见过同一幕：忽然发现余额撑不过下个月，而每个支出当初都“没多少”。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e05_d26_money_discipline
+    campaign: venture
+    day: 26
+    type: story
+    trigger: { kind: day, day: 26, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["你立了三条财务纪律：①公私账户分开（生活费碰不到项目钱）②¥50以上支出想一夜 ③每周日对账10分钟。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 5 }
+      - { kind: setFlag, key: money_discipline }
+    dialogue:
+      - { speaker: 系统, text: "财务纪律不是抠门，是给欲望装刹车。创业死于没钱的不多，死于随便花钱的多。" }
+    terminal: true
+
+  - id: v_e05_delay_muted
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——平台禁言的代价, learning: 把触达命脉交给平台规则就是赌博 }
+    scene: { location: dorm, characters: [] }
+    setup: ["招新周关键三天，你的群发功能还躺在禁言期。眼睁睁看着三个大社团在群里问“报名管家还能用吗”，你无法回复。"]
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 5 }
+      - { kind: add, key: academicDebt, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：第25天的“先继续群发”，在最重要的日子完成了复仇。" }
+    terminal: true

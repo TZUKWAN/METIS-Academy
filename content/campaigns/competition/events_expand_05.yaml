@@ -1,0 +1,645 @@
+# 竞赛线扩展包05：初赛 / 复赛网评 / 评委 / 对手 / 临场应对（D17-D21）
+events:
+  - id: c_xe7_prelim_morning
+    campaign: competition
+    day: 19
+    type: story
+    trigger: { kind: day, day: 19, phase: start }
+    purpose: { narrative: 初赛日早晨, learning: 比赛日的仪式感与检查 }
+    scene: { location: dorm, characters: [] }
+    setup: ["初赛日上午。你按清单检查：U盘×2、备用机、一页纸应答卡、充电宝、纸质申报书一份。方远在群里发了三个字：「都到位。」"]
+    dialogue:
+      - { speaker: 系统, text: "比赛日的平静不是运气，是清单给的。" }
+    next: c_xe7_prelim_wait_room
+
+  - id: c_xe7_prelim_wait_room
+    campaign: competition
+    day: 19
+    type: npc
+    trigger: { kind: manual }
+    purpose: { narrative: 候场区观察, learning: 候场时间的管理 }
+    scene: { location: corridor, characters: [c_rival] }
+    setup: ["候场区。邱一鸣的队伍在第9号，你们第11号。他的队员在低声过稿子，他本人翘着腿刷手机——演给你们看的。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "（路过）你们手都在抖？放轻松，初赛而已。", mood: pleased }
+      - { speaker: 方远, text: "（低头系鞋带）他说的对，初赛而已。（系了个死结）", mood: neutral }
+    choices:
+      - id: warm_up_routine
+        text: 按彩排惯例热身：默讲一遍开场30秒+深呼吸三轮
+        visibleResponse: 三人轮流默讲开场。轮到林晓时她声音有点抖，讲完自己愣住："好像也没那么可怕。"
+        hiddenEffects: [{ kind: add, key: energy, value: 4 }, { kind: setFlag, key: warmup_done }]
+        next: c_xe7_prelim_qa_data
+      - id: spy_on_rival
+        text: 凑近听第9号队伍过稿子，摸他们的重点
+        visibleResponse: 你听到了三个功能名，没听到任何数据。信息没用上，自己的热身时间倒是没了。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 3 }]
+        next: c_xe7_prelim_qa_data
+    terminal: true
+
+  - id: c_xe7_prelim_qa_data
+    campaign: competition
+    day: 19
+    type: npc
+    trigger: { kind: manual }
+    purpose: { narrative: 初赛数据追问, learning: 每个数字都要能说出处 }
+    scene: { location: defense_hall, characters: [c_judge_prelim] }
+    setup: ["答辩进行中。高主任的手指停在数据页：「81%。三轮均值——三轮样本分别是多少？差异多大？」"]
+    dialogue:
+      - { speaker: 高主任, text: "81%很好看。我想知道的是 variance。", mood: serious }
+      - { speaker: 你, text: "三轮分别是78%、82%、83%，样本量120。第三轮高是因为修了两个分类错误后补测的。" }
+      - { speaker: 高主任, text: "（第一次抬头看了你们一眼）continue。", mood: neutral }
+    next: c_xe7_prelim_surprise_q
+    choices:
+      - id: answer_precise
+        text: 精确作答：每轮数字、样本、差异原因
+        visibleResponse: 答完这题，剩下的问题明显变温和了——数据答得动的队伍，评委会自动降低攻击性。
+        hiddenEffects: [{ kind: add, key: credibility, value: 8 }, { kind: setFlag, key: prelim_data_good }]
+      - id: answer_vague
+        text: 「大致都在80%左右」——模糊但不出错
+        visibleResponse: 高主任「嗯」了一声，在表格上写了什么。那个「嗯」的音调你会在今晚反复回放。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 4 }, { kind: setFlag, key: prelim_data_shaky }]
+    terminal: true
+
+  - id: c_xe7_prelim_surprise_q
+    campaign: competition
+    day: 19
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 没准备的问题：诚实+现场推理 }
+    scene: { location: defense_hall, characters: [c_judge_prelim] }
+    setup: ["最后一个问题超出准备范围：「如果学校明年统一采购了一个商业社团系统，你们的项目还有什么价值？」"]
+    choices:
+      - id: honest_think
+        text: 停两秒，诚实推理：商业系统管全校，我们管「最后三公里」的社团自定义
+        visibleResponse: 你承认没想过这个场景，然后现场分析：商业系统覆盖通用流程，但72个社团的个性化表单和去重规则没人管——那是你们的生存空间。高主任在表上落笔。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: add, key: independence, value: 5 }
+          - { kind: setFlag, key: surprise_q_survived }
+        next: c_xe7_prelim_exit
+      - id: bluff_hard
+        text: 「我们的技术领先，任何竞品都无法替代」
+        visibleResponse: 高主任追了一句：「哪个技术点？」你报了两个功能名——那是功能，不是技术。他合上了材料。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 8 }, { kind: setFlag, key: bluff_failed }]
+        next: c_xe7_prelim_exit
+    terminal: true
+
+  - id: c_xe7_prelim_exit
+    campaign: competition
+    day: 19
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 下场后的第一分钟, learning: 赛后立即复盘黄金五分钟 }
+    scene: { location: corridor, characters: [c_tech, c_design] }
+    setup: ["下场的走廊上，雨桐第一句话：「第3页讲快了。」方远：「数据那题咱们答得漂亮。」你们借了走廊白板，五分钟记下四条复盘。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: prelim_retro_done }
+    dialogue:
+      - { speaker: 系统, text: "赛后五分钟的记忆保鲜期，比一周后的任何回忆都准。" }
+    terminal: true
+
+  - id: c_xe7_semifinal_notice
+    campaign: competition
+    day: 20
+    type: story
+    trigger: { kind: day, day: 20, phase: start }
+    purpose: { narrative: 复赛网评规则, learning: 新阶段新规则 }
+    scene: { location: dorm, characters: [] }
+    setup: ["上午十点，入围名单公示：应用赛道12进8，你们在列。同一条通知里写着复赛规则：今晚20:00前提交更新版申报书与3分钟视频，网评分数计入决赛总分30%。"]
+    automaticEffects:
+      - { kind: setFlag, key: semifinal_notified }
+    dialogue:
+      - { speaker: 方远, text: "（盯着「30%」）这意味着决赛前我们不能躺。", mood: serious }
+      - { speaker: 江雨桐, text: "更新版申报书——好消息是素材全有，坏消息是今晚八点。", mood: worried }
+    next: c_xe7_semifinal_plan
+
+  - id: c_xe7_semifinal_plan
+    campaign: competition
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 时间紧急时按「增量」更新而非重做 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["十小时倒计时。更新什么？全队列出候选：修崩溃后的新数据/竞品对比加强/用户证言/界面优化截图/砍掉愿景页。"]
+    choices:
+      - id: update_incremental
+        text: 增量更新：补新测试数据+用户证言+修复后的稳定性说明，结构不动
+        visibleResponse: 三处增量，两小时完成。数据源表加了三行，全部有出处。20:00前一小时提交完毕——这次你们连命名格式都是现成的。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: setFlag, key: semifinal_submitted }
+          - { kind: achievement, achievementId: ach_c_semifinal_fast }
+        next: c_xe7_semifinal_user_quote
+      - id: update_overhaul
+        text: 趁机大改版：反正评委是同一批，焕然一新给个好印象
+        visibleResponse: 大改版改到19:40，视频导出到87%时软件崩溃。最终压线提交了一个没有封面的版本。焕然一新，新得缺页。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: scheduleEvent, eventId: c_xe7_dly_semifinal_mess, onDay: 21 }]
+        next: c_xe7_semifinal_user_quote
+      - id: skip_semifinal_effort
+        text: 原样再交一遍，把力气留给决赛
+        visibleResponse: 原样交了。网评评委的评语栏写着：「与初赛完全一致，未见迭代诚意」——30%的分数里你们丢了大半。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }, { kind: setFlag, key: semifinal_lazy }]
+        next: c_xe7_semifinal_user_quote
+    terminal: true
+
+  - id: c_xe7_semifinal_user_quote
+    campaign: competition
+    day: 20
+    type: npc
+    trigger: { kind: manual }
+    purpose: { narrative: 用户证言的收集, learning: 让用户替你说话 }
+    scene: { location: canteen, characters: [] }
+    setup: ["你去找老K要一句证言放进更新材料。老K口述，你记录，他改了两遍措辞——比想象中认真。"]
+    dialogue:
+      - { speaker: 老K, text: "（改第三遍）这句不行，「大幅提升效率」是我说的话吗？我原话是「我不用再拿三个手机回收到了」。用原话。", mood: serious }
+    next: c_xe7_speech_polish
+    choices:
+      - id: use_verbatim
+        text: 用原话，一个字不改
+        visibleResponse: 原话进了申报书用户证言栏，粗体。网评评委的批注（赛后公开的）写着：「用户证言可信度高」。
+        hiddenEffects: [{ kind: add, key: credibility, value: 6 }, { kind: setFlag, key: k_quote_used }]
+      - id: polish_quote
+        text: 帮老K把话润色得更有书面感
+        visibleResponse: 润色后的证言读起来像广告文案。老K看到后说：「这说的不是我。」——证言的说服力随润色递减。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe7_judge_style_study
+    campaign: competition
+    day: 20
+    type: decision
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { learning: 决赛前研究评委的公开学术观点 }
+    scene: { location: dorm, characters: [c_ai_agent] }
+    setup: ["决赛评委名单公布：孙教授领衔。你让Agent搜集他近年的公开演讲观点。它汇总出三条：反感概念堆砌/重视数据可溯/欣赏「承认边界」的答辩者。"]
+    choices:
+      - id: study_judges
+        text: 核对这三条的真实性：找他两段公开视频亲自验证
+        visibleResponse: 视频里孙教授果然两次追问「这个数据的来源」、一次肯定了「这个我们做不了」的回答。三条全部属实，答辩策略据此调整。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: setFlag, key: judge_studied }
+          - { kind: achievement, achievementId: ach_c_judge_study }
+      - id: trust_agent_summary
+        text: Agent总结得挺好，直接用
+        visibleResponse: 总结里第三条「欣赏承认边界的答辩者」其实是它的推测。决赛你按这条答了一道本可以拿分的问题——评委的表情说明了一切。
+        hiddenEffects: [{ kind: add, key: aiDependence, value: 5 }]
+    terminal: true
+
+  - id: c_xe7_rival_semifinal_duel
+    campaign: competition
+    day: 20
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: corridor, characters: [c_rival] }
+    setup: ["提交入口前遇到邱一鸣。他看着你们的队伍编号，忽然伸出手。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "说真的，你们材料的数据链是我这两年见过最全的。决赛别软。", mood: serious }
+      - { speaker: 系统, text: "对手的认可偶尔是真的。接住它，不用怀疑。" }
+    choices:
+      - id: handshake
+        text: 握手：「你们的功能演示也不水。决赛见。」
+        visibleResponse: 两只手握了三秒。回去的路上方远说："他刚才没放烟雾弹。"有些较量的尊重，只在赛场存在。
+        hiddenEffects: [{ kind: relationship, characterId: c_rival, delta: 8 }, { kind: add, key: riskTolerance, value: 3 }]
+      - id: suspicious_refuse
+        text: 「又是心理战吧。」侧身走过
+        visibleResponse: 邱一鸣耸耸肩走了。你的警惕心没白费，但那晚你的复盘里多了一条没必要的猜测，睡得不太好。
+        hiddenEffects: [{ kind: relationship, characterId: c_rival, delta: -4 }, { kind: subtract, key: energy, value: 4 }]
+    terminal: true
+
+  - id: c_xe7_final_venue_check
+    campaign: competition
+    day: 20
+    type: decision
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { learning: 场地侦察消灭环境变量 }
+    scene: { location: defense_hall, characters: [] }
+    setup: ["决赛场地开放踩点。你记下：投影比例4:3（PPT是16:9，两边会被裁）、HDMI接口在讲台左侧、WiFi密码贴在签到台、讲台有翻页笔但没激光。"]
+    choices:
+      - id: full_recon
+        text: 全面踩点：试投影、试接口、试网络、记讲台动线
+        visibleResponse: PPT连夜改成4:3安全区排版；演示备份机插上HDMI试了一遍；翻页笔没激光——雨桐把「指屏幕」写进了分工。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: setFlag, key: venue_recon }
+          - { kind: achievement, achievementId: ach_c_venue_recon }
+      - id: skip_recon
+        text: 明天早点到，现场调就行
+        visibleResponse: 「现场调」发生在评委注视下：PPT两边被裁掉一列数据，你蹲在讲台左侧插线时话筒差点掉地。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    unlockKnowledge: [kc_c_backup_plan]
+    terminal: true
+
+  - id: c_xe7_speech_polish
+    campaign: competition
+    day: 20
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 讲稿改到「像说话」为止 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["答辩稿第五版。雨桐念了一遍，停下来：「这句「赋能多场景应用」——你自己平时这么说吗？」"]
+    choices:
+      - id: speak_human
+        text: 全稿改成「人话」：每个句子先念三遍，拗口的 rewrite
+        visibleResponse: 改完的稿子念起来像你在讲话，不像播音稿。彩排时你自己都惊讶：不背稿也能讲——因为是自己的话。
+        hiddenEffects: [{ kind: add, key: execution, value: 4 }, { kind: setFlag, key: speech_human }]
+        next: c_xe7_final_role_assign
+      - id: keep_written_style
+        text: 书面语更专业，背熟就行
+        visibleResponse: 背到第九遍时你开始在「赋能」处卡壳——大脑拒绝记住舌头不认的词。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 8 }]
+        next: c_xe7_final_role_assign
+    terminal: true
+
+  - id: c_xe7_final_role_assign
+    campaign: competition
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 答辩分工：主讲/演示/接问各有其人 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["决赛8分钟+5分钟问答。谁主讲？谁操作演示？谁接追问？三人第一次为「谁上」认真讨论——上次这么认真还是分外卖红包。"]
+    choices:
+      - id: best_speaker
+        text: 雨桐主讲（彩排得分最高），方远演示，你专职接数据类追问
+        visibleResponse: 分工落定。方远对「不说话只操作」有意见，看了两遍自己彩排录像后撤回意见："我手比嘴稳。"
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 5 }, { kind: setFlag, key: final_roles_set }]
+      - id: captain_all_in
+        text: 你全包：主讲加接问，你们俩专心操作
+        visibleResponse: 你一个人扛了13分钟的输出量。问答环节第三个问题时你的大脑开始缓冲——单点过载，和服务器一个道理。
+        hiddenEffects: [{ kind: subtract, key: execution, value: 3 }, { kind: setFlag, key: captain_overload }]
+    terminal: true
+
+  - id: c_xe7_sleep_decision
+    campaign: competition
+    day: 20
+    type: decision
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { learning: 决赛前夜的睡眠是比赛装备 }
+    scene: { location: dorm, characters: [] }
+    setup: ["23:40。备选：再全流程过一遍（约40分钟）/立刻睡。明早9点开赛。"]
+    choices:
+      - id: sleep_first
+        text: 睡。练了五遍的东西不差这一遍，缺的是明天的清醒
+        visibleResponse: 你睡了七小时。早上醒来第一反应是「昨晚彩排第8步好像能再顺一点」——睡过的大脑自己完成了整理。
+        hiddenEffects: [{ kind: add, key: energy, value: 15 }, { kind: setFlag, key: slept_well }]
+      - id: one_more_run
+        text: 再来一遍，第6遍肯定比第5遍强
+        visibleResponse: 第6遍其实比第5遍差了——你在第4步开始用「昨晚的肌肉记忆」而不是脑子。凌晨一点，你带着遗憾睡着。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 10 }]
+    unlockKnowledge: [kc_c_energy_mgmt]
+    terminal: true
+
+  - id: c_xe7_final_morning
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: day, day: 21, phase: start }
+    purpose: { narrative: 决赛日早晨, learning: 赛前流程闭环 }
+    scene: { location: dorm, characters: [] }
+    setup: ["决赛日。检查清单最后一遍：设备✓、材料✓、备份✓、人员✓。雨桐在群里发了张照片：四个人的早餐，每人面前一杯豆浆。", "「最后一顿比赛餐。晚上换庆功宴或者安慰宴，反正先吃饱。」"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 5 }
+      - { kind: setFlag, key: final_morning_ready }
+    next: c_xe7_final_draw_order
+    terminal: true
+
+  - id: c_xe7_final_draw_order
+    campaign: competition
+    day: 21
+    type: npc
+    trigger: { kind: manual }
+    purpose: { narrative: 抽签运气, learning: 出场顺序影响心态不影响分数 }
+    scene: { location: defense_hall, characters: [c_rival] }
+    setup: ["出场顺序抽签：邱一鸣第2位，你们第7位——中间隔着五个对手，包括一支带着实物机器人的队伍。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "（下场时）前面几个都不行。你们要是再不行，评委审美就疲劳了。", mood: pleased }
+    choices:
+      - id: ignore_banter
+        text: 不接话。把候场时间用来最后默过一遍10步脚本
+        visibleResponse: 默讲到第8步时工作人员叫到你们。走上台的那几秒，你只想着一件事：第一句话怎么开。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: final_calm }]
+        next: c_xe7_final_tech_fail
+      - id: pressure_adopt
+        text: 被他说得有点烦，情绪上头
+        visibleResponse: 你带着一股「要争口气」的火气开讲，语速比彩排快了15%。雨桐在旁边拼命给你打「慢」的手势。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+        next: c_xe7_final_tech_fail
+    terminal: true
+
+  - id: c_xe7_final_tech_fail
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 现场突发：投影失灵, learning: B计划的真正考验 }
+    scene: { location: defense_hall, characters: [c_judge_final] }
+    setup: ["开场90秒，投影突然黑屏。会场安静。孙教授抬手示意别慌：「设备问题不扣分，看你们怎么处理。"]
+    dialogue:
+      - { speaker: 系统, text: "你们等了两年的这一刻来了——而且是以最坏的方式。" }
+    next: c_xe7_final_demo_live
+    choices:
+      - id: switch_backup
+        text: 启动预案：备用笔记本接入，雨桐同步口头讲解第3页内容顶住时间
+        visibleResponse: 全程47秒，画面恢复。雨桐的口头补充无缝衔接到下一页。孙教授在评分表上写了什么——你后来知道那是「应变能力：优」。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 8 }
+          - { kind: setFlag, key: projector_saved }
+          - { kind: achievement, achievementId: ach_c_stay_calm }
+      - id: panic_wait
+        text: 站在台上等工作人员修
+        visibleResponse: 三分钟黑屏。你的开场记忆点全凉了，后面的讲述一直在追赶节奏。设备修好了，状态没修好。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 5 }, { kind: setFlag, key: panic_gap }]
+    terminal: true
+
+  - id: c_xe7_final_demo_live
+    campaign: competition
+    day: 21
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 现场演示的真机环节 }
+    scene: { location: defense_hall, characters: [c_judge_final, c_tech] }
+    setup: ["演示第8步：评委现场扫码，用自己手机提交一条真实报名。方远看向你——这一步用的是现场网络。"]
+    choices:
+      - id: live_demo
+        text: 真机演示。有本地降级预案：失败就切录屏并说明
+        visibleResponse: 孙教授的手机上，提交成功动画转了三秒。他「哦」了一声——那声「哦」是全场最值钱的音效。真网络，真提交，真数据。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 10 }
+          - { kind: setFlag, key: live_demo_success }
+          - { kind: achievement, achievementId: ach_c_live_demo }
+        next: c_xe7_final_hard_question
+      - id: safe_recording
+        text: 播录屏。安全第一
+        visibleResponse: 录屏流畅播完。问答时孙教授问：「刚才如果我现在提交一条，系统会怎么响应？」你说「应该会成功」——「应该」两个字被全场听见了。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 4 }, { kind: setFlag, key: demo_recorded }]
+        next: c_xe7_final_hard_question
+    terminal: true
+
+  - id: c_xe7_final_hard_question
+    campaign: competition
+    day: 21
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 追问的本质是检验理解深度 }
+    scene: { location: defense_hall, characters: [c_judge_final] }
+    setup: ["孙教授的追问来了：「你们的AI分类，错判了怎么办？谁来兜底？兜底的代价算过吗？」三连问，一个比一个深。"]
+    choices:
+      - id: layered_answer
+        text: 分层作答：错判率数据→人工审核兜底→成本已折算进人时账
+        visibleResponse: 你答了三层：81%准确率意味着19%进人工复核，复核由社长一键处理（平均每条8秒），这笔成本在「900人时」账里已扣减。孙教授点头：「想过边界的团队，不多。」
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 10 }
+          - { kind: setFlag, key: hard_q_answered }
+          - { kind: achievement, achievementId: ach_c_hard_q }
+        next: c_xe7_final_closing
+      - id: deflect_answer
+        text: 「我们的准确率很高，这个问题基本不会发生」
+        visibleResponse: 「基本不会」——孙教授追问：「81%在你们自己的申报书里。19%去哪了？」你的答案和你的材料打了一架。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 10 }, { kind: setFlag, key: hard_q_flubbed }]
+        next: c_xe7_final_closing
+    unlockKnowledge: [kc_c_focus_defense]
+    terminal: true
+
+  - id: c_xe7_final_closing
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 收尾一句, learning: 结尾要短要稳 }
+    scene: { location: defense_hall, characters: [c_tech, c_design] }
+    setup: ["最后一页PPT只有一行字：「让72个社团的报名，从3天到3分钟。」雨桐说完「谢谢」，计时器定格在8分02秒——超出2秒，无人扣分。"]
+    automaticEffects:
+      - { kind: setFlag, key: final_done_speech }
+      - { kind: add, key: teamTrust, value: 5 }
+    dialogue:
+      - { speaker: 系统, text: "下台时不要庆祝，走稳。评委的眼睛还在你们背上。" }
+    next: c_xe7_final_wait_verdict
+    terminal: true
+
+  - id: c_xe7_final_wait_verdict
+    campaign: competition
+    day: 21
+    type: npc
+    trigger: { kind: manual }
+    purpose: { narrative: 合议等待, learning: 等待期的情绪管理 }
+    scene: { location: corridor, characters: [c_tech, c_design] }
+    setup: ["评委合议一小时。走廊里八支队伍各自聚成一团，音量都压得很低，像医院等候区。"]
+    choices:
+      - id: review_notes
+        text: 拿出白板照片复盘：记下三个下次要改的点——无论名次
+        visibleResponse: 三条笔记：开场语速/演示第5步的转场词/回答成本问题时该报附录页码。写完你突然发现自己在期待「下一次」。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: final_retro }]
+        next: c_xe7_final_result_moment
+      - id: refreshments_scroll
+        text: 刷手机转移注意力
+        visibleResponse: 一小时里你刷到了第2位出场队伍的庆祝视频、三条招生广告和一个无关的猫猫视频。合议结果公布时，你的心率和刷视频时一样乱。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 3 }]
+        next: c_xe7_final_result_moment
+    terminal: true
+
+  - id: c_xe7_final_result_moment
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 结果宣布, learning: 结果结算一切真实积累 }
+    scene: { location: defense_hall, characters: [c_judge_final, c_rival] }
+    setup: ["孙教授宣布成绩前先说了两分钟点评。第三句是：「今年应用赛道的材料真实性，明显好于往届——特别是第7号队伍的数据口径标注。」那是你们。"]
+    automaticEffects:
+      - { kind: setFlag, key: verdict_coming }
+      - { kind: add, key: credibility, value: 5 }
+    dialogue:
+      - { speaker: 孙教授, text: "奖项宣读之前我想说：评审看重的从来不是完美，是真实与完成度的乘积。", mood: serious }
+      - { speaker: 系统, text: "无论奖项花落谁家，这句话本身已经是你的奖。" }
+    next: c_xe7_result_react
+
+  - id: c_xe7_semifinal_score_leak
+    campaign: competition
+    day: 20
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["网评分数流传出一个小道版本：你们网评第3，邱一鸣第1。真假不明。群里已经有人@你们「恭喜」。"]
+    choices:
+      - id: ignore_leak
+        text: 不实信息不转发不讨论，按既定计划备赛
+        visibleResponse: 第二天官方分数公布：你们第4，那个「小道版本」差着一支队伍。没被带节奏的人毫发无伤。
+        hiddenEffects: [{ kind: add, key: independence, value: 3 }, { kind: setFlag, key: leak_ignored }]
+      - id: celebrate_early
+        text: 第3！在群里提前回应「谢谢」
+        visibleResponse: 官方分数出来后，你提前说的「谢谢」悬在群里，像一件洗坏了的衣服。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe7_robot_team_awe
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: defense_hall, characters: [] }
+    setup: ["第5位的机器人队伍演示时全场拍照。他们的机械臂精准抓起水杯，评论区一片「完了，我们要输了」。你看了看台上——他们的PPT第三页数据空白，只有愿景。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 4 }
+      - { kind: add, key: riskTolerance, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "炫技与完成是两个物种。评委的打分表会替你分辨它们。" }
+    terminal: true
+
+  - id: c_xe7_judge_private_note
+    campaign: competition
+    day: 21
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: corridor, characters: [c_judge_final] }
+    setup: ["赛后在走廊，孙教授叫住你们，只说了一件小事。"]
+    dialogue:
+      - { speaker: 孙教授, text: "你们的AI使用说明我逐条看了。比说明本身更重要的，是你们真的照着做了——这叫言行一致。明年校赛，来当学生评委助理吧。", mood: pleased }
+    automaticEffects:
+      - { kind: relationship, characterId: c_judge_final, delta: 8 }
+      - { kind: add, key: mentorTrust, value: 4 }
+      - { kind: setFlag, key: judge_invite }
+    terminal: true
+
+  - id: c_xe7_rival_result
+    campaign: competition
+    day: 21
+    type: npc
+    trigger: { kind: manual }
+    purpose: { narrative: 对手的结局, learning: 对手是这段路的同行者 }
+    scene: { location: corridor, characters: [c_rival] }
+    setup: ["成绩出来后，你在楼梯口遇到邱一鸣。他手里的奖状卷成了一个筒，用它敲了敲栏杆。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "第二名。（顿了顿）输给数据链不丢人。明年我还来，你们最好也是。", mood: serious }
+    choices:
+      - id: rival_respect
+        text: "明年见。到时候别再放烟雾弹了。"
+        visibleResponse: 他大笑："烟雾弹是战术，明年换阳谋。"这大概是比赛能给人的最好礼物之一：一个值得反复较量的对手。
+        hiddenEffects: [{ kind: relationship, characterId: c_rival, delta: 6 }, { kind: setFlag, key: rival_pact }]
+        next: c_d21_after
+      - id: rival_cool
+        text: 「恭喜。」（不多说）
+        visibleResponse: 他点点头走了。体面，但你们之间那点较劲的火苗，就这样安静地熄了。
+        hiddenEffects: [{ kind: relationship, characterId: c_rival, delta: 2 }]
+        next: c_d21_after
+    terminal: true
+
+  - id: c_xe7_result_react
+    campaign: competition
+    day: 21
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { narrative: 成绩公布后的第一反应, learning: 如何面对结果也是一种能力 }
+    scene: { location: corridor, characters: [c_tech, c_design] }
+    setup: ["成绩已经宣布。走廊里八支队伍表情各异。此刻你想先做什么？"]
+    choices:
+      - id: react_group_photo
+        text: 叫上所有人，在答辩厅门口拍一张合照——无论成绩
+        visibleResponse: 合照定格。照片里没有奖状，只有四张写满二十一天的脸。很多年后你大概率忘了名次，但记得这张照片。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 4 }]
+        next: c_xe7_award_photo
+      - id: react_quiet_ten
+        text: 允许自己安静十分钟，情绪过了再行动
+        visibleResponse: 十分钟里没人打扰你们。情绪处理完，你们各自给家里发了条报平安的消息——比赛结束了，生活还在。
+        hiddenEffects: [{ kind: add, key: independence, value: 4 }, { kind: add, key: energy, value: 4 }]
+        next: c_xe7_lost_but_calm
+      - id: react_find_rival
+        text: 先去找邱一鸣——不管谁上谁下，这条线要收个尾
+        visibleResponse: 你穿过人群去找那个穿蓝色卫衣的身影。较量的终点是握手，这句话你今天是信了。
+        hiddenEffects: [{ kind: relationship, characterId: c_rival, delta: 4 }]
+        next: c_xe7_rival_result
+    next: c_d21_after
+    terminal: true
+
+  - id: c_xe7_award_photo
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 领奖台, learning: 仪式是记忆的锚点 }
+    scene: { location: auditorium, characters: [c_tech, c_design, c_advisor] }
+    setup: ["答辩厅门口，林晓举着手机喊：「都看镜头！无论成绩，这是我们四个人的合照。」何老师路过时入镜，老K在走廊对面举着手机连拍。"]
+    automaticEffects:
+      - { kind: setFlag, key: award_photo_taken }
+      - { kind: relationship, characterId: c_advisor, delta: 4 }
+    dialogue:
+      - { speaker: 江雨桐, text: "（翻着手机相册）从空白的白板到今天，四十二天……哦不，二十一天。", mood: happy }
+    next: c_d21_after
+    terminal: true
+
+  - id: c_xe7_lost_but_calm
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 若结果不理想的平静, learning: 名次不定义这场旅程 }
+    scene: { location: corridor, characters: [c_tech, c_design] }
+    setup: ["成绩定格。不管名单上有没有你们的编号，走廊里都有十秒钟的安静。方远先开口：「数据没造假，Demo没崩，问答没怂。有什么好怕回头的？」"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 5 }
+      - { kind: add, key: teamTrust, value: 4 }
+      - { kind: setFlag, key: no_award_calm }
+    dialogue:
+      - { speaker: 江雨桐, text: "（吸了吸鼻子）不许安慰我。让我难过十分钟，十分钟后我们去吃火锅。", mood: worried }
+      - { speaker: 系统, text: "十分钟的难过是必要的。它让火锅更香。" }
+    next: c_d21_after
+    terminal: true
+
+  - id: c_xe7_feedback_request
+    campaign: competition
+    day: 21
+    type: decision
+    trigger: { kind: day, day: 21, phase: end }
+    purpose: { learning: 主动索取反馈是被忽视的权利 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["赛后。组委会公布了网评与决赛的评委批注（匿名的）。何老师问你们要不要一起过一遍——大部分人不会去翻。"]
+    choices:
+      - id: read_feedback
+        text: 全部打印出来，逐条标注：认同/不认同/下次改
+        visibleResponse: 十七条批注，你们标注了两小时。最有价值的一条：「建议补充长期留存数据」——这是赛后真正的路线图。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: addAsset, assetType: document, name: 评委批注分析, description: 17条批注的认同与行动标注, content: "认同9/存疑5/下次改3" }]
+      - id: skip_feedback
+        text: 比赛结束了，翻旧账没意义
+        visibleResponse: 那份批注文件在下载文件夹里躺到毕业。你偶尔想起它，像想起一个没拆的包裹。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe7_media_request
+    campaign: competition
+    day: 21
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: corridor, characters: [] }
+    setup: ["校媒记者拦住你们：「做个获奖专访吧？顺便问下，你们那个工具，明年真的会继续做吗？」"]
+    choices:
+      - id: honest_media
+        text: 如实说：赛后先维护一学期，看用户留存再谈未来
+        visibleResponse: 报道刊出后，标题是《他们把「看留存」当成了荣誉标准》。四个字的诚实，比一版套话传播得远。
+        hiddenEffects: [{ kind: add, key: credibility, value: 4 }, { kind: setFlag, key: media_honest }]
+      - id: big_promise
+        text: "肯定做下去！做成全校平台！"
+        visibleResponse: 标题很燃：《剑指全校平台》。三个月后有人在推送下留言「平台呢？」——你删评的手速都练出来了。
+        hiddenEffects: [{ kind: add, key: riskTolerance, value: 3 }, { kind: setFlag, key: media_overpromise }]
+    terminal: true
+
+  - id: c_xe7_confetti_night
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: day, day: 21, phase: end }
+    purpose: { narrative: 赛程结束夜, learning: 旅程的收束 }
+    scene: { location: canteen, characters: [c_tech, c_design] }
+    setup: ["赛程最后一夜。四个人加了老K，五个人挤在烧烤摊。方远举杯：「敬测试全绿。」雨桐：「敬真实的数据。」林晓：「敬错别字全灭。」老K：「敬我那三个手机。"]
+    automaticEffects:
+      - { kind: setFlag, key: closing_dinner }
+      - { kind: add, key: teamTrust, value: 6 }
+    dialogue:
+      - { speaker: 系统, text: "21天前，这支队伍还不存在。现在它有了自己的黑话、规矩和共同记忆。这才是比赛真正发给你的东西。" }
+    terminal: true

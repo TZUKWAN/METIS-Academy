@@ -28,10 +28,10 @@ Received: false
     - paragraph [ref=f1e12]: 在真实任务里，学会让 Agent 真正为你工作
   - generic [ref=f1e13]:
     - button "新的开始" [ref=f1e14] [cursor=pointer]
-    - button "结局档案" [ref=f1e16] [cursor=pointer]
-    - button "设置" [ref=f1e17] [cursor=pointer]
-    - button "制作人员" [ref=f1e18] [cursor=pointer]
-  - paragraph [ref=f1e20]: © 2026 METIS Academy · Open Source (MIT)
+    - button "结局档案" [ref=f1e15] [cursor=pointer]
+    - button "设置" [ref=f1e16] [cursor=pointer]
+    - button "制作人员" [ref=f1e17] [cursor=pointer]
+  - paragraph [ref=f1e19]: © 2026 METIS Academy · Open Source (MIT)
 ```
 
 # Test source

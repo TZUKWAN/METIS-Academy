@@ -1,0 +1,746 @@
+# 创业线扩展事件 06（合作/B2B/B2C/pivot/开源/咨询/SaaS/工作室/收购）
+events:
+  - id: v_e06_d23_union_deal
+    campaign: venture
+    day: 23
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: B2B合同条款：价可以谈，控制权不能送 }
+    scene: { location: lab, characters: [] }
+    setup: ["学生会拿出合作协议草稿：全校独家使用权，换¥299/学期。最后一行写着：“学生会可对本校数据进行管理和调阅。”"]
+    choices:
+      - id: strike_data_clause
+        text: 划掉数据条款：“数据归各社团，你们只有使用和统计权。”独家可以谈，涨价到¥499
+        visibleResponse: |
+          对方讨价还价后接受了¥399+使用统计权。
+          你守住了最重要的东西：一旦让学生会“管理”数据，其他社团再也不敢用你的工具。
+        hiddenEffects: [{ kind: add, key: revenue, value: 399 }, { kind: add, key: credibility, value: 5 }, { kind: achievement, achievementId: ach_v_contract_neg }]
+      - id: sign_as_is
+        text: 全签。299拿下独家，数据条款无所谓
+        visibleResponse: 合同签了。两周后有社团私聊问你：“学生会能看到我们的数据？”你解释了半小时，效果存疑。便宜的那100块，开始连本带利地还。
+        hiddenEffects: [{ kind: add, key: revenue, value: 299 }, { kind: subtract, key: credibility, value: 6 }, { kind: setFlag, key: data_clause_signed }]
+    learningPoint: B2B谈判里，数据主权比价格更值钱
+    terminal: true
+
+  - id: v_e06_d23_b2b_pilot
+    campaign: venture
+    day: 23
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: B2B试点：免费试可以，必须带转化条件 }
+    scene: { location: dorm, characters: [] }
+    setup: ["隔壁学院团委想“先免费试点一学期，好用再谈钱”。纯免费试点，还是设个条件？"]
+    choices:
+      - id: pilot_with_terms
+        text: 同意试点，但白纸黑字：学期末按满意度结算，满意则签全年¥1200
+        visibleResponse: |
+          试点协议两页纸。学期末满意度92%，¥1200顺利落袋。
+          免费可以，但免费的尽头必须是明确的付费决策点。
+        hiddenEffects: [{ kind: add, key: revenue, value: 1200 }, { kind: setFlag, key: pilot_success }, { kind: achievement, achievementId: ach_v_b2b_pilot }]
+      - id: free_no_terms
+        text: 先免费着，关系处好了自然给钱
+        visibleResponse: 免费用满一学期。到期谈钱时对方说“预算没批”，第二学期默认继续免费。没有退出条件的免费，是无限期免费。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 没有转化条件的免费试点=慈善
+    terminal: true
+
+  - id: v_e06_d24_payment_cycle
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: B2B回款周期：签约≠收款 }
+    scene: { location: dorm, characters: [] }
+    setup: ["学生会合同签了，财务流程启动了。然后你体验了什么叫对公流程：申请单→审批→盖章→财务排期……预计回款周期：45天。"]
+    automaticEffects:
+      - { kind: setFlag, key: b2b_payment_wait }
+      - { kind: add, key: academicDebt, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "B端的钱像快递，签收前一直“运输中”。你的现金流计划里，B端收入永远要打对折再等两个月。" }
+    terminal: true
+
+  - id: v_e06_d24_custom_pull
+    campaign: venture
+    day: 24
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 大客户的定制拉扯：用产品路线图挡，不用人情挡 }
+    scene: { location: lab, characters: [] }
+    setup: ["学生会又提需求了：“给我们做个大屏展示页，迎新周领导要看的。”做完这一个，下一个已经在路上了。"]
+    choices:
+      - id: roadmap_shield
+        text: “大屏不在产品路线图里。可以定制开发，费用¥800，交付后归你们学院专属。”
+        visibleResponse: 对方嫌贵放弃了。你保住了开发时间，也没得罪人——报价单是世上最礼貌的拒绝。
+        hiddenEffects: [{ kind: add, key: independence, value: 5 }, { kind: setFlag, key: custom_priced_out }]
+      - id: free_favor
+        text: 算了，免费做了，就当维护关系
+        visibleResponse: 大屏做了三天。对方很满意，然后提了第二个、第三个“顺便”。免费的定制，教会了客户“他什么都肯做”。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }, { kind: subtract, key: energy, value: 8 }, { kind: setFlag, key: favor_loop }]
+    learningPoint: 每一次免费定制，都是下三次的开始
+    terminal: true
+
+  - id: v_e06_d25_b2c_impulse
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: B2C的冲动付费靠即时场景 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你观察到一个规律：C端订单的下单时间高度集中在“活动前48小时内”，占73%。用户不是决定用不用，是被截止日推着用。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 5 }
+      - { kind: addAsset, assetType: user_feedback, name: C端下单时间分析, description: 73%集中在活动前48小时, content: "截止日驱动付费——提醒时机=转化杠杆" }
+    dialogue:
+      - { speaker: 系统, text: "你在“活动前3天”加了一站式提醒：“还没搞定报名？3分钟搞定”。当周转化+40%。卖水要在跑步道旁边卖。" }
+    terminal: true
+
+  - id: v_e06_d25_pivot_question
+    campaign: venture
+    day: 25
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: pivot的合法理由：数据证伪，不是审美疲劳 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["你跟罗哥说想换方向：“报名工具做腻了，AI心理陪伴感觉更大。”罗哥放下杯子。"]
+    dialogue:
+      - { speaker: 罗哥, text: "先回答三个问题：现有业务亏钱吗？用户在流失吗？新方向验证过吗？", mood: serious }
+      - { speaker: 你, text: "……不亏、不流失、没验证。" }
+      - { speaker: 罗哥, text: "那你换的不是方向，是心情。心情不好去打球。数据的证据不够，任何pivot都是逃逸。" }
+    choices:
+      - id: stay_by_data
+        text: 留下。把“腻了”的能量换成“做深”：开俱乐部场景和新校区
+        visibleResponse: 两周后俱乐部场景带来3个新客户——你差点因为无聊，错过一个还在增长的市场。无聊是创业的常客，不是信号。
+        hiddenEffects: [{ kind: add, key: independence, value: 5 }, { kind: add, key: users, value: 3 }, { kind: achievement, achievementId: ach_v_stay_smart }]
+      - id: pivot_mood
+        text: 还是换！大方向比小生意重要！
+        visibleResponse: 你把报名工具调成维护模式。一个月后：AI心理陪伴没有任何付费用户，而老工具的社群开始问“是不是不做了”。两头空。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 8 }, { kind: subtract, key: credibility, value: 5 }, { kind: scheduleEvent, eventId: v_e06_delay_pivot_bill, onDay: 29 }]
+    learningPoint: pivot是数据逼出来的转向，不是情绪推出来的逃跑
+    terminal: true
+
+  - id: v_e06_d26_pivot_shrink
+    campaign: venture
+    day: 26
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 收缩式pivot：砍人群，不做减法会死在中间 }
+    scene: { location: dorm, characters: [] }
+    setup: ["数据复盘：你同时服务着社团、学生会、校外培训班、小卖部。四类客户，服务成本高得吓人，谁都没服务透。"]
+    choices:
+      - id: shrink_one
+        text: 收缩：只服务社团和学生会，培训班和小卖部礼貌劝退
+        visibleResponse: |
+          劝退了3个非目标客户。服务成本直降，社团口碑反而变好——“他只做校园社团，最懂我们。”
+          小而窄的定位，是你这个体量唯一的活法。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: add, key: credibility, value: 4 }, { kind: setFlag, key: niche_focus }]
+      - id: keep_everyone
+        text: 都留着，客户送上门哪有往外推的
+        visibleResponse: 四类客户互相拉扯：培训班的定制拖慢了社团的更新，小卖部的需求把界面搞得四不像。什么都接，等于什么都没做。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 8 }, { kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 收缩不是失败，是把子弹上膛
+    terminal: true
+
+  - id: v_e06_d26_data_pivot
+    campaign: venture
+    day: 26
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 换人群式pivot：跟着付费数据走 }
+    scene: { location: workbench, characters: [] }
+    setup: ["数据给你指了条路：社团客单¥19-99，频次高；而买学期卡最爽的其实是学生会和学生组织联盟——单笔¥399，决策一次管全校。"]
+    choices:
+      - id: b2b2c_shift
+        text: 加大B端权重：组建“校学生会联盟”销售线，C端保持低维护运转
+        visibleResponse: |
+          你用一学期跑了3所学校的学生会，签下2单，客单价翻了四倍。
+          B2B2C不是抛弃C端，是让B端替你把C端一锅端进来。
+        hiddenEffects: [{ kind: add, key: revenue, value: 798 }, { kind: setFlag, key: b2b2c }, { kind: achievement, achievementId: ach_v_b2b2c }]
+      - id: ignore_signal
+        text: 还是稳着来，只做C端
+        visibleResponse: 稳没错，但你把一条明摆着的增长曲线让给了“稳”。数据举手的时候不看，它就不举了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e06_d27_open_core
+    campaign: venture
+    day: 27
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 开源策略：开什么、留什么，要想清楚 }
+    scene: { location: workbench, characters: [v_partner] }
+    setup: ["有人在你帖子下留言：“建议开源！好东西就该共享！”阿斌问你：开吗？"]
+    choices:
+      - id: open_partial
+        text: 开源核心解析库（不涉业务），托管代码和部署服务保持闭源收费
+        visibleResponse: |
+          解析库开源后收到3个PR和一群热心用户，产品本身付费不受影响——
+          别人拿走引擎，造不出你的车，更留不住你的乘客。
+        hiddenEffects: [{ kind: add, key: credibility, value: 8 }, { kind: add, key: users, value: 4 }, { kind: addAsset, assetType: code_project, name: 开源解析库, description: 核心表单解析引擎, content: "MIT协议/文档齐全/3个外部PR" }, { kind: achievement, achievementId: ach_v_opensource }]
+      - id: open_all
+        text: 全部开源，用爱发电
+        visibleResponse: 全开了。一周后有人部署了你的代码改个logo就上线收费，定价比你低。情怀被上课了：开源没有商业模式，开源+服务才有。
+        hiddenEffects: [{ kind: subtract, key: revenue, value: 40 }, { kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e06_d27_stars_no_cash
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["开源库上了GitHub趋势榜，217个star，评论区一片“牛”“感谢开源”。你看了眼付费后台：新增收入¥0。"]
+    automaticEffects:
+      - { kind: add, key: credibility, value: 5 }
+      - { kind: setFlag, key: stars_not_cash }
+    dialogue:
+      - { speaker: 系统, text: "Star是掌声，不是门票。掌声能带来声誉和机会，但你得自己修好从掌声到收银台的通道。" }
+    terminal: true
+
+  - id: v_e06_d28_consult_invite
+    campaign: venture
+    day: 28
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 咨询邀约：卖时间还是卖产品，想清楚再接 }
+    scene: { location: cafe, characters: [] }
+    setup: ["外校学生会主席私信：“我们想搞个类似的系统，你能不能来给我们做指导？一天也行，报酬好说。”"]
+    choices:
+      - id: consult_day
+        text: 接一天咨询：¥300，讲架构、演示、避坑清单——只教，不代做
+        visibleResponse: |
+          一天咨询干完，对方拿去自己搭。两周后他们系统上线，用的是你的解析库付费版。
+          教人钓鱼的人，卖鱼竿。这就是咨询+产品的复利。
+        hiddenEffects: [{ kind: add, key: money, value: 300 }, { kind: add, key: revenue, value: 60 }, { kind: achievement, achievementId: ach_v_consult }]
+      - id: do_it_for_them
+        text: 帮他们做整套系统，收¥2000
+        visibleResponse: ¥2000赚到了，代价是整整12天。你的产品停更12天，竞品发了两个新功能。卖时间最贵的地方在于：时间不可复用。
+        hiddenEffects: [{ kind: add, key: money, value: 2000 }, { kind: add, key: academicDebt, value: 6 }, { kind: setFlag, key: sold_time }]
+    learningPoint: 咨询可以接，但别用产品的时间贴补咨询的收入
+    terminal: true
+
+  - id: v_e06_d28_consult_trap
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["又一个咨询邀约，对方开口就是“先免费分享下你的完整方案PPT呗，我们看看再决定请不请你”。你盯着“免费”“完整”两个词。"]
+    automaticEffects: [{ kind: add, key: independence, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "你回了个大纲，正式内容“见面聊”。白嫖型邀约的识别标记：先要全部，再谈报酬。" }
+    terminal: true
+
+  - id: v_e06_d29_saas_trial
+    campaign: venture
+    day: 29
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: SaaS订阅：把一次性买卖变成持续关系 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你琢磨把学期卡改成“云端订阅”：¥15/月，数据云端保存、随时可退。订阅制意味着你要承诺长期可用。"]
+    choices:
+      - id: go_subscription
+        text: 上订阅制，同时承诺“数据随时导出走人，不设障碍”
+        visibleResponse: |
+          订阅首月：38个付费用户，续订31个。退出门槛反而成了信任招牌——
+          “随时能走”让用户更愿意留。订阅的本质是持续证明自己值得。
+        hiddenEffects: [{ kind: add, key: revenue, value: 570 }, { kind: setFlag, key: subscription_live }, { kind: achievement, achievementId: ach_v_saas }]
+      - id: keep_oneshot
+        text: 保持一次性买卖，省心
+        visibleResponse: 一次性买卖省心是真省心——每学期都要从头再卖一遍，也是真累。没有订阅，就没有复利的雪球。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e06_d29_saas_churn_day
+    campaign: venture
+    day: 29
+    type: story
+    trigger: { kind: day, day: 29, phase: end }
+    purpose: { learning: 订阅流失每天都在发生，别等月报才发现 }
+    scene: { location: dorm, characters: [] }
+    setup: ["订阅制上线后你加了条规则：有人取消订阅，10分钟内你会收到一条通知，附带他最近的使用记录。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: setFlag, key: churn_alert_live }
+    dialogue:
+      - { speaker: 系统, text: "今天3人取消，原因分别是：毕业了、换工具了、忘记取消自动续费后生气了。流失每天都发生，你的反应速度决定挽回率。" }
+    terminal: true
+
+  - id: v_e06_d23_studio_offer
+    campaign: venture
+    day: 23
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 工作室模式 vs 产品模式：卖人头还是卖复制 }
+    scene: { location: lab, characters: [] }
+    setup: ["隔壁宿舍找上门：“你们有技术，一起接单吧！帮人做网站做小程序，一单赚几千，比你这破工具来钱快。”"]
+    choices:
+      - id: refuse_studio
+        text: 拒绝：“接单是拿时间换钱，我的产品是在攒会下蛋的鸡。”
+        visibleResponse: 对方转身去接单了，当月赚了¥6000，你只收入¥570。但你后台的用户数在涨——三个月后，差距会倒过来。
+        hiddenEffects: [{ kind: add, key: independence, value: 5 }, { kind: setFlag, key: refused_studio }]
+      - id: join_studio
+        text: 加入！先赚钱活下去才有资格谈理想
+        visibleResponse: 你接了两单，赚了¥4500，产品一个月没更新。结束才发现：接单赚的是现金，丢的是能滚动的时间。两个都真，但你只能选一个。
+        hiddenEffects: [{ kind: add, key: money, value: 4500 }, { kind: add, key: academicDebt, value: 8 }, { kind: setFlag, key: studio_sidequest }]
+    learningPoint: 接单模式现金流好，产品模式才有复利
+    terminal: true
+
+  - id: v_e06_d24_studio_trap
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["隔壁接单翻车了：客户反复改需求18版，尾款拖着不给，一单算下来时薪¥8。他来你这里吐苦水。"]
+    dialogue:
+      - { speaker: 邻居, text: "你说得对……接单看着快，其实一直在给别人的想法打工。你那个慢慢做的东西，现在值多少了？" }
+      - { speaker: 你, text: "这个月流水¥570。但里面有¥180是老客户自动续费的——我睡觉的时候它也在动。" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 3 }
+      - { kind: setFlag, key: studio_trap_seen }
+    terminal: true
+
+  - id: v_e06_d25_acquisition_story
+    campaign: venture
+    day: 25
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["罗哥给你讲了个真实案例：他认识的一个学生团队，产品做得不错，被一家教育公司收购。"]
+    dialogue:
+      - { speaker: 罗哥, text: "听着风光，细节呢？收购价80万，看着不少。但他们三人先把股权五五平分给了一个早退出的挂名合伙人——分掉26万。", mood: serious }
+      - { speaker: 你, text: "……没签退出条款？" }
+      - { speaker: 罗哥, text: "所以收购是喜事，账本是救命符。你的合伙备忘录，就是未来收购桌上你的律师。" }
+    automaticEffects:
+      - { kind: add, key: riskTolerance, value: -2 }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    terminal: true
+
+  - id: v_e06_d26_acq_offer
+    campaign: venture
+    day: 26
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 收购报价：买你的是流量还是资产 }
+    scene: { location: cafe, characters: [] }
+    setup: ["一个做校园社群APP的创业公司联系你：出价¥30000收购你的产品和用户数据，“你继续帮我们维护半年”。"]
+    choices:
+      - id: counter_acq
+        text: 反谈：¥30000可以谈，但用户数据不卖、维护期3个月、价不含税另算
+        visibleResponse: |
+          对方要的就是数据，一听不卖就拖。拖了两周不了了之。
+          你明白了：他们看上的从来不是你的产品，是你那800个真实社团用户的联系方式。
+        hiddenEffects: [{ kind: add, key: independence, value: 6 }, { kind: setFlag, key: acq_failed_data }, { kind: achievement, achievementId: ach_v_acq_neg }]
+      - id: accept_acq
+        text: 卖！三万块对学生来说是一大笔钱
+        visibleResponse: 卖了。钱到账那天你请了顿好的。半年维护期里你看着新东家把工具塞满广告，老用户在群里@一个再也不回复的头像。三万块，和一些说不清的失落。
+        hiddenEffects: [{ kind: add, key: money, value: 30000 }, { kind: subtract, key: credibility, value: 8 }, { kind: setFlag, key: sold_product }]
+    learningPoint: 收购报价单上，最值钱的往往是你最不舍得卖的
+    terminal: true
+
+  - id: v_e06_d27_acq_dead
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["另一家收购买家的尽调做了一半，发来消息：“贵司产品依赖单一学校场景，且无注册主体，法务评估风险高，我们暂缓。”谈判无声终结。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+      - { kind: setFlag, key: acq_dead_seen }
+    dialogue:
+      - { speaker: 系统, text: "被尽调拒绝不是失败，是免费的体检报告：注册主体、合同规范性、数据合规——这些迟早要补的课，有人提前告诉你了。" }
+    terminal: true
+
+  - id: v_e06_d28_partner_with_rival
+    campaign: venture
+    day: 28
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 和对手合作：竞合的前提是边界清晰 }
+    scene: { location: cafe, characters: [] }
+    setup: ["意外剧本：“社团帮”团队主动联系——他们全国化铺不开本校，想和你谈“本校运营由你负责，分成三成”。"]
+    choices:
+      - id: coopete
+        text: 谈！但要清楚边界：本校用户归我、品牌并列、分成按流水月结
+        visibleResponse: |
+          协议谈成。他们的品牌流量+你的本地服务=本校市占率两个月冲到80%。
+          和对手的战争，有时可以用一份合同结束。
+        hiddenEffects: [{ kind: add, key: users, value: 25 }, { kind: add, key: revenue, value: 120 }, { kind: setFlag, key: coopetition }, { kind: achievement, achievementId: ach_v_coope }]
+      - id: refuse_rival
+        text: 拒绝，跟敌人没什么好谈的
+        visibleResponse: 你拒了。他们转头找了你隔壁学校的另一个小团队做运营，一样起量。战场上少了个敌人，赛场上多了个对手。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e06_d29_rev_split
+    campaign: venture
+    day: 29
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 合作分成：算清谁贡献什么，比例自然出来 }
+    scene: { location: lab, characters: [v_partner] }
+    setup: ["和二手平台谈互推深化：他们的毕业生用户挂你的工具卖“搬家式交接服务”，你抽成多少？"]
+    choices:
+      - id: fair_split
+        text: 按贡献拆：平台出流量抽30%，你出工具+售后留70%，三个月后复盘调整
+        visibleResponse: 对方爽快签约：“你算得清楚，我们才敢跟你玩。”模糊的分成养不出长久的合作，清晰的算盘才是信任的起点。
+        hiddenEffects: [{ kind: add, key: revenue, value: 90 }, { kind: setFlag, key: split_clear }]
+      - id: vague_split
+        text: “都好说，先干起来！”
+        visibleResponse: 干了一个月，账目一团浆糊：哪些单算谁的？售后算谁的？双方各说各话，合作在争吵里散伙。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e06_d23_sales_cycle
+    campaign: venture
+    day: 23
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["B端销售周期实录：某高校学生会——首次接触第1天，第7天回访，第16天试用，第31天开会，第44天签约。整整44天，¥399。"]
+    automaticEffects:
+      - { kind: setFlag, key: sales_cycle_known }
+      - { kind: add, key: userUnderstanding, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "B2B的时间单位是月，B2C是分钟。用C端的急躁做B端，会在第20天放弃一笔第44天到账的钱。" }
+    terminal: true
+
+  - id: v_e06_d24_find_dm
+    campaign: venture
+    day: 24
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: B端销售的第一课：找到能拍板的人 }
+    scene: { location: lab, characters: [] }
+    setup: ["你想谈下计算机学院的社团联合会。你手里有三条线：一个干事（你访谈过）、副主席（群里聊过）、指导老师（没见过）。"]
+    choices:
+      - id: direct_dm
+        text: 直接约指导老师——预算和拍板都在他那层
+        visibleResponse: 老师听完10分钟演示就拍了板：“下学期院级推广，费用走活动经费。”找对人，十分钟顶三十天。
+        hiddenEffects: [{ kind: add, key: revenue, value: 399 }, { kind: achievement, achievementId: ach_v_find_dm }]
+      - id: warm_bottom
+        text: 先从熟悉的干事慢慢往上磨
+        visibleResponse: 干事很热情，帮你问了三层领导，每层都“再研究研究”。你在错误的层级上耗光了耐心。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e06_d25_b2c_psych
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["B2C价格敏感度观察：¥19时有人骂贵；你把定价页加了条“相当于2杯奶茶”之后，骂的少了，买的多了。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: add, key: revenue, value: 20 }
+    dialogue:
+      - { speaker: 系统, text: "C端用户不比较绝对价格，比较的是心理账户。“两杯奶茶”和“¥19”是两个账户里的钱。" }
+    terminal: true
+
+  - id: v_e06_d26_license_choice
+    campaign: venture
+    day: 26
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 开源协议=商业模式的边界线 }
+    scene: { location: workbench, characters: [v_partner] }
+    setup: ["决定开源解析库后，协议选择摆上桌：MIT（随便用）、GPL（传染开源）、AGPL（连云端使用也要开源）。"]
+    choices:
+      - id: mit_plus
+        text: MIT开源核心+商业授权双轨：个人随便用，企业商用需购买许可
+        visibleResponse: 半年后真有一家公司在产品里用了你的库，按条款购买了¥500的商业授权。协议不是法律游戏，是商业模式的一部分。
+        hiddenEffects: [{ kind: add, key: revenue, value: 500 }, { kind: addAsset, assetType: document, name: 开源双轨协议说明, description: MIT+商业授权, content: "个人MIT免费/企业商用¥500授权" }]
+      - id: pure_mit
+        text: 纯MIT，彻底开源，图个名声
+        visibleResponse: 名声确实不错。那家公司在你的库上构建了付费服务，一分钱没付——合法合规，你连质问的立场都没有。
+        hiddenEffects: [{ kind: add, key: credibility, value: 3 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e06_d27_consult_pricing
+    campaign: venture
+    day: 27
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["第三个咨询邀约来了，这次对方直接问价格。你心里没谱：报多少？"]
+    choices:
+      - id: price_daily
+        text: 报半天¥200/全天¥350，含一份避坑文档，售后答疑一周
+        visibleResponse: 对方秒约全天。你发现自己纠结一周的价格，在对方眼里不过是“一顿饭钱换三年经验”。知识有价，报出来才有价。
+        hiddenEffects: [{ kind: add, key: money, value: 350 }, { kind: setFlag, key: consult_rate_set }]
+      - id: price_free
+        text: 不好意思报价，先免费做，以后再说
+        visibleResponse: 免费做完，对方说“下次有偿请教”，然后把你推荐给了两个朋友——两个也想要免费的。免费的口碑传得最快，也锁得最死。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e06_d28_saas_or_service
+    campaign: venture
+    day: 28
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: SaaS还是服务：看用户买的是工具还是结果 }
+    scene: { location: dorm, characters: [] }
+    setup: ["用户声音分成了两派：一派“工具给我，我自己弄”（自助派）；另一派“你直接帮我搞定，多少钱都行”（甩手掌柜派）。"]
+    choices:
+      - id: dual_track
+        text: 双轨：SaaS自助¥15/月 + 代运营服务¥99/学期，两派都伺候
+        visibleResponse: |
+          上线当月：自助版31人订阅，代运营卖出6份。
+          你发现代运营的毛利是SaaS的三倍——市场早已投票，只是你以前没设投票箱。
+        hiddenEffects: [{ kind: add, key: revenue, value: 465 }, { kind: addAsset, assetType: business_model, name: 双轨业务模型, description: SaaS+代运营, content: "SaaS 15/月自助 + 99/学期代运营" }, { kind: achievement, achievementId: ach_v_dual_track }]
+      - id: saas_only
+        text: 只做SaaS，服务太重不做
+        visibleResponse: 甩手掌柜派悻悻而去，转头付钱给了你一个“顺手代做”的竞品粉丝。用户的钱不偏好纯粹，偏好被满足。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e06_d29_studio_or_product
+    campaign: venture
+    day: 29
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 29, phase: end }
+    purpose: { learning: 长期路线：工作室、SaaS、还是混合 }
+    scene: { location: lab, characters: [v_mentor, v_partner] }
+    setup: ["学期末战略会。罗哥把三条路画在纸上：A纯接单工作室（现金流稳/无积累）B纯SaaS（有积累/现金流慢）C混合：SaaS打底+定制接单养现金流。"]
+    choices:
+      - id: hybrid_road
+        text: 选C混合：定制单只接“能沉淀为通用功能”的，其余推掉
+        visibleResponse: |
+          规则定下：每单定制必须产出可复用模块，否则不接。
+          三个月后：现金流为正，通用功能+4，没有一单白干。混合模式的难点是你守不守得住规矩。
+        hiddenEffects: [{ kind: add, key: execution, value: 6 }, { kind: add, key: independence, value: 5 }, { kind: setFlag, key: hybrid_model }, { kind: achievement, achievementId: ach_v_hybrid }]
+      - id: pure_saas_road
+        text: 选B纯SaaS，心无旁骛
+        visibleResponse: 纯粹是真纯粹，账本也是真空洞：三个月的投入期里，你的存款直线下跌，差点没熬到复利出现的那天。
+        hiddenEffects: [{ kind: subtract, key: money, value: 600 }, { kind: add, key: riskTolerance, value: 4 }, { kind: setFlag, key: pure_saas_path }]
+      - id: studio_road
+        text: 选A工作室，先赚钱再说
+        visibleResponse: 单子越接越多，你成了小老板。半年后盘点：赚了钱，产品停了，当初的800个用户去了别处。钱赚到了，生意没了。
+        hiddenEffects: [{ kind: add, key: money, value: 3000 }, { kind: subtract, key: users, value: 0 }, { kind: setFlag, key: studio_path }]
+    learningPoint: 模式没有对错，但要为它付的代价签字
+    terminal: true
+
+  - id: v_e06_d23_union_kpi
+    campaign: venture
+    day: 23
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [] }
+    setup: ["和学生会的合作细则定了：每学期末核算——覆盖率超60%续约原价，超75%涨10%，低于50%对方可解约。"]
+    automaticEffects:
+      - { kind: setFlag, key: kpi_contract }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "KPI条款是把双刃剑，但它至少把“做得好值多少钱”写进了合同。模糊的合作才最耗人。" }
+    terminal: true
+
+  - id: v_e06_d24_poc_free
+    campaign: venture
+    day: 24
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: POC收不收费：收费过滤假意向 }
+    scene: { location: workbench, characters: [] }
+    setup: ["某校社联要求“先做一个完整POC我们看看”，工作量约一周。免费做，还是收个成本价？"]
+    choices:
+      - id: poc_charged
+        text: 收¥199成本价做POC，谈成抵扣首年费用
+        visibleResponse: 对方犹豫了一下就答应了，两周后顺利签下全年。愿意为POC掏钱的客户，大概率不会放你鸽子。
+        hiddenEffects: [{ kind: add, key: money, value: 199 }, { kind: setFlag, key: poc_charged }]
+      - id: poc_free2
+        text: 免费做，诚意最重要
+        visibleResponse: POC你干了一周。对方“内部流程有变”没了下文，你的方案PPT却出现在另一所学校的群里——诚意喂错了人。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    terminal: true
+
+  - id: v_e06_d25_corp_account
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["对公账户办下来了，手续费¥0开户但每笔转账¥2。你看着账户名那行字，感觉项目突然“正经”了很多。"]
+    automaticEffects:
+      - { kind: setFlag, key: corp_account }
+      - { kind: add, key: credibility, value: 4 }
+    dialogue:
+      - { speaker: 系统, text: "对公账户是B端的信用底座：发票、合同、回款，从此有处可依。" }
+    terminal: true
+
+  - id: v_e06_d26_sunk_cost
+    campaign: venture
+    day: 26
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: pivot的最大障碍是沉没成本：问自己“今天重来还做它吗” }
+    scene: { location: dorm, characters: [] }
+    setup: ["深夜复盘。你突然意识到一个扎心的问题：如果今天从零开始，手里的数据还会让你选“社团报名工具”这条路吗？"]
+    choices:
+      - id: rerun_choice
+        text: 做思想实验：抹掉三个月投入，只看现有数据——结论是依然选它
+        visibleResponse: 实验结果让你踏实了：不是舍不得，是真值得。沉没成本不该绑架决策，但验证过的判断值得坚持——这两件事你分清了。
+        hiddenEffects: [{ kind: add, key: independence, value: 6 }, { kind: add, key: evidenceDiscipline, value: 4 }, { kind: achievement, achievementId: ach_v_sunk_clear }]
+      - id: sunk_trap
+        text: 不敢想。都投入三个月了，换方向等于全白干
+        visibleResponse: “白干恐惧”成了你的方向盘。你继续投入，但每次更新都像在给一个不敢验证的假设输血。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 6 }, { kind: setFlag, key: sunk_trapped }]
+    learningPoint: 沉没成本不参与决策，未来收益才参与
+    terminal: true
+
+  - id: v_e06_d27_oss_maintenance
+    campaign: venture
+    day: 27
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["开源库的issue列表涨到14条，有人语气不善：“为什么还不修？开源不就是为了社区吗？”你有点被道德绑架的感觉。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+      - { kind: setFlag, key: oss_burden_seen }
+    dialogue:
+      - { speaker: 系统, text: "你在README置顶了一行：“本人维护精力有限，问题按贡献者优先处理，商业支持请走付费通道。”善良需要边界，开源同理。" }
+    terminal: true
+
+  - id: v_e06_d28_consult_referral
+    campaign: venture
+    day: 28
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["咨询的口碑开始转了：上一个客户把你推荐给了隔壁学校，附评语“讲得实在，不藏私”。你的咨询日程排到了三周后。"]
+    automaticEffects:
+      - { kind: add, key: money, value: 200 }
+      - { kind: add, key: credibility, value: 5 }
+    dialogue:
+      - { speaker: 系统, text: "咨询服务最大的获客渠道是上一个客户。把每一次交付做好，就是在给下一单铺路。" }
+    terminal: true
+
+  - id: v_e06_d29_saas_page
+    campaign: venture
+    day: 29
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["订阅制定价页改版：要不要放“月付 vs 年付”对比？年付打八折。"]
+    choices:
+      - id: yearly_discount
+        text: 加年付¥144（省¥36），默认选中年付
+        visibleResponse: 62%的订阅者选了年付。你的现金流和留存同时改善——年付买走的是用户明年的“不离开”。
+        hiddenEffects: [{ kind: add, key: revenue, value: 288 }, { kind: setFlag, key: yearly_plan }]
+      - id: monthly_only
+        text: 只留月付，简单
+        visibleResponse: 月付简单，但每个月你都在重新参加一次“挽留大赛”。忘了比流失更常见。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e06_d23_federation
+    campaign: venture
+    day: 23
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 渠道合作：给渠道分成，比给渠道烧钱便宜 }
+    scene: { location: lab, characters: [] }
+    setup: ["社团联合会主席提条件：“我们帮你推全校，怎么分？”你心里算：转介绍来的社团LTV约¥187。"]
+    choices:
+      - id: rev_share
+        text: 给社联15%流水分成，按月对账公示
+        visibleResponse: 分成协议一页纸。社联推得比自家活动还卖力——分成的魔力：把渠道变成股东，把股东变成销售。
+        hiddenEffects: [{ kind: add, key: users, value: 12 }, { kind: subtract, key: revenue, value: 34 }, { kind: setFlag, key: fed_share }]
+      - id: flat_fee
+        text: 给一次性推广费¥200，两清
+        visibleResponse: ¥200花出去，一条横幅挂了一周，注册4个。买断式渠道推销一次就停，分成式渠道怕你不成。
+        hiddenEffects: [{ kind: subtract, key: money, value: 200 }, { kind: add, key: users, value: 4 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e06_d24_case_study
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你把摄影社做成标杆案例：一页纸——《72份报名表，从3天到3分钟，摄影社的零纸化学期》，数据、引语、前后对比齐全。"]
+    automaticEffects:
+      - { kind: addAsset, assetType: pitch_deck, name: 标杆案例·摄影社, description: 一页纸案例研究, content: "3天→3分钟/零纸化/社长引语" }
+      - { kind: add, key: credibility, value: 5 }
+    dialogue:
+      - { speaker: 系统, text: "B端销售的武器不是产品手册，是同行案例。“隔壁社团在用”的说服力，胜过你讲一百遍功能。" }
+    terminal: true
+
+  - id: v_e06_d25_b2c_refund_rate
+    campaign: venture
+    day: 25
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["月度数据：B2C退款率4.1%，其中73%发生在“活动取消”场景。B端（学生会）退款率0——签了合同的人不冲动。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: revenue_report, name: 退款结构分析, description: B2C vs B2B退款对比, content: "B2C 4.1%主因活动取消/B2B 0%" }
+    dialogue:
+      - { speaker: 系统, text: "退款不是损失，是数据：它告诉你哪种场景下你的价值没能兑现。活动取消险式的“顺延机制”也许是个新功能。" }
+    terminal: true
+
+  - id: v_e06_d26_due_diligence
+    campaign: venture
+    day: 26
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你反过来给潜在收购方做了尽调：查了对方公司的融资历史、产品口碑、之前的收购案例——发现他们收购过的小工具，三个里两个被关停。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 5 }
+      - { kind: setFlag, key: reverse_dd }
+    dialogue:
+      - { speaker: 系统, text: "收购是婚姻，尽调是相互的。他们查你的账，你也要查他们的坟。" }
+    terminal: true
+
+  - id: v_e06_d29_bmc
+    campaign: venture
+    day: 29
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 29, phase: end }
+    purpose: { learning: 商业模式画布：把散落的验证拼成一张图 }
+    scene: { location: dorm, characters: [v_ai_agent] }
+    setup: ["学期临近尾声。你把九格商业模式画布钉在墙上，一格一格填。"]
+    choices:
+      - id: fill_bmc
+        text: 完整填画布：客群/价值/渠道/关系/收入/资源/成本/合作/活动，每格标验证状态
+        visibleResponse: |
+          九格填完，五格有真实数据支撑，四格仍是假设——但这是你的生意第一次完整地出现在一张纸上。
+          Agent 看了半天说：“原来你一直在做这个。”
+        hiddenEffects: [{ kind: addAsset, assetType: business_model, name: 商业模式画布v1, description: 九格+验证状态, content: "客群/价值/渠道/收入4格已验证，其余假设" }, { kind: add, key: evidenceDiscipline, value: 6 }, { kind: achievement, achievementId: ach_v_bmc }]
+      - id: skip_bmc
+        text: 画布太理论了，我数据都在脑子里
+        visibleResponse: “在脑子里”的东西没法传承、没法复盘、更没法在谈判桌上摊开。散落的珍珠不叫项链。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e06_delay_pivot_bill
+    campaign: venture
+    day: 29
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——情绪化pivot的账单, learning: 没有数据支撑的转向是双头落空 }
+    scene: { location: dorm, characters: [] }
+    setup: ["AI心理陪伴项目一个月零付费。老用户在群里问“报名管家还更新吗”，你盯着两条都没有起色的曲线。"]
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 3 }
+      - { kind: subtract, key: credibility, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "延迟后果触发：第25天用心情换掉的方向，今天开始计息。好在旧工具还在——回头，不丢人。" }
+    terminal: true

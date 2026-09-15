@@ -1,0 +1,737 @@
+# 创业线扩展事件 03（首批用户/获客/内容营销/社区/冷启动）
+events:
+  - id: v_e03_d17_seed_list
+    campaign: venture
+    day: 17
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 种子用户名单：先列人，再上线 }
+    scene: { location: dorm, characters: [] }
+    setup: ["上线前夜。你不写开发计划了，改写一张名单：谁会是最想用这个工具的前20个人？"]
+    choices:
+      - id: write_names
+        text: 逐个写名字和来源：老K系4人、访谈认识6人、群潜水观察8人、老K转介绍2人
+        visibleResponse: |
+          名单20人，每个名字后面写着“为什么是他”。
+          上线当天你挨个私信，回复15个，注册9个——种子名单的转化率，是广撒网的五倍。
+        hiddenEffects: [{ kind: add, key: users, value: 9 }, { kind: add, key: userUnderstanding, value: 4 }, { kind: achievement, achievementId: ach_v_seed_list }]
+      - id: wait_for_users
+        text: 不列名单，产品好自然有人来
+        visibleResponse: 上线三天，后台安静得能听见风扇声。好产品不会自带喇叭，冷启动等不来风。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 冷启动的答案在上线上线前就写好了
+    terminal: true
+
+  - id: v_e03_d17_cold_dm
+    campaign: venture
+    day: 17
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 冷私信三件套：你是谁/对你有啥用/90秒能试 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你要给不认识的社团骨干发私信。第一条草稿：\"您好，我们是一款革命性的社团管理平台……\"。你删了。"]
+    choices:
+      - id: value_first
+        text: 重写：一句他的场景+一个数字+“发我一份样表，3分钟还你合并结果”
+        visibleResponse: |
+          “师兄，听说你们收报名表要合并三天。发我一份空表，3分钟还你合并结果，免费。”
+          发出10条，回7条，传表5个。冷私信的秘诀：先给再要。
+        hiddenEffects: [{ kind: add, key: users, value: 5 }, { kind: add, key: execution, value: 3 }]
+      - id: long_pitch
+        text: 发长文介绍产品全貌，显得专业
+        visibleResponse: 发出10条长文，回1条，回复内容是“谢谢，暂时不需要”。没人读陌生人的产品说明书。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 冷启动的第一句话是给，不是要
+    terminal: true
+
+  - id: v_e03_d18_door_to_door
+    campaign: venture
+    day: 18
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 首批用户要上门服务，不是等人来 }
+    scene: { location: lab, characters: [] }
+    setup: ["摄影社注册了但没动静。你决定抱着电脑直接去他们活动室。"]
+    choices:
+      - id: on_site_setup
+        text: 上门：帮他们把上周的报名表当场传上去，跑通全流程
+        visibleResponse: |
+          25分钟，当场跑通。社长看着合并结果：“哦？这就完了？”
+          当晚摄影社的通知发出去了。第二天，他们隔壁街舞社也注册了。
+        hiddenEffects: [{ kind: add, key: users, value: 2 }, { kind: add, key: userUnderstanding, value: 5 }, { kind: setFlag, key: onsite_won }]
+      - id: send_manual
+        text: 甩个教程链接过去，让他们自己琢磨
+        visibleResponse: 三天后回访，社长：“哦那个啊，收藏了还没看。”收藏夹是互联网的坟墓。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 前10个用户，值得你一个一个上门
+    terminal: true
+
+  - id: v_e03_d18_first_accompany
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: day, day: 18, phase: end }
+    purpose: { learning: 首用陪跑：看用户卡在哪，比问用户强 }
+    scene: { location: lab, characters: [v_user_club] }
+    setup: ["老K首次完整使用，你全程在旁边看着，不说话，只记录。"]
+    dialogue:
+      - { speaker: 老K, text: "（自言自语）传哪儿……哦这儿。这个按钮是什么……先不管。诶，出来了。", mood: neutral }
+      - { speaker: 你, text: "（记录：卡顿2处，用时4分半，中途想退出1次，最后说了句“行”）" }
+      - { speaker: 系统, text: "4分半里藏着你的整个改进清单。沉默地看，比热心地指导值钱十倍。" }
+    automaticEffects:
+      - { kind: addAsset, assetType: user_feedback, name: 首用观察·老K, description: 无干扰陪跑记录, content: "2卡顿/4分30秒/1次想退出/最终认可" }
+      - { kind: add, key: userUnderstanding, value: 5 }
+    terminal: true
+
+  - id: v_e03_d18_post_timing
+    campaign: venture
+    day: 18
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 渠道参数：连发帖时间都要测 }
+    scene: { location: dorm, characters: [] }
+    setup: ["准备在社团联合会群里发介绍帖。群消息高峰在午休和晚10点后，你现在是大下午3点。"]
+    choices:
+      - id: wait_peak
+        text: 存草稿，晚上9:58发，蹭晚高峰
+        visibleResponse: 晚10点档发出。当晚消息被顶到群上半区，收到6个私聊询问。同样的内容，黄金时段多一半回音。
+        hiddenEffects: [{ kind: add, key: users, value: 3 }, { kind: setFlag, key: timing_tested }]
+      - id: send_now
+        text: 现在就发，等不了
+        visibleResponse: 下午3点发出，20分钟后被课程通知和拼单消息顶没了。内容没错，时辰错了。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e03_d19_tutorial_post
+    campaign: venture
+    day: 19
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 内容营销：教程即软广 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["你打算写点东西引流。Agent 建议写《XX工具：重新定义社团管理》。你把它按住了。"]
+    choices:
+      - id: write_case
+        text: 写《我用3天收完72个社团的报名表（附方法）》，工具只在结尾露一面
+        visibleResponse: |
+          干货帖在两个群被转。有人评论区问“用的什么工具”，别人替你回答了。
+          当天注册+7，全部来自看完方法后才想试的人——转化质量极高。
+        hiddenEffects: [{ kind: add, key: users, value: 7 }, { kind: add, key: credibility, value: 5 }, { kind: achievement, achievementId: ach_v_content }]
+      - id: write_ad
+        text: 就写产品宣传文，直球营销
+        visibleResponse: 帖子发出去石沉大海，仅有的1条评论是“广告吧”。用户要方法，不要形容词。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 先给方法再提工具，广告才有人看
+    terminal: true
+
+  - id: v_e03_d19_fail_post
+    campaign: venture
+    day: 19
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 失败复盘是最好的信任内容 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你手上有现成的素材：上线首日那次通知重复发送的事故，和你一小时救火的全过程。"]
+    choices:
+      - id: post_failure
+        text: 发《我搞挂了自己的第一次付费通知，然后一小时赚回信任》
+        visibleResponse: |
+          帖子被一个创业群转了。评论区说“这比那些装完美的靠谱”。
+          有两个社长因为这篇帖子来试用——真实感是最好的获客文案。
+        hiddenEffects: [{ kind: add, key: credibility, value: 6 }, { kind: add, key: users, value: 2 }]
+      - id: hide_failure
+        text: 事故就压下去，别自己揭短
+        visibleResponse: 压住了。但你的“内容库存”里从此全是四平八稳的产品文，没有一篇能打。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: v_e03_d20_build_group
+    campaign: venture
+    day: 20
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 用户群的价值是反馈速度，不是规模 }
+    scene: { location: dorm, characters: [] }
+    setup: ["用户过30了，零散反馈管理不过来。要不要建个用户群？"]
+    choices:
+      - id: build_small
+        text: 建群，但只拉真实用过的20人，群名就叫“报名管家体验官”
+        visibleResponse: |
+          小群质量极高：当天问题当天反馈，你修完直接在群里@。
+          一周后这个群产生了你的第一批“自来水”——他们拉来了6个新社团。
+        hiddenEffects: [{ kind: add, key: users, value: 6 }, { kind: add, key: userUnderstanding, value: 6 }, { kind: setFlag, key: user_group }]
+      - id: big_group
+        text: 建大群，注册就拉，冲500人
+        visibleResponse: 群冲到120人，然后开始讨论食堂和游戏。你发的更新公告淹没在斗图里。人数不等于社区。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e03_d20_group_rules
+    campaign: venture
+    day: 20
+    type: story
+    trigger: { kind: day, day: 20, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["体验官群规三行：①问题随便提，截图最好 ②更新提前在这公告 ③扯皮去别处。第三行是老K建议加的。"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 2 }
+      - { kind: setFlag, key: group_rules_set }
+    dialogue:
+      - { speaker: 系统, text: "社区的味道=群规的味道。前三条消息定调，比之后一百条管理都管用。" }
+    terminal: true
+
+  - id: v_e03_d21_group_quiet
+    campaign: venture
+    day: 21
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 群冷了要用钩子唤醒，不是用红包硬砸 }
+    scene: { location: dorm, characters: [] }
+    setup: ["体验官群连续4天没消息。打开一看，最后一条还是你发的更新公告。"]
+    choices:
+      - id: throw_topic
+        text: 抛话题：“你们下次活动都什么时候？我把提醒功能排个优先级”
+        visibleResponse: 群活了：8个社团报了时间，2个顺带提了新需求。用户不冷，是你没给他们说话的理由。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 5 }, { kind: setFlag, key: group_revived }]
+      - id: send_redpacket
+        text: 发红包救场
+        visibleResponse: 红包抢完了，群又冷了。红包买来的是手速，不是参与。
+        hiddenEffects: [{ kind: subtract, key: money, value: 20 }, { kind: add, key: academicDebt, value: 2 }]
+    terminal: true
+
+  - id: v_e03_d21_koc
+    campaign: venture
+    day: 21
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: KOC>KOL：真实用户的日常推荐最有说服力 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: ["老K随口说：“我隔壁几个社团问我用的啥工具，我说了名字。”你意识到老K就是最好的推广员。"]
+    choices:
+      - id: empower_k
+        text: 给老K一批专属邀请码+他的社团永久9折，让他自己发挥
+        visibleResponse: 老K在各社长群里自然安利，一周带来5个注册。他不是你的销售，是你的用户——这个区别就是说服力的区别。
+        hiddenEffects: [{ kind: add, key: users, value: 5 }, { kind: add, key: credibility, value: 4 }, { kind: achievement, achievementId: ach_v_koc }]
+      - id: pay_k
+        text: 直接给老K钱，请他发推广文案
+        visibleResponse: 老K把钱退了：“朋友之间搞这个没意思。文案我帮你发，钱你收回去。”差一点，你把用户处成了乙方。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }, { kind: setFlag, key: k_refused_money }]
+    terminal: true
+
+  - id: v_e03_d22_referral_mech
+    campaign: venture
+    day: 22
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 转介绍机制：双向有奖才转得动 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你想加“邀请新社团得优惠”功能。优惠怎么设计？"]
+    choices:
+      - id: double_reward
+        text: 双向奖励：邀请方免单一次，被邀请方首单7折
+        visibleResponse: 上线两周，7个注册来自邀请链接。双方都有实惠，介绍人才好开口——单边奖励总让人觉得在帮您赚钱。
+        hiddenEffects: [{ kind: add, key: users, value: 7 }, { kind: setFlag, key: referral_double }]
+      - id: one_side
+        text: 只奖励邀请方，省点成本
+        visibleResponse: 两周2个邀请注册。被邀请的觉得“你是来挣我钱的”，介绍人张不开这个口。
+        hiddenEffects: [{ kind: add, key: users, value: 2 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e03_d22_booth
+    campaign: venture
+    day: 22
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 地推：一眼看懂+30秒演示才留得住人 }
+    scene: { location: canteen, characters: [] }
+    setup: ["社团招新季，你申请了摊位角落的一张桌子。传单怎么设计？"]
+    choices:
+      - id: demo_table
+        text: 不要传单，桌上放笔记本电脑循环演示合并过程，扫码即用
+        visibleResponse: |
+          停留的人第一句话都是“这真的只要3分钟？”——眼见为实。
+          当天扫码32人，注册19个。一张桌子赢了半层楼的传单。
+        hiddenEffects: [{ kind: add, key: users, value: 19 }, { kind: subtract, key: money, value: 15 }, { kind: achievement, achievementId: ach_v_booth }]
+      - id: flyers
+        text: 印500张传单，写满功能优势
+        visibleResponse: 传单发完，回收方式主要是垃圾桶。地上还有几张，印着你精心排版的“12大核心功能”。
+        hiddenEffects: [{ kind: subtract, key: money, value: 80 }, { kind: add, key: users, value: 1 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e03_d23_poster_qr
+    campaign: venture
+    day: 23
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["尴尬事故：海报印出来才发现二维码少了一位数，500张海报全军覆没。你盯着那卷海报看了十分钟。"]
+    automaticEffects:
+      - { kind: subtract, key: money, value: 60 }
+      - { kind: add, key: execution, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "物料上线前扫一次码，只要10秒。这60元买来的检查项，比任何营销课都便宜。" }
+    terminal: true
+
+  - id: v_e03_d23_zhihu_answer
+    campaign: venture
+    day: 23
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你发现知乎有个老问题：“大学社团管理有什么好工具？”下面回答3年前就停更了。"]
+    choices:
+      - id: answer_serious
+        text: 认真写答案：现有工具对比+你的方案+适用边界，诚实标注“自制小工具”
+        visibleResponse: |
+          答案成为问题下最高赞。长尾流量稳定：每周2-3个注册来自这条两年前的老问题。
+          内容是一次投入，持续收租的资产。
+        hiddenEffects: [{ kind: add, key: users, value: 3 }, { kind: add, key: credibility, value: 4 }, { kind: setFlag, key: zhihu_longtail }]
+      - id: spam_answer
+        text: 直接贴链接喊“快来用我的工具”
+        visibleResponse: 被管理员删了，账号禁言7天。渠道也有脾气，不懂规矩的流量客被请出门。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e03_d24_short_video
+    campaign: venture
+    day: 24
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 短视频前3秒决定生死 }
+    scene: { location: workbench, characters: [v_ai_agent] }
+    setup: ["你试拍短视频。第一版开头：“大家好，今天给大家介绍一款社团管理工具……”Agent 诚实地说：像课件。"]
+    choices:
+      - id: hook_first
+        text: 重拍：开头直接上画面——3天变3分钟的合并过程实录，全程无解说
+        visibleResponse: |
+          屏录+字幕，20条视频发出去。最好一条播放4000，评论区全是“求链接”。
+          没有开场白，是因为你的用户根本不认识你。
+        hiddenEffects: [{ kind: add, key: users, value: 8 }, { kind: add, key: execution, value: 3 }, { kind: achievement, achievementId: ach_v_video }]
+      - id: keep_talking
+        text: 保持讲解风格，显得专业
+        visibleResponse: 播放量最高的一条：87。其中30是你自己反复看的。专业感和完播率之间，用户选后者。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e03_d24_content_calendar
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: day, day: 24, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["你把内容排期写在墙上：周一功能更新、周三用户案例、周五使用技巧。素材从用户群里捞，不愁选题。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: content_calendar }
+    dialogue:
+      - { speaker: 系统, text: "灵感靠不住，日历靠得住。固定节奏发内容，粉丝知道什么时候等你。" }
+    terminal: true
+
+  - id: v_e03_d17_free_friend
+    campaign: venture
+    day: 17
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["老同学发消息：“听说你做了个工具？给我免费开个永久会员呗，兄弟。”"]
+    choices:
+      - id: friendly_refuse
+        text: “会员系统还没有呢。你先用，觉得值，以后第一个给你打折。”
+        visibleResponse: 老同学回了个“行，懂了，好东西不白拿”。他后来真成了付费用户，还拉来自己社团。边界立住了，关系也没伤。
+        hiddenEffects: [{ kind: add, key: independence, value: 3 }, { kind: add, key: users, value: 1 }]
+      - id: give_free
+        text: 免费给，都是兄弟
+        visibleResponse: 你开了后门。两周后他同学问“凭什么他有免费版”，你发现特例的维护成本比想象高。
+        hiddenEffects: [{ kind: setFlag, key: free_backdoor }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e03_d18_user_video
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["惊喜：辩论队社长自己录了个使用视频发在社团圈——“给你们安利个神器，真的只要3分钟。”配了6张截图。"]
+    automaticEffects:
+      - { kind: add, key: users, value: 4 }
+      - { kind: addAsset, assetType: user_feedback, name: 用户自制安利视频, description: 辩论队社长自发传播, content: "“神器”/6截图/带来4注册" }
+    dialogue:
+      - { speaker: 系统, text: "用户替你说话的那一刻，你的营销部门成立了。工资是产品真的好用。" }
+    terminal: true
+
+  - id: v_e03_d19_conversion_sheet
+    campaign: venture
+    day: 19
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 渠道要有转化数据，感觉靠不住 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你同时在做5件事引流。室友问哪个渠道最有效，你张口结舌——从没分开统计过。"]
+    choices:
+      - id: track_channels
+        text: 每个渠道带专属注册链接，建表统计：曝光/注册/激活
+        visibleResponse: |
+          两周数据：熟人私信转化28%、群发帖6%、视频3%、传单0.2%。
+          你把传单预算砍了，全押熟人转介绍。数据替你做了决定。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 6 }, { kind: addAsset, assetType: document, name: 渠道转化表, description: 曝光/注册/激活三列, content: "私信28%/群6%/视频3%/传单0.2%" }, { kind: achievement, achievementId: ach_v_channel_track }]
+      - id: feel_based
+        text: 感觉视频效果最好，加码短视频
+        visibleResponse: 加码两周后发现视频带来的是围观，不是注册。感觉在数据面前，就是个可爱的误会。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    terminal: true
+
+  - id: v_e03_d20_word_of_mouth
+    campaign: venture
+    day: 20
+    type: story
+    trigger: { kind: day, day: 20, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["安静的一周。没发帖没推广，注册却涨了11个。你查了来源：全是老用户拉的新社团，“来源：朋友推荐”。"]
+    automaticEffects:
+      - { kind: add, key: users, value: 11 }
+      - { kind: add, key: credibility, value: 5 }
+    dialogue:
+      - { speaker: 系统, text: "口碑是唯一睡后收入式的渠道。它慢，但它免费，且越用越灵。" }
+    terminal: true
+
+  - id: v_e03_d21_spam_suspect
+    campaign: venture
+    day: 21
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["被当成骗子了。某社长回怼：“创业的吧？先把我们的信息卖了吧。”你盯着屏幕深呼吸。"]
+    choices:
+      - id: calm_reply
+        text: 回复：“理解。我们只存报名数据，隐私方案在这里，你也可以传脱敏表先试。”附方案链接
+        visibleResponse: 对方沉默一会儿回了句“行吧，我看看”。三天后他注册了——还发了条好评：“这家不吹。”
+        hiddenEffects: [{ kind: add, key: credibility, value: 5 }, { kind: add, key: users, value: 1 }]
+      - id: argue_back
+        text: 气不过，跟他辩了十个回合
+        visibleResponse: 你赢了辩论，输了用户。他把聊天记录截图发到了墙上，配文“这小创业者戏真多”。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 6 }]
+    terminal: true
+
+  - id: v_e03_d22_union_knock
+    campaign: venture
+    day: 22
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [] }
+    setup: ["学生会的人主动找上门：“我们关注你的工具两周了。全校128个社团，有兴趣谈谈吗？”你努力克制上扬的嘴角。"]
+    automaticEffects:
+      - { kind: setFlag, key: union_knocked }
+      - { kind: add, key: credibility, value: 4 }
+    dialogue:
+      - { speaker: 系统, text: "被渠道主动找上的前提：你在渠道里已经被讨论过了。内容不是白发的。" }
+    terminal: true
+
+  - id: v_e03_d23_cross_promo
+    campaign: venture
+    day: 23
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["二手群群主提议：他在你这儿挂“毕业甩卖工具”，你在他群里宣传报名管家，互推不收钱。"]
+    choices:
+      - id: do_promo
+        text: 干。文案互相审一遍，各推三天
+        visibleResponse: 互推结束：他那边成交26单，你这边注册9个。用户画像重合度高——办活动的社团也要处理二手，天然交叉。
+        hiddenEffects: [{ kind: add, key: users, value: 9 }, { kind: setFlag, key: cross_promo }]
+      - id: refuse
+        text: 拒了，怕掉价
+        visibleResponse: 互推黄了。两周后你在别处看到类似合作做得风生水起——你拒绝的只是个形式，放走的是流量。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e03_d24_qr_misprint
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["又一起物料事故：传单上的短链接打错了字母，跳到一个卖考研资料的对家页面。你连夜在所有渠道撤换。"]
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 3 }
+      - { kind: add, key: evidenceDiscipline, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "给对家引流的链接，是营销事故里最讽刺的一种。物料清单从此多一项：扫码实测。" }
+    terminal: true
+
+  - id: v_e03_d18_onboarding_msg
+    campaign: venture
+    day: 18
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你给新注册用户加了条自动欢迎语：“我是作者本人，遇到任何卡壳直接回这条消息，我人肉客服。”"]
+    automaticEffects:
+      - { kind: add, key: users, value: 0 }
+      - { kind: setFlag, key: welcome_msg }
+    dialogue:
+      - { speaker: 系统, text: "冷启动期，“作者本人在线”是任何SaaS都买不到的服务体验。趁用户少，赶紧奢侈。" }
+    terminal: true
+
+  - id: v_e03_d19_dorm_show
+    campaign: venture
+    day: 19
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你跑了3栋宿舍楼的社团活动室，做“巡演”：每栋演示一遍，留下活动码。累了半死，收获了7个注册和一肚子真实吐槽。"]
+    automaticEffects:
+      - { kind: add, key: users, value: 7 }
+      - { kind: add, key: userUnderstanding, value: 6 }
+      - { kind: subtract, key: energy, value: 10 }
+    dialogue:
+      - { speaker: 系统, text: "地推的隐藏收益不是注册数，是你亲耳听到的那些“为什么不用”的理由。" }
+    terminal: true
+
+  - id: v_e03_d20_kill_channel
+    campaign: venture
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { learning: 砍渠道和加渠道一样重要 }
+    scene: { location: dorm, characters: [] }
+    setup: ["渠道转化表摆出来：传单0.2%、校园墙广告位¥50/2注册、私信转介绍28%、短视频围观多注册少。你的时间只剩每天4小时。"]
+    choices:
+      - id: cut_hard
+        text: 砍掉传单和广告位，时间全押“转介绍+内容”两条腿
+        visibleResponse: |
+          砍完的第三周，注册数没降反升——省下的时间你写了3篇教程帖。
+          渠道不在多，在你能养得起几条。
+        hiddenEffects: [{ kind: add, key: execution, value: 5 }, { kind: setFlag, key: channels_cut }, { kind: achievement, achievementId: ach_v_channel_cut }]
+      - id: keep_all_ch
+        text: 都留着，万一哪条爆了呢
+        visibleResponse: 四条渠道每条都半死不活。你的精力被摊成四份薄饼，哪条都喂不大。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 渠道是投资组合，但小团子只养得起一两个
+    terminal: true
+
+  - id: v_e03_d21_invite_code
+    campaign: venture
+    day: 21
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [] }
+    setup: ["要不要上邀请码机制？只能凭码注册。"]
+    choices:
+      - id: open_reg
+        text: 不设门槛，开放注册——现阶段要的是规模信号
+        visibleResponse: 开放注册一周+23，其中垃圾注册3个。可控的杂质，换来真实的增长曲线。
+        hiddenEffects: [{ kind: add, key: users, value: 23 }, { kind: setFlag, key: open_reg }]
+      - id: invite_only
+        text: 邀请码制，营造稀缺感
+        visibleResponse: 稀缺感没营造出来，麻烦先来了：3个想用的人因为“要找码”放弃了。早期产品没资格挑用户。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e03_d22_campus_media
+    campaign: venture
+    day: 22
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [] }
+    setup: ["校媒记者私信：“做个学生创业专访？明早拍摄，要露脸讲创业故事。”你对着镜头恐惧症犹豫了。"]
+    choices:
+      - id: accept_interview
+        text: 接。提前想好三句话定位，带上后台真实数据
+        visibleResponse: |
+          专访发了，标题《他把72个社团的报名表压进3分钟》。
+          当周注册+15，爸妈转遍了亲戚群。紧张归紧张，这次露脸值。
+        hiddenEffects: [{ kind: add, key: users, value: 15 }, { kind: add, key: credibility, value: 6 }]
+      - id: decline_media
+        text: 推了，产品还没准备好被围观
+        visibleResponse: 校媒找了下一位受访者。你错过了免费的信任背书——产品永远不会“准备好”。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e03_d23_mom_share
+    campaign: venture
+    day: 23
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [v_family] }
+    setup: ["妈妈把你的专访链接转发到了家族群、老同事群和广场舞姐妹群，配文：“我儿子做的！”连发三遍。"]
+    dialogue:
+      - { speaker: 妈妈, text: "你三姨用不上，但你舅舅单位工会说不定用得上！我让他找你了啊！" }
+      - { speaker: 你, text: "妈……这个主要是给学校社团用的……算了，谢谢妈。" }
+      - { speaker: 系统, text: "家人是最不精准但最卖力的渠道。备好一句“妈，专业问题我来对接”比阻止她更重要。" }
+    automaticEffects: [{ kind: relationship, characterId: v_family, delta: 4 }, { kind: add, key: energy, value: 3 }]
+    terminal: true
+
+  - id: v_e03_d24_hundred_users
+    campaign: venture
+    day: 24
+    type: story
+    keyDecision: true
+    trigger: { kind: day, day: 24, phase: end }
+    purpose: { learning: 用户破百：从“找用户”转向“养用户” }
+    scene: { location: dorm, characters: [] }
+    setup: ["后台数字跳过100：注册用户104。你在宿舍安静地坐了一会儿，然后打开来源统计。"]
+    dialogue:
+      - { speaker: 系统, text: "104个注册，周活跃61。来源分布：转介绍41、内容引流27、地推19、其他17。你的增长引擎有了型号。" }
+    automaticEffects:
+      - { kind: add, key: users, value: 4 }
+      - { kind: add, key: credibility, value: 6 }
+      - { kind: achievement, achievementId: ach_v_100_users }
+      - { kind: setFlag, key: users_100 }
+    terminal: true
+
+  - id: v_e03_d17_pitch_30s
+    campaign: venture
+    day: 17
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 30秒介绍公式：谁+痛+数字 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: ["食堂偶遇学生会文艺部长，她问“你最近忙啥呢”。你只有30秒。"]
+    choices:
+      - id: formula_pitch
+        text: “社团收报名表是不是要合好几天？我做的工具，72份表3分钟合完，老K他们在用。”
+        visibleResponse: 她当场要了链接：“下学期迎新晚会能用吗？”——具体的人+具体的痛+具体的数，就是最好的电梯稿。
+        hiddenEffects: [{ kind: add, key: users, value: 1 }, { kind: setFlag, key: pitch_formula }]
+      - id: vision_pitch
+        text: “我在做校园组织数字化转型方向的创业项目，场景很多元的。”
+        visibleResponse: 她“哦”了一声，去打饭了。每个字都认识，连起来不知道在说什么。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: v_e03_d19_meetup_speak
+    campaign: venture
+    day: 19
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    scene: { location: cafe, characters: [v_mentor] }
+    setup: ["创业社群下周有线下分享，罗哥问你敢不敢上台讲10分钟。"]
+    choices:
+      - id: go_speak
+        text: 上。就讲“我怎么用48小时落地页验证需求”，带真实数据
+        visibleResponse: |
+          讲完3个人加你好友，其中1个成了你的付费用户，1个介绍了客户。
+          分享不是输出，是高级获客。
+        hiddenEffects: [{ kind: add, key: credibility, value: 5 }, { kind: add, key: users, value: 2 }, { kind: relationship, characterId: v_mentor, delta: 5 }]
+      - id: refuse_speak
+        text: 不去，还没成功，没脸讲
+        visibleResponse: 你把机会让给了“月入五万”的卖课哥。台下坐着的本该是你的潜在用户。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e03_d20_bad_review_reply
+    campaign: venture
+    day: 20
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 差评区是免费的用户访谈现场 }
+    scene: { location: dorm, characters: [] }
+    setup: ["墙上有人评价：“工具能用，但界面丑得像上世纪，看着就不想付钱。”你手痒想回怼。"]
+    choices:
+      - id: thank_reviewer
+        text: 回复：“界面丑是真问题，预算和精力都堆在流程上了。下月优化，先把你的报名管好。”
+        visibleResponse: 对方回了句“行，看行动”。一个月后界面改版，他成了最早夸新界面的人。差评处理得好，黑转粉。
+        hiddenEffects: [{ kind: add, key: credibility, value: 5 }, { kind: setFlag, key: review_handled }]
+      - id: fight_review
+        text: 回怼：“免费的还要什么自行车？”
+        visibleResponse: 这条对话被截图传播，标题《创业者的玻璃心》。你花三天道歉平息，注册掉了2个。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 8 }, { kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: v_e03_d21_viral_post
+    campaign: venture
+    day: 21
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 流量来了先接住，别光顾着庆祝 }
+    scene: { location: dorm, characters: [] }
+    setup: ["凌晨你的教程帖被一个大V转了。早上一醒：帖子5万阅读，后台注册+413，服务器CPU告警，群里挤进200个新面孔。"]
+    choices:
+      - id: triage_wave
+        text: 先扩容服务器+发置顶公告“新人先看三步指南”+只回核心反馈
+        visibleResponse: |
+          你用两小时稳住了洪水：服务器升配、公告置顶、问题分三类处理。
+          一周后这批流量的周留存31%——不如种子用户，但远好于全流失。接住了。
+        hiddenEffects: [{ kind: add, key: users, value: 120 }, { kind: subtract, key: money, value: 50 }, { kind: add, key: execution, value: 6 }, { kind: achievement, achievementId: ach_v_catch_wave }]
+      - id: enjoy_viral
+        text: 先截图发朋友圈庆祝！数据让它飞一会儿
+        visibleResponse: 你庆祝了半天。服务器在 celebrations 中崩了3小时，修复后新增用户里肯回来的所剩无几。流量没等到，等到了差评。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 10 }, { kind: add, key: users, value: 30 }, { kind: add, key: academicDebt, value: 6 }]
+    learningPoint: 流量是压力测试，不是彩票
+    terminal: true
+
+  - id: v_e03_d22_offline_event
+    campaign: venture
+    day: 22
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [v_user_club] }
+    setup: ["你请5个活跃社长吃了顿饭（¥150）。饭桌上没聊产品，聊的全是他们办活动翻过的车。你记了满满一页。"]
+    automaticEffects:
+      - { kind: subtract, key: money, value: 150 }
+      - { kind: add, key: userUnderstanding, value: 8 }
+      - { kind: addAsset, assetType: interview_notes, name: 社长饭局纪要, description: 5个社长的翻车实录, content: "场地临时换/人数暴增/审批卡壳——三个潜在新场景" }
+    dialogue:
+      - { speaker: 系统, text: "饭局是最贵的访谈，也是氛围最松的访谈。人一放松，说的全是真话。" }
+    terminal: true
+
+  - id: v_e03_d23_grow_slow
+    campaign: venture
+    day: 23
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["刷到同行帖子：“上线两周破万用户！”你的后台：312。你盯着两个数字对比了很久。"]
+    automaticEffects: [{ kind: add, key: independence, value: 3 }]
+    dialogue:
+      - { speaker: 系统, text: "别人的万粉没告诉你留存和成本。你的312个用户有61%周活——先比质量，再比音量。" }
+    terminal: true
+
+  - id: v_e03_d24_flyer_mistake
+    campaign: venture
+    day: 24
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: dorm, characters: [] }
+    setup: ["复盘获客账：这个月推广总花费¥205（传单80+海报60+广告位50+杂15），带来注册37个，CAC≈¥5.5。而转介绍CAC：¥0。"]
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 5 }
+      - { kind: addAsset, assetType: revenue_report, name: 获客成本月报, description: 各渠道CAC对比, content: "付费渠道CAC5.5/转介绍0/内容近0" }
+    dialogue:
+      - { speaker: 系统, text: "钱能买来曝光，买不来信任。信任只能用内容、服务和时间攒。" }
+    terminal: true
+
+  - id: v_e03_d17_first_ten
+    campaign: venture
+    day: 17
+    type: story
+    trigger: { kind: day, day: 17, phase: end }
+    scene: { location: dorm, characters: [] }
+    setup: ["前10个用户画像：6个熟人、3个访谈对象、1个纯陌生。你给每个人建了小档案：社团、活跃时间、抱怨记录。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: setFlag, key: first10_profiles }
+    dialogue:
+      - { speaker: 系统, text: "10个用户=10条实时反馈管道。这个阶段，深度比数量值钱一百倍。" }
+    terminal: true
+
+  - id: v_e03_d18_mom_first_user
+    campaign: venture
+    day: 18
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: home, characters: [v_family] }
+    setup: ["妈妈神秘兮兮地说：“我给你的工具拉了个用户——你舅妈的舞蹈队收活动费，我教她用你那个收表功能了。”"]
+    choices:
+      - id: accept_warm
+        text: 接住：“谢谢妈！舅妈要是遇到问题直接让她找我。”
+        visibleResponse: 舅妈的舞蹈队成了你的第41个用户，还是个“中老年场景”样本。她后来提的意见出奇地有用：字要再大点。
+        hiddenEffects: [{ kind: add, key: users, value: 1 }, { kind: relationship, characterId: v_family, delta: 4 }, { kind: add, key: userUnderstanding, value: 3 }]
+      - id: brush_off
+        text: “妈，你别瞎操作，这不是给阿姨们用的。”
+        visibleResponse: 妈妈讪讪地“哦”了一声。你拒绝的不是用户，是一份笨拙的爱你没接住。
+        hiddenEffects: [{ kind: relationship, characterId: v_family, delta: -4 }, { kind: subtract, key: energy, value: 3 }]
+    terminal: true

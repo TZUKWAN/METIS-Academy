@@ -1,0 +1,648 @@
+# 科研线扩展事件 04：数据清洗与统计分析支线（D20-D24）
+events:
+  # ---- D20 ----
+  - id: r_e04_20_clean_rules
+    campaign: research
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 20, phase: start }
+    purpose: { learning: 剔除规则先于看数据：顺序决定伦理 }
+    scene: { location: workbench, characters: [] }
+    setup: [“151 份数据到手。第一件事不是看结果——是立剔除规则。”]
+    dialogue:
+      - { speaker: 系统, text: "规则先写，数据后看。反过来的话，每一条规则都会变成'帮我剔除碍事的样本'。" }
+    choices:
+      - id: rules_first
+        text: 先写三条剔除规则并冻结：时长/检测题/规律作答
+        visibleResponse: 规则落笔：低于90秒剔除、检测题错一个剔除、连续12题同选项剔除。写完才打开数据——剔了 11 份，每份都有名有据。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 9 }
+          - { kind: setFlag, key: exclusion_frozen }
+          - { kind: achievement, achievementId: ach_r_e04_rules_first, description: 剔除规则先于数据 }
+      - id: look_first
+        text: 先看看数据长啥样，规则回头再定
+        visibleResponse: “回头再定”的规则精准地剔掉了拖累显著性的样本——你俩都清楚这不是清洗，是修图。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 10 }
+          - { kind: subtract, key: credibility, value: 8 }
+          - { kind: setFlag, key: rules_after_peek }
+    learningPoint: 清洗规则的顺序就是研究伦理的温度计
+
+  - id: r_e04_20_descriptives
+    campaign: research
+    day: 20
+    type: story
+    trigger: { kind: manual }
+    scene: { location: workbench, characters: [] }
+    setup: [“描述统计出炉。你第一次'看见'了自己的数据：年级分布、使用频率、各量表均值。”]
+    dialogue:
+      - { speaker: 系统, text: "样本画像：72%大二，日均AI写作1.8次，论证质量分13.6/18。" }
+      - { speaker: 你, text: "原来我的样本长这样。之前它在脑子里一直是团雾。" }
+    automaticEffects:
+      - { kind: add, key: progress, value: 3 }
+      - { kind: addAsset, assetType: dataset, name: 清洗后数据集 v1, description: 140份有效样本, content: "n=140 / 变量22 / 缺失41处" }
+    terminal: true
+
+  - id: r_e04_20_ai_analysis
+    campaign: research
+    day: 20
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 脚本可复现 > 菜单点选：让每一步都留痕 }
+    scene: { location: workbench, characters: [r_ai_agent, r_senior_data] }
+    setup: [“两条路线：让 Agent 写 R 脚本一键跑完，或者用点选式软件一步步来。”]
+    dialogue:
+      - { speaker: Agent, text: "我可以生成完整的分析脚本，一键复现全部结果。", mood: pleased }
+      - { speaker: 周师兄, text: "点选软件也有好处，你每一步都亲手点过，心里有数。", mood: neutral }
+      - { speaker: 你, text: "一个是留痕，一个是长手。为什么不能都要？" }
+    choices:
+      - id: script_route
+        text: Agent 写脚本，我逐行看懂再跑
+        visibleResponse: 你逼着自己读懂了每一行。三天后答辩预演，评委问'这结果怎么算的'，你当场打开脚本逐行讲——全场只有你带得走这套本事。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 7 }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: addAsset, assetType: code_project, name: analysis.R, description: 全流程可复现脚本, content: "清洗→反向计分→信度→描述→相关→回归" }
+          - { kind: achievement, achievementId: ach_r_e04_repro_script, description: 建立可复现分析脚本 }
+      - id: menu_route
+        text: 用点选软件，稳一点
+        visibleResponse: 结果出来了。但两周后你想加一个控制变量重新跑——点选路径是什么来着？你重新点了四十分钟。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 3 }
+          - { kind: add, key: technicalDebt, value: 4 }
+    learningPoint: 可复现是分析的地基
+
+  - id: r_e04_20_stats_illiteracy
+    campaign: research
+    day: 20
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [r_peer] }
+    setup: [“苏晓盯着你的屏幕：'这个 0.34 后面的星星是什么？'”]
+    dialogue:
+      - { speaker: 苏晓, text: "还有这个 r=0.34，算大算小？" }
+      - { speaker: 你, text: "星星是显著性，意思是'这关联不太可能是巧合'。0.34 在社科算中等——解释了大概一成出头的变异。" }
+      - { speaker: 苏晓, text: "一成？就这？" }
+      - { speaker: 你, text: "人的行为复杂，一成已经是能重复出来的关系了。" }
+    choices:
+      - id: teach_once
+        text: 借咖啡馆纸巾画散点图讲透
+        visibleResponse: 三张纸巾的板书。苏晓说她懂了，你也发现自己哪里没懂——'解释变异'那步你讲得磕巴，回去补了半页笔记。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_peer, delta: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+      - id: brush_off
+        text: "你不用懂，反正我懂"
+        visibleResponse: 答辩模拟时苏晓扮演评委，第一个问题就是'r等于0.34说明什么'——你被自己教过的人问住了。
+        hiddenEffects: [{ kind: subtract, key: credibility, value: 3 }]
+    terminal: true
+
+  - id: r_e04_20_correlation_surprise
+    campaign: research
+    day: 20
+    type: decision
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { learning: 相关矩阵里的第三变量信号 }
+    scene: { location: workbench, characters: [] }
+    setup: [“相关矩阵里藏了行刺：写作经验和论证质量的相关(r=0.41)比你的主变量(r=0.28)还高。”]
+    dialogue:
+      - { speaker: 系统, text: "一个不速之客：经验。它跟谁都好——包括跟你的自变量。" }
+    choices:
+      - id: control_experience
+        text: 把写作经验当控制变量塞进回归
+        visibleResponse: 控制后主效应降到 r=0.19，但仍然立得住。你把'部分关联由经验解释'写进了结果——诚实削弱了效应，却让剩下的部分更硬。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: setFlag, key: controlled_experience }
+      - id: hide_confounder
+        text: 不提经验这茬，报告主相关就行
+        visibleResponse: 评委只要多看一眼相关矩阵——他们一定会看——这行数字就会替你说话。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 8 }
+          - { kind: setFlag, key: hid_confounder }
+    learningPoint: 控制变量不是麻烦，是保命符
+
+  # ---- D21 ----
+  - id: r_e04_21_alpha_drop
+    campaign: research
+    day: 21
+    type: story
+    trigger: { kind: day, day: 21, phase: start }
+    purpose: { narrative: 信度下滑, learning: 预调研与正式数据的落差要追因 }
+    scene: { location: workbench, characters: [] }
+    setup: [“正式数据跑信度：0.61。预调研明明是 0.86。你盯着屏幕反复刷新。”]
+    dialogue:
+      - { speaker: 系统, text: "同样的量表，两次测量，信度差了 0.25。这不是命运，是差异——找差异。" }
+    next: r_e04_21_alpha_diagnose
+
+  - id: r_e04_21_alpha_diagnose
+    campaign: research
+    day: 21
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 信度诊断：题项/样本/流程三个来源 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    choices:
+      - id: diagnose_item
+        text: 查题项统计：哪道题在拖后腿
+        visibleResponse: 你发现第 6 题在正式样本里题总相关只有 0.05——预调研那批人读得懂，正式这批新人卡在题干里的'隐喻'一词。删它，α 回到 0.79。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 7 }
+          - { kind: add, key: execution, value: 3 }
+          - { kind: setFlag, key: alpha_fixed }
+      - id: rerun_until_good
+        text: 反复重跑，也许刚才是算错了
+        visibleResponse: 重跑十遍 α 还是 0.61。数字不会因为焦虑而改变，会改变的只有你对它的处理。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+      - id: agent_fix
+        text: 让 Agent 直接把信度'修好'
+        visibleResponse: Agent 给了一版 0.83 的信度——方法是悄悄删了四道题没留记录。你回滚了它的改动：修数据不等于修信度。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 6 }
+          - { kind: setFlag, key: agent_silent_delete }
+    learningPoint: 信度低先诊断，再处理，禁止静默删除
+
+  - id: r_e04_21_not_significant
+    campaign: research
+    day: 21
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 21, phase: end }
+    purpose: { narrative: 主假设不显著, learning: 不显著是结果，不是失败 }
+    scene: { location: dorm, characters: [] }
+    setup: [“晚间十一点。回归跑完：p=0.23。你的主假设，不显著。”]
+    dialogue:
+      - { speaker: 系统, text: "三十天里最安静的一刻。屏幕上的 0.23 在看着你。" }
+      - { speaker: 你, text: "……现在怎么办。改假设？换变量？还是……" }
+    choices:
+      - id: report_null
+        text: 如实报告：不显著也是发现，讨论可能原因
+        visibleResponse: 你关掉电脑去洗了把脸，回来在结果章写下第一句："假设H1未获支持。"写完莫名轻松——这句真话比任何星星都难写，也都值钱。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 10 }
+          - { kind: add, key: independence, value: 6 }
+          - { kind: setFlag, key: null_result_honest }
+          - { kind: achievement, achievementId: ach_r_e04_null_honest, description: 如实报告不显著结果 }
+      - id: try_subgroups
+        text: 明天先分几十个子组跑跑看，万一某组显著
+        visibleResponse: 你在 21 个分组里找到了 2 个显著的组——在 21 次尝试里，2 次显著就是噪音本音。你没有上报这 2 个，但你浪费了一晚。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+          - { kind: setFlag, key: tried_subgroup_fishing }
+      - id: tweak_scale
+        text: 回去把因变量换个算法，说不定就显著了
+        visibleResponse: 你换了个计分法，p=0.048。你盯着这个数字看了很久，最后把两种算法都写进了附录——评委会看见你挣扎的痕迹，这不可耻。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 5 }
+          - { kind: setFlag, key: scale_tweaked }
+    learningPoint: 结果显著与否不归你管，报告方式才归你管
+
+  - id: r_e04_21_p_hack_talk
+    campaign: research
+    day: 21
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“第二天，周师兄看出了你眼下的乌青。”]
+    dialogue:
+      - { speaker: 周师兄, text: "跑了几次了？" }
+      - { speaker: 你, text: "……四次。加分组二十多次。" }
+      - { speaker: 周师兄, text: "停。我博一干过更狠的：换个软件、换个剔除标准、换个方向。都显著了——然后呢？审稿人一次复算就全塌。", mood: serious }
+      - { speaker: 周师兄, text: "记住：p值是你劝自己别自欺的工具，不是劝别人信你的工具。" }
+    automaticEffects:
+      - { kind: relationship, characterId: r_senior_data, delta: 5 }
+      - { kind: add, key: evidenceDiscipline, value: 6 }
+      - { kind: setFlag, key: p_hack_warning_heard }
+    terminal: true
+
+  - id: r_e04_21_effect_size_frame
+    campaign: research
+    day: 21
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 效应量的讲法：小效应≠没价值 }
+    scene: { location: workbench, characters: [] }
+    setup: [“主假设最后定格：控制经验后 β=0.19，p=0.026。效应不大，但存在。”]
+    choices:
+      - id: size_in_context
+        text: 给效应量找参照：'与已有研究中师生互动效应(β=0.22)相当'
+        visibleResponse: 一句参照让 0.19 有了刻度。讨论章写出了底气：'小而稳的关联，提示过程性影响的存在。'
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: progress, value: 4 }
+          - { kind: setFlag, key: effect_framed }
+      - id: oversell
+        text: 报告里只写'显著正相关'，不提小不小
+        visibleResponse: 评委追问'多大'，你答'0.19'；追问'0.19意味着什么'，你卡住。显著性骗不过懂行的人。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }]
+    learningPoint: 效应量要带刻度出场
+
+  # ---- D22 ----
+  - id: r_e04_22_chart_truncation
+    campaign: research
+    day: 22
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 22, phase: start }
+    purpose: { learning: 图表诚信：坐标轴从零开始 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“Agent 画的柱状图很壮观：两组差异看着像差了一倍。你瞄了眼纵轴——从 11.0 开始的。”]
+    dialogue:
+      - { speaker: Agent, text: "截断纵轴可以放大视觉差异，突出组间效果。", mood: pleased }
+      - { speaker: 你, text: "放大视觉差异=视觉撒谎。实际差距是 13.6 对 12.1，差 11%不是 100%。" }
+    choices:
+      - id: honest_axis
+        text: 纵轴归零，差异老实画
+        visibleResponse: 柱子看起来平了，但你加了误差线和数值标注。评委看得懂：平柱+显著标记=诚实且有料。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: setFlag, key: honest_axis }
+      - id: keep_truncated
+        text: 就用截断图，PPT好看要紧
+        visibleResponse: 好看了一周。预审时吴教授指着你PPT说'纵轴从11开始？'——全场都听见了。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 10 }
+          - { kind: setFlag, key: chart_caught }
+    learningPoint: 图表的第一美德是诚实
+
+  - id: r_e04_22_outlier_policy
+    campaign: research
+    day: 22
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 离群值：先问'从哪来'，再问'删不删' }
+    scene: { location: workbench, characters: [] }
+    setup: [“散点图角落蹲着三个点：论证质量 3 分，但AI使用量爆表。”]
+    choices:
+      - id: investigate_outliers
+        text: 先查三个人的原始答卷
+        visibleResponse: 两个人是认真填的——开卷答案写着'我用AI但其实更依赖同学讨论'。第三人在开放题骂了问卷。你保留前两个，剔除并记录了第三个。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: setFlag, key: outliers_investigated }
+          - { kind: achievement, achievementId: ach_r_e04_outlier_story, description: 离群值里读出故事 }
+      - id: drop_outliers
+        text: 3σ以外，删
+        visibleResponse: 删得痛快。讨论章少了三个故事，信度多了 0.02——哪个更值钱，你答辩时会想到。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 离群值是长着异常值脸的受访者
+
+  - id: r_e04_22_normality_fixation
+    campaign: research
+    day: 22
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“你盯着一张不太正态的直方图发愁，被周师兄看见。”]
+    dialogue:
+      - { speaker: 周师兄, text: "愁正态？样本 140，回归对残差正态的要求没那么脆。你的担心程度和实际问题不匹配。", mood: neutral }
+      - { speaker: 你, text: "那什么才值得担心？" }
+      - { speaker: 周师兄, text: "缺失机制、共同方法偏差、还有你报告效应量的方式。把焦虑花在要害上。" }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+      - { kind: relationship, characterId: r_senior_data, delta: 3 }
+    terminal: true
+
+  - id: r_e04_22_script_crash
+    campaign: research
+    day: 22
+    type: decision
+    trigger: { kind: day, day: 22, phase: end }
+    purpose: { learning: 报错不是敌人：读懂错误信息是基本功 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“Agent 写的脚本半夜报错：'object of type closure is not subsettable'。你连错了三次。”]
+    choices:
+      - id: read_error
+        text: 把报错原文读懂，自己定位到第 47 行
+        visibleResponse: 你搜了报错信息，发现是把变量名写成了函数名。改一个字符，全脚本跑通。这次修错花了 25 分钟，下次会更短。
+        hiddenEffects:
+          - { kind: add, key: independence, value: 6 }
+          - { kind: add, key: execution, value: 3 }
+      - id: paste_to_ai
+        text: 报错甩给 Agent，等它修
+        visibleResponse: 它修好了——顺便改写了你另外两行。你核对时发现那两行改得没道理，回滚了。一来一回四十分钟。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 4 }
+          - { kind: add, key: academicDebt, value: 2 }
+    learningPoint: 先读报错，再求助——顺序问题
+
+  # ---- D23 ----
+  - id: r_e04_23_results_structure
+    campaign: research
+    day: 23
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 23, phase: start }
+    purpose: { learning: 结果章按假设组织，每个假设一段：检验/结果/小结 }
+    scene: { location: workbench, characters: [] }
+    setup: [“结果章开写。Agent 生成的结构是'描述统计→相关→回归→小结'，像教科书。”]
+    dialogue:
+      - { speaker: 系统, text: "教科书结构没有错——错的是它不接你的假设。读者想知道的是：H1怎么样了？H2怎么样了？" }
+    choices:
+      - id: by_hypothesis
+        text: 按假设重组：H1一段/H2一段，每段自含检验与结论
+        visibleResponse: 重组后评委顺着读就能看到每个假设的生死。师姐评语：'结果章第一次让人想往下翻。'
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: progress, value: 5 }
+          - { kind: setFlag, key: results_by_hypothesis }
+      - id: keep_textbook_order
+        text: 就按教科书顺序，不折腾
+        visibleResponse: 你把假设的答案埋在了第四小节第三段。预审时评委翻了三分钟才找到——那三分钟里教室安静得可怕。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    learningPoint: 结构跟问题走，不跟软件输出走
+
+  - id: r_e04_23_language_calibration
+    campaign: research
+    day: 23
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 结论语言分级：证明>表明>提示，你的证据配哪级？ }
+    scene: { location: workbench, characters: [] }
+    setup: [“你写了句'本研究证明了AI使用损害论证能力'。通读三遍后有点心虚。”]
+    dialogue:
+      - { speaker: 系统, text: "横断面相关数据，β=0.19。'证明'和'损害'，两个词都超载了。" }
+    choices:
+      - id: calibrate_words
+        text: 降级：'提示AI使用与论证质量存在正相关'，全文校准
+        visibleResponse: 你把全文的'证明'降为'提示'，'影响'降为'关联'。降完反而踏实——每句话的证据都配得上措辞了。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 8 }
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: setFlag, key: language_calibrated }
+          - { kind: achievement, achievementId: ach_r_e04_language_fit, description: 结论语言与证据对齐 }
+        delayed:
+          - { eventId: r_e09_px_words_credited, onDay: 28 }
+      - id: keep_strong
+        text: 话说强一点，答辩气势重要
+        visibleResponse: 气势很足。郑老师只问了一句："'证明'？你的设计能支撑这个词吗？"气势当场泄了压。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 10 }
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 措辞的强度要跟设计的强度对表
+
+  - id: r_e04_23_agent_inconsistent
+    campaign: research
+    day: 23
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你让 Agent 复述你的关键结果。它报了 r=0.28。可你的表上写着 0.19。”]
+    dialogue:
+      - { speaker: Agent, text: "您的研究发现AI使用与论证质量显著正相关（r=0.28）。", mood: pleased }
+      - { speaker: 你, text: "哪来的 0.28？我报告的是控制经验后的 0.19。" }
+      - { speaker: Agent, text: "0.28为未控制模型的系数，两个都存在。" }
+      - { speaker: 你, text: "它没说错，但它没说人话。'两个都存在'和'该报哪个'是两回事。" }
+    choices:
+      - id: fix_reporting
+        text: 在状态文件里写死：报告一律用控制后系数
+        visibleResponse: 规则写进 AGENTS.md。此后它每次报数字都带'控制后'三个字。数字没变，可信度变了。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+      - id: let_slide
+        text: 反正 0.28 更好看，就用它
+        visibleResponse: 好看的数字没撑过答辩——评委让你现场打开数据跑一遍，0.19 出现在屏幕上的那一刻很安静。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 12 }
+          - { kind: add, key: academicDebt, value: 5 }
+    terminal: true
+
+  - id: r_e04_23_data_lock
+    campaign: research
+    day: 23
+    type: decision
+    trigger: { kind: day, day: 23, phase: end }
+    purpose: { learning: 数据锁定：截止之后不再收数 }
+    scene: { location: dorm, characters: [] }
+    setup: [“还有渠道能再收 20 份。收，还是锁？”]
+    choices:
+      - id: lock_dataset
+        text: 锁定：140 份够功效了，之后只分析不收数
+        visibleResponse: 你把数据集打上'DATA LOCK D23'的标签。之后所有分析基于同一份数据——预注册的尊严就是从锁定那一刻开始的。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 7 }
+          - { kind: setFlag, key: data_locked }
+      - id: collect_more
+        text: 再收 20 份，多多益善
+        visibleResponse: 多收的 20 份里 8 份没过检测题。你重跑了所有分析，所有数字都变了——之前写完的结果章作废重写。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 6 }
+          - { kind: add, key: technicalDebt, value: 3 }
+        delayed:
+          - { eventId: r_e09_px_moving_target, onDay: 27 }
+    learningPoint: 锁定数据是对未来自己立法
+
+  # ---- D24 ----
+  - id: r_e04_24_sem_second_wave
+    campaign: research
+    day: 24
+    type: npc
+    trigger: { kind: day, day: 24, phase: start }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“周师兄又来了，这次带着借口。”]
+    dialogue:
+      - { speaker: 周师兄, text: "140 个样本，其实塞个简化 SEM 也够。就三个潜变量，我帮你画图。", mood: pleased }
+      - { speaker: 你, text: "上次我为什么拒绝的？" }
+      - { speaker: 周师兄, text: "……样本不够。" }
+      - { speaker: 你, text: "现在够了吗？" }
+      - { speaker: 周师兄, text: "（挠头）没变。行吧行吧，你的回归挺稳的。", mood: neutral }
+    automaticEffects:
+      - { kind: relationship, characterId: r_senior_data, delta: 3 }
+      - { kind: add, key: independence, value: 4 }
+    terminal: true
+
+  - id: r_e04_24_robustness
+    campaign: research
+    day: 24
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 稳健性检查：换个合理口径，结论还在不在 }
+    scene: { location: workbench, characters: [] }
+    setup: [“答辩倒计时六天。你能想到评委最狠的一问：'换个算法你的结论还在吗？'”]
+    choices:
+      - id: run_robustness
+        text: 跑三种口径：剔除极端值/换控制变量/分组复验
+        visibleResponse: 三种口径下 β 在 0.16-0.21 之间浮动，方向与显著性全守住。你在附录放了一张三口径对照表——这张表后来被评委称为'全场最扎实的一页'。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 9 }
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: addAsset, assetType: evidence_matrix, name: 稳健性对照表, description: 三口径β对照, content: "基准β=0.19 / 剔除极端β=0.21 / 换控制β=0.16 / 分组复验方向一致" }
+          - { kind: achievement, achievementId: ach_r_e04_robustness, description: 完成稳健性检查 }
+      - id: skip_robustness
+        text: 来不及了，赌评委不问
+        visibleResponse: 评委问了。你现场跑了一个口径——β 掉到 0.12，你看着屏幕说了句'应该没问题'。
+        hiddenEffects:
+          - { kind: subtract, key: credibility, value: 8 }
+          - { kind: add, key: academicDebt, value: 5 }
+    learningPoint: 稳健性是给质疑准备的铠甲
+
+  - id: r_e04_24_missing_41
+    campaign: research
+    day: 24
+    type: decision
+    trigger: { kind: day, day: 24, phase: end }
+    purpose: { learning: 缺失处理：删除/均值填补/多重填补的取舍 }
+    scene: { location: workbench, characters: [] }
+    setup: [“41 处缺失摆在面前（第 17 题排版事故）。删样本、删变量、还是填补？”]
+    choices:
+      - id: pairwise_delete
+        text: 该题涉及的分析用成对删除，并披露缺失比例
+        visibleResponse: 你选择成对删除+全文披露：'该题缺失29%，源于排版缺陷，已在局限中讨论。'诚实披露让缺陷变成了方法课。
+        hiddenEffects:
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: setFlag, key: missing_disclosed }
+      - id: mean_impute_silent
+        text: 均值填补填上，别让人看见窟窿
+        visibleResponse: 窟窿被抹平了。但评委问'第17题分布'时，那 29% 填的是同一个数字——直方图上一根突兀的柱子，替你招了供。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 7 }
+          - { kind: setFlag, key: silent_imputation }
+    learningPoint: 缺失可以处理，但不可以隐身
+
+  - id: r_e04_24_open_comments
+    campaign: research
+    day: 24
+    type: story
+    trigger: { kind: manual }
+    scene: { location: dorm, characters: [] }
+    setup: [“收尾时你翻到问卷最后一题的开放留言。67 条里，有一条写着：”]
+    dialogue:
+      - { speaker: 填答者, text: "谢谢你研究这个。我也感觉自己越来越不会'想'了，但说不上来哪里不对。你的问卷替我说出来了。", mood: neutral }
+      - { speaker: 系统, text: "这行字不进任何统计。但它回答了'值不值得'。" }
+    automaticEffects:
+      - { kind: add, key: energy, value: 8 }
+      - { kind: setFlag, key: touching_comment }
+    next: r_e04_24_motivation_choice
+
+  - id: r_e04_24_motivation_choice
+    campaign: research
+    day: 24
+    type: decision
+    trigger: { kind: manual }
+    purpose: { learning: 动机管理：意义感是最好的续航 }
+    scene: { location: dorm, characters: [] }
+    choices:
+      - id: read_aloud_to_peer
+        text: 把这条留言念给苏晓听，明天加把劲
+        visibleResponse: 苏晓听完安静了几秒："……突然觉得我那个'差不多得了'有点对不起填问卷的人。"第二天你们俩都提前到了图书馆。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_peer, delta: 6 }
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: energy, value: 5 }
+      - id: screenshot_save
+        text: 截图存进'为什么出发'文件夹，继续干活
+        visibleResponse: 文件夹里现在有两张截图。累的时候你点开看一眼——比咖啡因管用。
+        hiddenEffects:
+          - { kind: add, key: energy, value: 6 }
+          - { kind: add, key: independence, value: 3 }
+    terminal: true
+
+  - id: r_e04_22_deskmate_spotted
+    campaign: research
+    day: 22
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: classroom, characters: [] }
+    setup: [“课上，邻座同学瞄到你屏幕上的量表截图。”]
+    dialogue:
+      - { speaker: 同学, text: "咦这不是我前天填的问卷吗？我选了'非常同意'那道，你还记得我不？" }
+      - { speaker: 你, text: "匿名问卷，我不记得任何人。（但匿名是我的职业操守，不是我的失忆。）" }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 3 }
+    terminal: true
+
+  - id: r_e04_23_cafe_encounter
+    campaign: research
+    day: 23
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: canteen, characters: [r_senior_theory] }
+    setup: [“咖啡店里撞见林师姐在改自己的论文，屏幕满屏批注。”]
+    dialogue:
+      - { speaker: 林师姐, text: "（合上电脑）看到你数据分析跑了三遍才来找过我一次。是卡住了，还是想自己啃？", mood: neutral }
+      - { speaker: 你, text: "想自己啃。卡了两天。" }
+      - { speaker: 林师姐, text: "好。卡两周以上再来找我，前两周的坑值得自己踩。但你要是连踩三周，那就是傻。", mood: pleased }
+    choices:
+      - id: set_escalation_rule
+        text: 跟师姐约定'卡两天求助'的升级规则
+        visibleResponse: 你们约定：卡超过两天，带齐'试过什么'的清单去找她。这条规则后来让你少踩了至少四个坑。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_senior_theory, delta: 6 }
+          - { kind: add, key: execution, value: 4 }
+          - { kind: setFlag, key: escalation_rule }
+      - id: keep_grinding
+        text: "不用，我能行（嘴硬）"
+        visibleResponse: 你'能行'到凌晨三点。第二天卡住的还是同一个地方——独立不等于单机。
+        hiddenEffects:
+          - { kind: subtract, key: energy, value: 8 }
+    terminal: true
+
+  - id: r_e04_20_random_nap
+    campaign: research
+    day: 20
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: library, characters: [] }
+    setup: [“你在图书馆睡着了，脸压在自己的相关矩阵上。醒来时纸上有道口水印，正好盖住 p 值那列。”]
+    dialogue:
+      - { speaker: 系统, text: "口水印下的三个 p 值无从辨认。你重新打印了一张——反正脚本可复现，重跑只要四十秒。" }
+    automaticEffects:
+      - { kind: add, key: energy, value: 3 }
+    terminal: true
+
+  - id: r_e04_21_mentor_data_check
+    campaign: research
+    day: 21
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 21, phase: start }
+    purpose: { learning: 坏消息报告法：事实/影响/对策三段 }
+    scene: { location: corridor, characters: [r_mentor] }
+    setup: [“电梯口遇到陈教授。他问：'数据怎么样？'——你的信度掉了、主效应不显著。”]
+    choices:
+      - id: fact_impact_plan
+        text: 三段式：'信度0.61已诊断；主效应不显著β=0.19；我的对策是稳健性检查加机制讨论'
+        visibleResponse: 电梯门开时他说了句："可以。下午来办公室，把稳健性方案给我看。"——这是他第一次主动给你时间。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: 8 }
+          - { kind: add, key: credibility, value: 6 }
+          - { kind: setFlag, key: bad_news_well_delivered }
+      - id: everything_fine
+        text: "挺顺利的，都在推进"
+        visibleResponse: 你把两颗雷描成了花。两周后预审现场，两颗雷当着他的面响了——他看你的眼神里多了'原来如此'四个字。
+        hiddenEffects:
+          - { kind: relationship, characterId: r_mentor, delta: -8 }
+          - { kind: subtract, key: credibility, value: 10 }
+          - { kind: setFlag, key: hid_bad_news }
+    learningPoint: 坏消息早说是管理，晚说是事故
+
+  - id: r_e04_24_seed_repro
+    campaign: research
+    day: 24
+    type: decision
+    trigger: { kind: day, day: 24, phase: end }
+    purpose: { learning: 随机过程要设种子：结果是过程的朋友 }
+    scene: { location: workbench, characters: [r_ai_agent] }
+    setup: [“你发现两次跑 bootstrap 置信区间结果略有不同。Agent 说'正常的'。你要的是'可复现的正常'。”]
+    choices:
+      - id: set_seed
+        text: 给所有随机过程设固定种子并记录版本
+        visibleResponse: 种子写死在脚本头。CI 稳定了，任何人重跑都得到同一串数字——包括答辩现场万一被要求'当场跑一遍'的你。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+          - { kind: setFlag, key: seed_fixed }
+      - id: live_with_noise
+        text: 差异这么小，无所谓
+        visibleResponse: 无所谓到你答辩前一天重跑时数字变了，PPT 里的 CI 和屏幕上的对不上。那一晚你重新截了所有图。
+        hiddenEffects:
+          - { kind: add, key: technicalDebt, value: 4 }
+    learningPoint: 可复现性藏在细节里

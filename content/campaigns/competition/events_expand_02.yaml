@@ -1,0 +1,705 @@
+# 竞赛线扩展包02：选题 / 调研 / 竞品 / 队友冲突（D4-D7）
+events:
+  # ---- D4：选题 ----
+  - id: c_xe2_sel_meeting
+    campaign: competition
+    day: 4
+    type: story
+    trigger: { kind: day, day: 4, phase: start }
+    purpose: { narrative: 选题会开场, learning: 选题是21天里杠杆最大的决定 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["选题会。白板上写了四个大字：选什么题？方远带了三罐红牛，摆成一排，像上战场。"]
+    dialogue:
+      - { speaker: 系统, text: "今天选的题，决定后面17天你们每天早上醒来的心情。" }
+    next: c_xe2_sel_brainstorm
+
+  - id: c_xe2_sel_brainstorm
+    campaign: competition
+    day: 4
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 选题来源决定候选质量：需求池>灵感>AI清单 }
+    scene: { location: lab, characters: [c_ai_agent] }
+    choices:
+      - id: from_gripe_pool
+        text: 从抱怨里找：把三个人最近半年听过的社团吐槽全列出来
+        visibleResponse: 二十三条吐槽上墙：收报名表、群接龙刷屏、活动审批、经费报销……每条后面都站着一个真实的人。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 8 }
+          - { kind: setFlag, key: topic_from_pain }
+        next: c_xe2_sel_check
+      - id: from_ai_list
+        text: 让Agent生成10个「高创新性」选题
+        visibleResponse: 十个选题到了，个个自带「AI+」前缀。雨桐数了数：「有八个我们连用户是谁都说不出来。」
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 6 }
+          - { kind: setFlag, key: topic_from_ai }
+        next: c_xe2_sel_ai_topics
+      - id: from_winners
+        text: 翻去年获奖名单，找一个「还能做得更好」的方向
+        visibleResponse: 好方向都被做过——这是事实，也是提示：说明评委认这个方向。但「做得更好」四个字需要证据撑着。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 3 }, { kind: setFlag, key: topic_from_history }]
+        next: c_xe2_sel_check
+    next: c_xe2_sel_check
+    terminal: false
+
+  - id: c_xe2_sel_ai_topics
+    campaign: competition
+    day: 4
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: AI选题的通病, learning: AI擅长生成"像选题的文本" }
+    scene: { location: lab, characters: [c_ai_agent] }
+    setup: ["Agent的候选清单排在白板上：AI+心理咨询、AI+二手交易、AI+失物招领……每条后面跟着\"创新性：高\"。"]
+    dialogue:
+      - { speaker: 方远, text: "失物招领，我校贴吧十年前就有置顶帖。这叫创新？", mood: angry }
+      - { speaker: Agent, text: "该选题在语义空间中具备新颖性组合潜力。", mood: pleased }
+      - { speaker: 江雨桐, text: "它说的每个字都对，连起来就是没用的意思。", mood: surprised }
+    next: c_xe2_sel_check
+
+  - id: c_xe2_sel_check
+    campaign: competition
+    day: 4
+    type: decision
+    keyDecision: true
+    trigger: { kind: manual }
+    purpose: { learning: 选题三问：真问题/已有方案/我们凭什么 }
+    scene: { location: lab, characters: [] }
+    setup: ["候选收敛到三个：社团报名工具（你们自己痛过）/实验室仪器预约（方远实验室在用纸）/AI笔记分享平台（雨桐班上有人做过后两个方向没了下文）。"]
+    choices:
+      - id: desk_check_all
+        text: 每题30分钟桌面验证：搜往届名单、搜现有产品、找三个潜在用户聊
+        visibleResponse: 验证结果：仪器预约校务处明年上系统（排雷成功）；笔记平台已有一个注册过万的小程序（排雷成功）；社团工具——现有产品难用，评委没见过同题，你们自己就是用户。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 8 }
+          - { kind: add, key: progress, value: 3 }
+          - { kind: setFlag, key: sel_verified }
+          - { kind: achievement, achievementId: ach_c_sel_check }
+        next: c_xe2_sel_debate
+      - id: gut_pick
+        text: 感觉哪个顺眼选哪个，比赛拼执行力
+        visibleResponse: 你们选了仪器预约。三天后校务处的采购公示贴出来，白纸黑字。选题重开，倒计时少了三天。
+        hiddenEffects:
+          - { kind: add, key: academicDebt, value: 8 }
+          - { kind: scheduleEvent, eventId: c_xe7_dly_resel_pain, onDay: 7 }
+        next: c_xe2_sel_debate
+    unlockKnowledge: [kc_c_interview]
+    learningPoint: 选题验证的30分钟，是整个赛程回报率最高的30分钟
+    terminal: false
+
+  - id: c_xe2_sel_debate
+    campaign: competition
+    day: 4
+    type: npc
+    trigger: { kind: manual }
+    purpose: { narrative: 技术流与故事流的选题分歧, learning: 好选题=真痛点×做得出×讲得清 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["方远想把题做「重」：加推荐算法、行为分析。雨桐想把题做「轻」：就讲清楚一个报名流程的痛。"]
+    dialogue:
+      - { speaker: 方远, text: "一个表单工具没有技术含量，创新分怎么拿？", mood: angry }
+      - { speaker: 江雨桐, text: "把一个流程讲透，比把五个功能堆上去更像一个作品。", mood: serious }
+    choices:
+      - id: depth_over_breadth
+        text: 裁决：一个流程做透，AI用在刀刃（自动分类），不堆概念
+        visibleResponse: 定案：报名-审核-通知闭环做透，AI只做表单字段自动分类。方远嘟囔「说服我了」，把推荐算法写进了愿望清单。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 5 }, { kind: setFlag, key: sel_final_club }, { kind: add, key: execution, value: 3 }]
+      - id: tech_over_depth
+        text: 方远说得对，上推荐算法，技术分拉满
+        visibleResponse: 范围膨胀开始。第12天的中期检查会替今天记住这笔账。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 6 }, { kind: setFlag, key: sel_bloated }]
+    terminal: true
+
+  - id: c_xe2_sel_flag_smoke
+    campaign: competition
+    day: 4
+    type: npc
+    trigger: { kind: day, day: 4, phase: end }
+    scene: { location: canteen, characters: [c_rival] }
+    setup: ["邱一鸣在食堂门口叫住你们，身后跟着他两个队员，像随从。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "听说你们做社团工具？劝你们换个题，那个坑我们研究过，水深。", mood: pleased }
+      - { speaker: 系统, text: "第二次劝退。烟雾弹放第二次，说明你们的方向让他不安。" }
+    choices:
+      - id: smoke_checked
+        text: 想起他去年做的其实是抽奖小程序，笑笑带过
+        visibleResponse: 「谢谢关心」四个字说得真诚。回实验室你把这条对话记进对手档案：他关注我们的选题=选题有威胁性。
+        hiddenEffects: [{ kind: add, key: independence, value: 4 }, { kind: setFlag, key: smoke_double }]
+      - id: smoke_shaken2
+        text: 回去翻出他的「研究」，连夜重新评估选题
+        visibleResponse: 评估到凌晨一点，结论：没有任何公开材料支持「水深」一说。你损失了一晚睡眠，买了一条经验：对手的嘴不可作为数据源。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 12 }, { kind: add, key: evidenceDiscipline, value: 4 }]
+    terminal: true
+
+  # ---- D5：调研/访谈 ----
+  - id: c_xe4_interview_plan
+    campaign: competition
+    day: 5
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 5, phase: start }
+    purpose: { learning: 访谈对象=信息的矿脉，名单比提纲重要 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["调研日。要访谈社团骨干，名单怎么定？雨桐列了两栏：\"好说话的\"和\"有代表性的\"。"]
+    choices:
+      - id: representative_list
+        text: 选7个有代表性的：大社/小社/文体类/学术类/刚成立……覆盖光谱
+        visibleResponse: 名单定稿，每个社长后面标注社团规模与痛点猜测。方远负责约时间，一天约到五个——惊讶了所有人包括他自己。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 8 }, { kind: setFlag, key: interview_list_ready }]
+      - id: convenient_list
+        text: 找认识的、好约的先聊，快最重要
+        visibleResponse: 三个朋友社团，三个「挺好的啊没觉得麻烦」。友好但空洞——熟人访谈连真话都是客气的。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: setFlag, key: weak_interviews }]
+    terminal: true
+
+  - id: c_xe4_interview_elderK
+    campaign: competition
+    day: 5
+    type: npc
+    trigger: { kind: day, day: 5, phase: end }
+    purpose: { narrative: 关键访谈：社长老K, learning: 问过去行为不问未来意愿 }
+    scene: { location: canteen, characters: [] }
+    setup: ["老K，动漫社社长，管理12个群、72个社团里最忙的人。他把采访当聊天，你按提纲问过去行为。"]
+    dialogue:
+      - { speaker: 老K, text: "上次纳新？三天，收了400多份表。我拿三个手机轮流回\"收到\"。第三天我看见表格就恶心。", mood: neutral }
+      - { speaker: 你, text: "然后呢？" }
+      - { speaker: 老K, text: "然后我用Excel去重，重名的、代填的，剔除了一晚上。你们要是能自动去重……（他突然认真看你们）这题值得做。" }
+    choices:
+      - id: record_verbatim
+        text: 原话记下「三个手机」「看见表格就恶心」——金句进素材库
+        visibleResponse: 当晚纪要整理完，雨桐把老K的原话标成了高亮：「材料里引用用户原话，比任何形容词都锋利。」
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 8 }, { kind: addAsset, assetType: interview_notes, name: 老K访谈纪要, description: 400份表/3天/三手机/Excel去重, content: "痛点原话+去重需求+意外发现（报销更痛）" }]
+      - id: record_summary
+        text: 只记要点：收表慢、要去重
+        visibleResponse: 要点没错，但写申报书时你发现「慢」字没有细节撑腰——评委问「多慢」，你只能凭记忆答。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe4_interview_quotes
+    campaign: competition
+    day: 5
+    type: story
+    trigger: { kind: day, day: 5, phase: end }
+    purpose: { narrative: 访谈的意外发现, learning: 意外发现是调研的复利 }
+    scene: { location: dorm, characters: [] }
+    setup: ["五份纪要摊在桌上。高频痛点是收表慢；但三个社长不约而同提到了同一件事：活动经费报销，垫钱、贴发票、等两个月。"]
+    automaticEffects:
+      - { kind: setFlag, key: insight_reimburse }
+      - { kind: add, key: userUnderstanding, value: 4 }
+    dialogue:
+      - { speaker: 系统, text: "三个独立来源指向同一痛点，这就是信号。记进\"停车场\"，不追打——今天的主线是报名。" }
+    terminal: true
+
+  - id: c_xe4_interview_recorder
+    campaign: competition
+    day: 5
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 记录方式决定信息损耗率 }
+    scene: { location: lab, characters: [] }
+    setup: ["第二个访谈要开始了。雨桐问：录音、手记，还是一个人聊一个人记？"]
+    choices:
+      - id: dual_channel
+        text: 征得同意后录音+雨桐现场手记，回来对照整理
+        visibleResponse: 当晚对照，手记漏掉了两个关键数字（400份、72个社团），录音补上了。双通道多花四十分钟，救回两条数据。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: setFlag, key: dual_record }]
+      - id: memory_only
+        text: 不录不记，靠脑子，访谈氛围更好
+        visibleResponse: 氛围确实好。当晚你努力回忆具体数字，回忆出一个「大概四百多吧」——申报书里不能写「大概」。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe4_interview_sorry
+    campaign: competition
+    day: 5
+    type: decision
+    trigger: { kind: day, day: 5, phase: end }
+    purpose: { learning: 调研也要有B计划 }
+    scene: { location: dorm, characters: [] }
+    setup: ["晚上八点，文学社社长发消息：临时有评优材料要赶，访谈取消。名单上只剩一个替补。"]
+    choices:
+      - id: backup_interview
+        text: 启用替补：明天约电竞社社长，规模相近可替换
+        visibleResponse: 电竞社社长爽快答应，第二天带来一个意外收获：他们用接龙小程序收报名，但手续费和广告让他烦透了。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 5 }, { kind: add, key: execution, value: 2 }]
+      - id: drop_one
+        text: 少一个就少一个，五个样本也够
+        visibleResponse: 样本量本身够用。但那个「刚好没采访到」的学术类社团，恰好是三周后评委提问里的主角。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }, { kind: scheduleEvent, eventId: c_xe7_dly_sample_gap, onDay: 18 }]
+    terminal: true
+
+  - id: c_xe4_question_rewrite
+    campaign: competition
+    day: 5
+    type: story
+    trigger: { kind: day, day: 5, phase: end }
+    purpose: { narrative: 诱导问题的现场改写, learning: 问题措辞决定答案质量 }
+    scene: { location: classroom, characters: [] }
+    setup: ["访谈中途，你意识到自己刚问的问题有问题：\"如果有个工具能自动去重，你会用吧？\"对方点头点得毫无信息量。"]
+    dialogue:
+      - { speaker: 系统, text: "把\"你会用吧\"换成\"上次你是怎么处理的\"——前者收获礼貌，后者收获事实。" }
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+    terminal: true
+
+  - id: c_xe4_survey_trap
+    campaign: competition
+    day: 5
+    type: decision
+    trigger: { kind: day, day: 5, phase: end }
+    purpose: { learning: 问卷的样本偏差与诱导措辞 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["Agent提议：再发个问卷，\"样本量大多了\"。它10秒生成了20题问卷，其中8题以\"你是否同意AI能提升社团效率\"开头。"]
+    choices:
+      - id: small_honest_survey
+        text: 砍到5题，全部行为题，匿名投放到3个大社团群
+        visibleResponse: 回收47份。「你上次收报名表花了多久」的中位数：2天。这个数字后来进了申报书，扛住了评委追问。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: addAsset, assetType: dataset, name: 社团报名问卷数据, description: 47份行为问卷（含口径说明）, content: "收表时长中位数2天/最高6天/去重为最高频需求" }
+      - id: big_ai_survey
+        text: 用AI的20题版本，题多显得专业
+        visibleResponse: 回收52份，一半在第三题流失，留下的答案全是「同意」。这堆数据看起来很大，吃起来没味。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 5 }
+          - { kind: add, key: academicDebt, value: 5 }
+          - { kind: scheduleEvent, eventId: c_xe7_dly_survey_bias, onDay: 16 }
+    terminal: true
+
+  # ---- D6：政策/竞品 ----
+  - id: c_xe4_policy_check
+    campaign: competition
+    day: 6
+    type: decision
+    trigger: { kind: day, day: 6, phase: start }
+    purpose: { learning: 合规是设计约束，不是事后补丁 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["雨桐翻章程时划出一行小字：\"涉及校园个人信息的项目须说明数据安全方案。\"底下还有半句：往届因此有一队被要求现场答辩额外加问。"]
+    choices:
+      - id: privacy_by_design
+        text: 数据不出校：本地化存储+最小化收集+匿名化展示，写进设计约束
+        visibleResponse: 三条原则进了AGENTS.md的前身文档。方远改了存储方案：「本地SQLite，反而省了服务器钱。」合规顺带省钱。
+        hiddenEffects:
+          - { kind: add, key: evidenceDiscipline, value: 6 }
+          - { kind: setFlag, key: privacy_designed }
+          - { kind: addAsset, assetType: document, name: 数据安全方案, description: 本地化/最小化/匿名化三原则, content: "数据不出校+最小收集+匿名展示" }
+        next: c_xe4_data_breach_story
+      - id: privacy_later
+        text: 先做功能，安全方案材料周再补
+        visibleResponse: 材料周确实补了——把已经做完的架构倒过来描述成「符合规范」。写起来心虚，答辩起来更虚。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 5 }, { kind: setFlag, key: privacy_patch }]
+        next: c_xe4_data_breach_story
+    next: c_xe4_data_breach_story
+
+  - id: c_xe4_data_breach_story
+    campaign: competition
+    day: 6
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 前车之鉴, learning: 数据事故的真实代价 }
+    scene: { location: dorm, characters: [] }
+    setup: ["查政策时搜到一条旧闻：某高校创业项目把学生信息库放在公网测试服务器上，被校外人员爬取，团队被通报批评，参赛资格取消。"]
+    automaticEffects:
+      - { kind: setFlag, key: breach_story_known }
+      - { kind: add, key: evidenceDiscipline, value: 4 }
+    dialogue:
+      - { speaker: 系统, text: "那条新闻的主角未必比你笨，只是把\"以后再管\"当成了默认选项。" }
+    terminal: true
+
+  - id: c_xe4_competitor_scan
+    campaign: competition
+    day: 6
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 6, phase: end }
+    purpose: { learning: 竞品扫描=范围+维度+禁区先行的批量任务 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["竞品扫描开工。Agent自告奋勇：\"我可以列出所有竞品！\"你决定给它立规矩。"]
+    choices:
+      - id: scan_with_scope
+        text: 契约：近3年、校园场景优先、四列（功能/定价/口碑/缺陷）、每条附来源链接
+        visibleResponse: 扫出9个产品。你抽查3条，2条属实，1条的定价是两年前的旧价——有来源链接就是好改。
+        hiddenEffects:
+          - { kind: add, key: execution, value: 6 }
+          - { kind: addAsset, assetType: research_matrix, name: 竞品矩阵v2, description: 9产品×4维度+来源链接, content: "|产品|功能|定价|口碑|缺陷|来源|" }
+      - id: scan_free
+        text: 让它随便扫，扫出什么算什么
+        visibleResponse: 扫出14个产品，其中2个查无此物，1个是它的训练数据里的怀旧产品。矩阵很满，可信度很空。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 6 }
+          - { kind: scheduleEvent, eventId: c_xe7_dly_ghost_product, onDay: 18 }
+    unlockKnowledge: [kc_c_competitor_scan]
+    terminal: true
+
+  - id: c_xe4_ai_matrix_trap
+    campaign: competition
+    day: 6
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    purpose: { narrative: Agent编造产品的现场, learning: 编造内容有统一的自信语气 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["方远核对矩阵，指向第6行：\"这个'校社宝'我怎么搜不到？官网、应用商店、公众号，全无。\"Agent的回答依然笃定。"]
+    dialogue:
+      - { speaker: Agent, text: "校社宝为国内主流校园管理平台，市场占有率较高。建议持续关注。", mood: pleased }
+      - { speaker: 方远, text: "它连自己编的东西都这么自信。", mood: surprised }
+    choices:
+      - id: delete_and_note
+        text: 删掉该行，并在矩阵顶部加一行警示：无来源=不存在
+        visibleResponse: 假产品除名。你在矩阵规则里加了一条：新行必须有可点击的来源链接。Agent「已学习该约束」。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 6 }, { kind: setFlag, key: ghost_caught }]
+      - id: keep_it
+        text: 留着吧，万一真有呢
+        visibleResponse: 决赛答辩PPT里那行「竞品校社宝」被评委圈出来：「这个产品我没听说过，来源？」——那天的你还欠着今天的债。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 7 }, { kind: setFlag, key: ghost_kept }]
+    terminal: true
+
+  - id: c_xe4_competitor_trial
+    campaign: competition
+    day: 6
+    type: decision
+    trigger: { kind: day, day: 6, phase: end }
+    purpose: { learning: 真实试用比参数对比更接近用户视角 }
+    scene: { location: dorm, characters: [] }
+    setup: ["矩阵做完，雨桐提议：\"我们仨每人真注册两个竞品，走一遍报名流程，记录每一步的感受。\"方远嫌麻烦。"]
+    choices:
+      - id: trial_six
+        text: 试用。三人各两个，一晚上完成，记录卡点截图
+        visibleResponse: 发现两个竞品在手机端报名会丢字段、一个验证码根本收不到。截图攒了二十三张——「竞品缺陷」那一列瞬间有血有肉。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 8 }, { kind: addAsset, assetType: user_feedback, name: 竞品试用记录, description: 6产品实走流程+23张卡点截图, content: "手机端丢字段/验证码失败/流程超过5步" }]
+      - id: paper_comparison
+        text: 不用了，矩阵上比参数就够
+        visibleResponse: 参数上你们「完胜」。初赛答辩评委问「你们试用过它们吗」，场面安静了三秒。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe4_competitor_gap
+    campaign: competition
+    day: 7
+    type: story
+    trigger: { kind: day, day: 7, phase: start }
+    purpose: { narrative: 空隙分析, learning: 定位来自竞品的真实缺陷而非自我想象 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["竞品结论三条上墙：通用工具贵而重（企业版逻辑）；校园工具是残血版（核心去重全靠手）；免费工具靠广告（社长最烦）。空隙清晰：轻、免费、为报名闭环而生。"]
+    automaticEffects:
+      - { kind: add, key: progress, value: 4 }
+      - { kind: setFlag, key: gap_found }
+      - { kind: addAsset, assetType: research_brief, name: 市场空隙结论, description: 三条竞品缺陷与定位, content: "贵而重/残血版/广告——轻+免费+闭环" }
+    dialogue:
+      - { speaker: 江雨桐, text: "空隙找到了。现在我们只需要把\"轻\"做成看得见的东西。", mood: pleased }
+    terminal: true
+
+  - id: c_xe4_rival_interview
+    campaign: competition
+    day: 6
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: canteen, characters: [c_rival] }
+    setup: ["你在食堂撞见邱一鸣也在访谈一个社长——你们的访谈对象名单重叠了。他先看见你，笑得毫无歉意。"]
+    dialogue:
+      - { speaker: 邱一鸣, text: "英雄所见略同。不过我们比你们早来一天。", mood: pleased }
+      - { speaker: 系统, text: "同一批访谈对象，答案会互相污染。今晚碰一下纪要，去重，并检查有没有被带节奏的问题。" }
+    choices:
+      - id: cross_check
+        text: 回去和队友交叉核对纪要，标注可能的「串供」答案
+        visibleResponse: 两份纪要对了一处矛盾：那个社长对你说了「最痛是收表」，对邱一鸣说「最痛是没人报名」。两边都记上了，面试结论打了个折。
+        hiddenEffects: [{ kind: add, key: evidenceDiscipline, value: 5 }, { kind: setFlag, key: cross_checked }]
+      - id: ignore_overlap
+        text: 无所谓，我们的调研做我们自己的
+        visibleResponse: 三周后你在答辩引用那个社长的原话，评委恰好听到了另一个队引用同一个人说的相反的话。场面很尴尬。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  # ---- D6-D7：队友冲突 ----
+  - id: c_xe4_conflict_scope
+    campaign: competition
+    day: 6
+    type: decision
+    keyDecision: true
+    trigger: { kind: random, weight: 3 }
+    purpose: { learning: 冲突背后是未言明的恐惧 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["需求评审。雨桐坚持要用户登录系统：「没有账号，数据怎么算他们的？」方远炸了：「游客模式够了！登录系统要做一整天！」声音大到隔壁实验室探头。"]
+    dialogue:
+      - { speaker: 方远, text: "一整天！你知道一整天能写多少核心功能吗？", mood: angry }
+      - { speaker: 江雨桐, text: "没有账号体系，演示的时候「用户数据」全是假的！你又最恨假数据！", mood: angry }
+      - { speaker: 系统, text: "两个人在用不同论据捍卫同一件事：材料的真实性。" }
+    choices:
+      - id: split_difference
+        text: 折中方案：演示专用轻登录（手机号+验证码，不做密码找回）
+        visibleResponse: 方远估40分钟，实际做了70分钟。雨桐拿到了「真实用户数据」的口径。两人谁都没赢，但项目赢了。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 6 }, { kind: add, key: technicalDebt, value: 2 }, { kind: setFlag, key: light_login }]
+      - id: side_tech
+        text: 游客模式，演示数据标注「演示数据」即可
+        visibleResponse: 省下一天。雨桐没吵，她只是在材料里把「用户数据」四个字全部改成了「测试数据」——她的让步方式是诚实。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: guest_mode }]
+      - id: side_design
+        text: 完整账号体系，真实感优先
+        visibleResponse: 方远写了一天登录，顺便修了三个他忍不住要修的「顺手问题」。核心流程当天停摆，但他不后悔，你有点后悔。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }, { kind: subtract, key: execution, value: 3 }]
+    terminal: true
+
+  - id: c_xe4_conflict_cool
+    campaign: competition
+    day: 7
+    type: npc
+    trigger: { kind: day, day: 7, phase: end }
+    purpose: { narrative: 冲突后的修复, learning: 修复关系靠具体动作不是道歉表演 }
+    scene: { location: lab, characters: [c_design] }
+    setup: ["昨天的争吵没有输家也没有赢家。晚上十点，雨桐还留在实验室改竞品矩阵的排版——没人要求她改排版。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "我昨天语气不好。（盯着屏幕）但需求本身我是对的。", mood: worried }
+    choices:
+      - id: acknowledge_both
+        text: "需求你是对的，时间他是对的。以后吵架前，我们先各自写一句\"我最怕什么\"。"
+        visibleResponse: 雨桐愣了一下，笑了：「方远最怕返工，我最怕假。写下来居然这么清楚。」墙上的队规多了一条。
+        hiddenEffects: [{ kind: relationship, characterId: c_design, delta: 8 }, { kind: add, key: teamTrust, value: 5 }, { kind: setFlag, key: fear_protocol }]
+      - id: avoid_topic
+        text: "过去的事就过去了，看矩阵排得真不错。"
+        visibleResponse: 她说了声谢谢。话题翻篇了，但没解决——下次需求评审，同一座火山还在原地。
+        hiddenEffects: [{ kind: relationship, characterId: c_design, delta: 2 }, { kind: scheduleEvent, eventId: c_xe7_dly_conflict_replay, onDay: 15 }]
+    terminal: true
+
+  # ---- D7：用户画像/收尾 ----
+  - id: c_xe4_user_persona
+    campaign: competition
+    day: 7
+    type: decision
+    trigger: { kind: day, day: 7, phase: start }
+    purpose: { learning: 画像来自数据而不是想象 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["雨桐要给PPT画用户画像页。她问：用户是\"20岁热心社团骨干\"还是老K那样的\"三手机狂魔\"？"]
+    choices:
+      - id: persona_from_data
+        text: 用访谈数据拼画像：规模/频率/工具/最痛瞬间，全部有出处
+        visibleResponse: 画像定稿：管60人以上社团、每学期2次大型纳新、用Excel和3个微信群、最痛瞬间是「看见表格就恶心」。每一条后面跟着来源编号。
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 6 }
+          - { kind: addAsset, assetType: user_feedback, name: 核心用户画像, description: 数据拼装+来源编号, content: "60人社/2次纳新/Excel+3群/痛点原话" }
+      - id: persona_vibes
+        text: 画个好看的虚拟形象，标签写「爱生活爱社团」
+        visibleResponse: 画像页很好看。评委问「这个用户是真实存在的吗」——好看的页面第一次变成负担。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 4 }]
+    terminal: true
+
+  - id: c_xe4_journey_map
+    campaign: competition
+    day: 7
+    type: story
+    trigger: { kind: day, day: 7, phase: end }
+    purpose: { narrative: 报名流程旅程图, learning: 把流程画出来才能找准下手点 }
+    scene: { location: lab, characters: [] }
+    setup: ["雨桐把报名流程画成七格旅程：发通知→建表→收表→催交→去重→筛选→通知结果。每一格下面标注现在的耗时和竞品的死法。第4格「催交」被红笔圈了三圈。"]
+    automaticEffects:
+      - { kind: add, key: progress, value: 3 }
+      - { kind: addAsset, assetType: research_matrix, name: 报名流程旅程图, description: 七格现状+痛点标注, content: "发通知/建表/收表/催交(最痛)/去重/筛选/通知" }
+    dialogue:
+      - { speaker: 系统, text: "催交，人类社团管理史上的永恒之痛。你们的产品如果只解决一格，就解决这一格。" }
+    terminal: true
+
+  - id: c_xe4_pain_rank
+    campaign: competition
+    day: 7
+    type: decision
+    trigger: { kind: day, day: 7, phase: end }
+    purpose: { learning: 痛点排序=产品边界的民意基础 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["痛点清单七条。只能选一个做主打——申报书里「解决所有问题」的项目，评委默认它一个都解决不了。"]
+    choices:
+      - id: rank_by_data
+        text: 按访谈频次×强度排序：催交+去重并列第一，做「收表→自动去重→一键催交」
+        visibleResponse: 排序表贴墙。主打功能定案，其余五条进「路线图」。老K在朋友圈看到产品概念图，主动转发：「这就是我说的那个东西！」
+        hiddenEffects:
+          - { kind: add, key: userUnderstanding, value: 6 }
+          - { kind: setFlag, key: pain_ranked }
+          - { kind: add, key: credibility, value: 4 }
+      - id: rank_by_demo
+        text: 哪个功能演示起来最炫就主打哪个——AI推荐好友社团！
+        visibleResponse: 方远眼睛亮了。但七次访谈里没有任何人提过想要推荐。炫点悬在真空里，落不了地。
+        hiddenEffects: [{ kind: add, key: technicalDebt, value: 5 }, { kind: setFlag, key: fancy_focus }]
+    unlockKnowledge: [kc_c_mvp_scope]
+    terminal: true
+
+  - id: c_xe4_focus_group
+    campaign: competition
+    day: 7
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    purpose: { narrative: 老K带来的五人社长小群, learning: 廉价快速的concept测试 }
+    scene: { location: canteen, characters: [] }
+    setup: ["老K拉了个五人社长小群让你发概念图。五个人，四种反应，加一个沉默的。"]
+    dialogue:
+      - { speaker: 老K, text: "（语音）我看了，就问一句：能不能设报名上限？我们场地只装得下80人，年年超。", mood: neutral }
+    choices:
+      - id: ask_follow_up
+        text: 追问这个细节：上限满了之后，候补怎么排？
+        visibleResponse: 五人群瞬间活跃：候补、优先级、部门配额……一个你没规划过的功能域浮出水面。记进停车场，主线不变。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 6 }, { kind: setFlag, key: quota_insight }]
+      - id: just_thanks_group
+        text: 回复「收到！上线一定加！」然后溜了
+        visibleResponse: 老K回了个「+1」。你收获了好人缘和一条没有细节的需求——做的时候你会发现「报名上限」三个字根本不够。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe4_research_retro
+    campaign: competition
+    day: 7
+    type: story
+    trigger: { kind: day, day: 7, phase: end }
+    purpose: { narrative: 调研周复盘, learning: 复盘把经历变成资产 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["调研周复盘会。白板上清点：7个访谈、47份问卷、9个竞品、6次试用、1张旅程图、2条政策。方远说：「我这周写的代码是零。奇怪的是我不慌。」"]
+    automaticEffects:
+      - { kind: setFlag, key: research_week_done }
+      - { kind: add, key: progress, value: 4 }
+      - { kind: achievement, achievementId: ach_c_research_week }
+    dialogue:
+      - { speaker: 江雨桐, text: "因为这一周写的是答案，代码只是把答案抄进机器。", mood: pleased }
+    terminal: true
+
+  - id: c_xe4_random_classmate
+    campaign: competition
+    day: 5
+    type: story
+    trigger: { kind: random, weight: 2 }
+    scene: { location: classroom, characters: [] }
+    setup: ["课后，隔壁班同学听你们在做社团工具，当场打开手机给你们看：他社团的报名接龙，371条消息，报名表在第240条左右。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+    dialogue:
+      - { speaker: 系统, text: "调研不总在访谈里。有时候它自己撞上来。" }
+    terminal: true
+
+  - id: c_xe4_random_blog_night
+    campaign: competition
+    day: 6
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["深夜刷到一篇《我如何用AI一晚做出爆款小程序》，10万+阅读。你看了看自己的调研计划表——明天还有三个访谈。"]
+    automaticEffects:
+      - { kind: add, key: aiDependence, value: 3 }
+      - { kind: add, key: independence, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "爆款故事不会告诉你作者删掉了多少个失败的仓库。你的17天，一天都省不了。" }
+    terminal: true
+
+  - id: c_xe4_random_senior_post
+    campaign: competition
+    day: 7
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["赵学长发朋友圈：\"三年前的今天我在写竞赛申报书。怀念那时的焦虑——现在焦虑的是毕业论文。\"配图是他当年没获奖的证书模板截图。"]
+    automaticEffects:
+      - { kind: add, key: riskTolerance, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "焦虑会过期的。留下来的只有做出来的东西。" }
+    terminal: true
+
+  - id: c_xe4_elderK_intro
+    campaign: competition
+    day: 5
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: canteen, characters: [] }
+    setup: ["访谈结束，老K收起手机时随口说：\"要不要聊聊摄影协会的？他们收作品集比我们收表还狠，附件能有一百兆。\""]
+    choices:
+      - id: get_intro
+        text: "要！现在就约。"
+        visibleResponse: 摄影协会会长第二天就到。附件收集、命名混乱、版本混乱——作品类社团的痛是收表痛的进阶版。你们的产品边界悄悄清晰了。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 6 }, { kind: setFlag, key: elderK_referral }]
+      - id: sample_enough
+        text: "样本够用了，谢谢。"
+        visibleResponse: 决赛有评委问「你们的调研覆盖了作品类社团吗」——本可以-covered的题目成了空白。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe4_survey_follow
+    campaign: competition
+    day: 6
+    type: story
+    trigger: { kind: day, day: 6, phase: start }
+    purpose: { narrative: 问卷开放题的宝藏, learning: 定量找面，开放题找点 }
+    scene: { location: workbench, characters: [] }
+    setup: ["问卷最后一道开放题：\"还有什么想吐槽的？\"47份里31份空白，4份骂食堂，2份正经吐槽，其中一份写了大半页——署名学生会办公室。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+    dialogue:
+      - { speaker: 系统, text: "开放式问题的回收率永远难看，但每一份有效回答都可能是金脉。学生会办公室——这是校级用户的声音。" }
+    terminal: true
+
+  - id: c_xe4_interview_notebook
+    campaign: competition
+    day: 5
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["雨桐的访谈手记本用完了半本。最后一页画了个小人躺在表格堆里，配字：\"社长的真实形态。\"你决定把这页扫描进附录。"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 2 }
+    terminal: true
+
+  - id: c_xe4_conflict_teacher_view
+    campaign: competition
+    day: 7
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["何老师听你们讲完调研成果，顺口问了一句：\"你们仨这周吵过几次？\""]
+    dialogue:
+      - { speaker: 你, text: "两次。都解决了。" }
+      - { speaker: 何老师, text: "吵两次，正常。一次不吵的队伍，我反而担心——那是有话没人敢说。", mood: pleased }
+    automaticEffects:
+      - { kind: relationship, characterId: c_advisor, delta: 3 }
+      - { kind: add, key: teamTrust, value: 2 }
+    terminal: true
+
+  - id: c_xe4_lab_whiteboard_war
+    campaign: competition
+    day: 6
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["实验室白板今天经历了三方拉锯：方远画了架构图，雨桐画了旅程图，林晓默默在角落画了正字——\"访谈完成数：5\"。白板成了项目的共享大脑。"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 3 }
+    terminal: true
+
+  - id: c_xe4_interview_delayed_bus
+    campaign: competition
+    day: 6
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: corridor, characters: [] }
+    setup: ["去访谈的路上暴雨，你和雨桐在连廊下等雨小。她突然说：\"其实我挺喜欢调研的，听人讲他们的麻烦，比画图真实多了。\""]
+    automaticEffects:
+      - { kind: relationship, characterId: c_design, delta: 3 }
+    terminal: true
+
+  - id: c_xe4_sel_finalize
+    campaign: competition
+    day: 7
+    type: system
+    trigger: { kind: day, day: 7, phase: end }
+    purpose: { narrative: 调研阶段结算, learning: 阶段切分让进度可见 }
+    scene: { location: lab, characters: [] }
+    setup: ["调研阶段结算：问题卡×1、访谈纪要×7、问卷数据×1、竞品矩阵×1、旅程图×1、画像×1。文件夹命名\"D4-D7调研包\"。"]
+    automaticEffects:
+      - { kind: add, key: progress, value: 5 }
+      - { kind: setFlag, key: research_pack_done }
+    dialogue:
+      - { speaker: 系统, text: "调研阶段的完成判定：这些资产在申报书和PPT里都找得到位置。" }
+    terminal: true
+
+  - id: c_xe4_ghost_topic_story
+    campaign: competition
+    day: 4
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["整理选题会照片时，你翻到上学期一门课的小组作业记录：当时你们也做过\"AI+校园\"选题报告，得了92分。你点开看了看——全是概念，没有一个真实用户。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "92分教会你们写概念。这次比赛教的，是把概念钉进现实。" }
+    terminal: true

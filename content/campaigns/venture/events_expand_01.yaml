@@ -105,6 +105,26 @@ events:
     learningPoint: 选项越多，行动越少——日志也要做减法
     terminal: true
 
+  - id: v_e01_d03_log_tool
+    campaign: venture
+    day: 3
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 记录工具够用就好，流程比工具重要 }
+    scene: { location: dorm, characters: [] }
+    setup: ["你纠结问题日志用什么记：同学安利了笔记软件，功能强大，学习成本半小时起。"]
+    choices:
+      - id: plain_note
+        text: 手机自带备忘录+固定三栏：谁/在哪/卡在哪
+        visibleResponse: 三栏备忘录用了一周，零上手成本，随想随记。工具没让你多记一条，也没少记一条。
+        hiddenEffects: [{ kind: add, key: execution, value: 2 }, { kind: setFlag, key: simple_tools }]
+      - id: fancy_app
+        text: 上专业笔记软件，建数据库、加标签、做看板
+        visibleResponse: 你折腾了两天模板，字段定义改了5版。第三天想记信号时，先想了想“该归哪个视图”——然后没记。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    learningPoint: 先有记录习惯，再谈记录工具
+    terminal: true
+
   - id: v_e01_d04_wall_stats
     campaign: venture
     day: 4
@@ -534,14 +554,14 @@ events:
     trigger: { kind: random, weight: 2 }
     scene: { location: dorm, characters: [] }
     setup: ["小蔡把室友小林也拉来聊。小林是重度考研人，桌上三本真题。"]
+    automaticEffects:
+      - { kind: add, key: userUnderstanding, value: 4 }
+      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·小林, description: 反面用户：不整理派, content: "不整理直接刷/检索痛隐藏在“翻不到就算了”里" }
+      - { kind: add, key: evidenceDiscipline, value: 2 }
     dialogue:
       - { speaker: 小林, text: "整理？我不整理。我就把真题按年份摞着，直接刷。要什么工具，刷就完了。", mood: neutral }
       - { speaker: 你, text: "那你找某年的某道题怎么办？" }
       - { speaker: 小林, text: "……翻。翻不到就算了，那题多半也不考。（顿了顿）等等，要是有个东西能搜真题，好像还挺想用？" }
-    automaticEffects:
-      - { kind: add, key: userUnderstanding, value: 4 }
-      - { kind: addAsset, assetType: interview_notes, name: 访谈纪要·小林, description: 反面用户：不整理派, content: "不整理直接刷/检索痛隐藏在“翻不到就算了”里" }
-    dialogue:
       - { speaker: 系统, text: "反面用户很重要：他们定义了你的产品不是给谁的。“不用工具”也是一种用户洞察。" }
     terminal: true
 

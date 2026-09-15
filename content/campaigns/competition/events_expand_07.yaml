@@ -1,0 +1,580 @@
+# 竞赛线扩展包07：延迟后果目标事件 / 随机事件 / 补充密度
+events:
+  # ===== 延迟后果目标（由 scheduleEvent 触发）=====
+  - id: c_xe7_dly_resel_pain
+    campaign: competition
+    day: 7
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——选题返工利息, learning: 未验证的选题是负债 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["校务处官网挂出采购公示：实验室仪器预约系统，预算四十万。你们凭感觉选的题，被人用预算补完了。"]
+    dialogue:
+      - { speaker: 方远, text: "（盯着公示截图）四十万。我们想用零元干成的事，学校直接外包了。", mood: angry }
+      - { speaker: 系统, text: "延迟后果：选题会省下的30分钟验证，今天连本带利还清——重选，倒计时继续。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 4 }
+      - { kind: subtract, key: energy, value: 8 }
+    terminal: true
+
+  - id: c_xe7_dly_survey_bias
+    campaign: competition
+    day: 16
+    type: npc
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——诱导问卷被识破, learning: 诱导性数据经不起追问 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["何老师拿着申报书问卷一节：「这题「你是否同意AI能提升社团效率」——52份里48份同意。你知道这能证明什么吗？什么也证明不了。"]
+    dialogue:
+      - { speaker: 何老师, text: "评委里懂调查的，一眼就能看出这是诱导样本。要么删掉，要么重做口径说明。", mood: serious }
+      - { speaker: 系统, text: "延迟后果：D5省下的问卷设计时间，今天用口碑来偿。" }
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 6 }
+      - { kind: add, key: academicDebt, value: 4 }
+    terminal: true
+
+  - id: c_xe7_dly_sample_gap
+    campaign: competition
+    day: 18
+    type: npc
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——样本缺口暴露, learning: 调研光谱的缺口就是答辩的缺口 }
+    scene: { location: defense_hall, characters: [c_judge_prelim] }
+    setup: ["模拟答辩。高主任翻到用户验证页：「你们的样本里好像没有学术类社团？他们的报名场景和你主打的一样吗？"]
+    dialogue:
+      - { speaker: 系统, text: "那天你为了省一次约访跳过的学术类社团，今天站在了评委席上。" }
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 5 }
+      - { kind: add, key: academicDebt, value: 3 }
+    terminal: true
+
+  - id: c_xe7_dly_ghost_product
+    campaign: competition
+    day: 18
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——幻觉竞品随材料上线, learning: 未核实的行会自己找到读者 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["雨桐做PPT竞品页时引用了矩阵：第6行「校社宝」又出现了——上次的删除只删了矩阵，没删引文。方远亲自搜了半小时，依然查无此物。"]
+    dialogue:
+      - { speaker: 方远, text: "幽灵产品的二次来袭。这次连PPT都想收录它。", mood: angry }
+      - { speaker: 系统, text: "延迟后果：留着的「万一」，最终都会变成材料里的实锤。" }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 4 }
+      - { kind: subtract, key: energy, value: 5 }
+    terminal: true
+
+  - id: c_xe7_dly_conflict_replay
+    campaign: competition
+    day: 15
+    type: npc
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——未修复的冲突复发, learning: 回避的冲突会带利息回来 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: ["材料周第一天，同一座火山准时喷发：方远觉得申报书里「交互设计」一节夸大了——「那是工具自带的，不算设计」。雨桐的笔停在了半空。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（很平静）行。那按你的说法改。（平静得像上次一样）", mood: serious }
+      - { speaker: 系统, text: "延迟后果：上一次没谈完的话，谈判桌 today 重新开张，筹码变成了情绪。" }
+    automaticEffects:
+      - { kind: subtract, key: teamTrust, value: 5 }
+      - { kind: subtract, key: energy, value: 5 }
+    terminal: true
+
+  - id: c_xe7_dly_bus_factor
+    campaign: competition
+    day: 16
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——单点风险兑现, learning: 公交系数不是耸人听闻 }
+    scene: { location: lab, characters: [] }
+    setup: ["方远发烧39度，请假一天。部署、数据、代码架构三件事的「活文档」分别长在他的脑子里。今天三个人对着服务器面板大眼瞪小眼。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（打电话）方远，你就说一句：部署要点哪几个按钮？（记录中）", mood: worried }
+      - { speaker: 系统, text: "延迟后果：何老师那句「如果方远明天倒下」，today 兑现成了现实题。" }
+    automaticEffects:
+      - { kind: subtract, key: execution, value: 5 }
+      - { kind: subtract, key: energy, value: 6 }
+    terminal: true
+
+  - id: c_xe7_dly_deploy_mystery
+    campaign: competition
+    day: 16
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——心情操作的产物, learning: 不可复现的操作等于没有操作 }
+    scene: { location: workbench, characters: [] }
+    setup: ["需要临时回滚一个版本。你翻遍方远的提交记录和聊天记录，找不到那天的部署步骤——他自己也回忆不起来当时「顺手改了哪个配置」。"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果：D11「看心情操作」的债，today 按小时计息。没有文档的运维是考古。" }
+    automaticEffects:
+      - { kind: add, key: technicalDebt, value: 4 }
+      - { kind: subtract, key: energy, value: 6 }
+    terminal: true
+
+  - id: c_xe7_dly_number_drift
+    campaign: competition
+    day: 19
+    type: npc
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——数字漂移在答辩暴露, learning: 没有数据源表就没有对账能力 }
+    scene: { location: defense_hall, characters: [c_judge_prelim] }
+    setup: ["答辩进行到一半，高主任举起两份材料：「申报书说47份问卷，PPT上写57——哪个是对的？」你心里咯噔一下：那个笔误，交叉审时漏掉了。"]
+    dialogue:
+      - { speaker: 高主任, text: "数字打架的材料，我默认其他数字也可疑。", mood: serious }
+      - { speaker: 系统, text: "延迟后果：没有数据源表的每一天，漂移都在积累。" }
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 8 }
+      - { kind: add, key: academicDebt, value: 4 }
+    terminal: true
+
+  - id: c_xe7_dly_deadline_squeeze
+    campaign: competition
+    day: 18
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——时间挤压链, learning: 前面松一小时，后面紧一整天 }
+    scene: { location: workbench, characters: [c_design, c_tech] }
+    setup: ["连锁反应到账：等待配音的1.5天 → 视频延期 → 申报书终校推迟 → 现在，距离截止还有4小时，三件事同时未完成。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（第N次看表）别说话，让我算算还来得及救哪一件。", mood: angry }
+      - { speaker: 系统, text: "延迟后果：D16「等她嗓子好起来」的温柔决定，today 变成了三线作战。" }
+    automaticEffects:
+      - { kind: subtract, key: energy, value: 12 }
+      - { kind: add, key: academicDebt, value: 4 }
+    terminal: true
+
+  - id: c_xe7_dly_semifinal_mess
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——大改版的代价, learning: 决赛前夜不适宜重构材料 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["决赛候场时你翻自己公众号推送的预览——复赛材料那版「焕然一新」的申报书里，第三页的标题序号是错的：二、三、五、六。"]
+    dialogue:
+      - { speaker: 江雨桐, text: "（闭眼）大改版那晚删掉了目录自动编号……我发誓这周之内我再也不说「焕然一新」这个词。", mood: angry }
+      - { speaker: 系统, text: "延迟后果：D20 的膨胀野心，today 在评委眼皮底下付账。" }
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 4 }
+    terminal: true
+
+  - id: c_xe7_dly_design_burnout
+    campaign: competition
+    day: 18
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——过载者倒下, learning: 疲劳是会记账的 }
+    scene: { location: dorm, characters: [] }
+    setup: ["雨桐病了。喉咙哑到说不出完整的句子，微信里发来一排打字语音：「视频终审……你们……帮我……」。"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果：她说「不累」的那三天，利息 today 一次性结算。" }
+    automaticEffects:
+      - { kind: subtract, key: teamTrust, value: 3 }
+      - { kind: subtract, key: energy, value: 8 }
+    terminal: true
+
+  - id: c_xe7_dly_lin_wobble
+    campaign: competition
+    day: 20
+    type: npc
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——编外心态动摇, learning: 名分欠账要还 }
+    scene: { location: lab, characters: [] }
+    setup: ["决赛彩排日，林晓的消息发得越来越晚。今晚她说：「学长，明天比赛我可能到不了太早，社团有个例会……「例会」两个字，你们都读得出委婉。"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果：「帮忙的」身份留不住「自己人」的全力。名分的债，today 收取。" }
+    automaticEffects:
+      - { kind: subtract, key: teamTrust, value: 4 }
+      - { kind: subtract, key: execution, value: 3 }
+    terminal: true
+
+  - id: c_xe7_dly_tech_wobble
+    campaign: competition
+    day: 20
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——未接住的崩溃, learning: 「嗯」的两种含义 }
+    scene: { location: workbench, characters: [c_tech] }
+    setup: ["决赛前一天，方远的提交记录停在了昨天下午。他的工位整齐得反常——那种要收拾东西走人的整齐。"]
+    dialogue:
+      - { speaker: 方远, text: "（看到你来，勉强笑笑）我在。（停顿）就是有点想明白一些事。", mood: worried }
+      - { speaker: 系统, text: "延迟后果：那晚没打出去的电话，today 变成了实验室里的沉默。" }
+    automaticEffects:
+      - { kind: subtract, key: teamTrust, value: 5 }
+      - { kind: subtract, key: execution, value: 4 }
+    terminal: true
+
+  - id: c_xe7_dly_format_bounce
+    campaign: competition
+    day: 18
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——形式审查退回, learning: 行政规范是硬约束 }
+    scene: { location: workbench, characters: [] }
+    setup: ["形式审查通报邮件到了：「A-042队材料命名不符规范，请于今日17:00前重新提交。」四个文件重命名重传，惊出一身冷汗——离截止还有四小时。"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果：「系统又不看」的自信，today 被秘书的 Excel 打脸。" }
+    automaticEffects:
+      - { kind: subtract, key: energy, value: 8 }
+      - { kind: add, key: academicDebt, value: 3 }
+    terminal: true
+
+  - id: c_xe7_dly_fake_honor
+    campaign: competition
+    day: 19
+    type: npc
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——幻觉荣誉入材料, learning: 上游造假下游买单 }
+    scene: { location: defense_hall, characters: [c_judge_prelim] }
+    setup: ["答辩现场，高主任指着申报书荣誉栏：「市级创业大赛银奖？报名系统的获奖名单里怎么查不到？」"]
+    dialogue:
+      - { speaker: 系统, text: "延迟后果：Agent「建议保留」的那行字，today 需要你本人站在台上解释。" }
+    automaticEffects:
+      - { kind: subtract, key: credibility, value: 12 }
+      - { kind: add, key: academicDebt, value: 5 }
+    terminal: true
+
+  # ===== 随机事件补充 =====
+  - id: c_xe7_random_weather
+    campaign: competition
+    day: 10
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["暴雨。实验室窗外的雨声大得像白噪音，方远说这雨声「适合写测试」。雨桐说适合睡觉。你们最终决定：都听。"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 3 }
+    terminal: true
+
+  - id: c_xe7_random_midterm_conflict
+    campaign: competition
+    day: 12
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 比赛与课程冲突的时间管理 }
+    scene: { location: classroom, characters: [] }
+    setup: ["高数期中考排在D13早上——和Demo周完美撞车。方远看着复习提纲笑了：「我上一次翻开这本书还是选课的时候。」"]
+    choices:
+      - id: plan_exam_blocks
+        text: 倒排复习块：每天两个45分钟块，考试前一天全队串讲
+        visibleResponse: 复习块排进了日程。D13早上三个人都过了——不漂亮，但过了。比赛课业双线生存，靠的是块状时间而不是愧疚感。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: exam_survived }]
+      - id: sacrifice_exam
+        text: 比赛要紧，考试裸考吧
+        visibleResponse: 考试考出了参赛以来最大的技术债——59分。补考排在决赛周。宇宙的账本从不漏记。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 8 }, { kind: scheduleEvent, eventId: c_xe7_dly_remake_exam, onDay: 20 }]
+    terminal: true
+
+  - id: c_xe7_dly_remake_exam
+    campaign: competition
+    day: 20
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 延迟后果——补考通知, learning: 逃避的账单准时到达 }
+    scene: { location: dorm, characters: [] }
+    setup: ["补考通知：D21 上午8:00，考场在东区。决赛9:00开始。两场考试隔着半座城。"]
+    dialogue:
+      - { speaker: 方远, text: "（看着两张准考证）一个上午决定我的绩点和我的奖。", mood: worried }
+      - { speaker: 系统, text: "延迟后果：D12「裸考」的选择，today 变成了极限二选一。" }
+    automaticEffects:
+      - { kind: subtract, key: energy, value: 10 }
+      - { kind: add, key: academicDebt, value: 4 }
+    terminal: true
+
+  - id: c_xe7_random_canteen_idea
+    campaign: competition
+    day: 13
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: canteen, characters: [] }
+    setup: ["食堂阿姨看你盯着餐盘发呆，多给了你一勺菜：「小伙子，想什么呢？想什么事情这么辛苦？」「「在想报名表去重算法。」「哦，跟阿姨想今天剩哪个菜一样，都是缘分。」"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 2 }
+    terminal: true
+
+  - id: c_xe7_random_ai_downtime
+    campaign: competition
+    day: 13
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 工具不可用日的自持能力 }
+    scene: { location: workbench, characters: [c_ai_agent] }
+    setup: ["Agent平台今天大规模故障，官方公告「预计恢复时间：未知」。方远盯着转圈的加载图标：「我的左手没了。」"]
+    choices:
+      - id: work_offline
+        text: 降级作业：手写核心逻辑+翻文档，把不依赖AI的活儿排上来
+        visibleResponse: 方远徒手写了下午的解析模块，晚上Agent恢复后一测——能跑，还挺好。"原来我会写代码啊。"他久违地感慨了一句。
+        hiddenEffects: [{ kind: add, key: independence, value: 6 }, { kind: add, key: execution, value: 3 }, { kind: achievement, achievementId: ach_c_offline_day }]
+      - id: wait_for_ai
+        text: 等它恢复吧，核心工作都依赖它
+        visibleResponse: 恢复是晚上九点。今天净产出：三条未读公告和一屏幕焦虑。依赖单一工具的风险，平时看不见，故障日全款结清。
+        hiddenEffects: [{ kind: add, key: aiDependence, value: 6 }, { kind: subtract, key: execution, value: 4 }]
+    terminal: true
+
+  - id: c_xe7_random_senior_visit
+    campaign: competition
+    day: 14
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: lab, characters: [] }
+    setup: ["去年参赛的赵学长顺路来访，看了一圈你们白板上的数据源表和回归清单，沉默了一会儿。"]
+    dialogue:
+      - { speaker: 赵学长, text: "我们去年要是有这张表，答辩时就不会被问出三处对不上的数字。（拍照）我能发给我们队的人看看吗？", mood: surprised }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 3 }
+    terminal: true
+
+  - id: c_xe7_random_doubt_night
+    campaign: competition
+    day: 14
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["睡前刷到一句话：「所有比赛都是幸存者偏差的展览。」你看了看桌上的调研包——里面是七份真实的访谈和47份真实的问卷。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "偏差没法消灭，但你的数据是真的。真的东西不怕被叫作偏差。" }
+    terminal: true
+
+  - id: c_xe7_random_lint_night
+    campaign: competition
+    day: 16
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: workbench, characters: [c_tech] }
+    setup: ["方远给项目配了格式化检查：代码不整齐不让提交。林晓吐槽：「这是代码界的处女座。」方远：「这是工程界的体面。」"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 2 }
+    terminal: true
+
+  - id: c_xe7_random_user_praise
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [] }
+    setup: ["老K在五人社长小群晒了张截图：用你们工具做的一次完整报名流程，配文「3分钟，全流程，0催交」。下面一排社长排队问链接。"]
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 3 }
+      - { kind: add, key: userUnderstanding, value: 3 }
+    dialogue:
+      - { speaker: 系统, text: "用户自发递来的广告，比任何推广位都值钱。" }
+    terminal: true
+
+  - id: c_xe7_random_rival_meme
+    campaign: competition
+    day: 18
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: dorm, characters: [c_rival] }
+    setup: ["邱一鸣深夜在朋友圈发了张梗图，配文只有两个字：「熬夜」。定位：实验楼。原来对手也在熬——这个发现让今晚的疲惫意外地可以忍受了。"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 2 }
+    terminal: true
+
+  - id: c_xe7_random_lost_usb
+    campaign: competition
+    day: 19
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 物理介质的冗余纪律 }
+    scene: { location: corridor, characters: [] }
+    setup: ["初赛候场时你摸口袋——装着全部材料的U盘不见了。冷汗三秒后想起：包里有第二只，网盘还有一份，雨桐邮箱里还有一封「以防万一」。"]
+    choices:
+      - id: backup_works
+        text: 启用备份，赛后把「三份冗余」写进队规
+        visibleResponse: 备份U盘插上，材料完好。丢的那只在赛后清洁时从沙发缝里现身——它躺在了所有备份安全抵达终点之后。
+        hiddenEffects: [{ kind: add, key: execution, value: 3 }, { kind: setFlag, key: backup_saved }]
+      - id: panic_search
+        text: 放弃候场纪律，全场翻找20分钟
+        visibleResponse: U盘没找到（后来证明在沙发缝），你靠最后三分钟找到备用机才没退赛。候场的心理建设归零。
+        hiddenEffects: [{ kind: subtract, key: energy, value: 8 }, { kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe7_random_journalist
+    campaign: competition
+    day: 20
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: corridor, characters: [] }
+    setup: ["校媒在决赛场地外架起了采访灯。前一个受访队伍的队长对着镜头说「我们的愿景是改变校园服务生态」，说完自己先绷不住笑了。"]
+    automaticEffects:
+      - { kind: add, key: independence, value: 2 }
+    terminal: true
+
+  # ===== 补充剧情密度 =====
+  - id: c_xe7_teach_lin_code
+    campaign: competition
+    day: 12
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    purpose: { narrative: 方远教学时刻, learning: 教是最好的学 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: ["林晓想学写测试用例。方远拉了把椅子过来，用了十分钟讲「先想清楚怎么算坏」。你发现他讲解时异常耐心——教学激活了另一个方远。"]
+    dialogue:
+      - { speaker: 方远, text: "写测试就像挑刺。你得先变成最烦的用户，再变成最狠的验收员。", mood: pleased }
+      - { speaker: 林晓, text: "那我第一次当验收员就挑出你8个刺，算出师了吗？" }
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: add, key: teamTrust, value: 3 }
+    terminal: true
+
+  - id: c_xe7_portfolio_update
+    campaign: competition
+    day: 17
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: workbench, characters: [c_design] }
+    setup: ["雨桐把项目过程图整理进作品集：线框稿、竞品矩阵、旅程图、十版PPT截图。她说这个项目让她的作品集「第一次有故事线，而不是一堆好看的图」。"]
+    automaticEffects:
+      - { kind: relationship, characterId: c_design, delta: 4 }
+    dialogue:
+      - { speaker: 江雨桐, text: "作品集的尽头不是漂亮，是「我做过真的东西」。这次真的有了。", mood: happy }
+    terminal: true
+
+  - id: c_xe7_user_followup
+    campaign: competition
+    day: 17
+    type: decision
+    trigger: { kind: random, weight: 2 }
+    purpose: { learning: 试用后的回访比首发访谈更真实 }
+    scene: { location: canteen, characters: [] }
+    setup: ["两个社长用了工具一周。你去做回访——这次的问题比第一轮访谈尖锐：哪里别扭？哪里想卸载？"]
+    choices:
+      - id: hard_followup
+        text: 问狠问题："如果收费你还用吗？""比Excel好在哪？""哪一步你想骂人？"
+        visibleResponse: 收获三条扎心反馈：通知不够及时、某个按钮太深、想导出Excel做备份——「想骂人」环节贡献了两个明日修复项。真实回访的ROI是首发访谈的两倍。
+        hiddenEffects: [{ kind: add, key: userUnderstanding, value: 8 }, { kind: addAsset, assetType: user_feedback, name: 一周回访记录, description: 2社长硬核反馈+4条改进项, content: "通知不及时/按钮太深/缺导出/文案歧义" }]
+      - id: soft_followup
+        text: 客气地问"用得还顺利吗"
+        visibleResponse: 「挺好的挺方便的。」——客气话采集完毕，一行可用信息都没有。用户对客气问题的回应永远是客气。
+        hiddenEffects: [{ kind: add, key: academicDebt, value: 3 }]
+    terminal: true
+
+  - id: c_xe7_backup_day
+    campaign: competition
+    day: 14
+    type: system
+    trigger: { kind: day, day: 14, phase: end }
+    purpose: { learning: 定期备份是纪律不是事件 }
+    scene: { location: workbench, characters: [] }
+    setup: ["你设了个「备份日」提醒：每周最后一天，代码推远端、材料上云盘、U盘全量更新。第一次执行花了一小时——之后每次只要十分钟。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: backup_routine }
+    dialogue:
+      - { speaker: 系统, text: "备份的意义在丢东西那天才显现，但纪律要养在那天之前。" }
+    unlockKnowledge: [kc_c_git_basics]
+    terminal: true
+
+  - id: c_xe7_assessment_day
+    campaign: competition
+    day: 15
+    type: system
+    trigger: { kind: day, day: 15, phase: end }
+    purpose: { narrative: 中期自评, learning: 用数据而不是感觉评估进度 }
+    scene: { location: dorm, characters: [] }
+    setup: ["赛程过半自评：进度条上，调研100%、Demo核心流程100%、材料60%、路演0%。你在「路演0%」旁边画了个箭头——它是下一个要啃的山头。"]
+    automaticEffects:
+      - { kind: add, key: execution, value: 3 }
+      - { kind: setFlag, key: midterm_self_check }
+    terminal: true
+
+  - id: c_xe7_rival_data_leak
+    campaign: competition
+    day: 16
+    type: npc
+    trigger: { kind: random, weight: 1 }
+    scene: { location: canteen, characters: [c_rival] }
+    setup: ["邱一鸣的队友不小心把屏幕转向你们——表格上一行「竞品分析：社团管家（待研究）」。原来他们的竞品矩阵里，你们是第1行。"]
+    dialogue:
+      - { speaker: 方远, text: "（憋笑）我们是被研究的第1行。这算不算一种荣誉？", mood: pleased }
+      - { speaker: 邱一鸣, text: "（合上电脑）战术泄密。今天回去全队写检讨。（其实毫无愧色）", mood: angry }
+    automaticEffects:
+      - { kind: add, key: riskTolerance, value: 3 }
+    terminal: true
+
+  - id: c_xe7_advisor_burn_warn
+    campaign: competition
+    day: 13
+    type: npc
+    trigger: { kind: random, weight: 2 }
+    scene: { location: office, characters: [c_advisor] }
+    setup: ["例行汇报结尾，何老师没急着赶人，问了个题外话。"]
+    dialogue:
+      - { speaker: 何老师, text: "你们仨现在见到对方的时间，是不是比见到室友还多？", mood: neutral }
+      - { speaker: 你, text: "差不多。现在看到泡面都想吐。" }
+      - { speaker: 何老师, text: "记住这个信号。到「见到队友都想吐」的那天，比技术崩溃更危险。提前放半天假，我批准。", mood: pleased }
+    automaticEffects:
+      - { kind: relationship, characterId: c_advisor, delta: 3 }
+      - { kind: add, key: teamTrust, value: 2 }
+    terminal: true
+
+  - id: c_xe7_semifinal_wait
+    campaign: competition
+    day: 20
+    type: story
+    trigger: { kind: day, day: 20, phase: end }
+    purpose: { narrative: 网评等待夜, learning: 提交后的焦虑管理 }
+    scene: { location: dorm, characters: [] }
+    setup: ["复赛网评提交后的晚上。结果明天才出。雨桐把四个人的「赛前焦虑度」画成了折线图——她的峰值在D8，你的峰值在今晚。方远拒绝提供数据：「我方波动小于0.5。」"]
+    automaticEffects:
+      - { kind: add, key: energy, value: 3 }
+      - { kind: setFlag, key: semifinal_waited }
+    dialogue:
+      - { speaker: 系统, text: "焦虑无法消灭，但可以被看见、被命名、被一起笑。" }
+    terminal: true
+
+  - id: c_xe7_final_glasses
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: random, weight: 1 }
+    scene: { location: defense_hall, characters: [] }
+    setup: ["候场最后一刻，方远摸了摸眼镜盒：「镜片今天早上裂了一道缝。戴还是不戴？」——他八百度近视。"]
+    automaticEffects:
+      - { kind: add, key: riskTolerance, value: 2 }
+    dialogue:
+      - { speaker: 系统, text: "小事故的应急反应，也是团队肌肉记忆的一部分。" }
+    choices:
+      - id: lend_glasses
+        text: 林晓的备用隐形眼镜递了上去（她早就人肉备份了全队的小事故）
+        visibleResponse: 方远戴隐形的手抖了五分钟，最后成功上场。危机清单上从此多了一行：「备用眼镜」。团队的冗余设计延伸到了镜片。
+        hiddenEffects: [{ kind: add, key: teamTrust, value: 3 }]
+      - id: crack_is_fine
+        text: "裂缝在边角，戴着吧别折腾了。"
+        visibleResponse: 他戴着裂镜片讲完了架构页。没人发现问题，但他自己知道每看一次大屏幕都有一道彩虹—— distraction 也是一种消耗。
+        hiddenEffects: [{ kind: subtract, key: execution, value: 2 }]
+    terminal: true
+
+  - id: c_xe7_after_github_star
+    campaign: competition
+    day: 21
+    type: story
+    trigger: { kind: manual }
+    purpose: { narrative: 赛后的小惊喜, learning: 公开成果的复利 }
+    scene: { location: dorm, characters: [] }
+    setup: ["赛后你收到一封邮件：外校一个社团联合会看了你们开源的仓库，问「能不能参考你们的字段设计」——他们也要做报名工具。"]
+    automaticEffects:
+      - { kind: add, key: credibility, value: 4 }
+      - { kind: setFlag, key: external_interest }
+    dialogue:
+      - { speaker: 系统, text: "把想法在约束下做成真的，然后它开始自己生长——这就是创作的报酬。" }
+    terminal: true
+
+  - id: c_xe7_end_all_clean
+    campaign: competition
+    day: 21
+    type: system
+    trigger: { kind: day, day: 21, phase: end }
+    purpose: { narrative: 收尾结算, learning: 完整闭环的确认 }
+    scene: { location: dorm, characters: [] }
+    setup: ["最后的清单，全部打勾：规则读懂了✓ 队伍组成了✓ 选题验证了✓ 调研做实了✓ Demo跑通了✓ 材料对齐了✓ 上台讲完了✓ 团队还在✓"]
+    automaticEffects:
+      - { kind: setFlag, key: campaign_complete }
+      - { kind: add, key: independence, value: 5 }
+      - { kind: add, key: teamTrust, value: 5 }
+    dialogue:
+      - { speaker: 系统, text: "八个勾，二十一天，四个人。下一场，无论是什么场，你已经带着方法来了。" }
+    terminal: true
