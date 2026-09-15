@@ -1,0 +1,239 @@
+# METIS Academy Competition V2 结局批次四 —— 对应 events_v2_04.yaml 旗标
+endings:
+  - id: cv2_rules_master_end
+    campaign: competition
+    title: 《第 14 页的幸存者》
+    mainResult: 规则深度阅读转化为竞争优势
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_rules_mastered }
+        - { kind: flag, key: kcv_rules_skimmed, expected: false }
+    priority: 92
+    tier: main
+    baseText: 那支被取消资格的队伍退出赛场时，你们的视频稳稳躺在合格名单里——4 分半，比上限还留了半分钟。赵老师把那 32 页细则的红笔版裱进了教研室的展示柜，旁边贴了张便签：“规则不是限制，是出题人给你的提示。”终审答辩时，你们对每一条评分标准的呼应都严丝合缝——评委互相看了看：“这队伍读过细则。”读过，而且读了七遍。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你从此养成了"重要文档打印精读"的习惯——屏幕扫读和纸笔精读是两种理解。 }
+          - { lte: 40, text: 红笔是赵老师的，你只是跟着走。下次没有红笔的细则，你还敢扫读吗？ }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 赵老师退休前把那支红笔送给了你：“给下一个不看细则的孩子。”
+        neutral: 赵老师说“应该的”。规则课他年年讲，年年有人不听。
+        negative: 团队里有人说“太教条了”。 Finals 之后，没人再这么说。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的工作习惯里多了一条铁律：任何比赛/投标，细则至少精读两遍，红笔标注。 }
+    reflection: 规则的每一个字都是信息——读它不是胆小，是对游戏的尊重。
+    lessonHint: 评审细则包含评分权重与红线，精读是最便宜的竞争优势。
+    tone: positive
+    family: rules_execution
+    whyDistinct: 核心结果是“规则精读的生存红利”，与扫读踩坑路径在同一链互斥。
+
+  - id: cv2_rules_trap_end
+    campaign: competition
+    title: 《不被接受的附录》
+    mainResult: 规则盲区导致的返工消耗
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_rules_skimmed }
+    priority: 90
+    tier: main
+    baseText: “不接受任何附件”——第 14 页，黑纸白字。你那份精心准备的附录，成了被打回的全部理由。重排版耗掉一天，更贵的是士气：队长被质疑的阴云飘了三天。后来你养成了一个习惯：任何规则文档，先搜“不接受”“不允许”“取消”三个词。这个习惯的名字，叫“第 14 页”。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你把搜索关键词的方法教给了学弟。负向条款，永远先查。 }
+          - { lte: 40, text: 你的教训只有一句话："下次看全。"但"看全"是个没有方法的愿望。 }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 赵老师说：“吃一次亏记一辈子，也行。就怕吃三次。”
+        neutral: 赵老师没提这事。她见过太多不看细则的孩子。
+        negative: 队友后来私下说“队长连规则都不看”。信任的裂缝比扣分更疼。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的浏览器书签里永远有一个文件夹，名叫"读过的规则"。 }
+    reflection: 规则文档的第 14 页和第 1 页一样重要——灰犀牛从来都写在明处。
+    lessonHint: 规则文档的禁止性条款优先核查。
+    tone: negative
+    family: rules_execution
+    whyDistinct: 核心结果是“规则盲区的返工代价”，与精读红利结局在同一链互斥。
+
+  - id: cv2_invisible_work_end
+    campaign: competition
+    title: 《四十七个视觉稿》
+    mainResult: 看见队友的隐形投入
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_saw_invisible }
+        - { kind: flag, key: kcv_alignment_debt, expected: false }
+    priority: 92
+    tier: main
+    baseText: 那个装着 47 个视觉稿的文件夹，后来成了你们团队的传说。答辩现场当小林讲视觉部分时，评委问她“这是外包的吧”，她笑了：“是我们的队长每天问我'今天有什么我能帮忙的'之后，我自己想做到的版本。”领奖那天你们争谁站 C 位，小林说：“谁先看见谁的，谁站。”最后你们并排站了——评委拍下的照片里，没有中心，只有一排。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你把"今天问了没"写进了每天的任务清单第一条——问队友，不是问进度，是问状态。 }
+          - { lte: 40, text: 那次倾听是你创业式管理的第一课。没有它，后来的团队散得会更早。 }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 小林毕业时送了你一本册子，封面是第 47 版视觉稿，扉页写着：“谢谢那天你听完了我说话。”
+        neutral: 小林说“那都是分内的事”，然后继续画她的图。
+        negative: 你后来又忙忘了一次，小林没说什么——但你记得她当时的眼神，亮了一下的那种亮，灭了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们团队的入职第一课，就是看那个 47 稿的文件夹——看懂了才算入职。 }
+    reflection: 团队管理的第一课不是分工，是看见——看见那些不说、不响、不邀功的付出。
+    lessonHint: 主动同步与倾听是对隐形投入的最低成本管理。
+    tone: positive
+    family: team
+    whyDistinct: 核心结果是“看见队友隐形投入”的团队叙事，与对齐债爆发路径在同一链互斥。
+
+  - id: cv2_alignment_debt_end
+    campaign: competition
+    title: 《三个方向的半成品》
+    mainResult: 理解错位引发的返工危机
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_alignment_debt }
+    priority: 90
+    tier: main
+    baseText: 对齐会上，三台笔记本同时翻开：你的规则引擎、tech 的 AI 生成、小林的人工模板——同一个功能，三种理解，三份半成品。会议室安静得能听见风扇声。返工三天，你们最终合并出了一个“谁都没完全认同”的方案。初赛过了，但你永远记得那三份半成品摊在桌上的样子：那就是“各忙各的”四个字的实体形态。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你立了新规矩：任何功能开工前，三个人各自用一句话描述它——不一致就不开工。 }
+          - { lte: 40, text: 你把它归因为"沟通成本太高"。下次你还是选择了不沟通——成本更高的一种。 }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: tech 后来养成了开工前发“一句话确认”的习惯，说是从那次教训里长的。
+        neutral: tech 说“返工就返工呗”，心大的背后是不记仇。
+        negative: 半成品返工消耗的那三天，正好错过了你们准备最充分的一次模拟答辩。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的协作文档永远有第一页："我们说的 X 是指什么。" }
+    reflection: 对齐的成本是十分钟，错位的成本是三天——团队协作的复利公式，藏在方向一致里。
+    lessonHint: 多人协作必须开工前对齐理解，书面一句话确认。
+    tone: negative
+    family: team
+    whyDistinct: 核心结果是“理解错位的返工危机”，与主动倾听结局在同一链互斥。
+
+  - id: cv2_real_footage_end
+    campaign: competition
+    title: 《40 秒的真话》
+    mainResult: 真实素材赢得评委信任
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_real_footage }
+        - { kind: flag, key: kcv_staged_footage, expected: false }
+    priority: 93
+    tier: main
+    baseText: “完整版我可以现在放。”你说完这句话，答辩教室安静了两秒——然后终审评委笑了。后来拿奖的时候你才知道，那两秒里评委们交换的眼神说的是：这队的素材是真的。40 秒的采访剪辑，11 分钟的原片，一个经得起“现在放”考验的答案。摆拍能骗过镜头，骗不过追问——而你带着真话上阵，就永远不怕追问。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: "经得起现在放"成了你们所有素材的制作标准。这个标准后来救了你们三次。 }
+          - { lte: 40, text: 那天你其实手心冒汗——真话的底气是真的，紧张也是真的。 }
+    characterEpilogueRules:
+      - characterId: c_judge_final
+        positive: 那位终审评委后来在行业分享里用了你们的案例：“真实是最好的答辩策略——第 7 位用户的 40 秒，胜过 40 分钟的包装。”
+        neutral: 评委在评分表的“材料真实性”一栏打了满分。他没告诉你，但他记得。
+        negative: 如果评委追问了呢？你不敢想。真话的成本是排练，谎言的成本是暴露。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的所有产品演示视频片尾都有一行字："真实录制，无摆拍。"——它成了品牌的一部分。 }
+    reflection: 真实素材的弱是画面朴素，强是经得起任何追问——答辩现场，追问才是终审。
+    lessonHint: 演示素材坚持真实来源，摆拍是答辩现场的定时炸弹。
+    tone: positive
+    family: presentation_defense
+    whyDistinct: 核心结果是“真实素材的追问免疫”，与摆拍风险路径在同一链互斥。
+
+  - id: cv2_staged_risk_end
+    campaign: competition
+    title: 《悬着的钩子》
+    mainResult: 摆拍素材的侥幸未爆弹
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_staged_footage }
+        - { kind: flag, key: kcv_real_footage, expected: false }
+    priority: 90
+    tier: main
+    baseText: 评委那句“挺真实”是夸奖，你却听成了判决。答辩顺利结束，奖也拿了，但那个“悬着的钩子”一直没落地——只要没人深究，一切安好；只要有人深究，一切归零。领奖台上的你笑得很标准，心里却在想片尾那行“场景演示”的小字。你赢了这个比赛，输了一场自己和自己打的官司——被告是侥幸，判决书迟迟不下。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 拿奖第二周，你主动在公众号发了一篇《那条课堂场景是演示》，把钩子亲手摘了下来。 }
+          - { lte: 40, text: 你安慰自己"大家都这样"。这个"都"字，你用了很久，越来越心虚。 }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 小林看完你的坦白文章说：“早说啊，我可以帮你拍真的——真的也没那么难看。”
+        neutral: 没人发现，没人问。钩子锈在了没人看见的地方。
+        negative: 一年后有竞争对手扒出了那段摆拍。奖没被收回，但“真实”这个标签永远离你而去了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的视频素材库从此分两个文件夹："能公开的"和"不敢追问的"——后来第二个文件夹再也没有新素材。 }
+    reflection: 侥幸不是安全，是暂缓执行的安全——它的利息叫“悬着”。
+    lessonHint: 包装素材的心理与声誉成本会在赛后长期存在。
+    tone: negative
+    family: presentation_defense
+    whyDistinct: 核心结果是“摆拍侥幸的长期心理成本”，与真实素材结局在同一链互斥。
+
+  - id: cv2_rival_confirm_end
+    campaign: competition
+    title: 《来自对手的确认》
+    mainResult: 退赛对手的问题真实性背书
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_rival_confirm }
+    priority: 93
+    tier: hidden
+    baseText: “你们做的那个校园工具，是真问题。加油。”——那支最强对手队伍的成员，抱着纸箱说完这句话就走了。你把这句话写在方案第一页，右下角标注了日期。之后的每一次自我怀疑，你都翻回第一页看一眼：一个刚刚失去比赛资格的人，一个研究这个问题比你还深的人，说它是真问题。评委的认可会过期，对手的认可不会——因为他没有理由骗你。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了在自我怀疑时寻找"没有利益关系的确认源"——他们的话最便宜也最贵。 }
+          - { lte: 40, text: 那句话是你的止痛药。药效过了的时候，你还是会怀疑——但至少能撑到下一次。 }
+    characterEpilogueRules:
+      - characterId: c_rival
+        positive: 半年后你们在另一个赛场重逢。他没得奖，你来领奖。散场后你们一起吃了顿火锅——以同行的身份。
+        neutral: 你再没见过那个人。你的方案第一页换了排版，但那句话一直在。
+        negative: 有评委质疑你们的选题价值时，你想引用那句话，又觉得不够权威——最后只能靠自己的答辩硬扛。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来也养成了给对手提意见的习惯——因为你记得那句"真问题"对你意味着什么。 }
+    reflection: 竞争对手的认可没有利益滤镜——它是世界上最便宜也最贵的市场验证。
+    lessonHint: 主动从竞争格局变化中获取情报与确认。
+    tone: positive
+    family: problem_quality
+    whyDistinct: 核心结果是“退赛对手的真问题背书”，由隐藏的偶遇事件解锁。
+
+  - id: cv2_ng_fortified_end
+    campaign: competition
+    title: 《同一个问题，两次答案》
+    mainResult: NG+ 架构补强的针对性逆袭
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_ng_fortified }
+        - { kind: flag, key: kcv_ng_deflect, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 终审评委抬头了。上一世，他的第一个问题让你在台上红了脸；这一世，同一个问题问出来，你打开备用页——双节点部署图、故障切换流程、压测数据——讲了九十秒。他点点头，在评分表上写了什么。你知道他不知道这笔账：三天重写、两个深夜、一个“提前知道你会问”的秘密。NG+ 最大的福利不是知道题目，是有时间把答案写好。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 补强不是临时抱佛脚——那三天的重写让整个架构真的更稳了。知识复利，落在实处。 }
+          - { lte: 40, text: 你只补了评委可能问的那一块。知识体系的其他洞还在——下一位评委不按剧本问呢？ }
+    characterEpilogueRules:
+      - characterId: c_judge_final
+        positive: 那位评委赛后特意走过来：“你们的部署方案改过？比初赛版本好太多。”你说：“有人提醒了我们。”——他是谁不重要了。
+        neutral: 评委点了点头就翻了页。他不知道那九十秒背后有三十天。
+        negative: 另一位评委问了供应链的问题——你没提前补。你的“预知”，只买了一张考场的单科保险。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来管理项目时总问一个问题："如果评委/客户明天问 X，我们答得上来吗？"——那个 X 每次都不一样。 }
+    reflection: NG+ 的正确打开方式：把已知的风险点，变成提前交付的工程。
+    lessonHint: NG+ 记忆应转化为结构性补强而非表面话术。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 评委记忆的架构补强”，仅 NG+ 可达，与话术规避路径在同一链互斥。

@@ -1,0 +1,295 @@
+# METIS Academy Competition V2 事件批次四 —— 延迟链/隐藏/NG+ 补完
+events:
+  # ===== T1 链：报名信息与规则盲区（D3 → D11）=====
+  - id: cv2_t1_rules_reading
+    campaign: competition
+    day: 3
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 3, phase: start }
+    purpose: { narrative: 评审细则的阅读深度, learning: 规则里藏着评分表 }
+    scene: { location: lab, characters: [c_advisor] }
+    setup: [“大赛官方群发了 32 页的《评审细则与FAQ》。你打算扫一眼标题，赵老师却把它打印了出来，用红笔划了七处。”]
+    choices:
+      - id: deep_read
+        text: 跟着赵老师的红笔，逐条过细则
+        visibleResponse: 七处红笔里有三处直接改变策略：初赛看“问题真实性”权重 30%、演示视频不超过 5 分钟、答辩现场不许播 PPT 以外的视频。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_rules_mastered }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+        delayed:
+          - { eventId: cv2_t2_rules_save, onDay: 11 }
+      - id: skim_only
+        text: 扫一眼标题就行，交东西前再看
+        visibleResponse: 你把细则收进了收藏夹——那个你从不打开的收藏夹。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_rules_skimmed }
+          - { kind: add, key: academicDebt, value: 4 }
+        delayed:
+          - { eventId: cv2_t2_rules_trap, onDay: 11 }
+    learningPoint: 评审细则是最高优先级的“需求文档”
+
+  - id: cv2_t2_rules_save
+    campaign: competition
+    day: 11
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 细则的红利, learning: 规则知识的即时回报 }
+    scene: { location: lab, characters: [c_tech] }
+    dialogue:
+      - { speaker: c_tech, text: “ tech 那组被取消资格了——视频做了 7 分钟。咱们上周不是把视频剪到 4 分半了吗？” }
+      - { speaker: 系统, text: “赵老师的三处红笔，今天兑现了第一处。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 3 }
+    next: cv2_d11_wire5
+
+  - id: cv2_t2_rules_trap
+    campaign: competition
+    day: 11
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 规则陷阱触发, learning: 规则盲区的代价 }
+    scene: { location: lab, characters: [c_design] }
+    setup: [“初赛材料被打回一次：你用了”附加附录“格式，而细则第 14 页写明”不接受任何附件“。重新排版浪费了一天，团队的士气也被磨掉一层。”]
+    dialogue:
+      - { speaker: c_design, text: “第 14 页……谁会看 32 页细则的第 14 页啊。” }
+      - { speaker: 系统, text: “评委会。这就是谁看谁活下来的游戏。” }
+    automaticEffects:
+      - { kind: add, key: energy, value: -6 }
+    next: cv2_d11_wire5
+
+  # ===== T3 链：队友的隐形投入（D6 → D15）=====
+  - id: cv2_t3_invisible_work
+    campaign: competition
+    day: 6
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 6, phase: start }
+    purpose: { narrative: 看不见的队友付出, learning: 团队可见性管理 }
+    scene: { location: lab, characters: [c_design] }
+    setup: [“你连轴转了三天写方案，忽然意识到已经两天没和小林说上一句话。她在做视觉稿——不声不响的那种。”]
+    choices:
+      - id: check_in_sincerely
+        text: 主动问进度，认真听她讲完
+        visibleResponse: 小林打开文件夹：47 个视觉稿迭代。你愣住了——你以为卡住的部分，她早就做完了三版。她说：“我不说，是怕你觉得我在邀功。”
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_saw_invisible }
+          - { kind: add, key: teamTrust, value: 6 }
+        delayed:
+          - { eventId: cv2_t4_trust_dividend, onDay: 15 }
+      - id: keep_grinding
+        text: 各忙各的，做完再对齐
+        visibleResponse: 你继续埋头。第 10 天对齐时，你们发现彼此对“核心功能”的理解完全是两个东西——返工三天。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_alignment_debt }
+          - { kind: add, key: technicalDebt, value: 4 }
+        delayed:
+          - { eventId: cv2_t4_rework_wall, onDay: 15 }
+    learningPoint: 主动同步是对队友投入的尊重，对齐成本低于返工成本
+
+  - id: cv2_t4_trust_dividend
+    campaign: competition
+    day: 15
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 信任的分红, learning: 心理安全带来主动担当 }
+    scene: { location: lab, characters: [c_design] }
+    dialogue:
+      - { speaker: c_design, text: “答辩答疑部分我来背——评委问视觉我来讲。我看了你所有的技术文档，万一呢。” }
+      - { speaker: 系统, text: “她主动扩大的”万一“，是六天前那次十分钟倾听的利息。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 3 }
+    next: cv2_d15_wire5
+
+  - id: cv2_t4_rework_wall
+    campaign: competition
+    day: 15
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 理解错位的返工墙, learning: 对齐债务的集中爆发 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: [“对齐会上冲突爆发：你说的”自动分析“是指规则引擎，tech 做的是 AI 生成，小林画的是人工模板。三个方向，三份半成品。”]
+    dialogue:
+      - { speaker: c_tech, text: “不是谁的错，是咱们从来没坐下来对过词。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: -3 }
+      - { kind: add, key: progress, value: -5 }
+    next: cv2_d15_wire5
+
+  # ===== T5 链：展示素材的真实性（D9 → D17）=====
+  - id: cv2_t5_demo_footage
+    campaign: competition
+    day: 9
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 9, phase: start }
+    purpose: { narrative: 演示视频的边界, learning: 真实素材 vs 包装素材 }
+    scene: { location: dorm, characters: [] }
+    setup: [“演示视频缺一段”真实使用场景“。有人提议找同学摆拍”课堂使用“——产品明明还没进过课堂。”]
+    choices:
+      - id: real_footage_only
+        text: 只用真实素材：测试录屏+内测用户采访
+        visibleResponse: 视频朴素得像学生作业——因为它本来就是。但内测用户那句“我真的每周用它复盘”，比任何摆拍都有说服力。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_real_footage }
+          - { kind: add, key: credibility, value: 6 }
+        delayed:
+          - { eventId: cv2_t6_judge_ask, onDay: 17 }
+      - id: staged_scene
+        text: 摆拍一段，效果优先
+        visibleResponse: 摆拍很顺利，画面漂亮。你在片尾加了行小字“场景演示”。心里有个小声音说：评委看不见那行字的。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_staged_footage }
+          - { kind: add, key: academicDebt, value: 5 }
+        delayed:
+          - { eventId: cv2_t6_staged_risk, onDay: 17 }
+    learningPoint: 演示素材的真实性是诚信问题也是答辩风险点
+
+  - id: cv2_t6_judge_ask
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 评委追问素材来源, learning: 真实素材经得起追问 }
+    scene: { location: lab, characters: [c_judge_final] }
+    dialogue:
+      - { speaker: c_judge_final, text: “视频里那个采访，是摆拍吗？” }
+      - { speaker: 你, text: “不是。她是我们第 7 位内测用户，采访原片 11 分钟，剪辑版 40 秒，完整版我可以现在放。” }
+      - { speaker: c_judge_final, text: “……不用了。这个回答本身就是答案。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 4 }
+    next: cv2_d17_wire5
+
+  - id: cv2_t6_staged_risk
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: delayed }
+    purpose: { narrative: 摆拍的风险敞口, learning: 包装素材的追问风险 }
+    scene: { location: lab, characters: [] }
+    setup: [“答辩前的选题确认会上，一位评委随口说：”我看你们视频里的课堂场景挺真实。“你的心跳漏了一拍——他没有质疑，只是夸奖。但那句话像一个悬着的钩子。”]
+    dialogue:
+      - { speaker: 系统, text: “你赌的是评委不问。赌赢了，无事发生；赌输了，万劫不复。这就是包装素材的真实价格。” }
+    automaticEffects:
+      - { kind: add, key: academicDebt, value: 4 }
+    next: cv2_d17_wire5
+
+  # ===== 隐藏线：对手的弃赛信息（V1）=====
+  - id: cv2_h1_rival_dropout
+    campaign: competition
+    day: 8
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 对手退赛的背后, learning: 竞争格局的情报价值 }
+    scene: { location: canteen, characters: [] }
+    setup: [“organizer 群里悄悄更新了参赛列表——你注意到那支校外的”夺冠热门“消失了。晚上你在自习室碰见他们队的成员，抱着纸箱。”]
+    choices:
+      - id: ask_why
+        text: 上前问一句：怎么退赛了？
+        visibleResponse: 对方苦笑：“我们做的是政府赛道，指导单位换了对口方向，老师让撤了。”临走他说：“你们做的那个校园工具，是真问题。加油。”——来自对手的确认，比一百次自我怀疑都值钱。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_rival_confirm }
+          - { kind: add, key: independence, value: 4 }
+        next: cv2_h1_after_confirm
+      - id: mind_own
+        text: 专注自己，不打听
+        visibleResponse: 你没问。少了一个对手当然好——但你不知道的是，那条“真问题”的确认，从此缺席了。
+    learningPoint: 竞争格局变化的情报需要主动获取
+
+  - id: cv2_h1_after_confirm
+    campaign: competition
+    day: 8
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 对手的祝福, learning: 竞争者的认可 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你把那句”真问题“记进了方案文档的第一页。之后的每一次深夜改稿，这句话都在——它来自一个比评委更懂”值得“的人。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 2 }
+    next: cv2_d9_wire5
+
+  # ===== NG+ 线：评委的记忆（V2）=====
+  - id: cv2_ng_judge_memory
+    campaign: competition
+    day: 12
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 12 }
+    purpose: { narrative: NG+ 评委偏好记忆, learning: 上辈子的答辩教训 }
+    scene: { location: dorm, characters: [] }
+    setup: [“上一世的答辩现场，终审评委的第一个问题就打在你最薄弱的技术架构上。这一世看到分组名单——同一位评委。”]
+    choices:
+      - id: fortify_weakness
+        text: 提前补强那个架构薄弱点
+        visibleResponse: 你用三天重写了部署方案，把单点风险改成了双节点。这一世的答辩现场，同一个评委问了同一个问题——你的回答让他抬起了头。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_ng_fortified }
+          - { kind: add, key: technicalDebt, value: -5 }
+          - { kind: add, key: evidenceDiscipline, value: 3 }
+      - id: prepare_redirect
+        text: 不补强，练习把这个话题引向优势区
+        visibleResponse: 你排练了二十遍“ deflect 到优势区”的话术。答辩时你成功引开了问题——但你心里清楚，那个薄弱点还在，评委的目光也不都是瞎的。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_ng_deflect }
+          - { kind: add, key: independence, value: 3 }
+    learningPoint: NG+ 记忆可以转化为针对性补强或话术规避
+
+  # ===== 汇流 wire =====
+  - id: cv2_d9_wire5
+    campaign: competition
+    day: 9
+    type: story
+    trigger: { kind: day, day: 9, phase: end }
+    purpose: { narrative: D9 夜间复盘, learning: 竞争情报归档 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “参赛列表又更新了。你截了图，存进了一个名叫”战场“的文件夹。” }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }
+
+  - id: cv2_d11_wire5
+    campaign: competition
+    day: 11
+    type: story
+    trigger: { kind: day, day: 11, phase: end }
+    purpose: { narrative: D11 夜间复盘, learning: 规则即战略 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你把细则的七处红笔抄进了团队 wiki。赵老师看到了，什么也没说，但把红笔换了支新的。” }
+    automaticEffects:
+      - { kind: add, key: evidenceDiscipline, value: 1 }
+
+  - id: cv2_d15_wire5
+    campaign: competition
+    day: 15
+    type: story
+    trigger: { kind: day, day: 15, phase: end }
+    purpose: { narrative: D15 夜间复盘, learning: 团队状态的感知 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “睡前你给每位队友发了一条具体感谢——不是群发，是一对一。发送列表三行，用了你二十分钟，值。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 1 }
+
+  - id: cv2_d17_wire5
+    campaign: competition
+    day: 17
+    type: story
+    trigger: { kind: day, day: 17, phase: end }
+    purpose: { narrative: D17 夜间复盘, learning: 真实性的利息 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “你在方案最后一页加了行小字：”所有演示均为真实运行截图。“——没人要求你写，你就是想写。” }
+    automaticEffects:
+      - { kind: add, key: credibility, value: 1 }
