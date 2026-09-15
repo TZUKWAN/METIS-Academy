@@ -1,0 +1,333 @@
+# METIS Academy Venture V2 结局批次四 —— 对应 events_v2_04.yaml 旗标
+endings:
+  - id: v2_brand_end
+    campaign: venture
+    title: 《八千块的字符串》
+    mainResult: 品牌资产的早期到位
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_brand_bought }
+        - { kind: flag, key: kv_brand_cheap, expected: false }
+    priority: 92
+    tier: main
+    baseText: 那个 .com 域名后来被印在了 T恤、PPT 尾页和投资协议的壳公司名里。天使投资人尽调时说：“域名、商标、公众号，三件套齐的团队不到三成——你们省了我最烦的提醒。”阿哲算过账：8000 元除以三年使用天数，每天 7 块 3。“比咖啡便宜，”他说，“但提神效果更好。”
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你从此对“将就能用”的资产保持警惕——品牌如此，团队也是如此。 }
+          - { lte: 40, text: 买完那周你吃了六天泡面。心疼是真的，值也是真的。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲把域名证书裱了起来，挂在“我们当年差点省掉的五样东西”照片墙正中央。
+        neutral: 阿哲说“买都买了”，然后埋头继续做产品。
+        negative: 域名续费提醒的邮件每年都会来一次，每年你都会想起那周的泡面。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 公司资产清单的第一行永远是那个域名——采购日期，比公司注册日还早。 }
+    reflection: 品牌不是奢侈品，是地基——所有后来的增长，都建在那个字符串之上。
+    lessonHint: 品牌/域名/商标等基础资产应早期一次性到位。
+    tone: positive
+    family: founder_team
+    whyDistinct: 核心结果是“品牌资产的早期投入决策”，与缩写将就路径在同一链互斥。
+
+  - id: v2_tos_shield_end
+    campaign: venture
+    title: 《第三条挡下的刀》
+    mainResult: 用户协议的法律防线建成
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_tos_fixed }
+        - { kind: flag, key: kv_tos_lazy, expected: false }
+    priority: 92
+    tier: main
+    baseText: 数据客诉风波平息后，你把协议第三条打印出来贴在工位上。阿哲不理解：“一张纸而已。”你说：“这半天的逐条修改，今天十分钟回本——这是咱们公司回报率最高的一笔时间投资。”后来法务顾问审阅你们全套文件时评价：“小团队里有这种意识的，凤毛麟角。”那张纸你一直留着——它是你的法律意识的第一块肌肉。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你建立了“上线前法律四查”：协议、隐私、版权、资质。清单挂在发布流程第一步。 }
+          - { lte: 40, text: 协议改完你就没再看它。两年后新业务上线，那份旧协议还在裸奔。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲后来每次改协议都拉你一起看。“双人复核”成了发布检查项之一。
+        neutral: 阿哲说“你看着办就好”。法律的事，他全权信任你。
+        negative: 那位学法律的用户后来又扒出两处小问题。你第三次道歉时，把“逐条人工适配”写进了制度。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那份手改的协议草稿你存着，红笔痕迹密密麻麻——像一份青春期的试卷。 }
+    reflection: 法律文本不是形式，是你和世界签的边界合同——边界清楚，合作才能长久。
+    lessonHint: AI 生成的法律文本必须人工适配辖区与业务实际。
+    tone: positive
+    family: rules_execution
+    whyDistinct: 核心结果是“用户协议的法律防线”，与协议裸奔被扒路径在同一链互斥。
+
+  - id: v2_anchor_hold_end
+    campaign: venture
+    title: 《不降价的勇气》
+    mainResult: 价格锚点的坚守与回报
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_hold_price }
+        - { kind: flag, key: kv_discount_once, expected: false }
+    priority: 92
+    tier: main
+    baseText: 季度复盘会上，两行对比数据刺在屏幕上：你的客单价 29、续费率 61%；竞品 14.5、“永远在促销”。阿哲感慨：“我们当时要是也五折呢？”你说：“那今天站在这的就是他们的数据。”增长遇到瓶颈的那天，选择“送价值不送价格”，是你创业以来最像“大人”的一次决定。价格是承诺——你对自己承诺的尊重，决定了用户对你的尊重。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你后来开发了一整套“非折价增长”工具箱：增值包、推荐奖励、年费优惠。 }
+          - { lte: 40, text: 坚持的三十天里你动摇过四次。第五次的时候，数据替你做了决定。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲把那句“送服务不送价格”印在了投放团队的周报抬头。
+        neutral: 阿哲接受了方案，照常执行。增长焦虑两个人分着扛。
+        negative: 促销月你的增长曲线真的很难看。阿哲没说什么，但你看见他收藏了三个竞品的五折海报。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的价格表三年没改过版式。老用户说“看到那个 29 就安心”——这就是锚点的温度。 }
+    reflection: 定价的本质是承诺管理——每一次折价都是对老用户信任的一次稀释。
+    lessonHint: 增长瓶颈优先用增值手段，折价会永久重置价格锚点。
+    tone: positive
+    family: pricing
+    whyDistinct: 核心结果是“价格锚点的坚守”，与折价冲量路径在同一链互斥。
+
+  - id: v2_discount_hangover_end
+    campaign: venture
+    title: 《11% 的续费率》
+    mainResult: 折价促销的留存反噬
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_discount_once }
+        - { kind: flag, key: kv_hold_price, expected: false }
+    priority: 90
+    tier: main
+    baseText: 恢复原价后的第一个续费日，11%。促销期涌入的三倍用户像退潮一样离开了，应用商店里还多了一条差评：“ lỳ结束后就涨价，吃相难看。”你盯着那条评论看了很久——他说的不对，但又对得让你没法反驳。你用三折的价格教会了用户一个错误的价值认知，现在你要用双倍的时间去纠正它。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你在复盘里写了“促销的三重代价”：收入、锚点、品牌。贴在了每个运营的桌上。 }
+          - { lte: 40, text: 你把锅甩给了“用户太贪”。这个归因让你在下次促销时毫不犹豫——再次踩坑。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲主动担了责：“促销是我提的。”你说“是我批的”。那次共同背锅，成了你们信任的转折点。
+        neutral: 阿哲说“下次不搞了”。简单直接，像删掉一行代码。
+        negative: 你们为“谁的锅”吵了一次。增长的压力第一次变成了关系的裂缝。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “11%”这个数字你设成了电脑密码提示——提醒自己什么才是真实的增长率。 }
+    reflection: 促销引来的用户爱的是折扣，不是你——潮水退去时，你才看清谁是泳者。
+    lessonHint: 折价促销的留存反噬风险必须事前测算。
+    tone: negative
+    family: pricing
+    whyDistinct: 核心结果是“折价宿醉的留存崩塌”，与锚点坚守结局在同一链互斥。
+
+  - id: v2_positioning_end
+    campaign: venture
+    title: 《十四个字的增长引擎》
+    mainResult: 定位句驱动自传播
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_one_sentence }
+        - { kind: flag, key: kv_rich_positioning, expected: false }
+    priority: 92
+    tier: main
+    baseText: “帮大学生社团半小时搞定活动复盘”——十四个字，用户拿它安利朋友，媒体拿它当标题，投资人拿它记住你。第 22 天的用户转述让你确认了一件事：你的定位句已经不属于你了，它开始自己旅行。导师说过“验证你的定位句”，而现在，整个校园都在替你验证——用复述的方式。最好的营销预算，是一句值得被转述的话。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你把定位句钉在工位上方，每个新功能上线前都要问：它让这十四个字更真了吗？ }
+          - { lte: 40, text: 定位句是苏晓式导师逼出来的。没有那顿咖啡，你可能还在写四十七个字。 }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 导师在下一届课堂上用了你的案例：“看，这就是定位句从产品里长出来的样子。”
+        neutral: 导师点点头：“可以。”他不知道这两个字后面你改了十八稿。
+        negative: 有竞品抄袭了你的定位句。你笑着说“欢迎”——句子可以抄，兑现句子的产品抄不走。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 每年你都会重新审视那十四个字。三年里它只改过两个字——但每次都改得心惊肉跳。 }
+    reflection: 定位句是产品最重要的一段代码——它决定了你在别人心智里的编译结果。
+    lessonHint: 一句话定位（为谁/解决什么/凭什么）是增长的第一杠杆。
+    tone: positive
+    family: problem_discovery
+    whyDistinct: 核心结果是“定位句的自传播引擎”，与定位模糊路径在同一链互斥。
+
+  - id: v2_merit_bar_end
+    campaign: venture
+    title: 《三道实题》
+    mainResult: 用制度化标准化解人情困境
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_merit_bar }
+        - { kind: flag, key: kv_favor_hire, expected: false }
+    priority: 92
+    tier: main
+    baseText: 表弟离开那天，阿哲请他吃了顿饭。回来后阿哲对你说：“标准是残酷的，但比人情残酷好一万倍。他现在恨的是题目，不是我。”你忽然明白：制度不是冷血，是把“拒绝”的责任从人身上移到标准上——保护被拒的人，也保护拒绝的人。那三道实题后来成了你们招人的固定流程，名叫“阿哲表弟测试”。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你学会了在人情问题上“第一时就立规矩”——越早，伤害越小。 }
+          - { lte: 40, text: 出题的那天你纠结了很久，题目越出越简单。标准一旦想留情面，就不是标准了。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 半年后表弟设计水平大进，拿着新作品集重新来过。这次他通过了“阿哲表弟测试”——用实力。
+        neutral: 阿哲一家对这事口径一致：“按流程来的。”没有心结。
+        negative: 表弟把那次测试视为羞辱。阿哲夹在中间，过了一个很别扭的年。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的公司手册第一页写着：标准面前，人人平等——包括股东的亲戚。 }
+    reflection: 制度的温度不在于它多宽松，在于它对所有人都一样冷——那才是真正的暖。
+    lessonHint: 人情用人制度化处理：提前设定标准，让规则代替人拒绝。
+    tone: positive
+    family: founder_team
+    whyDistinct: 核心结果是“人情雇佣的制度化化解”，与收下人情路径在同一链互斥。
+
+  - id: v2_migrate_now_end
+    campaign: venture
+    title: 《两天换三年》
+    mainResult: 基础设施窗口期的把握
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_migrated_now }
+        - { kind: flag, key: kv_patch_later, expected: false }
+    priority: 92
+    tier: main
+    baseText: 用户翻五倍那天，同行的群里哀鸿遍野，你的监控面板一片绿。你调了调连接池，泡了杯茶。阿哲路过看了眼你的屏幕：“就这？”你说：“就这。”那天下午你终于懂了第 16 天那两天的意义：基础设施的债，是最贵的债——因为它的利息叫“事故”，而事故只在你最忙的时候上门。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: 你把“基础设施窗口期”写进了技术决策清单：每个季度评估一次，别等撑爆。 }
+          - { lte: 40, text: 那两天你其实改了三遍方案。幸好窗口期足够宽容——下一次未必。 }
+    characterEpilogueRules:
+      - characterId: v_ai_agent
+        positive: 迁移方案是 Agent 起草、你逐行审的。它后来把这份方案做成了模板，取名“两天换三年”。
+        neutral: Agent 执行迁移零失误。机器的严谨配上了人的判断，第一次完美协作。
+        negative: 迁移中有四个小时的数据不一致。你学会了：再好的方案，也要留回滚预案。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的运维笔记扉页写着：基础设施的债，利息是事故——而事故从不挑时间。 }
+    reflection: 技术决策的复利在几个月后显现——第 16 天的两天，和第 28 天的八天，是同一道选择题的两个答案。
+    lessonHint: 基础设施迁移成本随数据量指数增长，窗口期前移。
+    tone: positive
+    family: technology_agent
+    whyDistinct: 核心结果是“数据库迁移窗口期的把握”，与备份脚本拖延路径在同一链互斥。
+
+  - id: v2_integrity_return_end
+    campaign: venture
+    title: 《未拆封的 U 盘》
+    mainResult: 商业道德边界的满分答卷
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_integrity_return }
+        - { kind: flag, key: kv_integrity_compromised, expected: false }
+    priority: 97
+    tier: hidden
+    baseText: 三个月后的行业会上，那位定价负责人穿过半场人群来和你握手：“U 盘的事我查了监控——你在门口犹豫了六秒，然后直接走了。就冲这六秒，我想认识你。”后来他成了你非正式的行业信息源——用完全干净的方式。你常想起那六秒的犹豫：道德不是没有欲念，是欲念和原则打架时，原则赢了。而世界居然会为这六秒付利息——以信任的形式。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: 你后来把“六秒测试”讲给团队：做决定前给自己六秒，问这会不会让明天的你羞耻。 }
+          - { lte: 40, text: 说实话你好奇过里面还有什么。好奇无罪，但你庆幸好奇没有赢。 }
+    characterEpilogueRules:
+      - characterId: v_mentor
+        positive: 导师听完只说了一句：“创业拼到最后，拼的是人格。”这句话你记进了笔记本扉页。
+        neutral: 你没跟导师提这件事。有些及格，不需要展示。
+        negative: 同行后来传言“那人连 U 盘都不要”。你听出了嘲讽，也听出了他们做不到。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的办公桌上有个空的 U 盘座——提醒你有些东西的价值在于“没有打开”。 }
+    reflection: 商业道德不是不食人间烟火，是烟火气里依然守住的那六秒。
+    lessonHint: 信息优势的获取手段决定其长期价值——干净的双手是最好的商业资产。
+    tone: positive
+    family: founder_team
+    whyDistinct: 核心结果是“U盘归还的道德测试”，由隐藏事件解锁，与偷看折衷路径在同一链互斥。
+
+  - id: v2_family_formal_end
+    campaign: venture
+    title: 《和爸爸签的那份协议》
+    mainResult: 亲情资本的制度化处理
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_family_formal }
+        - { kind: flag, key: kv_family_refused, expected: false }
+    priority: 97
+    tier: hidden
+    baseText: 那份和爸爸签的协议，条款和对外投资人的一模一样：风险披露、退出机制、分红规则。爸爸签字时戴上了老花镜，签完说了一句：“我闺女/儿子第一次这么正式地跟我谈钱。”一年后公司盈利，你按协议打了第一笔分红到家里。妈妈把钱原样存了个定期：“这是你爸的投资，不是家用。”你看，规矩立好了，连亲情都会长出边界感——而边界感里的亲情，更结实。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 协议让你在经济上和情感上都对这次投资负责——你做每个决定都会想起那副老花镜。 }
+          - { lte: 40, text: 拿了钱心里还是发虚。你分不清哪些决定是为了公司，哪些是为了“不能让爸妈亏”。 }
+    characterEpilogueRules:
+      - characterId: v_family
+        positive: 爸爸把协议复印件收进了装重要证件的抽屉——和房产证放在一起。
+        neutral: 爸妈对分红很满意，逢人便说“孩子懂事”。
+        negative: 第二轮融资稀释了爸妈的股份。解释那天，你第一次恨自己签得太草率——没有写反稀释条款。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那份协议你留着两份，一份法律意义，一份象征意义——你知道哪份更重要。 }
+    reflection: 亲情和生意不是不能混合，是不能糊涂地混合——边界感是成年人和父母之间最好的礼物。
+    lessonHint: 接受家人投资必须签订正式协议并明确风险。
+    tone: positive
+    family: founder_team
+    whyDistinct: 核心结果是“亲情投资的协议化”，由隐藏饭桌事件解锁，与温和拒绝路径在同一链互斥且情感结构不同。
+
+  - id: v2_ng_ticket_cluster_end
+    campaign: venture
+    title: 《41% 的真相在工单里》
+    mainResult: NG+ 客服数据的二次挖掘
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_ticket_cluster }
+        - { kind: flag, key: kv_ng_ticket_interviews, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 聚类结果出来那天，你盯着“41% 来自同一个设计缺陷”这行字发了十分钟呆。上一世，这 240 条工单你逐条回复、逐条关闭，像擦地一样勤劳——却从没想过抬头看看天花板为什么一直滴水。修复上线一周后，相关工单下降七成。你对 Agent 说了声谢谢，它回：“数据一直都在，只是这次你问了不同的问题。”NG+ 教的不是新知识，是换一双看旧数据的眼睛。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 工单月度聚类成了固定动作。你再也不让任何一批数据只被“处理”而不被“研究”。 }
+          - { lte: 40, text: 这次聚类靠的是 NG+ 的记忆提醒。没有这一世的你，会不会想起来？你不敢保证。 }
+    characterEpilogueRules:
+      - characterId: v_ai_agent
+        positive: 你给 Agent 的聚类提示词加了业务上下文。它给你的第 2 类结果，比第 1 类更接近真相。
+        neutral: Agent 完成了聚类。它不知道那 41% 对你的意义。
+        negative: 聚类有两个错分的桶。你花了半天人工复核——机器的答案也要抽样验收。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的需求优先级表多了一个固定来源：“上月工单 Top3”。产品会议第一项就是它。 }
+    reflection: 客服数据是免费的需求调研——大多数公司付了钱收集，却没花时间阅读。
+    lessonHint: 工单聚类是需求洞察的高杠杆动作，应常态化。
+    tone: positive
+    family: user_understanding
+    whyDistinct: 核心结果是“NG+ 工单二次挖掘”的数据觉醒，仅 NG+ 可达，与用户回访路径互斥。
+
+  - id: v2_ng_delay_fixed_end
+    campaign: venture
+    title: 《推迟的一天》
+    mainResult: NG+ 质量防线的提前部署
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kv_ng_delay_fixed }
+        - { kind: flag, key: kv_ng_ship_anyway, expected: false }
+    priority: 96
+    ngPlus: true
+    tier: special
+    baseText: 发布那天，商店评论区第一条是五星好评。你盯着它看了很久——上一世，同一位置挂的是那条因为已知 bug 而来的差评。一天的时间差，两种评价史。阿哲说你“突然变得很稳”，你说“吃过亏”。他问什么亏，你笑笑没答。有些教训的价值无法向人解释——它们来自另一个世界，但保护着这一个。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: “已知缺陷清零”从此是发布的硬门槛。这条规矩没有例外——包括投资人催的时候。 }
+          - { lte: 40, text: 推迟的那天你焦躁得不行。你意识到自己只是换了种方式焦虑——从怕差评变成怕延期。 }
+    characterEpilogueRules:
+      - characterId: v_partner
+        positive: 阿哲把那条五星好评截图设成了群公告背景。“这一天，”他说，“是我们质量文化的生日。”
+        neutral: 用户们不知道他们避开了什么。最好的事故，是没有发生的事故。
+        negative: 推迟的决策让一位等着用新功能的用户写了条抱怨。你私信致歉并送了月卡——他后来成了铁杆。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的发布检查单最后一栏叫“还有没有已知的'用户不会注意'”——这一栏永远需要两个人签字。 }
+    reflection: “用户不会注意”是开发者最危险的自我催眠——上一个世界的差评就是它的账单。
+    lessonHint: 已知缺陷必须在发布前清零，发布日期应服从质量。
+    tone: positive
+    family: rules_execution
+    whyDistinct: 核心结果是“NG+ 质量防线的提前部署”，仅 NG+ 可达，与按时带伤上线路径互斥。
