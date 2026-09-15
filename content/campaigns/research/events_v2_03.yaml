@@ -1,0 +1,283 @@
+# METIS Academy Research V2 事件批次三 —— 隐藏线扩展 + NG+ 扩展 + 冲刺决策
+events:
+  # ===== 隐藏线：答辩录像带（W1）=====
+  - id: r_v2_h20_defense_tapes
+    campaign: research
+    day: 20
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 往届答辩录像, learning: 答辩是可观摩的技能 }
+    scene: { location: library, characters: [] }
+    setup: [“图书馆多媒体区的角落里有一排旧光盘，标签写着'研究生开题答辩存档 2016-2019'。借阅卡上，上一个名字是四年前。”]
+    choices:
+      - id: watch_three
+        text: 借三盘，看通过的和挂掉的各一
+        requirements:
+          kind: and
+          conditions:
+            - { kind: flag, key: rv2_past_files }
+        requirementHint: 你读过往届论文，知道存档的价值
+        visibleResponse: 挂掉的那位，讲述超时、被评委三次打断、最后自乱阵脚。你把他卡住的三个点抄了下来——每一个都是可以预防的。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_tapes_watched }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+        next: r_v2_h20_after_tapes
+      - id: skip_tapes
+        text: 光盘都过时了，回去改PPT
+        visibleResponse: 你回到工位。旧光盘在架子上继续安静地落灰，像一段没人认领的时光胶囊。
+    learningPoint: 观摩真实答辩（尤其失败的）是最低成本的答辩训练
+
+  - id: r_v2_h20_after_tapes
+    campaign: research
+    day: 20
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 录像的启示, learning: 失败模式的预防价值 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: "你在 PPT 大纲边上加了一列新标记：'这里慢下来'。三个评委打断讲述的位置，全部是语速失控的地方——十年前的学长和你，会在同一句话上摔跤。" }
+    automaticEffects:
+      - { kind: add, key: independence, value: 2 }
+    next: r_v2_d21_wire3
+
+  # ===== 隐藏线：Agent 的训练痕迹（W2）=====
+  - id: r_v2_h21_agent_trace
+    campaign: research
+    day: 21
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 发现 Agent 输出的训练痕迹, learning: AI 文本的统计指纹 }
+    scene: { location: dorm, characters: [r_ai_agent] }
+    setup: [“整理笔记时你发现一个规律：Agent 生成的综述段落里，'此外''值得注意的是''综上所述'出现的频率高得离谱——每千字 4.7 次。你自己的写作里，是 0.8 次。”]
+    choices:
+      - id: build_fingerprint
+        text: 做一份“AI 文风指纹”清单，用于自查自查互查
+        requirements:
+          kind: and
+          conditions:
+            - { kind: flag, key: rv2_bias_probed }
+        requirementHint: 你已有探测 AI 偏见的经验
+        visibleResponse: 你整理了 11 个高频指纹词、3 种句式特征、1 个标点习惯。组里传阅后，师弟惊呼：“我说怎么读师妹的综述那么耳熟！”
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_fingerprint_list }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+          - { kind: add, key: independence, value: 3 }
+        next: r_v2_d22_wire3
+      - id: ignore_style
+        text: 文风而已，内容对就行
+        visibleResponse: 你放下了这个发现。两周后导师在组会上说“最近有些作业 AI 味重得像洗过没晾干”，你低了头。
+        hiddenEffects:
+          - { kind: add, key: aiDependence, value: 4 }
+    learningPoint: AI 生成文本有统计指纹，学术写作需要人味自查
+
+  # ===== 隐藏线：师兄的失败笔记（W3）=====
+  - id: r_v2_h22_senior_notes
+    campaign: research
+    day: 22
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 师兄的私密失败笔记, learning: 失败叙事的传承形式 }
+    scene: { location: lab, characters: [r_senior_theory] }
+    setup: [“帮师兄搬家，你从纸箱底滑出一本黑色笔记本，第一页写着：'此生做过最蠢的五件事（持续更新）'。”]
+    choices:
+      - id: ask_to_read
+        text: 征得同意，认真读完
+        requirements:
+          kind: and
+          conditions:
+            - { kind: relationship, characterId: r_senior_theory, op: gte, value: 60 }
+        requirementHint: 你们的交情够深，他才没有收回笔记本
+        visibleResponse: 五件事里,三件你差点就要照做了。师兄在旁边看着你的表情从好奇变成后怕：“现在懂了？我写这个，就是怕我毕业之后没人告诉你。”
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_failure_notes_read }
+          - { kind: add, key: independence, value: 6 }
+        next: r_v2_d23_wire3
+      - id: pretend_unseen
+        text: 假装没看见，塞回箱底
+        visibleResponse: 你把笔记本塞了回去。搬家结束的聚餐上，师兄喝多了说“我有本笔记想给你看来着，算了，你忙”。
+    learningPoint: 前辈的失败笔记是稀缺资源，主动索取是成熟
+
+  # ===== NG+ 扩展（X 系列）=====
+  - id: r_v2_ng_x1_double_memory
+    campaign: research
+    day: 21
+    type: decision
+    keyDecision: true
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 21 }
+    purpose: { narrative: NG+ 的双倍利息, learning: 教训只在被应用时才是资产 }
+    scene: { location: dorm, characters: [] }
+    setup: [“上一世的第 21 天，你熬夜补了一张数据表，第二天顶着黑眼圈犯了个低级错误。这一世的今晚，同样的任务摆在面前——但你在三天前就做完了。”]
+    dialogue:
+      - { speaker: 系统, text: "同样的夜晚，两种版本：一个在补作业，一个在复查。区别不在于努力，在于努力发生的时间。" }
+    choices:
+      - id: rest_confidently
+        text: 早点睡——你已经提前完成了
+        visibleResponse: 你十一点就躺下了。躺着躺着忽然笑出声：原来“从容”是一种可以靠提前量买到的商品，而你的钱包里正好有。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_ng_rest_confident }
+          - { kind: add, key: energy, value: 8 }
+      - id: double_check_again
+        text: 不放心，再复查一遍
+        visibleResponse: 你复查到十二点，发现了两处格式错误。上一世的你连犯错的时间都没有，这一世的你有余裕把错误扼杀在答辩前。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_ng_double_check }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+    learningPoint: NG+ 提前量的正确用法：把努力前置，把错误前置
+
+  - id: r_v2_ng_x2_mentor_question
+    campaign: research
+    day: 24
+    type: story
+    ngPlus: true
+    trigger:
+      kind: state
+      condition:
+        kind: and
+        conditions:
+          - { kind: ngPlus }
+          - { kind: state, key: day, op: gte, value: 24 }
+    purpose: { narrative: 导师的意外提问, learning: NG+ 中被看见的成长 }
+    scene: { location: lab, characters: [r_mentor] }
+    setup: [“组会结束，导师叫住你，问了一个上一世从没问过的问题：'这三十天，你觉得自己最大的变化是什么？'”]
+    dialogue:
+      - { speaker: 陈教授, text: "不是问进度。问你。" }
+    automaticEffects:
+      - { kind: relationship, characterId: r_mentor, delta: 3 }
+    next: r_v2_d25_wire3
+
+  # ===== 冲刺决策链（Y 系列，补决策缺口）=====
+  - id: r_v2_y1_outline_lock
+    campaign: research
+    day: 18
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 18, phase: start }
+    purpose: { narrative: 报告大纲的冻结, learning: 大纲冻结防止范围蔓延 }
+    scene: { location: dorm, characters: [] }
+    setup: [“开题报告的大纲第三版改到了第 7 章。苏晓路过瞄了一眼：”你这报告是要写到博士毕业吗？“”
+    ]
+    choices:
+      - id: freeze_outline
+        text: 冻结大纲：只允许删，不允许加
+        visibleResponse: 你在文档首页贴了张便签：“冻。只删不加。”此后五天，报告瘦身了 30%，逻辑反而更清楚。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_outline_frozen }
+          - { kind: add, key: execution, value: 5 }
+      - id: keep_expanding
+        text: 再扩两天，把想到的全写进去
+        visibleResponse: 你又扩了两天。第 20 天的大纲有 9 章，你开始对着它发呆：哪一章讲给评委听？
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_outline_bloated }
+          - { kind: add, key: academicDebt, value: 5 }
+    learningPoint: 写作范围冻结是交付的护栏
+
+  - id: r_v2_y2_backup_slide
+    campaign: research
+    day: 22
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 22, phase: start }
+    purpose: { narrative: 附录弹药库, learning: 预判问题准备附录页 }
+    scene: { location: lab, characters: [r_senior_data] }
+    setup: [“周师兄问你：'评委最可能追问的五个问题，你有附录页吗？'你愣住了——正文 30 页，附录 0 页。”]
+    choices:
+      - id: build_arsenal
+        text: 做 8 页附录弹药：数据细节、方法对照、局限性
+        visibleResponse: 你花一天做了 8 页附录。答辩时评委的第 2 个问题就打进了弹药库——你翻页的速度比他提问的速度还快，全场笑了。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_arsenal_built }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+      - id: wing_it
+        text: 附录没用，临场发挥就好
+        visibleResponse: 你省下了一天。答辩那天评委追问数据细节，你只能回答“会后我可以发您”——那声“可以”里藏着多少底气，只有你知道。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_no_arsenal }
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 附录弹药库是答辩的标准防御工事
+
+  - id: r_v2_y3_talk_order
+    campaign: research
+    day: 26
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 26, phase: start }
+    purpose: { narrative: 讲述顺序的策略, learning: 叙事结构服务记忆 }
+    scene: { location: dorm, characters: [r_peer] }
+    setup: [“苏晓帮你排练后提了个尖锐意见：'你的 PPT 是按”我做了什么“组织的，评委想听的是”你发现了什么“。顺序反了。'”]
+    choices:
+      - id: discovery_first
+        text: 重排：先抛发现，再讲方法
+        visibleResponse: 你把最核心的发现提到了第 3 页。修改后的开场是：“我们发现了一个反直觉的现象——”苏晓点头：“现在像故事了。”
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_discovery_first }
+          - { kind: add, key: independence, value: 4 }
+      - id: keep_chronology
+        text: 保持时间顺序，稳妥
+        visibleResponse: 你保留了编年史结构。稳妥，但也意味着评委要在第 15 页才知道你想说什么——如果他们还有耐心的话。
+        hiddenEffects:
+          - { kind: setFlag, key: rv2_chronology_kept }
+          - { kind: add, key: academicDebt, value: 3 }
+    learningPoint: 学术讲述以发现为导向，不以工序为导向
+
+  # ===== 汇流（wire）事件 =====
+  - id: r_v2_d21_wire3
+    campaign: research
+    day: 21
+    type: story
+    trigger: { kind: day, day: 21, phase: end }
+    purpose: { narrative: D21 夜间复盘, learning: 记录观察习惯 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: "你的研究笔记里多了一页'他人的摔跤点地图'。看别人的失败看得越清楚，自己的路越直。" }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }
+
+  - id: r_v2_d22_wire3
+    campaign: research
+    day: 22
+    type: story
+    trigger: { kind: day, day: 22, phase: end }
+    purpose: { narrative: D22 夜间复盘, learning: 文风的自我意识 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: "你把今晚写的段落读了一遍——没有一个'综上所述'。你满意地合上了电脑。" }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }
+
+  - id: r_v2_d23_wire3
+    campaign: research
+    day: 23
+    type: story
+    trigger: { kind: day, day: 23, phase: end }
+    purpose: { narrative: D23 夜间复盘, learning: 失败笔记的回响 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: "睡前你想起了师兄笔记里的第三件事——恰好是你这周差点要做的事。你把它也抄进了自己的笔记，标题加了两个字：'差点'。" }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }
+
+  - id: r_v2_d25_wire3
+    campaign: research
+    day: 25
+    type: story
+    trigger: { kind: day, day: 25, phase: end }
+    purpose: { narrative: D25 夜间复盘, learning: 被看见的成长 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: "你在日志里回答了导师的问题。写完发现答案比想象中长——原来变化发生的时候，当事人往往是最后一个知道的。" }
+    automaticEffects:
+      - { kind: add, key: independence, value: 1 }

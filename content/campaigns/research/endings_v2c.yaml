@@ -1,0 +1,153 @@
+# METIS Academy Research V2 结局批次四 —— 隐藏/NG+ 补完（对应 events_v2_03）
+endings:
+  - id: r_v2_tapes_end
+    campaign: research
+    title: 《2016 年的摔跤点》
+    mainResult: 从往届答辩录像习得节奏控制
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_tapes_watched }
+        - { kind: flag, key: rv2_failure_notes_read, expected: false }
+    priority: 97
+    tier: hidden
+    baseText: 你答辩那天，讲到第 9 页时放慢了语速——那是 2016 年那位学长被评委打断的地方。评委的目光在你的慢节奏上停留了几秒，顺利滑过。散场后你把光盘还回图书馆，在借阅卡上签下自己的名字，然后在名字后面补了一行小字：“替我谢谢 2016 年的学长。”四年后，会有人看到这行字，然后打开那台老旧的光盘机。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你把三个摔跤点做成了"节奏地图"，贴在排练室的墙上。 }
+          - { lte: 40, text: 你只在那一页慢了下来。光盘里的其他教训，要等下一次摔跤才会想起。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄听说光盘的事：“那排盘我当年也看过。传承有时候就是一张借阅卡。”
+        neutral: 师兄说“光盘？现在还有人用那种东西”。你笑他不懂考古。
+        negative: 师兄说“看别人的挂相太不吉利”。你答辩通过后特意又去看了一遍。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那排光盘后来添了新的存档——答辩委员会通过决议，把每年答辩录下来。提议人一栏写着你的名字。 }
+    reflection: 失败是可以继承的遗产——只要你愿意去图书馆的角落里认领它。
+    lessonHint: 观摩往届答辩录像（含失败案例）可精准预防节奏与结构问题。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“答辩录像的代际传承”，由光盘事件链解锁，与往届论文（文本）的传承方式不同。
+
+  - id: r_v2_fingerprint_end
+    campaign: research
+    title: 《千字 4.7 次》
+    mainResult: 建立AI文风指纹自查体系
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_fingerprint_list }
+        - { kind: flag, key: rv2_agent_hypothesis_unused, expected: true }
+    priority: 97
+    tier: hidden
+    baseText: 你那份“AI 文风指纹”清单在组里流传了两周，被师弟们戏称“防AI脸识别指南”。导师知道后没有批评谁，只说了一句：“能识别出AI味的人，说明自己的文风已经长成了。”你忽然理解了这份清单的真正意义：它不是用来防AI的，是用来照自己的镜子——你的写作有没有自己的脸，一试便知。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你每月用清单自查一次。十一个月后，你的指纹词使用率降到了 0.9——你的脸，是你的。 }
+          - { lte: 40, text: 清单传出去后就和你没关系了。你自己反而再也没查过。 }
+    characterEpilogueRules:
+      - characterId: r_ai_agent
+        positive: 你后来让 Agent 学习你的文风再生成，指纹率降了一半。它开始有点像你了——这算进步还是危险，你想了很久。
+        neutral: Agent 的输出依旧带着 4.7 的频率。它不知道自己有一张统计意义上的脸。
+        negative: 组里的清单版本越传越多，最后一版加入了七条不存在的指纹。迷信开始了。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的写作自查表第一行写着：先问这句话像不像我说的。 }
+    reflection: AI 时代写作的第一素养，是知道自己的文风长什么样——否则你连失去它都察觉不到。
+    lessonHint: 建立个人文风指纹自查，防止AI代写对写作主体的侵蚀。
+    tone: mixed
+    family: hidden_longterm
+    whyDistinct: 核心结果是“AI文风指纹自查”的元写作成就，由统计发现事件链解锁。
+
+  - id: r_v2_failure_notes_end
+    campaign: research
+    title: 《此生最蠢的五件事》
+    mainResult: 师兄失败笔记的私相授受
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_failure_notes_read }
+        - { kind: flag, key: rv2_reject_letters, expected: false }
+    priority: 98
+    tier: hidden
+    baseText: 毕业那天，师兄把那本黑色笔记本正式送给了你。扉页上他的字换了新的一行：“第五件事快写满了，剩下的页归你。”你翻了翻自己这三十天的记录——差点照做的三件事，全都没发生。你拿出笔，在第四件事下面补了一行小字：“差点做成的第四件：2019 届师兄的笔记差点没被打开。”传承有时候不是技术，是一个人愿意对另一个人诚实到什么程度。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你开始写自己的笔记。第一件事写完你就脸红了——原来蠢是长得像聪明的。 }
+          - { lte: 40, text: 笔记你收在抽屉最深处。你还没准备好面对里面照出的自己。 }
+    characterEpilogueRules:
+      - characterId: r_senior_theory
+        positive: 师兄读博答辩通过那天，你把新写的两件事发了过去。他回：“后继有人。”
+        neutral: 师兄毕业后联系渐少。笔记本是你们之间最后的、也是最重的信物。
+        negative: 你把笔记本的内容当笑料讲给了别人。消息传回师兄耳朵里，他没有说什么。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 那本黑色笔记本后来传到了第五个人手里。每一页的空白处，都叠着不同笔迹的批注。 }
+    reflection: 学术传承的最高形式不是传授方法，是交接失败——方法让人走得快，失败清单让人走得远。
+    lessonHint: 主动求取前辈的失败叙事，是最稀缺也最有效的风险管理教育。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“失败笔记的仪式性交接”，由私密的师兄弟信任链解锁，与退稿信抽屉（被动发现）在叙事与情感结构上不同。
+
+  - id: r_v2_ng_rest_end
+    campaign: research
+    title: 《提前买到的从容》
+    mainResult: NG+ 提前量换来的睡眠
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ng_rest_confident }
+        - { kind: flag, key: rv2_rehearsed_slept }
+    priority: 97
+    ngPlus: true
+    tier: special
+    baseText: 答辩前一晚你十一点躺下——和上一世通宵的你隔着两个周目遥遥相望。从容不是天赋，是提前量的利息：三天前完成的报告、一周前排练的讲稿、一个月前养成的核查习惯，全部在这一刻到期兑付。你闭上眼睛前想的是：上一世的我也很努力。只是他把努力花在了错误的时间——像一个总是错过发车时刻的乘客。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 60, text: 你把"从容清单"列了出来：哪些事可以提前做。清单比想象中长。 }
+          - { lte: 40, text: 你担心这份从容是NG+的错觉。万一答辩当天出意外呢——你带着这个念头睡着了。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 陈教授第二天说：“你今天的状态像研究了三年的人。”你心想：差不多——算上上一世。
+        neutral: 陈教授没注意你的状态。从容的另一个名字是不被注意。
+        negative: 从容让你少了一分“拼命感”。有人说你“不够拼”。你知道他们看错了什么。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你的人生信条里多了一条：努力可以，但要在正确的时间提前发生。 }
+    reflection: NG+ 教的最高一课：努力的价值取决于它发生的时间，而不是总量。
+    lessonHint: 前置努力可兑换答辩前的心理从容——这是可以设计的。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 提前量的从容成就”，仅 NG+ 可达，与排练睡眠结局的触发结构不同。
+
+  - id: r_v2_ng_mentor_question_end
+    campaign: research
+    title: 《他问的不是进度》
+    mainResult: NG+ 中导师看见了你这个人
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: rv2_ng_mentor_mirror }
+        - { kind: flag, key: rv2_ng_double_check }
+    priority: 97
+    ngPlus: true
+    tier: special
+    baseText: “这三十天，你最大的变化是什么？”——你在日志里写了很久。写完发现，答案和进度无关：上一世你学会了怎么做研究，这一世你学会了怎么被看见。导师听完你的回答，沉默了几秒，然后说：“比上一个你强。”他说得轻描淡写，你却听得雷霆万钧——他当然不知道“上一个你”是什么意思，但你确定，他说的就是字面意思。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 60, text: 你诚实地说了"我更敢暴露问题了"。导师眼里的光告诉你：这就是他要的答案。 }
+          - { lte: 40, text: 你给了一个安全的标准答案。导师点点头——有些问题答错一次，就没有第二次了。 }
+    characterEpilogueRules:
+      - characterId: r_mentor
+        positive: 毕业多年后你才知道，那个问题他只问过三个人。三个人的答案，他都记得。
+        neutral: 陈教授照常开了下周的组会。那个问题的答案，他收进了某个你不知道的地方。
+        negative: 你的安全答案让对话在三十秒后结束。他没再问过第二个问题。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你后来带学生时也问了同一个问题。传承的有时不是知识，是一双愿意看见的眼睛。 }
+    reflection: 成长最深的部分无法量化——所以当有人问起时，答案的诚实度就是你的成长刻度。
+    lessonHint: NG+ 的元认知收益：能清晰讲述自己的变化轨迹。
+    tone: positive
+    family: hidden_longterm
+    whyDistinct: 核心结果是“NG+ 被导师看见的元时刻”，仅 NG+ 可达，与镜像结局的互动方向不同。
