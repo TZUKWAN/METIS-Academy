@@ -1,0 +1,161 @@
+# METIS Academy Competition V2 事件批次七 —— 决策密集补完
+events:
+  - id: cv2_e1_role_draft
+    campaign: competition
+    day: 4
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 4, phase: start }
+    purpose: { narrative: 角色分工的三种方案, learning: 分工匹配长板 vs 补齐短板 }
+    scene: { location: lab, characters: [c_tech, c_design] }
+    setup: [“分工讨论会。tech 技术最强但不善言辞；小林表达好但代码零基础；你两样都会一点。三种分法摆在桌上。”]
+    choices:
+      - id: strength_match
+        text: 长板匹配：tech 全力开发，小林管表达
+        visibleResponse: 分工按长板来：tech 埋头两周产出了核心引擎，小林的答辩讲稿改了十一稿。短板的部分——你两头补。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_strength_match }
+          - { kind: add, key: execution, value: 4 }
+      - id: rotate_learning
+        text: 轮岗互补：每人都要碰不熟的部分
+        visibleResponse: 你们选择了轮岗。三周后，每个人都会了一点彼此的技能——但都不精。竞赛要求的是尖峰，你们长成了高原。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_rotate_learning }
+          - { kind: add, key: teamTrust, value: 3 }
+          - { kind: add, key: progress, value: -3 }
+      - id: leader_picks
+        text: 你统一分配，按任务需要
+        visibleResponse: 你按任务拆解分工，每人领到明确的模块。效率最高，但 tech 后来私下说“感觉像打工的”。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_leader_assigns }
+          - { kind: add, key: progress, value: 4 }
+          - { kind: add, key: teamTrust, value: -2 }
+    learningPoint: 分工策略影响团队能力结构与心理契约
+
+  - id: cv2_e2_data_vis_choice
+    campaign: competition
+    day: 8
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 8, phase: start }
+    purpose: { narrative: 数据可视化的风格, learning: 图表为论点服务 }
+    scene: { location: lab, characters: [c_design] }
+    setup: [“同一组数据的两种图：3D 动感饼图（炫但难读）和朴素的折线对比图（清楚但平淡）。小林倾向前者，你倾向后者。”]
+    choices:
+      - id: clarity_first
+        text: 清晰优先：一图一观点
+        visibleResponse: 你们用朴素的对比图，每张图只讲一件事。决赛时评委在第三张图停了很久——那张图后来被两个对手队“参考”了。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_clarity_charts }
+          - { kind: add, key: evidenceDiscipline, value: 4 }
+      - id: wow_first
+        text: 冲击优先：炫技开场抓眼球
+        visibleResponse: 3D 饼图确实抓了眼球——然后评委问“这个扇区是什么意思”，小林卡壳了十秒。炫技的债，是理解跟不上展示。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_wow_charts }
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 数据可视化第一原则是传达效率，视觉冲击其次
+
+  - id: cv2_e3_mock_schedule
+    campaign: competition
+    day: 11
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 11, phase: start }
+    purpose: { narrative: 模拟答辩的排期, learning: 排练密度与疲劳的平衡 }
+    scene: { location: lab, characters: [c_advisor] }
+    setup: [“决赛前十天。赵老师问：模拟答辩排几轮？每轮都耗一天准备+半天复盘。排多了疲惫，排少了生疏。”]
+    choices:
+      - id: three_rounds
+        text: 三轮：初版、改进版、定妆版
+        visibleResponse: 三轮模拟，一轮一个台阶。第三轮“定妆版”全流程计时通过，你们的自信像上了发条。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_three_mocks }
+          - { kind: add, key: execution, value: 5 }
+          - { kind: add, key: energy, value: -6 }
+      - id: one_crucial
+        text: 一轮就够：把时间留给内容
+        visibleResponse: 你们只排练了一次。内容确实又厚了一层——但决赛现场第一次计时，你们超时了 90 秒，最后仓促砍掉了准备最久的致谢页。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_one_mock }
+          - { kind: add, key: progress, value: 3 }
+          - { kind: add, key: academicDebt, value: 4 }
+    learningPoint: 排练密度决定临场稳定性，三轮是性价比最优
+
+  - id: cv2_e4_judge_question_bank
+    campaign: competition
+    day: 14
+    type: decision
+    keyDecision: true
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 评委提问库的编制, learning: 预判的艺术 }
+    scene: { location: lab, characters: [c_ai_agent] }
+    setup: [“Agent 扫完了三届比赛的公开答辩视频，提炼出 87 个评委高频问题。你看着这份题库想：全背下来是不可能的。”]
+    choices:
+      - id: top20_drill
+        text: 筛出 top20，三人分头准备答案
+        visibleResponse: 20 个问题，三份答案风格，互相质询了两天。决赛现场评委的第一个问题就在题库里——你们三个人抢着答。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_top20_drill }
+          - { kind: add, key: evidenceDiscipline, value: 5 }
+        next: cv2_e4_after_drill
+      - id: full_coverage
+        text: 87 题全覆盖，每个人背 29 题
+        visibleResponse: 87 题摊下来每人 29 题，背到怀疑人生。决赛时评委问了第 43 题——恰好是小林背的那道，但她太紧张，背串了。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_full_coverage }
+          - { kind: add, key: energy, value: -8 }
+    learningPoint: 预判要按概率聚焦，全覆盖是焦虑的表现
+
+  - id: cv2_e4_after_drill
+    campaign: competition
+    day: 14
+    type: story
+    hidden: true
+    trigger: { kind: manual }
+    purpose: { narrative: 质询的化学反应, learning: 互相质询的团队价值 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “互相质询的第二天，你们发现了一个意外收获：为了回答对方的刁钻问题，三个人把彼此的模块都学了一遍。题库准备了答案，副产品是你们终于成了真正的团队。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 3 }
+    next: cv2_d15_wire11
+
+  - id: cv2_e5_final_tech_check
+    campaign: competition
+    day: 18
+    type: decision
+    keyDecision: true
+    trigger: { kind: day, day: 18, phase: start }
+    purpose: { narrative: 决赛设备的三重备份, learning: 现场演示的容灾设计 }
+    scene: { location: lab, characters: [c_tech] }
+    setup: [“决赛通知：现场提供投影（HDMI），无网络保证。你们的 Demo 需要联网调 API——tech 说这个消息让他”血压上来了“。”]
+    choices:
+      - id: local_fallback
+        text: 本地化 Demo：API 全部换成模拟数据+本地服务
+        visibleResponse: tech 花两天做了本地 Mock 版：断网照样流畅演示。决赛现场网络果然瘫痪了一半队伍——你们的 Demo 在离线状态下跑完了全场。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_local_demo }
+          - { kind: add, key: technicalDebt, value: -3 }
+          - { kind: add, key: execution, value: 5 }
+      - id: hotspot_pray
+        text: 带两个手机热点，赌现场网络
+        visibleResponse: 你们带了两个热点。决赛现场你掏出手机时，发现场馆信号被三千人挤爆了。Demo 卡在加载界面的样子，你们后来在噩梦里又看过很多次。
+        hiddenEffects:
+          - { kind: setFlag, key: kcv_hotspot_pray }
+          - { kind: add, key: credibility, value: -5 }
+    learningPoint: 现场演示必须本地化容灾，网络是最不可控变量
+
+  # ===== 汇流 wire =====
+  - id: cv2_d15_wire11
+    campaign: competition
+    day: 15
+    type: story
+    trigger: { kind: day, day: 15, phase: end }
+    purpose: { narrative: D15 夜间复盘, learning: 团队学习的复利 }
+    scene: { location: dorm, characters: [] }
+    dialogue:
+      - { speaker: 系统, text: “睡前你发现一个变化：team 的文档里开始出现”我帮你确认过了“——互相质询的副作用，是互相补位成了本能。” }
+    automaticEffects:
+      - { kind: add, key: teamTrust, value: 1 }

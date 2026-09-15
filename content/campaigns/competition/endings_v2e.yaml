@@ -1,0 +1,151 @@
+# METIS Academy Competition V2 结局批次八 —— 对应 events_v2_07.yaml 旗标
+endings:
+  - id: cv2_strength_match_end
+    campaign: competition
+    title: 《长板的胜利》
+    mainResult: 长板分工策略的成功
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_strength_match }
+        - { kind: flag, key: kcv_rotate_learning, expected: false }
+    priority: 91
+    tier: main
+    baseText: tech 的引擎、小林的讲稿、你的粘合——决赛现场每个人都在自己的长板里发光。评委赛后说：“你们队的每个人讲到自己那块时，眼睛都在发光。”长板分工的代价是你两头补的疲惫，但领奖台上的光，掩盖不了也无需掩盖。团队的天花板不是短板决定的——当短板有人补的时候，它由长板决定。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 你给自己找的定位是“粘合剂”——这个自我认知，比任何具体技能都稀缺。 }
+          - { lte: 40, text: 两头补的三十天你瘦了四斤。长板策略的前提是有个愿意燃烧的粘合剂——这次是你。 }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: tech 说：“有人补短板，才敢把长板拉满。谢谢你的两周。”
+        neutral: tech 照常写代码。分工各得其所，无需多言。
+        negative: 你补短板补出了错漏，tech 反过来帮你收拾——分工的名场面变成了互相救火的闹剧。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们仨后来合作了三次，分工表几乎没变过——验证过的长板，是团队最值钱的固定资产。 }
+    reflection: 团队组建的第一问不是“谁缺什么”，是“谁的长板值钱”——短板可以买，长板买不到。
+    lessonHint: 分工优先长板匹配，短板由粘合角色补位。
+    tone: positive
+    family: team
+    whyDistinct: 核心结果是“长板分工的领奖台”，与轮岗高原路径在同一链互斥。
+
+  - id: cv2_clarity_charts_end
+    campaign: competition
+    title: 《被参考的第三张图》
+    mainResult: 清晰优先的图表哲学
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_clarity_charts }
+        - { kind: flag, key: kcv_wow_charts, expected: false }
+    priority: 91
+    tier: main
+    baseText: 你们的图表朴素得像教科书——后来才知道，这恰是最高的赞美。决赛评委翻到第三张图停了很久：一条线讲一个变化，一个变化撑一个观点。赛后两个对手队“参考”了你们的图表样式（你们大度地没说什么）。小林感慨：“我学了四年炫技，第一次知道'让人看懂'才是图表的KPI。”朴素不是偷懒，是把力气花在观点而不是特效上。
+    growthVariantRules:
+      - dimension: evidenceDiscipline
+        variants:
+          - { gte: 55, text: 你们给每张图都写了一句话标题——先有观点再画图，顺序不能反。 }
+          - { lte: 40, text: 一图一观点的原则执行到第六张图开始松懈。评委没说什么——但你们的记忆里知道哪张图泄了气。 }
+    characterEpilogueRules:
+      - characterId: c_design
+        positive: 小林后来把“一图一观点”写进了她的作品集扉页。她说这是“竞赛教我的第一课”。
+        neutral: 小林接受了朴素方案。她的审美没有妥协——朴素的图也可以漂亮。
+        negative: 评委里有人喜欢炫技风。你们在“视觉分”上低了一档——用内容分补了回来，差一点没补上。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们团队的图表模板库第一页写着：如果一个观点需要解说，图就还没画好。 }
+    reflection: 图表的第一美德是被看懂——冲击力是糖衣，清晰度是药效，评委是来治病的不是来吃糖的。
+    lessonHint: 数据可视化以一图一观点为纲，特效让位于传达。
+    tone: positive
+    family: product_demo
+    whyDistinct: 核心结果是“清晰图表的哲学胜利”，与炫技风格在同一链互斥。
+
+  - id: cv2_three_mocks_end
+    campaign: competition
+    title: 《定妆版》
+    mainResult: 三轮排练的临场稳定
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_three_mocks }
+        - { kind: flag, key: kcv_one_mock, expected: false }
+    priority: 91
+    tier: main
+    baseText: 第三轮“定妆版”通过的那一刻，你们三个击掌的力气都大得发疼。决赛现场超时魔咒没有找上你们——计时器停在 14 分 20 秒，比定妆版还快了 35 秒。临场的从容不是天赋，是排练的存款：三轮各解决了三分之一的问题，轮到决赛时，问题已经排好队等着被解决了。赵老师说：“上过台的人都懂——彩排的遍数，就是现场的心跳数。”
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: 三轮的排练重点各不相同：一轮理逻辑、二轮磨衔接、三轮练心态。方法对了，体力就没白花。 }
+          - { lte: 40, text: 第三轮你们其实状态很差——但硬撑着走完了全程。事后证明，那次“硬撑”就是决赛需要的肌肉。 }
+    characterEpilogueRules:
+      - characterId: c_advisor
+        positive: 赵老师说：“我带了七届，三轮是黄金分割。你们验证了。”她说这话时在修剪她的红笔。
+        neutral: 赵老师说“通过”，然后在她的记录本上给“三轮法”打了勾。
+        negative: 排练挤掉了两天优化时间，你们的内容比计划薄了一层。定妆定了妆，妆容下面少了一层底子。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “三轮定妆法”成了你们所有重要汇报的标准流程。定妆照拍了二十多次，每次都管用。 }
+    reflection: 临场的心跳数是排练的遍数换来的——彩排不是重复，是给问题排队。
+    lessonHint: 重要答辩三轮排练（初版/改进/定妆），兼顾密度与疲劳。
+    tone: positive
+    family: presentation_defense
+    whyDistinct: 核心结果是“三轮排练的临场稳定”，与单轮仓促路径在同一链互斥。
+
+  - id: cv2_top20_drill_end
+    campaign: competition
+    title: 《87 到 20》
+    mainResult: 聚焦式题库备战法
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_top20_drill }
+        - { kind: flag, key: kcv_full_coverage, expected: false }
+    priority: 91
+    tier: hidden
+    baseText: 决赛评委的第一个问题，就在你们的 top20 里——三个人抢着答的场面后来成了组里的传说。但真正的收获是那个副产品：为了互相质询，你们把彼此的模块都学了一遍。赛后 tech 说：“我现在可以顶小林的班，你敢信？”87 题的焦虑被 20 题的聚焦治愈了，而聚焦的副作用是交叉理解——这大概是备考方法论里最意外的复利。
+    growthVariantRules:
+      - dimension: independence
+        variants:
+          - { gte: 55, text: 筛 top20 的标准你定了三条：频率、杀伤力、覆盖度。筛出来后发现 20 题覆盖了 87 题的 80% 价值。 }
+          - { lte: 40, text: 第 21 到 87 题你还是会紧张。聚焦是勇气——承认自己背不完 87 题，也是。 }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: tech 后来把 top20 筛选法用在了新员工培训上。他说：“题海是给焦虑者的安慰剂，聚焦才是给赢家的武器。”
+        neutral: tech 说“有用”，然后继续写他的代码。
+        negative: 评委恰恰问了第 35 题——不在你们的 20 里。你们靠临场反应撑过去了，但冷汗是真的。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: “top20 筛选法”后来成了你们的通用备战模板：从题海到题库，从焦虑到聚焦。 }
+    reflection: 备战的艺术不是覆盖，是聚焦——把有限的心力押在高概率的战场上，剩下的交给临场。
+    lessonHint: 预判题库按概率聚焦 top20，互相质询产生交叉理解。
+    tone: positive
+    family: presentation_defense
+    whyDistinct: 核心结果是“聚焦题库的备战法”，由隐藏的题库编制事件解锁，与全覆盖路径在同一链互斥。
+
+  - id: cv2_local_demo_end
+    campaign: competition
+    title: 《断网的全场》
+    mainResult: 本地化容灾的演示完胜
+    requirements:
+      kind: and
+      conditions:
+        - { kind: flag, key: kcv_local_demo }
+        - { kind: flag, key: kcv_hotspot_pray, expected: false }
+    priority: 92
+    tier: main
+    baseText: 决赛现场，三千人挤爆了网络。一半队伍的 Demo 卡在加载界面，主持人的救场词都说腻了。轮到你们，tech 敲下回车——本地 Mock 版流畅运行，断网状态，全程无卡顿。评委席有人鼓了掌。下场后 tech 说：“这两天写的 Mock 层，比我之前一个月写的代码都有价值。”你补了一句：“不，有价值的是'相信现场网络就是会崩'这个信念。”灾难不会提前通知，但容灾可以提前写好。
+    growthVariantRules:
+      - dimension: execution_vs_judgment
+        variants:
+          - { gte: 55, text: tech 的 Mock 层覆盖了全部 14 个 API 调用。数字是后来才统计的——当时他们只想着“别翻车”。 }
+          - { lte: 40, text: 本地化牺牲了实时数据的真实感。你们赌“稳比真重要”——赌赢了，但这个赌注不是每次都能赢。 }
+    characterEpilogueRules:
+      - characterId: c_tech
+        positive: tech 把那天称为“容灾骑士的加冕日”。他的 GitHub 上那个 Mock 层仓库，后来收获了不少 star。
+        neutral: tech 说“该做的”，然后去帮下一支卡住的队伍看了一眼——看完摇摇头走了。
+        negative: 本地数据是两周前的快照，评委问“现在的实时数据呢”，你们只能说“现场网络限制”。优势被追问后也会露馅。
+    projectFutureRules:
+      - { key: a, condition: { kind: always }, text: 你们的演示清单第一条从此是：“假设没有网络。”——后面 14 条都是为了这句话服务的。 }
+    reflection: 现场演示的最大变量是不可控的环境——把依赖降到零，把容灾写到满，剩下的交给命运和热点。
+    lessonHint: 现场演示必须本地化容灾，网络永远按不可用设计。
+    tone: positive
+    family: product_demo
+    whyDistinct: 核心结果是“断网容灾的演示完胜”，与热点赌博路径在同一链互斥。
